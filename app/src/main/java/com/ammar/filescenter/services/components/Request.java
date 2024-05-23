@@ -14,11 +14,9 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Request {
-    private Socket clientSocket;
     BufferedReader br;
 
     public Request(Socket clientSocket) {
-        this.clientSocket = clientSocket;
         try {
             br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         } catch (IOException e) {
@@ -109,9 +107,10 @@ public class Request {
     private String method;
     private String path;
     private String version;
-    private Map<String, String> headers;
+    private final Map<String, String> headers;
     private Map<String, String> params;
 
+    /** @noinspection unused*/
     public String getMethod() {
         return method;
     }
@@ -124,10 +123,12 @@ public class Request {
         return version;
     }
 
+    /** @noinspection unused*/
     public Map<String, String> getHeaders() {
         return headers;
     }
 
+    /** @noinspection unused*/
     public Map<String, String> getParams() {
         return params;
     }
