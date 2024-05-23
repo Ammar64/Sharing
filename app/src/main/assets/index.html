@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="script.js"></script>
+    <title>Files center</title>
+</head>
+
+<body>
+    <header id="header">
+        <h3 id="header-title">Files Center</h3>
+    </header>
+    <section id="file-upload-section">
+        <label for="file-upload-input" id="file-upload-label">Upload</label>
+        <input type="file" name="file-upload" id="file-upload-input" />
+    </section>
+    <section id="files-download-section">
+        <label id="file-downloads-button">Downloads</label>
+    </section>
+
+    <div id="files-download-dialog">
+        <div id="files-download-dialog-title">Available downloads</div>
+        <ul id="files-download-list">
+        </ul>
+        <div id="files-download-dialog-bottom">
+            <button id="files-download-dialog-bottom-ok">OK</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">مركز الملفات</string>
+    <string name="show_qr">اعرض كود الاستجابة</string>
+    <string name="settings">الإعدادات</string>
+    <string name="off">معطل</string>
+    <string name="on">يعمل</string>
+    <string name="unknown_at_the_moment">غير معروف حاليا</string>
+    <string name="notification_refused_message">يحتاج التطبيق إلى إذن الوصول إلى الإشعارات من أجل العمل فى الخلفية</string>
+    <string name="qrcode">رمز الاستجابة السريع</string>
+    <string name="svr_notification_message">الخادم يعمل على العنوان %1$s:%2$s</string>
+    <string name="scan_qr_code_title">امسح رمز الاستجابة</string>
+    <string name="add_downloadable">أضف ملف للتنزيل</string>
+    <string name="show_files">اعرض التنزيلات</string>
+    <string name="choose_files">اختر ملفات</string>
+    <string name="file_downloads">الملفات</string>
+    <string name="done">تم</string>
+    <string name="ok">حسنا</string>
+    <string name="add">أضف</string>
+    <string name="remove">حذف</string>
+    <string name="add_apps">أضف تطبيقات</string>
+    <string name="add_files">أضف ملفات</string>
+    <string name="choose_apps">اختر تطبيقات</string>
+</resources>
