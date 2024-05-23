@@ -11,6 +11,7 @@ import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Request {
     private Socket clientSocket;
@@ -44,7 +45,7 @@ public class Request {
             // for some reason this is thrown when Pipe is broken
             return false;
         } catch (Exception e) {
-            Log.e("MYLOG", e.getMessage());
+            Log.e("MYLOG", Objects.requireNonNull(e.getMessage()));
             return false;
         }
     }
@@ -89,7 +90,7 @@ public class Request {
                     try {
                         this.params.put(URLDecoder.decode(param[0], "UTF-8"), URLDecoder.decode(param[1], "UTF-8"));
                     } catch (UnsupportedEncodingException e) {
-                        Log.e("MYLOG", e.getMessage());
+                        Log.e("MYLOG", Objects.requireNonNull(e.getMessage()));
                     }
 
                 }
