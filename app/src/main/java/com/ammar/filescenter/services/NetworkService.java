@@ -20,6 +20,7 @@ import com.ammar.filescenter.R;
 import com.ammar.filescenter.services.components.Server;
 import com.ammar.filescenter.services.objects.Downloadable;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Inet4Address;
@@ -224,20 +225,16 @@ public class NetworkService extends Service {
         return null;
     }
 
-    public static byte[] readFileFromAssets(String filepath) {
-        try {
-            InputStream input = assetManager.open(filepath);
-            int size = input.available();
-            byte[] content = new byte[size];
-            int numBytes = input.read(content);
-            input.close();
-            if( numBytes != size ) {
-                throw new RuntimeException("Error reading file");
-            }
-            return content;
-        } catch (Exception e) {
-            Log.e("MYLOG", e.getMessage());
+    public static byte[] readFileFromAssets(String filepath) throws IOException {
+        InputStream input = assetManager.open(filepath);
+        int size = input.available();
+        byte[] content = new byte[size];
+        int numBytes = input.read(content);
+        input.close();
+        if (numBytes != size) {
+            throw new RuntimeException("Error reading file");
         }
-        return null;
+        return content;
+
     }
 }

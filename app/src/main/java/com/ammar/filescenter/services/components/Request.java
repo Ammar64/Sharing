@@ -3,6 +3,7 @@ package com.ammar.filescenter.services.components;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
@@ -13,15 +14,21 @@ import java.util.Map;
 
 public class Request {
     private Socket clientSocket;
+    BufferedReader br;
 
     public Request(Socket clientSocket) {
         this.clientSocket = clientSocket;
+        try {
+            br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        } catch (IOException e) {
+            throw new RuntimeException("IOException in Request constructor");
+        }
         this.headers = new HashMap<>();
     }
 
     public boolean readSocket() {
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()), 1024);
+
             params = new HashMap<>();
 
             int lineNumber = 1;

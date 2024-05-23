@@ -48,4 +48,7 @@ public class Downloadable {
     public long getSize() {
         return size;
     }
+    public String getPath() {
+        return path;
+    }
 }

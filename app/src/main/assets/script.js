@@ -37,7 +37,6 @@ function requestAvailableDownloads() {
                 let link = document.createElement("a");
                 link.style.display = "none";
                 link.href = `/download/${e.uuid}`
-                link.setAttribute("download", "");
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
