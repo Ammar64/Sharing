@@ -20,7 +20,6 @@ import com.ammar.filescenter.R;
 import com.ammar.filescenter.services.components.Server;
 import com.ammar.filescenter.services.objects.Downloadable;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Inet4Address;
@@ -29,10 +28,10 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.LinkedList;
 import java.util.Locale;
 import java.util.UUID;
 
+/** @noinspection unused */
 public class NetworkService extends Service {
 
     public static final String ACTION_TOGGLE_SERVER = "com.ammar.filescenter.services.TOGGLE_SERVER";
@@ -99,6 +98,7 @@ public class NetworkService extends Service {
                 break;
             case ACTION_ADD_DOWNLOADABLE:
                 ArrayList<String> files = intent.getStringArrayListExtra(EXTRA_FILE_PATHS);
+                assert files != null;
                 for (String i : files) {
                     server.downloadablesList.add(new Downloadable(i));
                 }
@@ -112,17 +112,14 @@ public class NetworkService extends Service {
                 break;
             case ACTION_MODIFY_DOWNLOADABLE:
                 String type = intent.getStringExtra(EXTRA_MODIFY_TYPE);
-                switch (type) {
-                    case VALUE_MODIFY_DELETE:
-                        UUID uuid = (UUID) intent.getSerializableExtra(EXTRA_MODIFY_DELETE_UUID);
-                        for (Downloadable i : server.downloadablesList) {
-                            if (i.getUUID().equals(uuid)) {
-                                server.downloadablesList.remove(i);
-                            }
+                assert type != null;
+                if (type.equals(VALUE_MODIFY_DELETE)) {
+                    UUID uuid = (UUID) intent.getSerializableExtra(EXTRA_MODIFY_DELETE_UUID);
+                    for (Downloadable i : server.downloadablesList) {
+                        if (i.getUUID().equals(uuid)) {
+                            server.downloadablesList.remove(i);
                         }
-                        break;
-                    default:
-                        break;
+                    }
                 }
                 break;
             default:
