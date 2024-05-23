@@ -108,6 +108,7 @@ public class NetworkService extends Service {
                 downloadablesIntent.setAction(ACTION_GET_DOWNLOADABLE);
                 downloadablesIntent.putExtra(EXTRA_DOWNLOADABLES_ARRAY, server.downloadablesList);
 
+                //noinspection deprecation
                 LocalBroadcastManager.getInstance(this).sendBroadcast(downloadablesIntent);
                 break;
             case ACTION_MODIFY_DOWNLOADABLE:
@@ -152,6 +153,7 @@ public class NetworkService extends Service {
         }
 
         intent.putExtra(EXTRA_SERVER_STATUS, isServerRunning);
+        //noinspection deprecation
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
