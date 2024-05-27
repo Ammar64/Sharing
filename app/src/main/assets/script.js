@@ -1,16 +1,15 @@
-const filesDownloadButton = document.getElementById("file-downloads-button");
-const filesDownloadDialog = document.getElementById("files-download-dialog");
+const recieveBtn = document.getElementById("recieveBtn");
+const downloadBubble = document.getElementById("downloadBubble");
 const overlay = document.getElementById('overlay');
-const okButton = document.getElementById('files-download-dialog-bottom-ok');
-const filesDownloadList   = document.getElementById("files-download-list");
+const okButton = document.getElementById('okButton');
+const downloads   = document.getElementById("downloads");
 
-const fileDownloadListItem = document.createElement("li");
+const download_item = document.createElement("li");
+download_item.className = "download-item";
 
-fileDownloadListItem.className = "files-download-list-item";
 
-
-filesDownloadButton.onclick = () => {
-    filesDownloadDialog.style.display = 'block';
+recieveBtn.onclick = () => {
+    downloadBubble.style.display = 'block';
     overlay.style.display = 'block';
     requestAvailableDownloads();
 };
@@ -25,15 +24,34 @@ overlay.onclick = () => {
 };
 
 function closeDialog() {
-    filesDownloadDialog.style.display = 'none';
-};
+    downloadBubble.style.display = 'none';
+    overlay.style.display = 'none';
+}
 
+const loader = document.querySelector('.process');
+function showLoader() {
+    loader.style.display= 'block';
+}
+
+function hideLoader() {
+    document.querySelector('.plane').style.animation = 'plane-done 1.2s infinite';
+    setTimeout(() => {
+        loader.style.display = 'none';
+    }, 1000);
+}
+
+function updateProgress(percent) {
+    const progressBar = document.querySelector('.progress-bar');
+    const progressText = document.querySelector('.progress-text');
+    progressBar.style.width = percent + '%';
+    progressText.textContent = percent + '%';
+}
 
 
 function requestAvailableDownloads() {
     // Show the loader when the request starts
     showLoader();
-    while(filesDownloadList.lastChild) {filesDownloadList.lastChild.remove();}
+    while(downloads.lastChild) {downloads.lastChild.remove();}
     fetch("/available-downloads", {
         headers: {
             "Content-Type": "application/json"
@@ -43,11 +61,11 @@ function requestAvailableDownloads() {
             return res.json();
         }
     }).then(data => {
-
+    
         data.forEach(e => {
-            const newFileItem = fileDownloadListItem.cloneNode();
+            const newFileItem = download_item.cloneNode();
             newFileItem.textContent = `${e.name}     (${getFormattedFileSize(e.size)})`;
-            filesDownloadList.appendChild(newFileItem);
+            downloads.appendChild(newFileItem);
             newFileItem.addEventListener("click", () => {
                 let link = document.createElement("a");
                 link.style.display = "none";
@@ -68,11 +86,11 @@ function requestAvailableDownloads() {
 }
 
 function getFormattedFileSize(s) {
-    const levels = ["B", "KB", "MB", "GB", "TB", "PB"];
+    const levels = ["B","KB","MB","GB","TB","PB"];
     let level = 0;
     let isGood = false;
-    while (!isGood) {
-        if (s > 1200 && level < levels.length) {
+    while(!isGood) {
+        if( s > 1200 && level < levels.length ) {
             s /= 1024;
             level++;
         }
@@ -85,18 +103,6 @@ function getFormattedFileSize(s) {
 }
 
 
-const loader = document.querySelector('.process');
-function showLoader() {
-    loader.style.display= 'block';
-}
-
-function hideLoader() {
-    document.querySelector('.plane').style.animation = 'plane-done 1.2s infinite';
-    setTimeout(() => {
-        loader.style.display = 'none';
-    }, 1000);
-}
-
 /* reloading page */
 window.addEventListener('onload', function (event) {
     showLoader();
@@ -107,3 +113,4 @@ window.addEventListener('load', function (event) {
     hideLoader();
     console.log('Page has fully loaded.');
 });
+
