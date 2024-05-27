@@ -64,7 +64,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
-                android:background="@android:drawable/ic_popup_sync" />
+                android:background="@android:drawable/ic_popup_sync"
+                android:contentDescription="@string/update_ip"/>
         </LinearLayout>
 
         <LinearLayout
@@ -86,6 +87,16 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RV_ConnectedDevices"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/B_AddFiles"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        android:paddingHorizontal="16dp"/>
 
     <android.widget.Button
         android:id="@+id/B_AddِApps"

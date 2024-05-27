@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
-import com.ammar.filescenter.services.objects.AppDownloadable;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapter.ViewHolder> {
@@ -24,11 +23,12 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
 
     private Context context;
     List<ApplicationInfo> apps;
-    List<ApplicationInfo> selectedApps;
+    LinkedList<String> selectedApps;
 
-    public AppsRecyclerAdapter(Context context, List<ApplicationInfo> apps) {
+    public AppsRecyclerAdapter(Context context, List<ApplicationInfo> apps, LinkedList<String> selectedApps) {
         this.context = context;
         this.apps = apps;
+        this.selectedApps = selectedApps;
     }
 
     @NonNull
@@ -49,6 +49,16 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
 
         holder.icon.setImageDrawable(appIcon);
         holder.appName.setText(appName);
+        holder.itemView.setSelected(selectedApps.contains(holder.appName.getText().toString()));
+        holder.itemView.setOnClickListener((view) -> {
+            boolean isSelected = holder.itemView.isSelected();
+            holder.itemView.setSelected(!isSelected);
+            if( !isSelected ) {
+                selectedApps.add(appInfo.packageName);
+            } else {
+                selectedApps.remove(appInfo.packageName);
+            }
+        });
     }
 
     @Override

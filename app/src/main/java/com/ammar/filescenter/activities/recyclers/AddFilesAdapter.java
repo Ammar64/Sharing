@@ -57,7 +57,10 @@ public class AddFilesAdapter extends RecyclerView.Adapter<AddFilesAdapter.ViewHo
             } else {
                 holder.checkBox.setChecked(false);
             }
-            if ("application/pdf".equals(type)) {
+            if( type != null)
+            if (type.startsWith("image/")) {
+                holder.icon.setImageURI(file.getUri());
+            } else if ("application/pdf".equals(type)) {
                 holder.icon.setImageResource(R.drawable.icons8_pdf_100);
             } else if ("application/vnd.android.package-archive".equals(type)) {
                 holder.icon.setImageResource(R.drawable.icons8_apk_file_100);

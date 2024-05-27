@@ -8,7 +8,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -43,14 +42,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.recyclers.DownloadablesDialogAdapter;
+import com.ammar.filescenter.activities.recyclers.SharingConnectedDevicesAdapter;
 import com.ammar.filescenter.services.NetworkService;
+import com.ammar.filescenter.services.components.Server;
 import com.ammar.filescenter.services.objects.Downloadable;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Locale;
 
@@ -69,15 +66,29 @@ public class SharingActivity extends AppCompatActivity {
             String action = intent.getAction();
             if (action != null)
                 switch (action) {
-                    case NetworkService.ACTION_GET_SERVER_STATUS:
+                    case NetworkService.ACTION_GET_SERVER_STATUS: {
                         boolean serverRunning = intent.getBooleanExtra(NetworkService.EXTRA_SERVER_STATUS, false);
                         if (serverButton == null) return;
                         IndicateServerOn(serverRunning);
+                        SharingConnectedDevicesAdapter adapter = new SharingConnectedDevicesAdapter(SharingActivity.this, Server.connectedDevices);
+                        // init recycler
+                        connectedDevices.setAdapter(adapter);
+                        connectedDevices.setLayoutManager(new LinearLayoutManager(SharingActivity.this));
+
+                    }
                         break;
+
                     case NetworkService.ACTION_GET_DOWNLOADABLE:
                         LinkedList<Downloadable> downloadables = (LinkedList<Downloadable>) intent.getSerializableExtra(NetworkService.EXTRA_DOWNLOADABLES_ARRAY);
                         showDownloadablesDialog(downloadables);
                         break;
+                    case NetworkService.ACTION_DEVICE_CONNECTED: {
+                        int index = Server.connectedDevices.size() - 1;
+                        SharingConnectedDevicesAdapter adapter = (SharingConnectedDevicesAdapter) connectedDevices.getAdapter();
+                        adapter.notifyItemChanged(index);
+                    }
+                    break;
+
                     default:
                         break;
                 }
@@ -89,10 +100,15 @@ public class SharingActivity extends AppCompatActivity {
     private TextView serverStatusText;
     private TextView serverAddressText;
     private TextView updateIpAddressText;
+    private RecyclerView connectedDevices;
     private ImageView qrCodeImage;
     private AlertDialog qrCodeDialog;
     private Button addFiles;
     private Button addApps;
+
+    // lists
+    private LinkedList<String> devicesList;
+
     private final ActivityResultLauncher<Intent> mGetFiles = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
         if (result.getResultCode() == Activity.RESULT_OK) {
             Intent resultIntent = result.getData();
@@ -107,7 +123,15 @@ public class SharingActivity extends AppCompatActivity {
     });
 
     private final ActivityResultLauncher<Intent> mGetApps = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
+        if( result.getResultCode() == Activity.RESULT_OK ) {
+            Intent resultIntent = result.getData();
+            ArrayList<String> selectedApps = resultIntent.getStringArrayListExtra(AddAppsActivity.EXTRA_INTENT_APPS);
 
+            Intent intent = new Intent(SharingActivity.this, NetworkService.class);
+            intent.setAction(NetworkService.ACTION_ADD_APPS_DOWNLOADABLE);
+            intent.putExtra(NetworkService.EXTRA_APPS_NAMES, selectedApps);
+            startService(intent);
+        }
     });
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,6 +141,7 @@ public class SharingActivity extends AppCompatActivity {
         IntentFilter filter = new IntentFilter();
         filter.addAction(NetworkService.ACTION_GET_SERVER_STATUS);
         filter.addAction(NetworkService.ACTION_GET_DOWNLOADABLE);
+        filter.addAction(NetworkService.ACTION_DEVICE_CONNECTED);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, filter);
 
@@ -150,6 +175,7 @@ public class SharingActivity extends AppCompatActivity {
         serverStatusText = findViewById(R.id.TV_ServerStatus);
         serverAddressText = findViewById(R.id.TV_ServerAddress);
         updateIpAddressText = findViewById(R.id.TV_UpdateIpAddressText);
+        connectedDevices = findViewById(R.id.RV_ConnectedDevices);
         addFiles = findViewById(R.id.B_AddFiles);
         addApps  = findViewById(R.id.B_AddِApps);
         View qrDialogView = getLayoutInflater().inflate(R.layout.dialog_qrcode, null, false);
@@ -159,7 +185,6 @@ public class SharingActivity extends AppCompatActivity {
                 })
                 .create();
         qrCodeImage = qrDialogView.findViewById(R.id.IV_QRCodeImage);
-
 
         // init state
         Intent intent = new Intent(this, NetworkService.class);

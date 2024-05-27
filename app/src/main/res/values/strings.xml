@@ -20,4 +20,5 @@
     <string name="add_apps">Add Apps</string>
     <string name="add_files">Add Files</string>
     <string name="choose_apps">Choose apps</string>
+    <string name="update_ip">Update Server IP Address</string>
 </resources>

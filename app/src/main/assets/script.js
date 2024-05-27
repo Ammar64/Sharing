@@ -1,9 +1,10 @@
 const filesDownloadButton = document.getElementById("file-downloads-button");
 const filesDownloadDialog = document.getElementById("files-download-dialog");
 const filesDownloadDialogBottomOk = document.getElementById("files-download-dialog-bottom-ok");
-const filesDownloadList   = document.getElementById("files-download-list");
-
+const filesDownloadList = document.getElementById("files-download-list");
+const fileUploadInput = document.getElementById("file-upload-input");
 const fileDownloadListItem = document.createElement("li");
+
 fileDownloadListItem.className = "files-download-list-item";
 
 filesDownloadButton.onclick = () => {
@@ -17,8 +18,32 @@ filesDownloadDialogBottomOk.onclick = () => {
 
 
 
+const xhr = new XMLHttpRequest();
+xhr.upload.addEventListener("progress", function (e) {
+    console.log(`${e.loaded} / ${e.total}`);
+})
+
+xhr.onreadystatechange = function () {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+            console.log(xhr.responseText);
+        } else {
+            console.log('Request failed: ' + xhr.status);
+        }
+    }
+}
+
+
+fileUploadInput.addEventListener("input", function () {
+    const formData = new FormData();
+    formData.append("file", fileUploadInput.files[0]);
+
+    xhr.open("POST", "/upload");
+    xhr.send(formData);
+})
+
 function requestAvailableDownloads() {
-    while(filesDownloadList.lastChild) {filesDownloadList.lastChild.remove();}
+    while (filesDownloadList.lastChild) { filesDownloadList.lastChild.remove(); }
     fetch("/available-downloads", {
         headers: {
             "Content-Type": "application/json"
@@ -28,7 +53,7 @@ function requestAvailableDownloads() {
             return res.json();
         }
     }).then(data => {
-    
+
         data.forEach(e => {
             const newFileItem = fileDownloadListItem.cloneNode();
             newFileItem.textContent = `${e.name}     (${getFormattedFileSize(e.size)})`;
@@ -46,11 +71,11 @@ function requestAvailableDownloads() {
 }
 
 function getFormattedFileSize(s) {
-    const levels = ["B","KB","MB","GB","TB","PB"];
+    const levels = ["B", "KB", "MB", "GB", "TB", "PB"];
     let level = 0;
     let isGood = false;
-    while(!isGood) {
-        if( s > 1200 && level < levels.length ) {
+    while (!isGood) {
+        if (s > 1200 && level < levels.length) {
             s /= 1024;
             level++;
         }
@@ -59,5 +84,5 @@ function getFormattedFileSize(s) {
         }
     }
     return `${s.toFixed(2)} ${levels[level]}`;
-    
+
 }

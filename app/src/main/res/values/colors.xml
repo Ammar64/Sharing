@@ -8,4 +8,5 @@
 
     <color name="status_on">#0c0</color>
     <color name="status_off">#c00</color>
+    <color name="selected">#32000000</color>
 </resources>

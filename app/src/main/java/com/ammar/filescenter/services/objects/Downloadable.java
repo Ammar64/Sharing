@@ -1,5 +1,9 @@
 package com.ammar.filescenter.services.objects;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.Locale;
 import java.util.UUID;
@@ -50,5 +54,31 @@ public class Downloadable {
     }
     public String getPath() {
         return path;
+    }
+
+    public JSONObject getJSONObject() throws JSONException {
+        JSONObject downloadableObject = new JSONObject();
+        downloadableObject.accumulate("uuid", uuid);
+        downloadableObject.accumulate("name", getName());
+        downloadableObject.accumulate("size", size);
+
+        if( this instanceof AppDownloadable ) {
+            AppDownloadable app = (AppDownloadable) this;
+            downloadableObject.accumulate("type", "app");
+            if(app.isWithSplits()) {
+                downloadableObject.accumulate("withSplits", true);
+                JSONArray splitsArray = new JSONArray();
+
+                for(Downloadable i : app.splits ) {
+                    splitsArray.put(i.getJSONObject());
+                }
+                downloadableObject.accumulate("splits", splitsArray);
+            } else {
+                downloadableObject.accumulate("withSplits", false);
+            }
+        } else {
+            downloadableObject.accumulate("type", "file");
+        }
+        return downloadableObject;
     }
 }

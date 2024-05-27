@@ -18,6 +18,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.services.components.Server;
+import com.ammar.filescenter.services.objects.AppDownloadable;
 import com.ammar.filescenter.services.objects.Downloadable;
 
 import java.io.IOException;
@@ -28,6 +29,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -39,8 +41,10 @@ public class NetworkService extends Service {
     public static final String ACTION_GET_SERVER_STATUS = "com.ammar.filescenter.services.GET_SERVER_STATUS";
     public static final String ACTION_UPDATE_NOTIFICATION_TEXT = "com.ammar.filescenter.services.UPDATE_NOTIFICATION_STRING";
     public static final String ACTION_ADD_DOWNLOADABLE = "com.ammar.filescenter.services.ADD_DOWNLOADABLE";
+    public static final String ACTION_ADD_APPS_DOWNLOADABLE = "com.ammar.filescenter.services.ADD_APP_DOWNLOADABLE";
     public static final String ACTION_GET_DOWNLOADABLE = "com.ammar.filescenter.services.GET_DOWNLOADABLE";
     public static final String ACTION_MODIFY_DOWNLOADABLE = "com.ammar.filescenter.services.MODIFY_DOWNLOADABLE";
+    public static final String ACTION_DEVICE_CONNECTED = "com.ammar.filescenter.services.DEVICE_CONNECTED";
 
     public static final String EXTRA_SERVER_STATUS = "com.ammar.filescenter.services.SERVER_STATUS";
     public static final String EXTRA_SERVER_ADDRESS = "com.ammar.filescenter.services.SERVER_ADDRESS";
@@ -48,8 +52,11 @@ public class NetworkService extends Service {
 
     public static final String EXTRA_FILE_PATHS = "com.ammar.filescenter.services.FILE_PATHS";
     public static final String EXTRA_DOWNLOADABLES_ARRAY = "com.ammar.filescenter.services.DOWNLOADABLES_LIST";
+    public static final String EXTRA_APPS_NAMES = "com.ammar.filescenter.services.APPS_NAME";
     public static final String EXTRA_MODIFY_TYPE = "com.ammar.filescenter.services.MODIFY_TYPE";
     public static final String EXTRA_MODIFY_DELETE_UUID = "com.ammar.filescenter.services.MODIFY_DELETE_UUID";
+    public static final String EXTRA_CONNECTED_DEVICES_LIST = "com.ammar.filescenter.services.CONNECTED_DEVICES_LIST";
+
 
     public static final String VALUE_MODIFY_DELETE = "com.ammar.filescenter.services.VALUE_MODIFY_DELETE";
 
@@ -59,7 +66,7 @@ public class NetworkService extends Service {
     public static AssetManager assetManager;
 
 
-    private final Server server = new Server();
+    private final Server server = new Server(this);
     final Intent serverStatusIntent = new Intent();
 
     @Override
@@ -123,6 +130,14 @@ public class NetworkService extends Service {
                     }
                 }
                 break;
+            case ACTION_ADD_APPS_DOWNLOADABLE:
+                ArrayList<String> appsName = intent.getStringArrayListExtra(EXTRA_APPS_NAMES);
+                for (String i : appsName) {
+                    server.downloadablesList.add(
+                            new AppDownloadable(this, i)
+                    );
+                }
+                break;
             default:
                 break;
         }
@@ -153,6 +168,7 @@ public class NetworkService extends Service {
         }
 
         intent.putExtra(EXTRA_SERVER_STATUS, isServerRunning);
+        intent.putExtra(EXTRA_CONNECTED_DEVICES_LIST, server.connectedDevices);
         //noinspection deprecation
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
