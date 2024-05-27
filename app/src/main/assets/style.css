@@ -1,3 +1,4 @@
+/* glopal */
 * {
     margin: 0;
     padding: 0;
@@ -5,14 +6,295 @@
     font-family: sans-serif;
 }
 
-header {
-    background-color: #6055F2;
+:root{
+    --colorOne:#2196f3;
+    --colorOneTransparent:#e91e6238;
+    --colorTwo:#e91e63;
+}
+body {
+    background: linear-gradient(to right, #010c14, #2e012e);
+}
+/* glopal */
+
+
+/* process */
+.process{
+    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 30%),
+        linear-gradient(to bottom, #000, #000);
+    height: 100vh;
     width: 100%;
-    padding: 1em;
+    position: fixed;
+    -webkit-animation: paleArea 3s infinite;
+            animation: paleArea 3s linear infinite;
+    display: none;
+    z-index: 999;
 }
 
-#header-title {
-    color: #ededed;
+@-webkit-keyframes paleArea {
+}
+
+@keyframes paleArea {
+0%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 30%),
+        linear-gradient(to bottom, #000, #000);}
+5%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 31%),
+        linear-gradient(to bottom, #000, #000);}
+10%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 32%),
+        linear-gradient(to bottom, #000, #000);}
+15%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 33%),
+        linear-gradient(to bottom, #000, #000);}
+20%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 34%),
+        linear-gradient(to bottom, #000, #000);}
+25%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 35%),
+        linear-gradient(to bottom, #000, #000);}
+30%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 36%),
+        linear-gradient(to bottom, #000, #000);}
+35%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 37%),
+        linear-gradient(to bottom, #000, #000);}
+40%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 38%),
+        linear-gradient(to bottom, #000, #000);}
+45%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 39%),
+        linear-gradient(to bottom, #000, #000);}
+50%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 40%),
+        linear-gradient(to bottom, #000, #000);}
+55%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 39%),
+        linear-gradient(to bottom, #000, #000);}
+60%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 38%),
+        linear-gradient(to bottom, #000, #000);}
+65%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 37%),
+        linear-gradient(to bottom, #000, #000);}
+70%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 36%),
+        linear-gradient(to bottom, #000, #000);}
+75%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 35%),
+        linear-gradient(to bottom, #000, #000);}
+80%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 34%),
+        linear-gradient(to bottom, #000, #000);}
+85%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 33%),
+        linear-gradient(to bottom, #000, #000);}
+90%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 32%),
+        linear-gradient(to bottom, #000, #000);}
+95%{    background: 
+        radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 31%),
+        linear-gradient(to bottom, #000, #000);}
+}
+
+
+.plane{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50% ,-50%);
+    -webkit-animation: plane 1s infinite;
+            -webkit-animation: plane-on-progress 8s infinite;
+                    animation: plane-on-progress 5s infinite;
+}
+
+@-webkit-keyframes plane-on-progress {
+    25%{transform: skew(-20deg , -5deg) rotateZ(3deg) translateX(calc(-50% + 110px)); }
+    50%{transform:skew(0 ,10deg) rotateZ(-3) translateX(calc(-50% + 200px))}
+    75%{transform:  skew(20deg , 5deg) rotateZ(3deg) translateX(calc(-50% + 110px));}
+    100%{transform: skew(0 , 0) rotateZ(0) translate(-50% ,-50%)}
+}
+@keyframes plane-on-progress {
+    25%{transform: skew(-20deg , -5deg) rotateZ(3deg) translateX(calc(-50% + 110px)); }
+    50%{transform:skew(0 ,10deg) rotateZ(-3) translateX(calc(-50% + 200px))}
+    75%{transform:  skew(20deg , 5deg) rotateZ(3deg) translateX(calc(-50% + 110px));}
+    100%{transform: skew(0 , 0) rotateZ(0) translate(-50% ,-50%)}
+}
+
+@-webkit-keyframes plane-done {
+    0%{transform: skew(0 , 0) rotateZ(0) translate(-50% ,-50%)}
+    100%{transform: skew(0 , 0) rotateZ(0) translate(-50% ,-50%)}
+}
+@keyframes plane-done {
+    0%{transform: skew(0 , 0) rotateZ(0) translate(-50% ,-50%)}
+    100%{transform: skew(0 , 0) rotateZ(0) translate(calc(-50% + 2000px) ,-50%)}
+}
+
+.fa-jet-fighter{
+    font-size: 150px;
+    background: linear-gradient(to right, var(--colorOne), var(--colorTwo));
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    z-index: 2;
+}
+
+.fa-jet-fighter::after{
+    content: '';
+    padding: 13px;
+    height: 22px ;
+    border-radius: 50%;
+    position: absolute;
+    left: -1px;
+    bottom: 50%;
+    transform: translateY(50%);
+    background-color: var(--colorTwo);
+    -webkit-filter: blur(30px);
+            filter: blur(30px);
+}
+
+.steamJet1 , .steamJet2, .steamJet{
+    width: 30rem;
+    height: 2px;
+    position: relative;
+    top: 6px;
+    right: 81%;
+    background: linear-gradient(to right, #000, var(--colorOne), var(--colorTwo));
+    -webkit-filter: blur(2px);
+            filter: blur(2px);
+}
+.steamJet2{
+    top: -6px;
+}
+
+.steamJetBig , .steamJet3 , .steamJet4{
+    width: 30rem;
+    height: 8px;
+    position: absolute;
+    top: 50%;
+    left: -100%;
+    transform: translateY(-50%);
+    background: linear-gradient(to right, #000, #2195f361, var(--colorOne), var(--colorTwo));
+    -webkit-filter: blur(2px);
+            filter: blur(2px);
+}
+.steamJet3{
+    top:calc(50% - 10px);
+    width: 30rem;
+    height: 2px;
+    left: calc(-100% + 20px);
+}
+.steamJet4{
+    top:calc(50% + 10px);
+    width: 30rem;
+    height: 2px;
+    left: calc(-100% + 20px);
+}
+.steamJet{
+    width: 10rem;
+    height: 2px;
+    position: absolute;
+    transform: translateY(-50%);
+    background: linear-gradient(to right, #000, #2195f361, var(--colorOne), var(--colorTwo), #000);
+    -webkit-filter: blur(2px);
+            filter: blur(2px);
+}
+
+.line:nth-child(1) {
+    top: 540px;
+    -webkit-animation-delay: .2s;
+            animation-delay: .2s;
+}
+.line:nth-child(2) {
+    top: 160px;
+    -webkit-animation-delay: .8s;
+            animation-delay: .8s;
+}
+.line:nth-child(3) {
+    top: 290px;
+    -webkit-animation-delay: 1s;
+            animation-delay: 1s;
+}
+.line:nth-child(4) {
+    top: 380px;
+    -webkit-animation-delay: .4s;
+            animation-delay: .4s;
+}
+.line:nth-child(5) {
+    top: 40px;
+    -webkit-animation-delay: .2s;
+            animation-delay: .2s;
+}
+
+.line{
+    left: 100%;
+    -webkit-animation: air .5s infinite ;
+    animation: air .5s infinite;
+}
+
+@-webkit-keyframes air {
+    0%{left: 100%;}
+    100%{left: -200px;}
+}
+
+@keyframes air {
+    0%{left: 100%;}
+    100%{left: -200px;}
+}
+
+@media (max-width : 575px) {
+.plane{
+    left: 60%;
+}
+.fa-jet-fighter{
+    font-size: 50px;
+}
+.steamJet1 , .steamJet2{
+    width: 20rem;
+    top: 6px;
+    right: 95%;
+}
+.steamJet2{
+    top: -6px;
+}
+.steamJetBig , .steamJet3 , .steamJet4{
+    width: 20rem;
+    height: 8px;
+    position: absolute;
+    top: 50%;
+    left: -100%;
+    transform: translateY(-50%);
+}
+.steamJet3{
+    top:calc(50% - 10px);
+    height: 2px;
+    left: calc(-100% + 20px);
+}
+.steamJet4{
+    top:calc(50% + 10px);
+    height: 2px;
+    left: calc(-100% + 20px);
+}
+}
+/* process */
+
+/* content */
+
+.text{
+    padding: 150px 0 80px;
+    text-align: center;
+    letter-spacing: 5px;
+    color: #777;
+}
+
+.text h1 ,#files-download-dialog-title{
+    font-family:monospace;
+    margin-bottom: 5px;
+        background: linear-gradient(to right, var(--colorOne), var(--colorTwo));
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 #file-upload-section,
@@ -20,22 +302,6 @@ header {
     padding-top: 1em;
     display: flex;
     justify-content: center;
-}
-#file-upload-label,
-#file-downloads-button {
-    display: inline-flex;
-    justify-content: center;
-    
-    border: 2px black solid;
-    font-size: 2em;
-    padding: 1em 2em;
-    cursor: pointer;
-    border-radius: 0.3em;
-    width: 8em;
-}
-
-#file-upload-input {
-    display: none;
 }
 
 
@@ -55,6 +321,18 @@ header {
     overflow-x: hidden;
     overflow-y: hidden;
     border-radius: 1em;
+    z-index: 901; 
+}
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.64);
+    z-index: 900; 
+    display: none; 
 }
 
 #files-download-list {
@@ -62,13 +340,9 @@ header {
     overflow-y: auto;
     list-style-type: none;
     max-height: calc(30em - 54px - 1em);
-
-
 }
 
-#files-download-dialog-title {
-    font-size: 1.5em;
-}
+
 
 .files-download-list-item {
     box-shadow: 1px 1px 5px rgb(149, 149, 149);
@@ -97,7 +371,7 @@ header {
     cursor: pointer;
     font-size: larger;
     font-weight: 500;
-    color: #358400;
+    color: var(--colorTwo);
     padding: 0.3em 1em;
     border-radius: 0.3em;
 }
@@ -105,3 +379,95 @@ header {
 #files-download-dialog-bottom-ok:hover {
     background-color: #d1d1d1;
 }
+
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.btn {
+ position: relative;
+ font-size: 17px;
+ text-transform: uppercase;
+ text-decoration: none;
+ padding: 1em 2.5em;
+ display: inline-block;
+ border-radius: 6em;
+ transition: all .2s;
+ border: none;
+ font-family: inherit;
+ font-weight: 500;
+ color: var(--colorTwo);
+ background-color: white;
+ letter-spacing: 2px;
+ -webkit-user-select: none;
+    -moz-user-select: none;
+     -ms-user-select: none;
+         user-select: none;
+}
+
+.btn:hover {
+ transform: translateY(-3px);
+ box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+ transform: translateY(-1px);
+ box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn::after {
+ content: "";
+ display: inline-block;
+ height: 100%;
+ width: 100%;
+ border-radius: 100px;
+ position: absolute;
+ top: 0;
+ left: 0;
+ z-index: -1;
+ transition: all .4s;
+}
+
+.btn::after {
+ background-color: #fff;
+}
+
+.btn:hover::after {
+ transform: scaleX(1.4) scaleY(1.6);
+ opacity: 0;
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+            color: #777;
+}
+footer small {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.8em; 
+}
+footer p {
+    margin: 5px 0;
+}
+footer a{
+    text-decoration:none ;
+    color: var(--colorOne);
+}
+footer a:hover{
+    text-decoration:underline ;
+}
+/* content */
+
+

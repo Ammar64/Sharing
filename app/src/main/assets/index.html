@@ -6,28 +6,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css" />
     <script defer src="script.js"></script>
-    <title>Files center</title>
+    <title>Sharing</title>
+    <script src="https://kit.fontawesome.com/d36d507b4c.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <header id="header">
-        <h3 id="header-title">Files Center</h3>
-    </header>
-    <section id="file-upload-section">
-        <label for="file-upload-input" id="file-upload-label">Upload</label>
-        <input type="file" name="file-upload" id="file-upload-input" />
-    </section>
-    <section id="files-download-section">
-        <label id="file-downloads-button">Downloads</label>
-    </section>
-
-    <div id="files-download-dialog">
-       <div id="files-download-dialog-title">Available downloads</div>
-        <ul id="files-download-list">
-        </ul>
-        <div id="files-download-dialog-bottom">
-            <button id="files-download-dialog-bottom-ok">OK</button>
+    <div class="process">
+            <div class="line steamJet"></div>
+            <div class="line steamJet"></div>
+            <div class="line steamJet"></div>
+            <div class="line steamJet"></div>
+            <div class="line steamJet"></div>
+        <div class="plane">
+            <div class="steamJet1"></div>
+            <i class="fa-solid fa-jet-fighter"></i>
+            <div class="steamJet3"></div>
+            <div class="steamJetBig"></div>
+            <div class="steamJet4"></div>
+            <div class="steamJet2"></div>
         </div>
+    </div>
+    <div class="container">
+        <div class="text">
+            <h1>sharing App</h1>
+            <p>Transfer and have your files travel for free</p>
+            <small>TransferNow is a simple and free way to safely share your data</small>
+        </div>
+        <section id="file-upload-section">
+            <label for="file-upload-input" id="file-upload-label" class="btn">Send</label>
+            <input type="file" name="file-upload" id="file-upload-input" style="display: none;"/>
+        </section>
+        <section id="files-download-section">
+            <label id="file-downloads-button" class="btn">receive</label>
+        </section>
+
+        <div id="files-download-dialog">
+           <div id="files-download-dialog-title">Available downloads</div>
+            <ul id="files-download-list">
+            </ul>
+            <div id="files-download-dialog-bottom">
+                <button id="files-download-dialog-bottom-ok">OK</button>
+            </div>
+        </div>
+        <div id="overlay"></div> <!-- Overlay div for covering the page -->
+        <footer>
+            <p>&copy; 2024 Sharing App. All rights reserved.</p>
+            <nav>
+            <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Contact Us</a>
+            </nav>
+        </footer>
     </div>
 </body>
 </html>
