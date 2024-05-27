@@ -25,6 +25,10 @@
             <div class="steamJet4"></div>
             <div class="steamJet2"></div>
         </div>
+    <div class="progress">
+        <div class="progress-bar"></div>
+        <div class="progress-text">0 %</div>
+    </div>
     </div>
     <div class="container">
         <div class="text">
@@ -32,20 +36,20 @@
             <p>Transfer and have your files travel for free</p>
             <small>TransferNow is a simple and free way to safely share your data</small>
         </div>
-        <section id="file-upload-section">
-            <label for="file-upload-input" id="file-upload-label" class="btn">Send</label>
-            <input type="file" name="file-upload" id="file-upload-input" style="display: none;"/>
-        </section>
-        <section id="files-download-section">
-            <label id="file-downloads-button" class="btn">receive</label>
-        </section>
+        <div id="sendBtn">
+            <label for="uploadInput" id="uploadLabel" class="btn">Send</label>
+            <input type="file" name="file-upload" id="uploadInput" style="display: none;"/>
+        </div>
+        <div id="recieveBtn" class="btn">
+            receive
+        </div>
 
-        <div id="files-download-dialog">
-           <div id="files-download-dialog-title">Available downloads</div>
-            <ul id="files-download-list">
+        <div id="downloadBubble">
+            <div class="downloadBubble-title">Available downloads</div>
+            <ul id="downloads">
             </ul>
-            <div id="files-download-dialog-bottom">
-                <button id="files-download-dialog-bottom-ok">OK</button>
+            <div class="btns">
+                <button id="okButton">Done</button>
             </div>
         </div>
         <div id="overlay"></div> <!-- Overlay div for covering the page -->
