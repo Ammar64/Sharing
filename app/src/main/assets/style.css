@@ -440,6 +440,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    position: relative;
 }
 
 .btn {
@@ -488,8 +489,8 @@ body {
 footer {
     text-align: center;
     padding: 20px 0;
-    position: fixed;
-    bottom: 0;
+    position: relative;
+    top: 100px;
     width: 100%;
     -webkit-user-select: none;
     -moz-user-select: none;
