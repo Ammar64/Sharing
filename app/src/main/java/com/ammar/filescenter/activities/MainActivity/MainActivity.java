@@ -1,5 +1,6 @@
 package com.ammar.filescenter.activities.MainActivity;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.MainActivity.fragments.ReceiveFragment;
 import com.ammar.filescenter.activities.MainActivity.fragments.SendFragment;
+import com.ammar.filescenter.activities.SharingActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 ft.replace(R.id.MainActivityFragmentContainer, SendFragment.class, null);
             } else if (id == R.id.B_Home) {
-                return false;
+                startActivity(new Intent(this, SharingActivity.class));
             } else if (id == R.id.B_Settings) {
                 return false;
             }
