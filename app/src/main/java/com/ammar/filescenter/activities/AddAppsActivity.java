@@ -22,6 +22,7 @@ import java.util.List;
 
 public class AddAppsActivity extends AppCompatActivity {
     public static final String EXTRA_INTENT_APPS = "com.ammar.filescenter.SELECTED_APPS";
+    public static final String ACTION_ADD_APPS = "ACTION_ADD_APPS";
     private RecyclerView appsRecycler;
     LinkedList<String> selectedApps = new LinkedList<>();
 
@@ -59,7 +60,7 @@ public class AddAppsActivity extends AppCompatActivity {
                 setResult(RESULT_CANCELED);
                 finish();
             }
-            Intent intent = new Intent();
+            Intent intent = new Intent(ACTION_ADD_APPS);
             intent.putExtra(EXTRA_INTENT_APPS, selectedApps);
             setResult(RESULT_OK, intent);
             finish();

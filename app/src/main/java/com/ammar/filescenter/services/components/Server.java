@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.ammar.filescenter.activities.MainActivity.models.Download;
 import com.ammar.filescenter.services.NetworkService;
 import com.ammar.filescenter.services.objects.Downloadable;
 
@@ -21,7 +22,9 @@ public class Server {
 
     private ServerSocket serverSocket;
     private Thread serverThread;
+
     public final LinkedList<Downloadable> downloadablesList = new LinkedList<>();
+    public static final LinkedList<Download> downloadsList = new LinkedList<>();
     public static final LinkedList<String> connectedDevices = new LinkedList<String>() {
         @Override
         public boolean add(String e) {

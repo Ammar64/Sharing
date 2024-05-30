@@ -9,6 +9,8 @@ import android.util.Log;
 import java.io.File;
 import java.util.UUID;
 
+import com.ammar.filescenter.services.components.Server;
+
 public class AppDownloadable extends Downloadable {
     public AppDownloadable(Context context, String package_id) {
         try {

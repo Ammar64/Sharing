@@ -24,14 +24,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FilesCenter"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
         <activity android:name=".activities.SharingActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <activity android:name=".activities.AddFilesActivity"
@@ -40,6 +37,15 @@
 
         <activity android:name=".activities.AddAppsActivity"
             android:exported="false" />
+
+        <activity android:name=".activities.MainActivity.MainActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+        </activity>
 
         <service android:name=".services.NetworkService"
             android:exported="false"

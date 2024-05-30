@@ -28,12 +28,15 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.UUID;
 
-/** @noinspection unused */
+/**
+ * @noinspection unused
+ */
 public class NetworkService extends Service {
 
     public static final String ACTION_TOGGLE_SERVER = "com.ammar.filescenter.services.TOGGLE_SERVER";
@@ -133,9 +136,9 @@ public class NetworkService extends Service {
             case ACTION_ADD_APPS_DOWNLOADABLE:
                 ArrayList<String> appsName = intent.getStringArrayListExtra(EXTRA_APPS_NAMES);
                 for (String i : appsName) {
-                    server.downloadablesList.add(
-                            new AppDownloadable(this, i)
-                    );
+                    AppDownloadable app = new AppDownloadable(this, i);
+                    server.downloadablesList.add(app);
+                    server.downloadablesList.addAll(Arrays.asList(app.splits));
                 }
                 break;
             default:

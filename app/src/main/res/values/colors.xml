@@ -2,11 +2,15 @@
 <resources>
     <color name="brightTextColor">#E6E6E6</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="colorPrimary">#6055F2</color>
-    <color name="colorSecondary">#42E46B</color>
-
+    <color name="white">#e0e0e0</color>
+    <color name="colorPrimary">#2196f3</color>
+    <color name="colorSecondary">#e91e63</color>
+    <color name="colorSecondaryTransparent">#38e91e62</color>
     <color name="status_on">#0c0</color>
     <color name="status_off">#c00</color>
     <color name="selected">#32000000</color>
+    <color name="text_color">#777</color>
+    <color name="colorTrinary">#776391</color>
+
+
 </resources>

@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.ammar.filescenter"
-        minSdk 19
+        minSdk 21 // API 19 is android 4. I'll change to 5
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -55,5 +55,6 @@ dependencies {
     implementation libs.recyclerview
     implementation libs.localbroadcastmanager
     implementation libs.documentfile
-
+    implementation libs.material
+    implementation libs.okhttp
 }

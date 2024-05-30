@@ -1,14 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activities.SendActivity.SendFragment">
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/TV_ReceiveTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/colorTrinary"
+        android:text="Send"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="20sp"/>
 
-</FrameLayout>
+
+    <ImageButton
+        android:id="@+id/B_AddApps"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/apps_icon"
+        android:background="@drawable/circular_button"
+         />
+
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:labelFor="@+id/B_AddApps"
+        android:text="add apps"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/B_AddApps"
+        app:layout_constraintStart_toStartOf="@+id/B_AddApps"
+        app:layout_constraintTop_toBottomOf="@+id/B_AddApps" />
+
+
+    <ImageButton
+        android:id="@+id/B_AddFiles"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/circular_button"
+        android:src="@drawable/file_icon_red"
+        app:layout_constraintEnd_toStartOf="@id/B_ShowSelected"
+        app:layout_constraintStart_toEndOf="@+id/B_AddApps"
+        app:layout_constraintTop_toTopOf="@+id/B_AddApps" />
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="add files"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/B_AddFiles"
+        app:layout_constraintStart_toStartOf="@+id/B_AddFiles"
+        app:layout_constraintTop_toBottomOf="@+id/B_AddFiles"
+        android:labelFor="@+id/B_AddFiles"/>
+
+    <ImageButton
+        android:id="@+id/B_ShowSelected"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/circular_button"
+        android:src="@drawable/check_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/B_AddApps" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="choosed"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/B_ShowSelected"
+        app:layout_constraintStart_toStartOf="@+id/B_ShowSelected"
+        app:layout_constraintTop_toBottomOf="@+id/B_ShowSelected"
+        android:labelFor="@+id/B_ShowSelected"/>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/materialButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:backgroundTint="@color/colorSecondary"
+        android:text="send"
+        android:textColor="@color/white"
+        app:cornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="Choose to send"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/B_AddApps"
+        app:layout_constraintStart_toStartOf="@+id/B_AddApps" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RV_SelectedDownloads"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialButton"
+        tools:listitem="@layout/row_download_view"/>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

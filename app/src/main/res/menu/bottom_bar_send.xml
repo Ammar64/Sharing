@@ -1,4 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/B_Receive"
+        android:icon="@drawable/receive_icon"
+        android:title="Receive" />
+
+    <item
+        android:id="@+id/B_Share"
+        android:icon="@drawable/share_icon"
+        android:title="Share" />
+
+    <item
+        android:enabled="false"
+        android:title="" />
+
+    <item
+        android:id="@+id/B_Home"
+        android:icon="@drawable/home_icon"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/B_Settings"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="Settings" />
 
 </menu>

@@ -1,16 +1,15 @@
-package com.ammar.filescenter.activities.SendActivity;
+package com.ammar.filescenter.activities.MainActivity;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.ammar.filescenter.R;
-import com.ammar.filescenter.activities.SendActivity.fragments.ReceiveFragment;
-import com.ammar.filescenter.activities.SendActivity.fragments.SendFragment;
+import com.ammar.filescenter.activities.MainActivity.fragments.ReceiveFragment;
+import com.ammar.filescenter.activities.MainActivity.fragments.SendFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 

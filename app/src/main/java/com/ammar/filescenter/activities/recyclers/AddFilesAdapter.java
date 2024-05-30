@@ -48,7 +48,7 @@ public class AddFilesAdapter extends RecyclerView.Adapter<AddFilesAdapter.ViewHo
         String type = file.getType();
         holder.setFileIndex(position);
         if (file.isDirectory()) {
-            holder.icon.setImageResource(R.drawable.folder);
+            holder.icon.setImageResource(R.drawable.folder_icon);
             holder.checkBox.setVisibility(View.GONE);
         } else {
             holder.checkBox.setVisibility(View.VISIBLE);
@@ -61,13 +61,13 @@ public class AddFilesAdapter extends RecyclerView.Adapter<AddFilesAdapter.ViewHo
             if (type.startsWith("image/")) {
                 holder.icon.setImageURI(file.getUri());
             } else if ("application/pdf".equals(type)) {
-                holder.icon.setImageResource(R.drawable.icons8_pdf_100);
+                holder.icon.setImageResource(R.drawable.file_icon_red);
             } else if ("application/vnd.android.package-archive".equals(type)) {
-                holder.icon.setImageResource(R.drawable.icons8_apk_file_100);
+                holder.icon.setImageResource(R.drawable.file_icon_red);
             } else if ("text/plain".equals(type)) {
-                holder.icon.setImageResource(R.drawable.icons8_text_file_100);
+                holder.icon.setImageResource(R.drawable.file_icon_red);
             } else {
-                holder.icon.setImageResource(R.drawable.icons8_file_100);
+                holder.icon.setImageResource(R.drawable.file_icon_red);
             }
         }
 

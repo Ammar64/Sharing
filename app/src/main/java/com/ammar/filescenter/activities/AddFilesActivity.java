@@ -21,6 +21,7 @@ import java.util.LinkedList;
 
 public class AddFilesActivity extends AppCompatActivity {
     public static final String EXTRA_INTENT_PATHS = "com.ammar.filescenter.EXTRA_INTENT_PATHS";
+    public static final String ACTION_ADD_FILES = "ACTION_ADD_FILES";
     LinkedList<String> selectedFiles = new LinkedList<>();
 
     @Override
@@ -63,7 +64,7 @@ public class AddFilesActivity extends AppCompatActivity {
                 setResult(RESULT_CANCELED);
                 finish();
             }
-            Intent intent = new Intent();
+            Intent intent = new Intent(ACTION_ADD_FILES);
             intent.putExtra(EXTRA_INTENT_PATHS, selectedFiles);
             setResult(RESULT_OK, intent);
             finish();
