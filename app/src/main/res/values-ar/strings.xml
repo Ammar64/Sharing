@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">مركز الملفات</string>
+    <string name="app_name">شيرنج</string>
     <string name="show_qr">اعرض كود الاستجابة</string>
     <string name="settings">الإعدادات</string>
     <string name="off">معطل</string>
