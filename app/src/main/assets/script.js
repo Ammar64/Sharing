@@ -51,7 +51,10 @@ function updateProgress(percent) {
 function requestAvailableDownloads() {
     // Show the loader when the request starts
     showLoader();
-    while(downloads.lastChild) {downloads.lastChild.remove();}
+    while (downloads.lastChild) {
+        downloads.lastChild.remove();
+    }
+
     fetch("/available-downloads", {
         headers: {
             "Content-Type": "application/json"
@@ -61,28 +64,76 @@ function requestAvailableDownloads() {
             return res.json();
         }
     }).then(data => {
-    
         data.forEach(e => {
             const newFileItem = download_item.cloneNode();
             newFileItem.textContent = `${e.name}     (${getFormattedFileSize(e.size)})`;
             downloads.appendChild(newFileItem);
             newFileItem.addEventListener("click", () => {
-                let link = document.createElement("a");
-                link.style.display = "none";
-                link.href = `/download/${e.uuid}`
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            })
+                downloadFileWithProgress(`/download/${e.uuid}`);
+            });
         });
         // Hide the loader when the request is complete
         hideLoader();
     }).catch(error => {
         console.error('Error fetching available downloads:', error);
-
         // Hide the loader even if there is an error
         hideLoader();
     });
+}
+
+function downloadFileWithProgress(url) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.responseType = "blob";
+
+    xhr.onprogress = function(event) {
+        if (event.lengthComputable) {
+            const percentComplete = (event.loaded / event.total) * 100;
+            updateProgress(Math.round(percentComplete));
+        }
+    };
+
+    xhr.onloadstart = function() {
+        showLoader();
+        updateProgress(0);
+    };
+
+    xhr.onloadend = function() {
+        hideLoader();
+    };
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            // Create a link to download the file
+            const link = document.createElement("a");
+            link.style.display = "none";
+            const url = window.URL.createObjectURL(xhr.response);
+            link.href = url;
+            link.download = getFileNameFromContentDisposition(xhr.getResponseHeader('Content-Disposition'));
+            document.body.appendChild(link);
+            link.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(link);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.error('Error downloading the file');
+        hideLoader();
+    };
+
+    xhr.send();
+}
+
+function getFileNameFromContentDisposition(contentDisposition) {
+    let fileName = "downloadedFile";
+    if (contentDisposition) {
+        const fileNameMatch = contentDisposition.match(/filename="?(.+)"?/);
+        if (fileNameMatch.length === 2) {
+            fileName = fileNameMatch[1];
+        }
+    }
+    return fileName;
 }
 
 function getFormattedFileSize(s) {
