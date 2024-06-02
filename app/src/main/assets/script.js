@@ -104,13 +104,21 @@ function getFormattedFileSize(s) {
 
 
 /* reloading page */
-window.addEventListener('onload', function (event) {
-    showLoader();
-    console.log('Page is unloading...');
-});
-
 window.addEventListener('load', function (event) {
-    hideLoader();
-    console.log('Page has fully loaded.');
+    showLoader();
+    updateProgress(0);
+
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += 1;
+        if (progress > 100) {
+            progress = 100;
+            clearInterval(interval);
+            hideLoader();
+        }
+        updateProgress(progress);
+    }, 30);
+
+    console.log('Page is refreshing...');
 });
 
