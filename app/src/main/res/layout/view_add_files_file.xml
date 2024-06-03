@@ -9,7 +9,7 @@
     android:layout_height="70dp">
 
     <ImageView
-        android:id="@+id/IV_FileIcon"
+        android:id="@+id/IV_FileIco"
         android:layout_width="50dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,11 +19,11 @@
         tools:src="@drawable/folder" />
 
     <TextView
-        android:id="@+id/TV_FileName"
+        android:id="@+id/TV_FileNam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/IV_FileIcon"
+        app:layout_constraintStart_toEndOf="@+id/IV_FileIco"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="24dp"
         android:textSize="24sp"

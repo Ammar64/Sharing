@@ -5,6 +5,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_subdirectory("qrcodegen")
 project("filescenter")
 
-add_library(NativeQRCodeGen SHARED generateqr.cpp)
+add_library(NativeQRCodeGen SHARED qrgenerator.c)
 
 target_link_libraries(NativeQRCodeGen PRIVATE qrcodegen)

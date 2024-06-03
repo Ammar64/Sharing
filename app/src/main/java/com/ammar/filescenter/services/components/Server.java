@@ -6,8 +6,8 @@ import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.ammar.filescenter.activities.MainActivity.models.Download;
 import com.ammar.filescenter.services.NetworkService;
+import com.ammar.filescenter.services.models.Upload;
 import com.ammar.filescenter.services.objects.Downloadable;
 
 import java.io.IOException;
@@ -15,7 +15,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.LinkedList;
-import java.util.List;
 
 public class Server {
     public static final int PORT_NUMBER = 2999;
@@ -24,7 +23,7 @@ public class Server {
     private Thread serverThread;
 
     public final LinkedList<Downloadable> downloadablesList = new LinkedList<>();
-    public static final LinkedList<Download> downloadsList = new LinkedList<>();
+    public static final LinkedList<Upload> filesList = new LinkedList<>();
     public static final LinkedList<String> connectedDevices = new LinkedList<String>() {
         @Override
         public boolean add(String e) {

@@ -16,18 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.services.NetworkService;
+import com.ammar.filescenter.services.components.Server;
 import com.ammar.filescenter.services.models.Upload;
 import com.ammar.filescenter.utils.Utils;
 
 import java.util.List;
 
-public class ChoosenFilesAdapter extends RecyclerView.Adapter<ChoosenFilesAdapter.ViewHolder> {
+public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.ViewHolder> {
 
-    public ChoosenFilesAdapter(List<Upload> uploadsList) {
-        this.uploadsList = uploadsList;
-    }
-
-    List<Upload> uploadsList;
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -38,13 +34,13 @@ public class ChoosenFilesAdapter extends RecyclerView.Adapter<ChoosenFilesAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setup(uploadsList.get(position));
-        holder.setFileListener(position);
+        holder.setup(Server.filesList.get(position));
+        holder.setFileListener(Server.filesList.get(position).getUUID());
     }
 
     @Override
     public int getItemCount() {
-        return uploadsList.size();
+        return Server.filesList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -65,11 +61,13 @@ public class ChoosenFilesAdapter extends RecyclerView.Adapter<ChoosenFilesAdapte
             setFileIconIV(file);
             setFileSizeTV(file.getSize());
         }
-        public void setFileListener(int indexRemove) {
-            Intent serviceIntent = new Intent(itemView.getContext(), NetworkService.class);
-            serviceIntent.setAction(NetworkService.ACTION_REMOVE_DOWNLOAD);
-            serviceIntent.putExtra(NetworkService.EXTRA_DOWNLOAD_REMOVE, indexRemove);
-            itemView.getContext().startService(serviceIntent);
+        public void setFileListener(String uuid) {
+            removeFileB.setOnClickListener( button -> {
+                Intent serviceIntent = new Intent(itemView.getContext(), NetworkService.class);
+                serviceIntent.setAction(NetworkService.ACTION_REMOVE_DOWNLOAD);
+                serviceIntent.putExtra(NetworkService.EXTRA_DOWNLOAD_UUID, uuid);
+                itemView.getContext().startService(serviceIntent);
+            });
         }
 
         public void setFileName(String fileName) {
@@ -80,7 +78,7 @@ public class ChoosenFilesAdapter extends RecyclerView.Adapter<ChoosenFilesAdapte
             fileSizeTV.setText(Utils.getFormattedSize(size));
         }
 
-        public void setFileIconIV(Upload file) {
+        public void setFileIconIV(@NonNull Upload file) {
             String mimeType = file.getMimeType();
             if(mimeType.startsWith("image/")) {
                 fileIconIV.setImageDrawable(Drawable.createFromPath(file.getFilePath()));

@@ -3,6 +3,7 @@ package com.ammar.filescenter.services.components;
 import android.util.Log;
 
 import com.ammar.filescenter.services.NetworkService;
+import com.ammar.filescenter.services.models.Upload;
 import com.ammar.filescenter.services.objects.Downloadable;
 
 import org.json.JSONArray;
@@ -59,7 +60,7 @@ public class ClientHandler implements Runnable {
                 } else if ("GET".equals(request.getMethod())) {
                     if ("/available-downloads".equals(path)) {
                         try {
-                            byte[] downloadables_response = getDownloadablesJson();
+                            byte[] downloadables_response = getFileJson();
                             response.sendResponse(downloadables_response);
                         } catch (JSONException e) {
                             Log.e("MYLOG", Objects.requireNonNull(e.getMessage()));
@@ -76,19 +77,26 @@ public class ClientHandler implements Runnable {
                     } else if (path.startsWith("/download/")) {
                         String requestedUUID = path.substring(10);
                         try {
-                            Downloadable downloadable = getDownloadableWithUUID(requestedUUID);
-                            response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", downloadable.getName()));
-                            response.setHeader("Content-Type", "application/octet-stream");
-                            response.sendFileResponse(downloadable.getPath());
+                            Upload file = getFileWithUUID(requestedUUID);
+                            response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getFileName()));
+                            response.setHeader("Content-Type", file.getMimeType());
+                            response.sendFileResponse(file);
                         } catch (RuntimeException e) {
                             Log.i("MYLOG", "FileNotHosted");
-                            response.setHeader("Content-Type", "text/html");
-                            response.setHeader("Content-Disposition", "inline");
-                            response.sendResponse("File not hosted".getBytes(StandardCharsets.UTF_8));
+                            if( "FileNotHosted".equals(e.getMessage()) ) {
+                                response.setHeader("Content-Type", "text/html");
+                                response.setHeader("Content-Disposition", "inline");
+                                response.sendResponse("File not hosted".getBytes(StandardCharsets.UTF_8));
+                            } else {
+                                Log.e("MYLOG", Objects.requireNonNull(e.getMessage()));
+                            }
                         }
                     } else if ("/favicon.ico".equals(path)) {
                         response.setHeader("Content-Type", "image/svg+xml");
                         response.sendResponse(NetworkService.readFileFromAssets("icons8-share.svg"));
+                    } else if ("/dv.png".equals(path)) {
+                        response.setHeader("Content-Type", "image/png");
+                        response.sendResponse(NetworkService.readFileFromAssets("dv.png"));
                     } else {
                         response.setStatusCode(404);
                         response.setHeader("Content-Type", "text/html");
@@ -109,19 +117,19 @@ public class ClientHandler implements Runnable {
 
     }
 
-    private Downloadable getDownloadableWithUUID(String uuid) throws RuntimeException {
-        for (Downloadable i : downloadablesList) {
-            if (uuid.equals(i.getUUID().toString())) {
+    private Upload getFileWithUUID(String uuid) throws RuntimeException {
+        for (Upload i : Server.filesList) {
+            if (uuid.equals(i.getUUID())) {
                 return i;
             }
         }
         throw new RuntimeException("FileNotHosted");
     }
 
-    private byte[] getDownloadablesJson() throws JSONException {
+    private byte[] getFileJson() throws JSONException {
         JSONArray jsonArray = new JSONArray();
-        for (Downloadable i : downloadablesList) {
-            jsonArray.put(i.getJSONObject());
+        for (Upload i : Server.filesList) {
+            jsonArray.put(i.getJSON());
         }
         return jsonArray.toString().getBytes();
     }

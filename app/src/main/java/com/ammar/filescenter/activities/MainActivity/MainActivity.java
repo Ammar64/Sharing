@@ -12,6 +12,7 @@ import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.MainActivity.fragments.ReceiveFragment;
 import com.ammar.filescenter.activities.MainActivity.fragments.SendFragment;
 import com.ammar.filescenter.activities.SharingActivity;
+import com.ammar.filescenter.services.NetworkService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -22,20 +23,19 @@ public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton serverButton;
     private BottomNavigationView bottomNavigationView;
-    boolean server_on = false;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initItems();
         setItemsListener();
+        initStates();
+        observeStates();
     }
 
     private void initItems() {
         bottomNavigationView = findViewById(R.id.BottomNavView);
         serverButton = findViewById(R.id.FAB_ServerButton);
-
         bottomNavigationView.setSelectedItemId(R.id.B_Share);
     }
 
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
             ReceiveFragment.class,
             SendFragment.class
     }));
+
 
     private void setItemsListener() {
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -76,15 +77,26 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
         serverButton.setOnClickListener((button) -> {
-            if (server_on) {
-                server_on = false;
-                button.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.status_off)));
+            Intent serviceIntent = new Intent(this, NetworkService.class);
+            serviceIntent.setAction(NetworkService.ACTION_TOGGLE_SERVER);
+            startService(serviceIntent);
+        });
+
+    }
+
+    private void initStates() {
+        Intent serviceIntent = new Intent(this, NetworkService.class);
+        serviceIntent.setAction(NetworkService.ACTION_GET_SERVER_STATUS);
+        startService(serviceIntent);
+    }
+    private void observeStates() {
+        NetworkService.serverStatusObserver.observe(this, running -> {
+            if(running) {
+                serverButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.status_on)));
             } else {
-                server_on = true;
-                button.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.status_on)));
+                serverButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.status_off)));
             }
         });
     }
-
 
 }
