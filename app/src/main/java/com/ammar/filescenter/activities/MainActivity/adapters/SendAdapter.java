@@ -1,6 +1,5 @@
 package com.ammar.filescenter.activities.MainActivity.adapters;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
-import com.ammar.filescenter.services.NetworkService;
-import com.ammar.filescenter.services.models.Upload;
-import com.ammar.filescenter.services.progress.ProgressSendWatcher;
+import com.ammar.filescenter.services.progress.ProgressWatcher;
 import com.ammar.filescenter.utils.Utils;
-
-import java.util.List;
 
 
 // this adapter is for files that is currently uploading.
@@ -35,18 +30,19 @@ public class SendAdapter extends RecyclerView.Adapter<SendAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setup(ProgressSendWatcher.progressSendWatchers.get(position));
+        holder.setup(ProgressWatcher.progressSendWatchers.get(position));
         holder.setFileListener(position);
     }
 
     @Override
     public int getItemCount() {
-        return ProgressSendWatcher.progressSendWatchers.size();
+        return ProgressWatcher.progressSendWatchers.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView fileNameTV;
         TextView fileSizeTV;
+        TextView operationTV;
         ProgressBar fileProgressPB;
         TextView fileProgressTV;
         Button removeFileB;
@@ -54,16 +50,25 @@ public class SendAdapter extends RecyclerView.Adapter<SendAdapter.ViewHolder> {
             super(itemView);
             fileNameTV  = itemView.findViewById(R.id.TV_FileUploadName);
             fileSizeTV  = itemView.findViewById(R.id.TV_FileUploadSize);
+            operationTV = itemView.findViewById(R.id.TV_OperationType);
             fileProgressPB = itemView.findViewById(R.id.PB_FileUploadProgress);
             fileProgressTV = itemView.findViewById(R.id.TV_FileUploadProgress);
             removeFileB = itemView.findViewById(R.id.B_StopFileUpload);
         }
 
-        public void setup(ProgressSendWatcher watcher) {
-            setFileName(watcher.getFile().getFileName());
-            setFileSizeTV(watcher.getFile().getSize());
+        public void setup(ProgressWatcher watcher) {
+            setFileName(watcher.getFileName());
+            setFileSizeTV(watcher.getSize());
             setProgress(watcher.getPercentage());
+            setOperationText(watcher.getOperation());
         }
+
+        private void setOperationText(ProgressWatcher.Operation operation) {
+            String operationText;
+            if( operation == ProgressWatcher.Operation.DOWNLOAD ) operationText = "Sending..."; else operationText = "Receiving...";
+            operationTV.setText(operationText);
+        }
+
         public void setFileListener(int indexCancel) {
 //            Intent serviceIntent = new Intent(itemView.getContext(), NetworkService.class);
 //            serviceIntent.setAction(NetworkService.ACTION_CANCEL_UPLOAD);
@@ -71,14 +76,14 @@ public class SendAdapter extends RecyclerView.Adapter<SendAdapter.ViewHolder> {
 //            itemView.getContext().startService(serviceIntent);
         }
 
-        public void setFileName(String fileName) {
+        private void setFileName(String fileName) {
             fileNameTV.setText(fileName);
         }
 
-        public void setFileSizeTV(long size) {
+        private void setFileSizeTV(long size) {
             fileSizeTV.setText(Utils.getFormattedSize(size));
         }
-        public void setProgress(int progress) {
+        private void setProgress(int progress) {
             fileProgressPB.setProgress(progress);
             fileProgressTV.setText(progress + "%");
         }

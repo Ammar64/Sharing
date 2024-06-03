@@ -3,7 +3,7 @@ package com.ammar.filescenter.services.components;
 import android.util.Log;
 
 import com.ammar.filescenter.services.models.Upload;
-import com.ammar.filescenter.services.progress.ProgressSendWatcher;
+import com.ammar.filescenter.services.progress.ProgressWatcher;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,7 +12,6 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Timer;
 
 public class Response {
     private Socket clientSocket;
@@ -23,7 +22,7 @@ public class Response {
     }
 
     public void sendFileResponse(Upload file) {
-        ProgressSendWatcher sendWatcher = new ProgressSendWatcher(file);
+        ProgressWatcher sendWatcher = new ProgressWatcher(file, ProgressWatcher.Operation.DOWNLOAD);
         try {
             OutputStream out = clientSocket.getOutputStream();
 

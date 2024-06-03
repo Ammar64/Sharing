@@ -5,6 +5,9 @@ import static com.ammar.filescenter.utils.Utils.readLineUTF8;
 import android.os.Environment;
 import android.util.Log;
 
+import com.ammar.filescenter.services.models.Upload;
+import com.ammar.filescenter.services.progress.ProgressWatcher;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -27,6 +30,7 @@ import java.util.TreeMap;
 
 public class Request {
     BufferedInputStream clientInput;
+    int charsRead = 0;
     public Request(Socket clientSocket) {
         try {
             clientInput = new BufferedInputStream(clientSocket.getInputStream());
@@ -43,9 +47,12 @@ public class Request {
             int lineNumber = 1;
             String line;
             while ((!(line = readLineUTF8(clientInput)).isEmpty())) {
+                charsRead += line.length() + 2; // string length + \r + \n
+
                 handleHTTPHeader(line, lineNumber);
                 lineNumber++;
             }
+            charsRead += 2; // the \r and \n.
 
             return true;
         } catch (SocketTimeoutException e) {
@@ -161,8 +168,10 @@ public class Request {
 
                 for (int lineNum = 1; ; lineNum++) {
                     String line = "";
-                    if (!readingBody)
+                    if (!readingBody) {
                         line = readLineUTF8(clientInput);
+                        charsRead += line.length() + 2; // string length + \r + \n
+                    }
                     if (line.equals("--" + boundary)) {
                         lineNum = 1;
                         readingBody = false;
@@ -189,6 +198,15 @@ public class Request {
                             if (file_upload.createNewFile()) {
                                 BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file_upload));
 
+                                // Init Progress watcher
+                                ProgressWatcher watcher = new ProgressWatcher(null, ProgressWatcher.Operation.UPLOAD);
+                                String requestSize = headers.get("Content-Length");
+                                if (requestSize != null) {
+                                    long size = Long.parseLong(requestSize) - charsRead - boundary.length() - 4;
+                                    Log.d("MYLOG", "File Uplaod size " + size + " bytes");
+                                    watcher.setRequestInfo(filename ,size);
+                                }
+                                watcher.notifyEverySecond();
                                 // boundary index
                                 int bi = 0;
                                 // char
@@ -208,14 +226,17 @@ public class Request {
                                         }
                                     } else {
                                         if (buffer.size() != 0) {
+                                            watcher.accumulate(buffer.size());
                                             out.write(buffer.toString().getBytes());
                                             buffer.reset();
                                         } else {
                                             bi = 0;
                                         }
                                         out.write((char) c);
+                                        watcher.accumulate(1);
                                     }
                                 }
+                                watcher.remove();
                                 return true;
                             }
                         }

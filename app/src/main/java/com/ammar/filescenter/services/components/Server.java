@@ -15,8 +15,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.LinkedList;
-
 public class Server {
+
     public static final int PORT_NUMBER = 2999;
 
     private ServerSocket serverSocket;

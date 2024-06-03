@@ -91,22 +91,17 @@ public class SendFragment extends Fragment {
             String[] parts = info.split(":");
             String action = parts[0];
 
-            switch (parts.length) {
-                case 2:
-                    if ("A".equals(action)) {
-                        int index = Integer.parseInt(parts[1]);
-                        adapter.notifyItemInserted(index);
-                    } else if("R".equals(action)) {
-                        int index = Integer.parseInt(parts[1]);
-                        adapter.notifyItemRemoved(index);
-                    }
-                    break;
-                case 3:
-                    if( "P".equals(action) ) {
-                        int index = Integer.parseInt(parts[1]);
-                        adapter.notifyItemChanged(index);
-                    }
-                    break;
+            if (parts.length == 2) {
+                if ("P".equals(action)) {
+                    int index = Integer.parseInt(parts[1]);
+                    adapter.notifyItemChanged(index);
+                } else if ("A".equals(action)) {
+                    int index = Integer.parseInt(parts[1]);
+                    adapter.notifyItemInserted(index);
+                } else if ("R".equals(action)) {
+                    int index = Integer.parseInt(parts[1]);
+                    adapter.notifyItemRemoved(index);
+                }
             }
         });
 

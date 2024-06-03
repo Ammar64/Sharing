@@ -46,10 +46,9 @@ public class Utils {
             byteArrayOutputStream.write(c);
         }
         if (c == -1 && byteArrayOutputStream.size() == 0) {
-            return null;
+            return "";
         }
-        String line = byteArrayOutputStream.toString("UTF-8");
-        return line;
+        return byteArrayOutputStream.toString("UTF-8");
     }
 
 }
