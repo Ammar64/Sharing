@@ -3,8 +3,7 @@
 
 #define encodeTextToQR Java_com_ammar_filescenter_activities_SharingActivity_encodeTextToQR
 
-JNIEXPORT jbyteArray JNICALL encodeTextToQR(JNIEnv *env, jobject thiz, jstring jtext)
-{
+JNIEXPORT jbyteArray JNICALL encodeTextToQR(JNIEnv *env, jobject thiz, jstring jtext) {
     const char *text = (*env)->GetStringUTFChars(env, jtext, 0);
     // generate QR Code
     QRCode qrcode;
@@ -16,10 +15,12 @@ JNIEXPORT jbyteArray JNICALL encodeTextToQR(JNIEnv *env, jobject thiz, jstring j
 
     for (int y = 0; y < qrcode.size; y++) {
         for (int x = 0; x < qrcode.size; x++) {
-            qrCodeBytes[ qrcode.size * x + y ] = qrcode_getModule(&qrcode, x, y) ? (jbyte) 1 : (jbyte) 0;
+            qrCodeBytes[qrcode.size * x + y] = qrcode_getModule(&qrcode, x, y) ? (jbyte) 1
+                                                                               : (jbyte) 0;
         }
     }
 
     (*env)->ReleaseByteArrayElements(env, qrCodeArray, qrCodeBytes, 0);
     return qrCodeArray;
 }
+// make big file with termux

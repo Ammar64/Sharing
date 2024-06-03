@@ -8,3 +8,4 @@ project("filescenter")
 add_library(NativeQRCodeGen SHARED qrgenerator.c)
 
 target_link_libraries(NativeQRCodeGen PRIVATE qrcodegen)
+# Where is my C files ????????????!!!!!!! Your code will appear when you do successful build this is the old app on your table
