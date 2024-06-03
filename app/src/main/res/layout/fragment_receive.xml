@@ -24,7 +24,7 @@
         android:layout_height="60dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="100dp"
-        android:background="@drawable/circular_button"
+        android:background="@drawable/circular_button_white"
         android:src="@drawable/camera_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

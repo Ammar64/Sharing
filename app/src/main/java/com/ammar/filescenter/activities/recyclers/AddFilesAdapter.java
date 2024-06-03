@@ -61,13 +61,13 @@ public class AddFilesAdapter extends RecyclerView.Adapter<AddFilesAdapter.ViewHo
             if (type.startsWith("image/")) {
                 holder.icon.setImageURI(file.getUri());
             } else if ("application/pdf".equals(type)) {
-                holder.icon.setImageResource(R.drawable.file_icon_red);
+                holder.icon.setImageResource(R.drawable.icon_file_red);
             } else if ("application/vnd.android.package-archive".equals(type)) {
-                holder.icon.setImageResource(R.drawable.file_icon_red);
+                holder.icon.setImageResource(R.drawable.icon_file_red);
             } else if ("text/plain".equals(type)) {
-                holder.icon.setImageResource(R.drawable.file_icon_red);
+                holder.icon.setImageResource(R.drawable.icon_file_red);
             } else {
-                holder.icon.setImageResource(R.drawable.file_icon_red);
+                holder.icon.setImageResource(R.drawable.icon_file_red);
             }
         }
 
@@ -110,8 +110,8 @@ public class AddFilesAdapter extends RecyclerView.Adapter<AddFilesAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            icon = itemView.findViewById(R.id.IV_FileIcon);
-            filename = itemView.findViewById(R.id.TV_FileName);
+            icon = itemView.findViewById(R.id.IV_FileIco);
+            filename = itemView.findViewById(R.id.TV_FileNam);
             checkBox = itemView.findViewById(R.id.CB_FileSelect);
         }
 

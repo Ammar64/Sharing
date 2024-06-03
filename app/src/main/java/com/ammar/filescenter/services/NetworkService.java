@@ -9,15 +9,18 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.lifecycle.MutableLiveData;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.services.components.Server;
+import com.ammar.filescenter.services.models.Upload;
 import com.ammar.filescenter.services.objects.AppDownloadable;
 import com.ammar.filescenter.services.objects.Downloadable;
 
@@ -30,7 +33,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -48,23 +51,36 @@ public class NetworkService extends Service {
     public static final String ACTION_GET_DOWNLOADABLE = "com.ammar.filescenter.services.GET_DOWNLOADABLE";
     public static final String ACTION_MODIFY_DOWNLOADABLE = "com.ammar.filescenter.services.MODIFY_DOWNLOADABLE";
     public static final String ACTION_DEVICE_CONNECTED = "com.ammar.filescenter.services.DEVICE_CONNECTED";
+    public static final String ACTION_REMOVE_DOWNLOAD = "ACTION_REMOVE_DOWNLOAD";
+    public static final String ACTION_CANCEL_UPLOAD = "ACTION_UPLOAD_CANCEL";
+    public static final String ACTION_ADD_DOWNLOADS = "ACTION_ADD_DOWNLOADS";
+    public static final String ACTION_ADD_APPS_DOWNLOADS = "ACTION_ADD_APPS_DOWNLOADS";
+    public static final String ACTION_GET_DOWNLOADS = "ACTION_GET_DOWNLOADS";
 
     public static final String EXTRA_SERVER_STATUS = "com.ammar.filescenter.services.SERVER_STATUS";
     public static final String EXTRA_SERVER_ADDRESS = "com.ammar.filescenter.services.SERVER_ADDRESS";
     public static final String EXTRA_SERVER_PORT = "com.ammar.filescenter.services.SERVER_PORT";
-
     public static final String EXTRA_FILE_PATHS = "com.ammar.filescenter.services.FILE_PATHS";
     public static final String EXTRA_DOWNLOADABLES_ARRAY = "com.ammar.filescenter.services.DOWNLOADABLES_LIST";
     public static final String EXTRA_APPS_NAMES = "com.ammar.filescenter.services.APPS_NAME";
     public static final String EXTRA_MODIFY_TYPE = "com.ammar.filescenter.services.MODIFY_TYPE";
     public static final String EXTRA_MODIFY_DELETE_UUID = "com.ammar.filescenter.services.MODIFY_DELETE_UUID";
     public static final String EXTRA_CONNECTED_DEVICES_LIST = "com.ammar.filescenter.services.CONNECTED_DEVICES_LIST";
+    public static final String EXTRA_DOWNLOAD_REMOVE = "EXTRA_DOWNLOAD_REMOVE";
+    public static final String EXTRA_UPLOAD_CANCEL = "EXTRA_UPLOAD_CANCEL";
+    public static final String EXTRA_DOWNLOAD_UUID = "EXTRA_DOWNLOAD_UUID";
 
 
+    // observers
+    public static final MutableLiveData<Boolean> serverStatusObserver = new MutableLiveData<>();
+    public static final MutableLiveData<Bundle> downloadsListObserver = new MutableLiveData<>();
+    public static final MutableLiveData<List<Upload>> filesListObserver = new MutableLiveData<>();
+    public static final MutableLiveData<String> filesListNotifier = new MutableLiveData<>();
+    public static final String DATA_DOWNLOADS_LIST = "DATA_DOWNLOADS_LIST";
     public static final String VALUE_MODIFY_DELETE = "com.ammar.filescenter.services.VALUE_MODIFY_DELETE";
+    public static final MutableLiveData<String> filesSendNotifier = new MutableLiveData<>();
 
     private final int FOREGROUND_NOTIFICATION_ID = 1;
-
     public static final int PORT_NUMBER = 2999;
     public static AssetManager assetManager;
 
@@ -141,6 +157,36 @@ public class NetworkService extends Service {
                     server.downloadablesList.addAll(Arrays.asList(app.splits));
                 }
                 break;
+
+
+
+
+            case ACTION_ADD_DOWNLOADS:
+                ArrayList<String> filePaths = intent.getStringArrayListExtra(EXTRA_FILE_PATHS);
+                assert filePaths != null;
+                for( String i : filePaths ) {
+                    server.filesList.add( new Upload(i));
+                }
+                break;
+            case ACTION_ADD_APPS_DOWNLOADS:
+
+                break;
+            case ACTION_GET_DOWNLOADS:
+                filesListObserver.postValue(server.filesList);
+            case ACTION_REMOVE_DOWNLOAD:
+                String uuid = intent.getStringExtra(EXTRA_DOWNLOAD_UUID);
+
+                int index = 0;
+                for( Upload i : Server.filesList ) {
+                    if( i.getUUID().equals(uuid) ) {
+                        Server.filesList.remove(index);
+                        break;
+                    }
+                    index++;
+                }
+                String info = "R:" + index;
+                filesListNotifier.postValue(info);
+                break;
             default:
                 break;
         }
@@ -157,21 +203,26 @@ public class NetworkService extends Service {
         sendServerStatusToActivity();
     }
 
-
+    private boolean isRunningFirstTime = true;
     private void sendServerStatusToActivity() {
         Intent intent = new Intent();
         intent.setAction(ACTION_GET_SERVER_STATUS);
         boolean isServerRunning = server.isRunning();
 
         // stop notification or start it
-        if (isServerRunning) {
+        if (isServerRunning && isRunningFirstTime) {
             startForeground(FOREGROUND_NOTIFICATION_ID, buildNotification(this));
+            isRunningFirstTime = false;
         } else {
             stopForegroundAndNotification();
+            isRunningFirstTime = true;
         }
 
+        // notify observer.
+        serverStatusObserver.postValue(isServerRunning);
+
         intent.putExtra(EXTRA_SERVER_STATUS, isServerRunning);
-        intent.putExtra(EXTRA_CONNECTED_DEVICES_LIST, server.connectedDevices);
+        intent.putExtra(EXTRA_CONNECTED_DEVICES_LIST, Server.connectedDevices);
         //noinspection deprecation
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }

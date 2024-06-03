@@ -2,17 +2,17 @@ package com.ammar.filescenter.services.components;
 
 import android.util.Log;
 
-import java.io.File;
+import com.ammar.filescenter.services.models.Upload;
+import com.ammar.filescenter.services.progress.ProgressSendWatcher;
+
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Timer;
 
 public class Response {
     private Socket clientSocket;
@@ -22,27 +22,37 @@ public class Response {
         statusCode = 200;
     }
 
-    public void sendFileResponse(String filepath) {
+    public void sendFileResponse(Upload file) {
+        ProgressSendWatcher sendWatcher = new ProgressSendWatcher(file);
         try {
             OutputStream out = clientSocket.getOutputStream();
 
-            File file = new File(filepath);
-            long size = file.length();
+            long size = file.getSize();
             setHeader("Content-Length", String.valueOf(size));
 
             writeHeaders(out);
-            FileInputStream input = new FileInputStream(file);
+            FileInputStream input = new FileInputStream(file.getFilePath());
+
+            sendWatcher.notifyEverySecond();
 
             byte[] buffer = new byte[1024];
             int bytesRead;
 
             while ((bytesRead = input.read(buffer)) != -1) {
                 out.write(buffer, 0, bytesRead);
+                sendWatcher.accumulate(bytesRead);
             }
             out.flush();
 
+            if( sendWatcher.executor.isAlive() ) {
+                sendWatcher.executor.interrupt();
+                Log.d("MYLOG", "Thread interrupted");
+            }
+            sendWatcher.remove();
+
         } catch (IOException e) {
-            Log.e("MYLOG", e.getMessage());
+            sendWatcher.executor.interrupt();
+            Log.e("MYLOG", "Thread interrupted" , e);
         }
     }
 

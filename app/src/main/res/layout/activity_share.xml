@@ -96,7 +96,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        android:paddingHorizontal="16dp"/>
+        android:paddingHorizontal="16dp"
+        tools:itemCount="0"/>
 
     <android.widget.Button
         android:id="@+id/B_AddِApps"
@@ -107,8 +108,6 @@
         android:layout_marginBottom="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/add_apps"
-        android:drawableStart="@drawable/apps_icon"
-        android:drawablePadding="16dp"
         />
 
 

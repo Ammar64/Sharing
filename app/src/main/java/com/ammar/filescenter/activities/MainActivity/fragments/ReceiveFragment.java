@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.MainActivity.adapters.ReceiveAdapter;
-import com.ammar.filescenter.activities.MainActivity.models.Download;
+import com.ammar.filescenter.services.models.Download;
 
 import org.json.JSONArray;
 import org.json.JSONException;

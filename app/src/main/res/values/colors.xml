@@ -11,6 +11,7 @@
     <color name="selected">#32000000</color>
     <color name="text_color">#777</color>
     <color name="colorTrinary">#776391</color>
+    <color name="red">#DC1010</color>
 
 
 </resources>

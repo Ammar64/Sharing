@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
-import com.ammar.filescenter.activities.MainActivity.models.Download;
+import com.ammar.filescenter.services.models.Download;
 import com.ammar.filescenter.utils.Utils;
 
 import java.util.List;
@@ -47,7 +47,7 @@ public class ReceiveAdapter extends RecyclerView.Adapter<ReceiveAdapter.ViewHold
         private final TextView icon;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            filenameView = itemView.findViewById(R.id.TV_FileName);
+            filenameView = itemView.findViewById(R.id.TV_FileNam);
             filesizeView = itemView.findViewById(R.id.TV_FileSize);
             progressBar = itemView.findViewById(R.id.PB_DownloadProgressBar);
             icon = itemView.findViewById(R.id.TV_DownloadIcon);

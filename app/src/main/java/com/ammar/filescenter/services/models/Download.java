@@ -1,4 +1,4 @@
-package com.ammar.filescenter.activities.MainActivity.models;
+package com.ammar.filescenter.services.models;
 
 public class Download {
     private String uuid;

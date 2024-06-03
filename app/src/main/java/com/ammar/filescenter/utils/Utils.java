@@ -19,13 +19,13 @@ public class Utils {
                 isGood = true;
             }
         }
-        return String.format(Locale.ENGLISH, "%.2f%s", s, levels[level]);
+        return String.format(Locale.ENGLISH, "%.2f %s", s, levels[level]);
     }
 
-    public static float pxToDp(float px, DisplayMetrics metrics) {
+    public static float dpToPx(float dp, DisplayMetrics metrics) {
         return TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
-                px,
+                dp,
                 metrics
         );
     }
