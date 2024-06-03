@@ -51,6 +51,7 @@ public class ClientHandler implements Runnable {
                 response.setHeader("Keep-Alive", String.format(Locale.ENGLISH, "timeout=%d", (int) (timeout * 0.001)));
                 if ("POST".equals(request.getMethod())) {
                     if ("/upload".equals(request.getPath())) {
+                        response.setHeader("Content-Type", "text/plain");
                         if (request.POST_StoreFile("file"))
                             response.sendResponse("Uploaded successfully".getBytes());
                         else

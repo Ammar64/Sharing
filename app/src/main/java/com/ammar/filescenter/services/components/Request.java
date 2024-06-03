@@ -1,10 +1,16 @@
 package com.ammar.filescenter.services.components;
 
+import static com.ammar.filescenter.utils.Utils.readLineUTF8;
+
 import android.os.Environment;
 import android.util.Log;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,11 +26,10 @@ import java.util.Objects;
 import java.util.TreeMap;
 
 public class Request {
-    BufferedReader br;
-
+    BufferedInputStream clientInput;
     public Request(Socket clientSocket) {
         try {
-            br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            clientInput = new BufferedInputStream(clientSocket.getInputStream());
         } catch (IOException e) {
             throw new RuntimeException("IOException in Request constructor");
         }
@@ -33,12 +38,11 @@ public class Request {
 
     public boolean readSocket() {
         try {
-
             params = new HashMap<>();
 
             int lineNumber = 1;
             String line;
-            while ((!(line = br.readLine()).isEmpty())) {
+            while ((!(line = readLineUTF8(clientInput)).isEmpty())) {
                 handleHTTPHeader(line, lineNumber);
                 lineNumber++;
             }
@@ -154,10 +158,11 @@ public class Request {
                 String filename = "";
                 boolean readingBody = false;
                 // loop through lines
+
                 for (int lineNum = 1; ; lineNum++) {
                     String line = "";
                     if (!readingBody)
-                        line = br.readLine();
+                        line = readLineUTF8(clientInput);
                     if (line.equals("--" + boundary)) {
                         lineNum = 1;
                         readingBody = false;
@@ -182,7 +187,7 @@ public class Request {
                         } else {
                             File file_upload = new File(Environment.getExternalStorageDirectory(), "Download/" + filename);
                             if (file_upload.createNewFile()) {
-                                BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file_upload)));
+                                BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file_upload));
 
                                 // boundary index
                                 int bi = 0;
@@ -192,26 +197,25 @@ public class Request {
                                 // this is boundary prefixed with \r\n--
                                 String __boundary = "\r\n--" + boundary;
 
-                                StringBuilder buffer = new StringBuilder();
-                                while ((c = br.read()) != -1) {
+                                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                                while ((c = clientInput.read()) != -1) {
                                     if ((char) c == __boundary.charAt(bi)) {
-                                        buffer.append((char) c);
+                                        buffer.write((char) c);
                                         bi++;
                                         if (bi == __boundary.length()) {
                                             out.close();
                                             break;
                                         }
                                     } else {
-                                        if (buffer.length() != 0) {
-                                            out.write(buffer.toString());
-                                            buffer.setLength(0);
+                                        if (buffer.size() != 0) {
+                                            out.write(buffer.toString().getBytes());
+                                            buffer.reset();
                                         } else {
                                             bi = 0;
                                         }
                                         out.write((char) c);
                                     }
                                 }
-                                out.close();
                                 return true;
                             }
                         }
@@ -219,6 +223,7 @@ public class Request {
 
 
                 }
+
             }
 
         } catch (IOException ignore) {
