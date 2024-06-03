@@ -23,4 +23,3 @@ JNIEXPORT jbyteArray JNICALL encodeTextToQR(JNIEnv *env, jobject thiz, jstring j
     (*env)->ReleaseByteArrayElements(env, qrCodeArray, qrCodeBytes, 0);
     return qrCodeArray;
 }
-// make big file with termux

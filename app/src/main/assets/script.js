@@ -127,26 +127,6 @@ function downloadFileWithProgress(url) {
 }
 
 
-uploadInput.addEventListener('input', function() {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/upload");
-
-    xhr.onload = function() {
-        console.log("UPLOAD: " + xhr.responseText);
-    }
-
-    xhr.upload.onprogress = function(e) {
-        if( e.lengthComputable )
-        console.log(`PROGRESS ${e.loaded / e.total * 100}%  (${getFormattedFileSize(e.loaded)} / ${getFormattedFileSize(e.total)})`);
-    }
-
-    const formData = new FormData();
-    formData.append("file", this.files[0]);
-
-    xhr.send(formData);
-    
-});
-
 function getFileNameFromContentDisposition(contentDisposition) {
     let fileName = "downloadedFile";
     if (contentDisposition) {
@@ -174,6 +154,48 @@ function getFormattedFileSize(s) {
     return `${s.toFixed(2)} ${levels[level]}`;
     
 }
+
+
+/* uploading */
+uploadInput.addEventListener('input', function() {
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/upload");
+
+            const formData = new FormData();
+            formData.append("file", this.files[0]);
+
+            xhr.upload.onprogress = function(event) {
+                if (event.lengthComputable) {
+                    const percentComplete = (event.loaded / event.total) * 100;
+                    updateProgress(Math.round(percentComplete));
+                }
+            };
+
+            xhr.onloadstart = function() {
+                showLoader();
+                updateProgress(0);
+            };
+
+            xhr.onloadend = function() {
+                hideLoader();
+            };
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    console.log('File uploaded successfully');
+                } else {
+                    console.error('Error uploading the file');
+                }
+            };
+
+            xhr.onerror = function() {
+                console.error('Error uploading the file');
+                hideLoader();
+            };
+
+            xhr.send(formData);
+        });
+
 
 
 /* reloading page */
