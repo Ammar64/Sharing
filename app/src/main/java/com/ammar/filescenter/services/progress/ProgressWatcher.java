@@ -12,12 +12,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class ProgressSendWatcher {
-
+    public enum Operation {DOWNLOAD, UPLOAD};
     private Upload file;
     private int loaded = 0;
 
-    public ProgressSendWatcher(Upload file) {
+    public Operation getOperation() {
+        return operation;
+    }
+
+    private final Operation operation;
+    public ProgressSendWatcher(Upload file, Operation operation) {
         this.file = file;
+        this.operation = operation;
         progressSendWatchers.add(this);
         String info = "A:" + num;
         NetworkService.filesSendNotifier.postValue(info);
@@ -40,7 +46,7 @@ public class ProgressSendWatcher {
             public void run() {
                 do {
                     int index = progressSendWatchers.indexOf(ProgressSendWatcher.this);
-                    String info = "P:" + index + ":" + loaded;
+                    String info = "P:" + index;
                     NetworkService.filesSendNotifier.postValue(info);
                     try {
                         Thread.sleep(1000);
