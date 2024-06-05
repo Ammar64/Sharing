@@ -11,14 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
-import com.ammar.filescenter.services.progress.ProgressWatcher;
+import com.ammar.filescenter.custom.io.ProgressManager;
 import com.ammar.filescenter.utils.Utils;
+
+import java.util.Locale;
 
 
 // this adapter is for files that is currently uploading.
 public class SendAdapter extends RecyclerView.Adapter<SendAdapter.ViewHolder> {
 
-    public SendAdapter() {}
+    public SendAdapter() {
+
+    }
 
     @NonNull
     @Override
@@ -30,43 +34,61 @@ public class SendAdapter extends RecyclerView.Adapter<SendAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setup(ProgressWatcher.progressSendWatchers.get(position));
+        holder.setup(ProgressManager.progresses.get(position));
         holder.setFileListener(position);
     }
 
     @Override
     public int getItemCount() {
-        return ProgressWatcher.progressSendWatchers.size();
+        return ProgressManager.progresses.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView fileNameTV;
-        TextView fileSizeTV;
         TextView operationTV;
+        TextView transferInfoTV;
         ProgressBar fileProgressPB;
         TextView fileProgressTV;
         Button removeFileB;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            fileNameTV  = itemView.findViewById(R.id.TV_FileUploadName);
-            fileSizeTV  = itemView.findViewById(R.id.TV_FileUploadSize);
+            fileNameTV = itemView.findViewById(R.id.TV_FileUploadName);
             operationTV = itemView.findViewById(R.id.TV_OperationType);
+            transferInfoTV = itemView.findViewById(R.id.TV_FileTransferInfo);
             fileProgressPB = itemView.findViewById(R.id.PB_FileUploadProgress);
             fileProgressTV = itemView.findViewById(R.id.TV_FileUploadProgress);
             removeFileB = itemView.findViewById(R.id.B_StopFileUpload);
         }
 
-        public void setup(ProgressWatcher watcher) {
-            setFileName(watcher.getFileName());
-            setFileSizeTV(watcher.getSize());
-            setProgress(watcher.getPercentage());
-            setOperationText(watcher.getOperation());
+        public void setup(ProgressManager manager) {
+            setFileName(manager.getFileName());
+            setFileTransferInfo(manager);
+            setProgress(manager.getPercentage());
+            setOperationText(manager);
         }
 
-        private void setOperationText(ProgressWatcher.Operation operation) {
+        private void setOperationText(ProgressManager manager) {
+            ProgressManager.OP operation = manager.getOperation();
+
             String operationText;
-            if( operation == ProgressWatcher.Operation.DOWNLOAD ) operationText = "Sending..."; else operationText = "Receiving...";
-            operationTV.setText(operationText);
+            switch (operation) {
+                case DOWNLOAD:
+                    if (manager.getLoaded() == ProgressManager.COMPLETED)
+                        operationText = "Sent to";
+                    else
+                        operationText = "Sending to";
+                    break;
+                case UPLOAD:
+                    if (manager.getLoaded() == ProgressManager.COMPLETED)
+                        operationText = "Received from";
+                    else
+                        operationText = "Receiving from";
+                    break;
+                default:
+                    throw new RuntimeException("UnknownOP");
+            }
+            operationTV.setText(String.format("%s %s", operationText, manager.getRemoteIp()));
         }
 
         public void setFileListener(int indexCancel) {
@@ -80,12 +102,21 @@ public class SendAdapter extends RecyclerView.Adapter<SendAdapter.ViewHolder> {
             fileNameTV.setText(fileName);
         }
 
-        private void setFileSizeTV(long size) {
-            fileSizeTV.setText(Utils.getFormattedSize(size));
+        private void setFileTransferInfo(ProgressManager manager) {
+            if (manager.getLoaded() == ProgressManager.COMPLETED) {
+                transferInfoTV.setText("Completed");
+                return;
+            }
+            String loaded = Utils.getFormattedSize(manager.getLoaded());
+            String total = Utils.getFormattedSize(manager.getSize());
+            String bytesPerSecond = Utils.getFormattedSize(manager.getSpeed());
+
+            transferInfoTV.setText(String.format(Locale.ENGLISH, "%s / %s   (%s/S)", loaded, total, bytesPerSecond));
         }
+
         private void setProgress(int progress) {
             fileProgressPB.setProgress(progress);
-            fileProgressTV.setText(progress + "%");
+            fileProgressTV.setText(String.format(Locale.ENGLISH, "%d%%", progress));
         }
     }
 }

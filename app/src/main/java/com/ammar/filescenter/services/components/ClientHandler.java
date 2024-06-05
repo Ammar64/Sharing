@@ -52,10 +52,13 @@ public class ClientHandler implements Runnable {
                 if ("POST".equals(request.getMethod())) {
                     if ("/upload".equals(request.getPath())) {
                         response.setHeader("Content-Type", "text/plain");
-                        if (request.POST_StoreFile("file"))
+                        if (request.POST_StoreFile("file")) {
+                            response.setStatusCode(200);
                             response.sendResponse("Uploaded successfully".getBytes());
-                        else
+                        } else {
+                            response.setStatusCode(500);
                             response.sendResponse("Upload Failed".getBytes());
+                        }
 
                     }
                 } else if ("GET".equals(request.getMethod())) {

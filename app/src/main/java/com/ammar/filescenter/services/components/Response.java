@@ -2,8 +2,9 @@ package com.ammar.filescenter.services.components;
 
 import android.util.Log;
 
+import com.ammar.filescenter.custom.io.ProgressManager;
+import com.ammar.filescenter.custom.io.ProgressOutputStream;
 import com.ammar.filescenter.services.models.Upload;
-import com.ammar.filescenter.services.progress.ProgressWatcher;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,36 +23,28 @@ public class Response {
     }
 
     public void sendFileResponse(Upload file) {
-        ProgressWatcher sendWatcher = new ProgressWatcher(file, ProgressWatcher.Operation.DOWNLOAD);
         try {
-            OutputStream out = clientSocket.getOutputStream();
+
+            ProgressManager progressManager = new ProgressManager(file.getFileName(), file.getSize(), clientSocket.getRemoteSocketAddress(), ProgressManager.OP.DOWNLOAD);
+            ProgressOutputStream out = new ProgressOutputStream(clientSocket.getOutputStream(), progressManager);
 
             long size = file.getSize();
             setHeader("Content-Length", String.valueOf(size));
 
             writeHeaders(out);
-            FileInputStream input = new FileInputStream(file.getFilePath());
+            try (FileInputStream input = new FileInputStream(file.getFilePath())) {
+                byte[] buffer = new byte[1024];
+                int bytesRead;
 
-            sendWatcher.notifyEverySecond();
-
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-
-            while ((bytesRead = input.read(buffer)) != -1) {
-                out.write(buffer, 0, bytesRead);
-                sendWatcher.accumulate(bytesRead);
+                while ((bytesRead = input.read(buffer)) != -1) {
+                    out.write(buffer, 0, bytesRead);
+                }
+                out.flush();
             }
-            out.flush();
-
-            if( sendWatcher.executor.isAlive() ) {
-                sendWatcher.executor.interrupt();
-                Log.d("MYLOG", "Thread interrupted");
-            }
-            sendWatcher.remove();
+            progressManager.reportCompleted();
 
         } catch (IOException e) {
-            sendWatcher.executor.interrupt();
-            Log.e("MYLOG", "Thread interrupted" , e);
+            Log.e("MYLOG", "", e);
         }
     }
 
@@ -98,9 +91,11 @@ public class Response {
 
 
     private int statusCode;
+
     public void setStatusCode(int statusCode) {
         this.statusCode = statusCode;
     }
+
     private Map<String, String> headers = new HashMap<>();
 
 

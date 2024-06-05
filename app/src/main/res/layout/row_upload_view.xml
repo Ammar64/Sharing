@@ -1,93 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:layout_marginTop="10dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="70dp"
+    android:layout_marginTop="10dp">
 
     <ProgressBar
         android:id="@+id/PB_FileUploadProgress"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
         android:progress="60"
-        app:layout_constraintBottom_toBottomOf="@+id/TV_FileUploadSize"
+        app:layout_constraintBottom_toBottomOf="@id/TV_FileUploadProgress"
         app:layout_constraintEnd_toStartOf="@id/TV_FileUploadProgress"
-        app:layout_constraintStart_toEndOf="@id/TV_FileUploadSize"
-        app:layout_constraintTop_toTopOf="@+id/TV_FileUploadSize" />
+        app:layout_constraintStart_toStartOf="@+id/TV_OperationType"
+        app:layout_constraintTop_toTopOf="@id/TV_FileUploadProgress" />
 
     <TextView
         android:id="@+id/TV_FileUploadName"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAlignment="viewStart"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:maxLines="1"
-        android:ellipsize="end"
-        app:layout_constraintBottom_toTopOf="@+id/TV_FileUploadSize"
-        app:layout_constraintEnd_toStartOf="@+id/TV_OperationType"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="8dp"
-        tools:text="File.apk" />
+        tools:text="file.png" />
 
-    <TextView
-        android:id="@+id/TV_FileUploadSize"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/TV_FileUploadName"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/TV_FileUploadName"
-        app:layout_constraintTop_toBottomOf="@+id/TV_FileUploadName"
-        tools:text="(25MB)" />
 
     <TextView
         android:id="@+id/TV_FileUploadProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/PB_FileUploadProgress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/PB_FileUploadProgress"
-        app:layout_constraintTop_toTopOf="@+id/PB_FileUploadProgress"
         android:layout_marginHorizontal="10dp"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/PB_FileUploadProgress"
+        app:layout_constraintTop_toBottomOf="@+id/TV_OperationType"
         tools:text="60%" />
 
 
     <TextView
         android:id="@+id/TV_OperationType"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@id/TV_FileUploadName"
+        app:layout_constraintEnd_toStartOf="@id/TV_FileTransferInfo"
+        app:layout_constraintTop_toBottomOf="@+id/TV_FileUploadName"
+        android:layout_marginEnd="4dp"
+        android:singleLine="true"
+        android:ellipsize="start"
+        tools:text="Sending to 192.168.1.15" />
+
+    <TextView
+        android:id="@+id/TV_FileTransferInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Downloading..."
+        app:layout_constraintBottom_toBottomOf="@+id/TV_OperationType"
+        app:layout_constraintEnd_toEndOf="@+id/TV_FileUploadProgress"
+        app:layout_constraintTop_toTopOf="@+id/TV_OperationType"
+        android:maxLines="1"
+        tools:text="24 MB / 35 MB            2 MB/S" />
 
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/TV_FileUploadProgress"
-        android:textSize="15sp"/>
 
     <com.google.android.material.button.MaterialButton
-        android:visibility="gone"
         android:id="@+id/B_StopFileUpload"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginEnd="16dp"
         android:backgroundTint="@color/red"
-
         android:fontFamily="sans-serif-medium"
+
         android:insetLeft="0dp"
         android:insetTop="0dp"
         android:insetRight="0dp"
         android:insetBottom="0dp"
-
         android:padding="0dp"
+
         android:text="X"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:visibility="gone"
 
         app:cornerRadius="18dp"
         app:layout_constraintBottom_toBottomOf="parent"

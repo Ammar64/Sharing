@@ -19,6 +19,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.ammar.filescenter.R;
+import com.ammar.filescenter.custom.data.QueueMutableLiveData;
 import com.ammar.filescenter.services.components.Server;
 import com.ammar.filescenter.services.models.Upload;
 import com.ammar.filescenter.services.objects.AppDownloadable;
@@ -78,7 +79,7 @@ public class NetworkService extends Service {
     public static final MutableLiveData<String> filesListNotifier = new MutableLiveData<>();
     public static final String DATA_DOWNLOADS_LIST = "DATA_DOWNLOADS_LIST";
     public static final String VALUE_MODIFY_DELETE = "com.ammar.filescenter.services.VALUE_MODIFY_DELETE";
-    public static final MutableLiveData<String> filesSendNotifier = new MutableLiveData<>();
+    public static final QueueMutableLiveData<Bundle> filesSendNotifier = new QueueMutableLiveData<>();
 
     private final int FOREGROUND_NOTIFICATION_ID = 1;
     public static final int PORT_NUMBER = 2999;
@@ -184,8 +185,7 @@ public class NetworkService extends Service {
                     }
                     index++;
                 }
-                String info = "R:" + index;
-                filesListNotifier.postValue(info);
+                // TODO: Remove it from UI
                 break;
             default:
                 break;

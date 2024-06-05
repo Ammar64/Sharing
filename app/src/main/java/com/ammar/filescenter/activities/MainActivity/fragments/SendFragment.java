@@ -62,6 +62,7 @@ public class SendFragment extends Fragment {
         filesSendRV.setAdapter(adapter);
         filesSendRV.setLayoutManager(new LinearLayoutManager(getContext()));
         filesSendRV.setItemAnimator(null);
+        filesSendRV.setHasFixedSize(true);
 
 
     }
@@ -88,21 +89,22 @@ public class SendFragment extends Fragment {
         });
 
         NetworkService.filesSendNotifier.observe( requireActivity(), info -> {
-            String[] parts = info.split(":");
-            String action = parts[0];
+            char action = info.getChar("action");
+            int index = info.getInt("index");
 
-            if (parts.length == 2) {
-                if ("P".equals(action)) {
-                    int index = Integer.parseInt(parts[1]);
+            switch (action) {
+                case 'P':
                     adapter.notifyItemChanged(index);
-                } else if ("A".equals(action)) {
-                    int index = Integer.parseInt(parts[1]);
-                    adapter.notifyItemInserted(index);
-                } else if ("R".equals(action)) {
-                    int index = Integer.parseInt(parts[1]);
+                    break;
+                case 'R':
                     adapter.notifyItemRemoved(index);
-                }
+                    break;
+                case 'A':
+                    adapter.notifyItemInserted(index);
+                    break;
             }
+
+
         });
 
     }

@@ -5,35 +5,37 @@ import static com.ammar.filescenter.utils.Utils.readLineUTF8;
 import android.os.Environment;
 import android.util.Log;
 
-import com.ammar.filescenter.services.models.Upload;
-import com.ammar.filescenter.services.progress.ProgressWatcher;
+import com.ammar.filescenter.custom.io.ProgressInputStream;
+import com.ammar.filescenter.custom.io.ProgressManager;
+import com.ammar.filescenter.custom.io.ProgressOutputStream;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
 public class Request {
+    Socket clientSocket;
     BufferedInputStream clientInput;
     int charsRead = 0;
+
     public Request(Socket clientSocket) {
         try {
+            this.clientSocket = clientSocket;
+
             clientInput = new BufferedInputStream(clientSocket.getInputStream());
+
         } catch (IOException e) {
             throw new RuntimeException("IOException in Request constructor");
         }
@@ -43,9 +45,9 @@ public class Request {
     public boolean readSocket() {
         try {
             params = new HashMap<>();
-
             int lineNumber = 1;
             String line;
+            charsRead = 0;
             while ((!(line = readLineUTF8(clientInput)).isEmpty())) {
                 charsRead += line.length() + 2; // string length + \r + \n
 
@@ -128,6 +130,7 @@ public class Request {
     }
 
     public boolean POST_StoreFile(String paramName) {
+        charsRead = 0;
         if (!"POST".equals(this.method)) {
             Log.e("MYLOG", "Call to POST_StoredFile with " + this.method + " request");
             return false;
@@ -138,10 +141,11 @@ public class Request {
         Map<String, String> content_type_values = new TreeMap<>();
         String boundary = "";
         boolean isMultiPart = false;
-        int content_length = 0;
+        int content_length;
         try {
             content_length = Integer.parseInt(this.headers.get("Content-Length"));
         } catch (NumberFormatException ignore) {
+            return false;
         }
 
         for (String i : content_type_params) {
@@ -161,7 +165,7 @@ public class Request {
             if (isMultiPart) {
 
 
-                String name = "";
+                String name;
                 String filename = "";
                 boolean readingBody = false;
                 // loop through lines
@@ -195,18 +199,17 @@ public class Request {
                             }
                         } else {
                             File file_upload = new File(Environment.getExternalStorageDirectory(), "Download/" + filename);
+                            if (file_upload.exists()) file_upload.delete();
                             if (file_upload.createNewFile()) {
-                                BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(file_upload));
 
-                                // Init Progress watcher
-                                ProgressWatcher watcher = new ProgressWatcher(null, ProgressWatcher.Operation.UPLOAD);
-                                String requestSize = headers.get("Content-Length");
-                                if (requestSize != null) {
-                                    long size = Long.parseLong(requestSize) - charsRead - boundary.length() - 4;
-                                    Log.d("MYLOG", "File Uplaod size " + size + " bytes");
-                                    watcher.setRequestInfo(filename ,size);
-                                }
-                                watcher.notifyEverySecond();
+                                long sz = content_length - charsRead - boundary.length() - 8;
+                                Log.d("MYLOG", String.format(Locale.ENGLISH, "sz: %d, charsRead: %d, boundary.length: %d", sz, charsRead, boundary.length()));
+
+                                ProgressManager progressManager = new ProgressManager(filename, sz, clientSocket.getRemoteSocketAddress(), ProgressManager.OP.UPLOAD);
+
+                                BufferedOutputStream out = new BufferedOutputStream(new ProgressOutputStream(new FileOutputStream(file_upload), progressManager));
+
+
                                 // boundary index
                                 int bi = 0;
                                 // char
@@ -226,18 +229,25 @@ public class Request {
                                         }
                                     } else {
                                         if (buffer.size() != 0) {
-                                            watcher.accumulate(buffer.size());
                                             out.write(buffer.toString().getBytes());
                                             buffer.reset();
                                         } else {
                                             bi = 0;
                                         }
                                         out.write((char) c);
-                                        watcher.accumulate(1);
                                     }
                                 }
-                                watcher.remove();
+
+                                if (c == -1) {
+                                    file_upload.delete();
+                                    Log.d("MYLOG", "Upload Failed");
+                                    out.close();
+                                    return false;
+                                }
+                                out.close();
+                                progressManager.reportCompleted();
                                 return true;
+
                             }
                         }
                     }
