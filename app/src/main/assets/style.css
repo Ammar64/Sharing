@@ -27,8 +27,8 @@ body {
     position: fixed;
     -webkit-animation: paleArea 15s infinite;
             animation: paleArea 15s linear infinite;
-/*     display: none;
- */    z-index: 998;
+    display: none;
+    z-index: 998;
 }
 
 @-webkit-keyframes paleArea {

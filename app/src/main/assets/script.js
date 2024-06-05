@@ -38,6 +38,7 @@ function hideLoader() {
     document.querySelector('.plane').style.animation = 'plane-done 1.2s infinite';
     setTimeout(() => {
         loader.style.display = 'none';
+        document.querySelector('.plane').style.animation = 'plane-on-progress 5s infinite';
     }, 1000);
 }
 
