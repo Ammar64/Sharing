@@ -341,7 +341,7 @@ body {
     color: #777;
 }
 
-.text h1 ,.downloadBubble-title ,#okButton{
+.text h1 ,.downloadBubble-title ,#okButton ,#update{
     font-family:monospace;
     margin-bottom: 5px;
         background: linear-gradient(to right, var(--colorOne), var(--colorTwo));
@@ -417,9 +417,10 @@ body {
     align-items: center;
     flex-direction: row-reverse;
     padding: 0 1em;
+    gap: 20px;
 }
 
-#okButton {
+#okButton ,#update{
     border: none;
     cursor: pointer;
     font-size: larger;
@@ -431,7 +432,7 @@ body {
     transition: .5s;
 }
 
-#okButton:hover {
+#okButton:hover ,#update:hover{
     letter-spacing: 2px;
     scale: 1.2;
 }
