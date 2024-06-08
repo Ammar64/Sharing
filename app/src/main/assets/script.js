@@ -2,6 +2,7 @@ const recieveBtn = document.getElementById("recieveBtn");
 const downloadBubble = document.getElementById("downloadBubble");
 const overlay = document.getElementById('overlay');
 const okButton = document.getElementById('okButton');
+const updateBtn = document.getElementById('update');
 const downloads   = document.getElementById("downloads");
 const uploadInput = document.getElementById('uploadInput');
 
@@ -15,16 +16,19 @@ recieveBtn.onclick = () => {
     requestAvailableDownloads();
 };
 
+updateBtn.onclick = () => {
+    requestAvailableDownloads();
+}
 
 okButton.onclick = () => {
-    closeDialog();
+    closeBubble();
 };
 
 overlay.onclick = () => {
-    closeDialog();
+    closeBubble();
 };
 
-function closeDialog() {
+function closeBubble() {
     downloadBubble.style.display = 'none';
     overlay.style.display = 'none';
 }
