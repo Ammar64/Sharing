@@ -13,6 +13,8 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class Response {
     private Socket clientSocket;
@@ -23,17 +25,19 @@ public class Response {
     }
 
     public void sendFileResponse(Upload file) {
+        ProgressManager progressManager = new ProgressManager(file.getName(), file.getSize(), clientSocket.getRemoteSocketAddress(), ProgressManager.OP.DOWNLOAD);
         try {
-
-            ProgressManager progressManager = new ProgressManager(file.getFileName(), file.getSize(), clientSocket.getRemoteSocketAddress(), ProgressManager.OP.DOWNLOAD);
             ProgressOutputStream out = new ProgressOutputStream(clientSocket.getOutputStream(), progressManager);
 
             long size = file.getSize();
+
             setHeader("Content-Length", String.valueOf(size));
+            setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getFileName()));
+            setHeader("Content-Type", file.getMimeType());
 
             writeHeaders(out);
             try (FileInputStream input = new FileInputStream(file.getFilePath())) {
-                byte[] buffer = new byte[1024];
+                byte[] buffer = new byte[2048];
                 int bytesRead;
 
                 while ((bytesRead = input.read(buffer)) != -1) {
@@ -44,7 +48,42 @@ public class Response {
             progressManager.reportCompleted();
 
         } catch (IOException e) {
-            Log.e("MYLOG", "", e);
+            progressManager.reportFailed();
+            Log.e("MYLOG", "SendFileResponse(). Exception: " + e.getMessage());
+        }
+    }
+
+
+    public void sendZippedFilesResponse(Upload[] files) {
+        ProgressManager progressManager = new ProgressManager(files[0].getName(), -1, clientSocket.getRemoteSocketAddress(), ProgressManager.OP.DOWNLOAD);
+        try {
+            ZipOutputStream zout = new ZipOutputStream(clientSocket.getOutputStream());
+            setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", files[0].getName() + ".zip"));
+            setHeader("Content-Type", "application/zip");
+            writeHeaders(clientSocket.getOutputStream());
+
+            zout.setMethod(ZipOutputStream.DEFLATED);
+            for (Upload i : files) {
+                ZipEntry zipEntry = new ZipEntry(i.getFileName());
+                zout.putNextEntry(zipEntry);
+
+                FileInputStream fin = new FileInputStream(i.getFilePath());
+                byte[] buffer = new byte[2048];
+                int bytesRead;
+                while ((bytesRead = fin.read(buffer)) != -1) {
+                    zout.write(buffer, 0, bytesRead);
+                    progressManager.setLoaded(progressManager.getLoaded() + bytesRead);
+                }
+                fin.close();
+                zout.closeEntry();
+            }
+            zout.finish();
+            zout.close();
+            progressManager.reportCompleted();
+
+        } catch (IOException e) {
+            progressManager.reportFailed();
+            Log.e("MYLOG", "sendZippedFilesResponse(). Exception: " + e.getMessage());
         }
     }
 

@@ -25,7 +25,13 @@ public class Utils {
         return String.format(Locale.ENGLISH, "%.2f %s", s, levels[level]);
     }
 
-    public static float dpToPx(float dp, DisplayMetrics metrics) {
+
+    private static DisplayMetrics metrics;
+    public static void setMetrics(DisplayMetrics metrics) {
+        Utils.metrics = metrics;
+    }
+
+    public static float dpToPx(float dp) {
         return TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
                 dp,

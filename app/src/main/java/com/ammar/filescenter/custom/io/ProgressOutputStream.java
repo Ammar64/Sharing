@@ -37,7 +37,6 @@ public class ProgressOutputStream extends OutputStream {
 
     private void updateProgress() {
         progressManager.setLoaded(bytesWritten);
-        progressManager.reportProgress();
     }
 
     @Override

@@ -11,11 +11,11 @@
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:progress="60"
         app:layout_constraintBottom_toBottomOf="@id/TV_FileUploadProgress"
         app:layout_constraintEnd_toStartOf="@id/TV_FileUploadProgress"
         app:layout_constraintStart_toStartOf="@+id/TV_OperationType"
-        app:layout_constraintTop_toTopOf="@id/TV_FileUploadProgress" />
+        app:layout_constraintTop_toTopOf="@id/TV_FileUploadProgress"
+        android:paddingEnd="8dp"/>
 
     <TextView
         android:id="@+id/TV_FileUploadName"
@@ -42,7 +42,6 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/PB_FileUploadProgress"
         app:layout_constraintTop_toBottomOf="@+id/TV_OperationType"
         tools:text="60%" />
 

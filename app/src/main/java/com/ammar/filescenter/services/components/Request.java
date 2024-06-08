@@ -56,6 +56,9 @@ public class Request {
             }
             charsRead += 2; // the \r and \n.
 
+            if( "keep-alive".equals(headers.get("Connection")) ) {
+                _shouldBreak = true;
+            }
             return true;
         } catch (SocketTimeoutException e) {
             return false;
@@ -242,6 +245,7 @@ public class Request {
                                     file_upload.delete();
                                     Log.d("MYLOG", "Upload Failed");
                                     out.close();
+                                    progressManager.reportFailed();
                                     return false;
                                 }
                                 out.close();
@@ -316,4 +320,8 @@ public class Request {
         return params;
     }
 
+    private boolean _shouldBreak = true;
+    public boolean shouldBreak() {
+        return _shouldBreak;
+    }
 }

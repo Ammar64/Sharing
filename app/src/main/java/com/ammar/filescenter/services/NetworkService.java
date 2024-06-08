@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Build;
@@ -21,6 +22,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.custom.data.QueueMutableLiveData;
 import com.ammar.filescenter.services.components.Server;
+import com.ammar.filescenter.services.models.AppUpload;
 import com.ammar.filescenter.services.models.Upload;
 import com.ammar.filescenter.services.objects.AppDownloadable;
 import com.ammar.filescenter.services.objects.Downloadable;
@@ -166,14 +168,23 @@ public class NetworkService extends Service {
                 ArrayList<String> filePaths = intent.getStringArrayListExtra(EXTRA_FILE_PATHS);
                 assert filePaths != null;
                 for( String i : filePaths ) {
-                    server.filesList.add( new Upload(i));
+                    Server.filesList.add( new Upload(i));
                 }
                 break;
             case ACTION_ADD_APPS_DOWNLOADS:
-
+                ArrayList<String> packages_name = intent.getStringArrayListExtra(EXTRA_APPS_NAMES);
+                if( packages_name != null ) {
+                    for( String i : packages_name ) {
+                        try {
+                            Server.filesList.add(new AppUpload(this, i));
+                        } catch (PackageManager.NameNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
                 break;
             case ACTION_GET_DOWNLOADS:
-                filesListObserver.postValue(server.filesList);
+                filesListObserver.postValue(Server.filesList);
             case ACTION_REMOVE_DOWNLOAD:
                 String uuid = intent.getStringExtra(EXTRA_DOWNLOAD_UUID);
 
@@ -185,7 +196,10 @@ public class NetworkService extends Service {
                     }
                     index++;
                 }
-                // TODO: Remove it from UI
+                Bundle remove_info = new Bundle();
+                remove_info.putChar("action", 'R');
+                remove_info.putInt("index", index);
+                NetworkService.filesSendNotifier.postValue(remove_info);
                 break;
             default:
                 break;

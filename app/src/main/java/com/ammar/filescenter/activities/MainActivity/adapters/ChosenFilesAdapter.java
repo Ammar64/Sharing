@@ -20,8 +20,6 @@ import com.ammar.filescenter.services.components.Server;
 import com.ammar.filescenter.services.models.Upload;
 import com.ammar.filescenter.utils.Utils;
 
-import java.util.List;
-
 public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.ViewHolder> {
 
     @NonNull
@@ -57,7 +55,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         }
 
         public void setup(Upload file) {
-            setFileName(file.getFileName());
+            setFileName(file.getName());
             setFileIconIV(file);
             setFileSizeTV(file.getSize());
         }

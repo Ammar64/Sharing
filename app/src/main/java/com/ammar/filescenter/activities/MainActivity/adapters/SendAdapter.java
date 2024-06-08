@@ -1,5 +1,7 @@
 package com.ammar.filescenter.activities.MainActivity.adapters;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +66,7 @@ public class SendAdapter extends RecyclerView.Adapter<SendAdapter.ViewHolder> {
         public void setup(ProgressManager manager) {
             setFileName(manager.getFileName());
             setFileTransferInfo(manager);
-            setProgress(manager.getPercentage());
+            setProgress(manager);
             setOperationText(manager);
         }
 
@@ -76,12 +78,16 @@ public class SendAdapter extends RecyclerView.Adapter<SendAdapter.ViewHolder> {
                 case DOWNLOAD:
                     if (manager.getLoaded() == ProgressManager.COMPLETED)
                         operationText = "Sent to";
+                    else if (manager.getLoaded() == ProgressManager.FAILED)
+                        operationText = "Send failed";
                     else
                         operationText = "Sending to";
                     break;
                 case UPLOAD:
                     if (manager.getLoaded() == ProgressManager.COMPLETED)
                         operationText = "Received from";
+                    else if (manager.getLoaded() == ProgressManager.FAILED)
+                        operationText = "Receive failed";
                     else
                         operationText = "Receiving from";
                     break;
@@ -103,20 +109,62 @@ public class SendAdapter extends RecyclerView.Adapter<SendAdapter.ViewHolder> {
         }
 
         private void setFileTransferInfo(ProgressManager manager) {
-            if (manager.getLoaded() == ProgressManager.COMPLETED) {
-                transferInfoTV.setText("Completed");
-                return;
+            switch ((int) manager.getLoaded()) {
+                case ProgressManager.COMPLETED:
+                    transferInfoTV.setText("Completed");
+                    return;
+                case ProgressManager.FAILED:
+                    transferInfoTV.setText("Failed");
+                    return;
             }
+
             String loaded = Utils.getFormattedSize(manager.getLoaded());
-            String total = Utils.getFormattedSize(manager.getSize());
+            String total = Utils.getFormattedSize(manager.getTotal());
             String bytesPerSecond = Utils.getFormattedSize(manager.getSpeed());
 
-            transferInfoTV.setText(String.format(Locale.ENGLISH, "%s / %s   (%s/S)", loaded, total, bytesPerSecond));
+            if (manager.getTotal() == -1 && manager.getLoaded() != ProgressManager.COMPLETED) {
+                transferInfoTV.setText(String.format(Locale.ENGLISH, "%s (%s/S)", loaded, bytesPerSecond));
+            } else
+                transferInfoTV.setText(String.format(Locale.ENGLISH, "%s / %s   (%s/S)", loaded, total, bytesPerSecond));
         }
 
-        private void setProgress(int progress) {
-            fileProgressPB.setProgress(progress);
-            fileProgressTV.setText(String.format(Locale.ENGLISH, "%d%%", progress));
+        private void setProgress(ProgressManager manager) {
+            if (manager.getLoaded() == ProgressManager.FAILED) {
+                fileProgressTV.setText("");
+                fileProgressTV.setVisibility(View.INVISIBLE);
+
+                fileProgressPB.setProgressTintList(ColorStateList.valueOf(Color.RED));
+                fileProgressPB.setIndeterminate(false);
+                fileProgressPB.setProgress(100);
+                fileProgressPB.setPaddingRelative(0, 0, 0, 0);
+                return;
+            }
+
+            if (manager.getTotal() != -1) {
+                int progress = manager.getPercentage();
+
+                fileProgressTV.setVisibility(View.VISIBLE);
+                fileProgressTV.setText(String.format(Locale.ENGLISH, "%d%%", progress));
+
+                fileProgressPB.setProgressTintList(ColorStateList.valueOf(Color.CYAN));
+                fileProgressPB.setIndeterminate(false);
+                fileProgressPB.setProgress(progress);
+                fileProgressPB.setPaddingRelative(0, 0, (int) Utils.dpToPx(8.0f), 0);
+            } else {
+
+                fileProgressTV.setVisibility(View.INVISIBLE);
+                fileProgressPB.setPaddingRelative(0, 0, 0, 0);
+                fileProgressPB.setProgressTintList(ColorStateList.valueOf(Color.CYAN));
+
+                if( manager.getLoaded() == ProgressManager.COMPLETED) {
+                    fileProgressPB.setIndeterminate(false);
+                    fileProgressPB.setProgress(100);
+                } else {
+                    fileProgressPB.setProgress(0);
+                    fileProgressPB.setIndeterminate(true);
+                }
+            }
+
         }
     }
 }

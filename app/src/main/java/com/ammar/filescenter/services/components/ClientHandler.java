@@ -3,6 +3,7 @@ package com.ammar.filescenter.services.components;
 import android.util.Log;
 
 import com.ammar.filescenter.services.NetworkService;
+import com.ammar.filescenter.services.models.AppUpload;
 import com.ammar.filescenter.services.models.Upload;
 import com.ammar.filescenter.services.objects.Downloadable;
 
@@ -82,12 +83,27 @@ public class ClientHandler implements Runnable {
                         String requestedUUID = path.substring(10);
                         try {
                             Upload file = getFileWithUUID(requestedUUID);
-                            response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getFileName()));
-                            response.setHeader("Content-Type", file.getMimeType());
-                            response.sendFileResponse(file);
+                            if( !(file instanceof AppUpload)) {
+                                response.sendFileResponse(file);
+                            } else {
+                                AppUpload app = (AppUpload) file;
+                                if( app.hasSplits() ) {
+                                    Upload[] app_splits = app.getSplits();
+                                    Upload[] app_files = new Upload[app_splits.length + 1];
+
+                                    // app base.apk must be the first file because it will be the name of the zip.
+                                    app_files[0] = app;
+                                    for( int i = 1 ; i < app_files.length ; i++ ) {
+                                        app_files[i] = app_splits[i-1];
+                                    }
+                                    response.sendZippedFilesResponse(app_files);
+                                } else {
+                                    response.sendFileResponse(app);
+                                }
+                            }
                         } catch (RuntimeException e) {
                             Log.i("MYLOG", "FileNotHosted");
-                            if( "FileNotHosted".equals(e.getMessage()) ) {
+                            if ("FileNotHosted".equals(e.getMessage())) {
                                 response.setHeader("Content-Type", "text/html");
                                 response.setHeader("Content-Disposition", "inline");
                                 response.sendResponse("File not hosted".getBytes(StandardCharsets.UTF_8));
@@ -95,6 +111,7 @@ public class ClientHandler implements Runnable {
                                 Log.e("MYLOG", Objects.requireNonNull(e.getMessage()));
                             }
                         }
+
                     } else if ("/favicon.ico".equals(path)) {
                         response.setHeader("Content-Type", "image/svg+xml");
                         response.sendResponse(NetworkService.readFileFromAssets("icons8-share.svg"));
@@ -107,7 +124,9 @@ public class ClientHandler implements Runnable {
                         response.sendResponse("404 What are you doing ?".getBytes(StandardCharsets.UTF_8));
                     }
                 }
-
+                if( request.shouldBreak() ) {
+                    break;
+                }
             }
         } catch (IOException ignored) {
 
@@ -118,7 +137,6 @@ public class ClientHandler implements Runnable {
                 Log.e("MYLOG", Objects.requireNonNull(e.getMessage()));
             }
         }
-
     }
 
     private Upload getFileWithUUID(String uuid) throws RuntimeException {

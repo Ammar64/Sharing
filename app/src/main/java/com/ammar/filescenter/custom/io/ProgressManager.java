@@ -16,6 +16,7 @@ public class ProgressManager {
     private String remoteIp;
 
 
+
     public enum OP {DOWNLOAD, UPLOAD}
 
     private final OP op;
@@ -65,7 +66,7 @@ public class ProgressManager {
         progress_info.putInt("index", index);
     }
 
-    public long getSize() {
+    public long getTotal() {
         return total;
     }
 
@@ -100,6 +101,7 @@ public class ProgressManager {
 
     public void setLoaded(long n) {
         loaded = n;
+        reportProgress();
     }
 
     public void setTotal(long n) {
@@ -122,10 +124,9 @@ public class ProgressManager {
 
 
     public void reportProgress() {
-        //  when total is -1 it means that we don't want to send progress to activity
-        if ( total != -1 && System.currentTimeMillis() - lastTime >= 300) {
+        if ( System.currentTimeMillis() - lastTime >= 300) {
             NetworkService.filesSendNotifier.postValue(progress_info);
-            bytesPerSecond = getLoaded() - previouslyLoaded;
+            bytesPerSecond = (long) ((getLoaded() - previouslyLoaded) / ((float)300/1000));
             previouslyLoaded = getLoaded();
             lastTime = System.currentTimeMillis();
         }
@@ -133,9 +134,16 @@ public class ProgressManager {
 
 
     public static final int COMPLETED = -1;
+    public static final int FAILED    = -2;
+
 
     public void reportCompleted() {
         setLoaded(COMPLETED);
+        NetworkService.filesSendNotifier.postValue(progress_info);
+    }
+
+    public void reportFailed() {
+        setLoaded(FAILED);
         NetworkService.filesSendNotifier.postValue(progress_info);
     }
 }
