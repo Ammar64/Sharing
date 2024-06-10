@@ -11,8 +11,8 @@ public class FilesCenterApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Utils.setMetrics(
-                getResources().getDisplayMetrics()
+        Utils.setRes(
+                getResources()
         );
     }
 }

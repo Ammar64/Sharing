@@ -22,5 +22,6 @@
     <string name="choose_apps">Choose apps</string>
     <string name="update_ip">Update Server IP Address</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="about_us">About us</string>
 </resources>

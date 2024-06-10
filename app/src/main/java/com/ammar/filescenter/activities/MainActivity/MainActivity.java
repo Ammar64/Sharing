@@ -9,9 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.ammar.filescenter.R;
-import com.ammar.filescenter.activities.MainActivity.fragments.ReceiveFragment;
 import com.ammar.filescenter.activities.MainActivity.fragments.SendFragment;
-import com.ammar.filescenter.activities.SharingActivity;
+import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
 import com.ammar.filescenter.services.NetworkService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -37,13 +36,15 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.BottomNavView);
         serverButton = findViewById(R.id.FAB_ServerButton);
         bottomNavigationView.setSelectedItemId(R.id.B_Share);
+
+
     }
 
 
     private int currentFragmentIndex = 1;
     private final ArrayList<Class> fragments = new ArrayList<>(Arrays.asList(new Class[]{
-            ReceiveFragment.class,
-            SendFragment.class
+            SendFragment.class,
+            SettingsFragment.class
     }));
 
 
@@ -55,22 +56,18 @@ public class MainActivity extends AppCompatActivity {
                     .beginTransaction();
 
             int nextFragmentIndex = -1;
-            if (id == R.id.B_Receive) {
-                nextFragmentIndex = fragments.indexOf(ReceiveFragment.class);
-                if (currentFragmentIndex > nextFragmentIndex) {
-                    ft.setCustomAnimations(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
-                }
-                ft.replace(R.id.MainActivityFragmentContainer, ReceiveFragment.class, null);
-            } else if (id == R.id.B_Share) {
+            if (id == R.id.B_Share) {
                 nextFragmentIndex = fragments.indexOf(SendFragment.class);
                 if (currentFragmentIndex < nextFragmentIndex) {
                     ft.setCustomAnimations(R.anim.fragment_enter_left, R.anim.fragment_exit_left);
                 }
                 ft.replace(R.id.MainActivityFragmentContainer, SendFragment.class, null);
-            } else if (id == R.id.B_Home) {
-                startActivity(new Intent(this, SharingActivity.class));
             } else if (id == R.id.B_Settings) {
-                return false;
+                nextFragmentIndex = fragments.indexOf(SendFragment.class);
+                if (currentFragmentIndex < nextFragmentIndex) {
+                    ft.setCustomAnimations(R.anim.fragment_enter_left, R.anim.fragment_exit_left);
+                }
+                ft.replace(R.id.MainActivityFragmentContainer, SettingsFragment.class, null);
             }
             currentFragmentIndex = nextFragmentIndex;
             ft.commit();
@@ -81,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
             serviceIntent.setAction(NetworkService.ACTION_TOGGLE_SERVER);
             startService(serviceIntent);
         });
-
     }
 
     private void initStates() {
@@ -92,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
     private void observeStates() {
         NetworkService.serverStatusObserver.observe(this, running -> {
             if(running) {
-                serverButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.status_on)));
+                serverButton.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.status_on)));
             } else {
-                serverButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.status_off)));
+                serverButton.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.status_off)));
             }
         });
     }

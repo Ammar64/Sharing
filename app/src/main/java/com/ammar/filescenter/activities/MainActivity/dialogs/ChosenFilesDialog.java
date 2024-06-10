@@ -49,18 +49,11 @@ public class ChosenFilesDialog extends DialogFragment {
         });
 
         NetworkService.filesListNotifier.observe(getViewLifecycleOwner(), info -> {
-            String[] c = info.split(":");
-            if( c.length == 2 ) {
-                String action = c[0];
-                String data = c[1];
-
-                if( action.equals("R") ) {
-                    filesAdapter.notifyItemRemoved(Integer.parseInt(data));
-                }
-            } else if ( c.length == 3 ) {
-
+            char action = info.getChar("action");
+            if( 'R' == action ) {
+                int index = info.getInt("index");
+                filesAdapter.notifyItemRemoved(index);
             }
-
         });
         return v;
     }

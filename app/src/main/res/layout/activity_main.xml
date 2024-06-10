@@ -39,10 +39,11 @@
         android:id="@+id/FAB_ServerButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/on_icon"
-        app:backgroundTint="@color/status_off"
+        android:src="@drawable/icon_power"
+        app:borderWidth="0dp"
+        app:backgroundTint="@android:color/transparent"
         app:layout_anchor="@+id/BottomAppBar"
         app:maxImageSize="50dp"
-        app:tint="@color/white" />
+        app:tint="@color/status_off" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

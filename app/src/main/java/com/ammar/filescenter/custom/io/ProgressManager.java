@@ -59,7 +59,7 @@ public class ProgressManager {
         Bundle info_add = new Bundle();
         info_add.putChar("action", 'A');
         info_add.putInt("index", index);
-        NetworkService.filesSendNotifier.postValue(info_add);
+        NetworkService.filesSendNotifier.forcePostValue(info_add);
 
         // set action to P for later use
         progress_info.putChar("action", 'P');
@@ -126,7 +126,7 @@ public class ProgressManager {
     public void reportProgress() {
         if ( System.currentTimeMillis() - lastTime >= 300) {
             NetworkService.filesSendNotifier.postValue(progress_info);
-            bytesPerSecond = (long) ((getLoaded() - previouslyLoaded) / ((float)300/1000));
+            bytesPerSecond = getLoaded() - previouslyLoaded;
             previouslyLoaded = getLoaded();
             lastTime = System.currentTimeMillis();
         }

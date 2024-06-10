@@ -50,6 +50,7 @@
         <service android:name=".services.NetworkService"
             android:exported="false"
             android:foregroundServiceType="specialUse"/>
+
     </application>
 
 </manifest>

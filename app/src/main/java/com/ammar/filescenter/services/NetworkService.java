@@ -78,7 +78,7 @@ public class NetworkService extends Service {
     public static final MutableLiveData<Boolean> serverStatusObserver = new MutableLiveData<>();
     public static final MutableLiveData<Bundle> downloadsListObserver = new MutableLiveData<>();
     public static final MutableLiveData<List<Upload>> filesListObserver = new MutableLiveData<>();
-    public static final MutableLiveData<String> filesListNotifier = new MutableLiveData<>();
+    public static final MutableLiveData<Bundle> filesListNotifier = new MutableLiveData<>();
     public static final String DATA_DOWNLOADS_LIST = "DATA_DOWNLOADS_LIST";
     public static final String VALUE_MODIFY_DELETE = "com.ammar.filescenter.services.VALUE_MODIFY_DELETE";
     public static final QueueMutableLiveData<Bundle> filesSendNotifier = new QueueMutableLiveData<>();
@@ -199,7 +199,7 @@ public class NetworkService extends Service {
                 Bundle remove_info = new Bundle();
                 remove_info.putChar("action", 'R');
                 remove_info.putInt("index", index);
-                NetworkService.filesSendNotifier.postValue(remove_info);
+                NetworkService.filesListNotifier.postValue(remove_info);
                 break;
             default:
                 break;

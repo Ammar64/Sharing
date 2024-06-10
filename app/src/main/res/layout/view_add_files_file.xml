@@ -16,20 +16,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="12dp"
-        tools:src="@drawable/folder" />
+        tools:src="@drawable/folder_icon" />
 
     <TextView
         android:id="@+id/TV_FileNam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/IV_FileIco"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="24dp"
-        android:textSize="24sp"
-        android:maxLines="1"
         android:ellipsize="end"
         android:maxEms="12"
+        android:maxLines="1"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/CB_FileSelect"
+        app:layout_constraintStart_toEndOf="@+id/IV_FileIco"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Download" />
 
     <CheckBox
@@ -40,6 +41,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginEnd="24dp"
-        android:visibility="gone"
         android:clickable="false"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

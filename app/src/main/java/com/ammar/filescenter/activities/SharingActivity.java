@@ -9,10 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -46,18 +43,14 @@ import com.ammar.filescenter.activities.recyclers.SharingConnectedDevicesAdapter
 import com.ammar.filescenter.services.NetworkService;
 import com.ammar.filescenter.services.components.Server;
 import com.ammar.filescenter.services.objects.Downloadable;
-
+import com.ammar.filescenter.utils.Utils;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Locale;
 
 public class SharingActivity extends AppCompatActivity {
-    static {
-        System.loadLibrary("NativeQRCodeGen");
-    }
 
     private final int REQUEST_CODE_STORAGE_PERMISSION = 2;
-    private native byte[] encodeTextToQR(String text);
 
     BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -256,48 +249,12 @@ public class SharingActivity extends AppCompatActivity {
     }
 
 
-    private Bitmap QrCodeArrayToBitmap(byte[] qrCodeBytes) {
-        int qrColor;
-        int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        switch (nightModeFlags) {
-            case Configuration.UI_MODE_NIGHT_YES:
-                qrColor = Color.WHITE;
-                break;
-            case Configuration.UI_MODE_NIGHT_NO:
-            case Configuration.UI_MODE_NIGHT_UNDEFINED:
-            default:
-                qrColor = Color.BLACK;
-                break;
-        }
 
-
-        int size = (int) Math.sqrt(qrCodeBytes.length);
-        Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_4444);
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                int pixel = qrCodeBytes[size * j + i] == 1 ? qrColor : Color.TRANSPARENT;
-                bitmap.setPixel(j, i, pixel);
-            }
-        }
-
-        return getResizedBitmap(bitmap, 5000, 5000);
-    }
-
-    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth, scaleHeight);
-        return Bitmap.createBitmap(
-                bm, 0, 0, width, height, matrix, false);
-    }
 
 
     private void setupQrCode() {
-        byte[] qrCodeBytes = encodeTextToQR("http://" + NetworkService.getIpAddress() + ":" + NetworkService.PORT_NUMBER);
-        Bitmap qrCodeBitmap = QrCodeArrayToBitmap(qrCodeBytes);
+        byte[] qrCodeBytes = Utils.encodeTextToQR("http://" + NetworkService.getIpAddress() + ":" + NetworkService.PORT_NUMBER);
+        Bitmap qrCodeBitmap = Utils.QrCodeArrayToBitmap(qrCodeBytes);
         // Display the bitmap in an ImageView or any other suitable view
         qrCodeImage.setImageBitmap(qrCodeBitmap);
     }

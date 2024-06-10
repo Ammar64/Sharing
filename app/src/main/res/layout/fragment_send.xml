@@ -5,31 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <TextView
-        android:id="@+id/TV_ReceiveTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:textColor="@color/colorTrinary"
-        android:text="Send"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="20sp"/>
-
+    <include layout="@layout/toolbar" />
 
     <ImageButton
         android:id="@+id/B_AddApps"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="100dp"
-        android:src="@drawable/apps_icon"
+        android:layout_marginTop="8dp"
         android:background="@drawable/circular_button_white"
-         />
+        android:src="@drawable/apps_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TB_Toolbar" />
 
 
     <TextView
@@ -74,9 +61,10 @@
         android:layout_height="60dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/circular_button_white"
-        android:src="@drawable/check_icon"
+        android:src="@drawable/icon_check"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/B_AddApps" />
+
 
     <TextView
         android:id="@+id/textView2"
@@ -90,19 +78,50 @@
         app:layout_constraintStart_toStartOf="@+id/B_ShowSelected"
         app:layout_constraintTop_toBottomOf="@+id/B_ShowSelected" />
 
+    <ImageButton
+        android:id="@+id/B_ShowQRCode"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/circular_button_white"
+        android:src="@drawable/icon_qrcode"
+        app:layout_constraintEnd_toStartOf="@id/B_ShowIPAddresses"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TV_AddApps"
+        android:layout_marginTop="8dp"/>
 
     <TextView
-        android:id="@+id/TV_ServerLink"
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/TV_AddApps"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="24dp"
-        android:autoLink="web"
-        android:textSize="18sp"
-        tools:text="http://192.168.2.25:2999"/>
+        android:layout_marginTop="4dp"
+        android:labelFor="@+id/B_ShowIPAddresses"
+        android:text="Show QR"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/B_ShowQRCode"
+        app:layout_constraintStart_toStartOf="@+id/B_ShowQRCode"
+        app:layout_constraintTop_toBottomOf="@+id/B_ShowQRCode" />
 
+
+    <ImageButton
+        android:id="@+id/B_ShowIPAddresses"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/circular_button_white"
+        android:src="@drawable/icon_link"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/B_ShowQRCode"
+        app:layout_constraintTop_toTopOf="@+id/B_ShowQRCode" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:labelFor="@+id/B_ShowIPAddresses"
+        android:text="Show IP"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/B_ShowIPAddresses"
+        app:layout_constraintStart_toStartOf="@+id/B_ShowIPAddresses"
+        app:layout_constraintTop_toBottomOf="@+id/B_ShowIPAddresses" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RV_FilesSend"
@@ -111,10 +130,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TV_ServerLink"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
         tools:listitem="@layout/row_upload_view" />
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

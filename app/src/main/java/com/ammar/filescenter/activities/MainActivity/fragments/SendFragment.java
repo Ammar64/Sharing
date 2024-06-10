@@ -2,16 +2,19 @@ package com.ammar.filescenter.activities.MainActivity.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.ImageView;
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,18 +25,22 @@ import com.ammar.filescenter.activities.AddFilesActivity;
 import com.ammar.filescenter.activities.MainActivity.adapters.SendAdapter;
 import com.ammar.filescenter.activities.MainActivity.dialogs.ChosenFilesDialog;
 import com.ammar.filescenter.services.NetworkService;
+import com.ammar.filescenter.utils.Utils;
 
 import java.util.ArrayList;
 
 
 public class SendFragment extends Fragment {
     private View v;
+    private Toolbar toolbar;
     private ImageButton addAppsB;
     private ImageButton addFilesB;
     private ImageButton showSelected;
-    private TextView serverLinkTV;
     private RecyclerView filesSendRV;
     private SendAdapter adapter;
+    private ImageButton QRCodeB;
+    private AlertDialog QRDialogAD;
+    private ImageView QRImageIV;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,10 +59,12 @@ public class SendFragment extends Fragment {
 
 
     private void initItems() {
+        toolbar = v.findViewById(R.id.TB_Toolbar);
+        toolbar.setTitle("Share");
+
         addAppsB = v.findViewById(R.id.B_AddApps);
         addFilesB = v.findViewById(R.id.B_AddFiles);
         showSelected = v.findViewById(R.id.B_ShowSelected);
-        serverLinkTV = v.findViewById(R.id.TV_ServerLink);
 
         filesSendRV = v.findViewById(R.id.RV_FilesSend);
         adapter = new SendAdapter();
@@ -63,23 +72,31 @@ public class SendFragment extends Fragment {
         filesSendRV.setLayoutManager(new LinearLayoutManager(getContext()));
         filesSendRV.setItemAnimator(null);
         filesSendRV.setHasFixedSize(true);
-
+        QRCodeB = v.findViewById(R.id.B_ShowQRCode);
+        View QRDialogView = getLayoutInflater().inflate(R.layout.dialog_qrcode, null, false);
+        QRDialogAD = new AlertDialog.Builder(requireContext())
+                .setView(QRDialogView)
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
+                })
+                .create();
+        QRImageIV = QRDialogView.findViewById(R.id.IV_QRCodeImage);
 
     }
 
     private void setItemsListener() {
 
-        addAppsB.setOnClickListener((button) -> {
-            launcher.launch(new Intent(getActivity(), AddAppsActivity.class));
-        });
+        addAppsB.setOnClickListener((button) -> launcher.launch(new Intent(getActivity(), AddAppsActivity.class)));
 
-        addFilesB.setOnClickListener((button) -> {
-            launcher.launch(new Intent(getActivity(), AddFilesActivity.class));
-        });
+        addFilesB.setOnClickListener((button) -> mGetContent.launch("*/*"));
 
         showSelected.setOnClickListener(button -> {
             ChosenFilesDialog dialog = new ChosenFilesDialog();
             dialog.show(requireActivity().getSupportFragmentManager(), ChosenFilesDialog.TAG);
+        });
+
+        QRCodeB.setOnClickListener( button -> {
+            QRDialogAD.show();
+            setupQrCode();
         });
 
     }
@@ -110,6 +127,14 @@ public class SendFragment extends Fragment {
     }
 
 
+    private void setupQrCode() {
+        byte[] qrCodeBytes = Utils.encodeTextToQR("http://" + NetworkService.getIpAddress() + ":" + NetworkService.PORT_NUMBER);
+        Bitmap qrCodeBitmap = Utils.QrCodeArrayToBitmap(qrCodeBytes);
+        // Display the bitmap in an ImageView or any other suitable view
+        QRImageIV.setImageBitmap(qrCodeBitmap);
+    }
+
+
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
         if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null && result.getData().getAction() != null) {
             Intent data = result.getData();
@@ -129,5 +154,22 @@ public class SendFragment extends Fragment {
             requireContext().startService(intent);
 
         }
+    });
+
+
+    ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetMultipleContents(), (result) -> {
+        ArrayList<String> files = new ArrayList<>(result.size());
+
+        for( Uri i : result ) {
+            String path = Utils.getPathFromUri(requireContext(), i);
+            files.add(path);
+        }
+
+        Intent intent = new Intent(requireContext(), NetworkService.class);
+
+        // intent to be sent to service
+        intent.setAction(NetworkService.ACTION_ADD_DOWNLOADS);
+        intent.putExtra(NetworkService.EXTRA_FILE_PATHS, files);
+        requireContext().startService(intent);
     });
 }

@@ -7,11 +7,9 @@
     <color name="colorSecondary">#e91e63</color>
     <color name="colorSecondaryTransparent">#38e91e62</color>
     <color name="status_on">#0c0</color>
-    <color name="status_off">#c00</color>
+    <color name="status_off">#F44242</color>
     <color name="selected">#32000000</color>
     <color name="text_color">#777</color>
     <color name="colorTrinary">#776391</color>
-    <color name="red">#DC1010</color>
-
-
+    <color name="red">#F44242</color>
 </resources>

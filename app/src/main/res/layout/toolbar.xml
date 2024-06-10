@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<androidx.appcompat.widget.Toolbar
+    android:id="@+id/TB_Toolbar"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:minHeight="?attr/actionBarSize"
+    android:theme="?attr/actionBarTheme"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:menu="@menu/menu_share"
+    app:titleTextColor="@color/white"
+    tools:title="TitleHolder"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" />

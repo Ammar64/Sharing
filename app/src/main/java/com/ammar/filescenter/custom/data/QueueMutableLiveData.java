@@ -8,21 +8,26 @@ import java.util.Queue;
 
 public class QueueMutableLiveData<T> extends MutableLiveData<T> {
     private final Queue<T> queuedValues = new LinkedList<T>();
-
-    @Override
-    public synchronized void postValue(T value) {
+    private boolean isValueForced = false;
+    public synchronized void forcePostValue(T value) {
 
         queuedValues.offer(value);
         super.postValue(value);
+        isValueForced = true;
     }
 
     @Override
     @MainThread
     public synchronized void setValue(T value) {
-        queuedValues.remove(value);
+        if(isValueForced) {
+            isValueForced = false;
+            queuedValues.remove(value);
 
-        queuedValues.offer(value);
-        while(!queuedValues.isEmpty())
-            super.setValue(queuedValues.poll());
+            queuedValues.offer(value);
+            while (!queuedValues.isEmpty())
+                super.setValue(queuedValues.poll());
+        } else {
+            super.setValue(value);
+        }
     }
 }

@@ -22,4 +22,8 @@
     <string name="add_files">أضف ملفات</string>
     <string name="choose_apps">اختر تطبيقات</string>
     <string name="update_ip">حدث عنوان الخادم</string>
+
+
+    <string name="about_us">عنَّا</string>
+
 </resources>

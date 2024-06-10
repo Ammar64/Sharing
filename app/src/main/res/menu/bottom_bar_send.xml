@@ -2,10 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:id="@+id/B_Receive"
-        android:icon="@drawable/receive_icon"
-        android:title="Receive" />
 
     <item
         android:id="@+id/B_Share"
@@ -15,11 +11,6 @@
     <item
         android:enabled="false"
         android:title="" />
-
-    <item
-        android:id="@+id/B_Home"
-        android:icon="@drawable/home_icon"
-        android:title="Home" />
 
     <item
         android:id="@+id/B_Settings"

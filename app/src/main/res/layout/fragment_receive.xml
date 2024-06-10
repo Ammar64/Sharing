@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:backgroundTint="@color/colorSecondary"
+        app:backgroundTint="@color/colorSecondary"
         android:text="Search"
         android:textColor="@color/white"
         app:cornerRadius="10dp"
