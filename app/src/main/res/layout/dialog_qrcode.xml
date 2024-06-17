@@ -5,27 +5,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/TV_QRCodeDialogTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/TV_ServerLink"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="30dp"
         android:layout_marginTop="16dp"
-        android:text="@string/scan_qr_code_title"
-        android:textSize="24sp"
+        android:autoLink="web"
+        android:textAlignment="center"
+
+        android:textColorLink="@color/linkColor"
+        android:textStyle="bold"
+        app:autoSizeMaxTextSize="38sp"
+        app:autoSizeMinTextSize="16sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textIsSelectable="true"
+        tools:text="http://192.168.1.9:2999" />
 
     <android.widget.ImageView
         android:id="@+id/IV_QRCodeImage"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TV_QRCodeDialogTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/TV_ServerLink" />
 </androidx.constraintlayout.widget.ConstraintLayout>

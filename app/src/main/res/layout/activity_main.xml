@@ -44,6 +44,8 @@
         app:backgroundTint="@android:color/transparent"
         app:layout_anchor="@+id/BottomAppBar"
         app:maxImageSize="50dp"
-        app:tint="@color/status_off" />
+        app:tint="@color/status_off"
+        app:elevation="0dp"
+        app:pressedTranslationZ="0dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

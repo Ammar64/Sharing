@@ -15,6 +15,8 @@ import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
+import com.ammar.filescenter.activities.MainActivity.MainActivity;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -200,18 +202,10 @@ public class Utils {
     public static native byte[] encodeTextToQR(String text);
     public static Bitmap QrCodeArrayToBitmap(byte[] qrCodeBytes) {
         int qrColor;
-        int nightModeFlags = res.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        switch (nightModeFlags) {
-            case Configuration.UI_MODE_NIGHT_YES:
-                qrColor = Color.WHITE;
-                break;
-            case Configuration.UI_MODE_NIGHT_NO:
-            case Configuration.UI_MODE_NIGHT_UNDEFINED:
-            default:
-                qrColor = Color.BLACK;
-                break;
-        }
-
+        if(MainActivity.darkMode)
+            qrColor = Color.WHITE;
+        else
+            qrColor = Color.BLACK;
 
         int size = (int) Math.sqrt(qrCodeBytes.length);
         Bitmap bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_4444);

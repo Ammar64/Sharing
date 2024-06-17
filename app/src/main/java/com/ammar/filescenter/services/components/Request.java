@@ -5,7 +5,6 @@ import static com.ammar.filescenter.utils.Utils.readLineUTF8;
 import android.os.Environment;
 import android.util.Log;
 
-import com.ammar.filescenter.custom.io.ProgressInputStream;
 import com.ammar.filescenter.custom.io.ProgressManager;
 import com.ammar.filescenter.custom.io.ProgressOutputStream;
 
@@ -17,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -26,9 +26,9 @@ import java.util.Objects;
 import java.util.TreeMap;
 
 public class Request {
-    Socket clientSocket;
-    BufferedInputStream clientInput;
-    int charsRead = 0;
+    private Socket clientSocket;
+    private BufferedInputStream clientInput;
+    private int charsRead = 0;
 
     public Request(Socket clientSocket) {
         try {
@@ -43,6 +43,7 @@ public class Request {
     }
 
     public boolean readSocket() {
+        if(_connClose) return false;
         try {
             params = new HashMap<>();
             int lineNumber = 1;
@@ -56,8 +57,16 @@ public class Request {
             }
             charsRead += 2; // the \r and \n.
 
-            if( "keep-alive".equals(headers.get("Connection")) ) {
-                _shouldBreak = true;
+            String connection = headers.get("Connection");
+            if( connection != null && connection.contains("keep-alive") ) {
+                _connClose = true;
+            } else {
+                try {
+                    clientSocket.setKeepAlive(true);
+                    clientSocket.setSoTimeout(ClientHandler.timeout);
+                } catch (SocketException e) {
+                    Log.e("MYLOG", "readSocket(): " + Objects.requireNonNull(e.getMessage()));
+                }
             }
             return true;
         } catch (SocketTimeoutException e) {
@@ -79,7 +88,7 @@ public class Request {
 
             // parse the method
             // requestInfo[0] is the method
-            if (!("GET".equals(requestInfo[0]) || "POST".equals(requestInfo[0]))) {
+            if (!("GET".equals(requestInfo[0]) || "POST".equals(requestInfo[0]) || "PUT".equals(requestInfo[0]))) {
                 throw new RuntimeException("Illegal method");
             }
             this.method = requestInfo[0];
@@ -209,49 +218,51 @@ public class Request {
                                 Log.d("MYLOG", String.format(Locale.ENGLISH, "sz: %d, charsRead: %d, boundary.length: %d", sz, charsRead, boundary.length()));
 
                                 ProgressManager progressManager = new ProgressManager(filename, sz, clientSocket.getRemoteSocketAddress(), ProgressManager.OP.UPLOAD);
+                                try {
+                                    BufferedOutputStream out = new BufferedOutputStream(new ProgressOutputStream(new FileOutputStream(file_upload), progressManager));
 
-                                BufferedOutputStream out = new BufferedOutputStream(new ProgressOutputStream(new FileOutputStream(file_upload), progressManager));
 
+                                    // boundary index
+                                    int bi = 0;
+                                    // char
+                                    int c;
 
-                                // boundary index
-                                int bi = 0;
-                                // char
-                                int c;
+                                    // this is boundary prefixed with \r\n--
+                                    String __boundary = "\r\n--" + boundary;
 
-                                // this is boundary prefixed with \r\n--
-                                String __boundary = "\r\n--" + boundary;
-
-                                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                                while ((c = clientInput.read()) != -1) {
-                                    if ((char) c == __boundary.charAt(bi)) {
-                                        buffer.write((char) c);
-                                        bi++;
-                                        if (bi == __boundary.length()) {
-                                            out.close();
-                                            break;
-                                        }
-                                    } else {
-                                        if (buffer.size() != 0) {
-                                            out.write(buffer.toString().getBytes());
-                                            buffer.reset();
+                                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                                    while ((c = clientInput.read()) != -1) {
+                                        if ((char) c == __boundary.charAt(bi)) {
+                                            buffer.write((char) c);
+                                            bi++;
+                                            if (bi == __boundary.length()) {
+                                                out.close();
+                                                break;
+                                            }
                                         } else {
-                                            bi = 0;
+                                            if (buffer.size() != 0) {
+                                                out.write(buffer.toString().getBytes());
+                                                buffer.reset();
+                                            } else {
+                                                bi = 0;
+                                            }
+                                            out.write((char) c);
                                         }
-                                        out.write((char) c);
                                     }
-                                }
 
-                                if (c == -1) {
-                                    file_upload.delete();
-                                    Log.d("MYLOG", "Upload Failed");
+                                    if (c == -1) {
+                                        file_upload.delete();
+                                        Log.d("MYLOG", "Upload Failed");
+                                        out.close();
+                                        progressManager.reportFailed();
+                                        return false;
+                                    }
                                     out.close();
+                                    progressManager.reportCompleted();
+                                    return true;
+                                } catch (Exception e) {
                                     progressManager.reportFailed();
-                                    return false;
                                 }
-                                out.close();
-                                progressManager.reportCompleted();
-                                return true;
-
                             }
                         }
                     }
@@ -320,8 +331,9 @@ public class Request {
         return params;
     }
 
-    private boolean _shouldBreak = true;
-    public boolean shouldBreak() {
-        return _shouldBreak;
+    public BufferedInputStream getClientInput() {
+        return clientInput;
     }
+
+    private boolean _connClose = false;
 }

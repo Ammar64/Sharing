@@ -72,7 +72,7 @@ public class Server {
         try {
             while (!serverSocket.isClosed()) {
                 Socket clientSocket = serverSocket.accept();
-                ClientHandler clientHandler = new ClientHandler(downloadablesList, clientSocket);
+                ClientHandler clientHandler = new ClientHandler(context, downloadablesList, clientSocket);
                 String clientAddress = clientSocket.getRemoteSocketAddress().toString();
 
                 if (connectedDevices.add(clientAddress.split(":")[0])) {

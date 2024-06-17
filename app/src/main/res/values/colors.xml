@@ -12,4 +12,6 @@
     <color name="text_color">#777</color>
     <color name="colorTrinary">#776391</color>
     <color name="red">#F44242</color>
+
+    <color name="linkColor">#1B309F</color>
 </resources>

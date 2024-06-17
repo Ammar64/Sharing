@@ -10,9 +10,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -100,6 +100,17 @@ public class Response {
         }
     }
 
+    public void sendResponse() {
+        try {
+            OutputStream out = clientSocket.getOutputStream();
+            writeHeaders(out);
+            out.flush();
+
+        } catch (IOException e) {
+            Log.e("MYLOG", e.getMessage());
+        }
+    }
+
     public void setHeader(String key, String value) {
         headers.put(key, value);
     }
@@ -135,7 +146,7 @@ public class Response {
         this.statusCode = statusCode;
     }
 
-    private Map<String, String> headers = new HashMap<>();
+    private Map<String, String> headers = new TreeMap<>();
 
 
 }

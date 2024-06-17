@@ -1,7 +1,11 @@
 package com.ammar.filescenter.services.components;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
+import com.ammar.filescenter.custom.io.ProgressManager;
 import com.ammar.filescenter.services.NetworkService;
 import com.ammar.filescenter.services.models.AppUpload;
 import com.ammar.filescenter.services.models.Upload;
@@ -10,7 +14,11 @@ import com.ammar.filescenter.services.objects.Downloadable;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
@@ -18,17 +26,20 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Objects;
 
+
 public class ClientHandler implements Runnable {
     private final LinkedList<Downloadable> downloadablesList;
     /**
      * @noinspection FieldCanBeLocal
      */
-    private final int timeout = 5000;
+    public static final int timeout = 5000;
     private final Socket clientSocket;
 
-    public ClientHandler(LinkedList<Downloadable> downloadablesList, Socket clientSocket) {
+    private final Context context;
+    public ClientHandler(Context context, LinkedList<Downloadable> downloadablesList, Socket clientSocket) {
         this.downloadablesList = downloadablesList;
         this.clientSocket = clientSocket;
+        this.context = context;
     }
 
     // handle client here
@@ -36,31 +47,25 @@ public class ClientHandler implements Runnable {
     public void run() {
 
         try {
-            clientSocket.setKeepAlive(true);
-            clientSocket.setSoTimeout(timeout);
-        } catch (SocketException e) {
-            Log.e("MYLOG", Objects.requireNonNull(e.getMessage()));
-        }
-
-
-        try {
             Request request = new Request(clientSocket);
             while (request.readSocket()) {
                 String path = request.getPath();
                 Response response = new Response(clientSocket);
+                response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+                response.setHeader("Pragma", "no-cache");
+                response.setHeader("Expires", "0");
                 // multiply timeout by 0.001 to convert from milliseconds into seconds
                 response.setHeader("Keep-Alive", String.format(Locale.ENGLISH, "timeout=%d", (int) (timeout * 0.001)));
-                if ("POST".equals(request.getMethod())) {
-                    if ("/upload".equals(request.getPath())) {
-                        response.setHeader("Content-Type", "text/plain");
-                        if (request.POST_StoreFile("file")) {
-                            response.setStatusCode(200);
-                            response.sendResponse("Uploaded successfully".getBytes());
+                if ("PUT".equals(request.getMethod())) {
+                    if(path.startsWith("/upload/")) {
+                        String fileName = path.substring(8);
+                        if( fileName.contains("/") ){
+                            response.setStatusCode(400);
                         } else {
-                            response.setStatusCode(500);
-                            response.sendResponse("Upload Failed".getBytes());
+                            long size = Long.parseLong(request.getHeaders().get("Content-Length"));
+                            response.setStatusCode(StoreFile(request.getClientInput(), fileName, size));
                         }
-
+                        response.sendResponse();
                     }
                 } else if ("GET".equals(request.getMethod())) {
                     if ("/available-downloads".equals(path)) {
@@ -124,9 +129,6 @@ public class ClientHandler implements Runnable {
                         response.sendResponse("404 What are you doing ?".getBytes(StandardCharsets.UTF_8));
                     }
                 }
-                if( request.shouldBreak() ) {
-                    break;
-                }
             }
         } catch (IOException ignored) {
 
@@ -156,4 +158,43 @@ public class ClientHandler implements Runnable {
         return jsonArray.toString().getBytes();
     }
 
+    private int StoreFile(InputStream in, String fullFileName, long size) {
+        SharedPreferences settingsPrefs = context.getSharedPreferences(SettingsFragment.SettingsPrefFile, Context.MODE_PRIVATE);
+        String upload_dir = settingsPrefs.getString(SettingsFragment.UploadDir, "");
+        assert !upload_dir.isEmpty();
+
+        ProgressManager progressManager = new ProgressManager(null, size, clientSocket.getRemoteSocketAddress(), ProgressManager.OP.UPLOAD);
+        try {
+
+            int num = 0;
+            int ext_index = fullFileName.lastIndexOf('.');
+
+            String fileNameNoExt = ext_index < 0 ?  fullFileName : fullFileName.substring(0, ext_index);
+            String fileExtension = ext_index < 0 ? "" : fullFileName.substring(ext_index);
+
+            File upload_file = new File(upload_dir, fullFileName);
+            while(upload_file.exists()) {
+                String localFileName = String.format(Locale.ENGLISH, "%s (%d)%s", fileNameNoExt, num++, fileExtension);
+                upload_file = new File(upload_dir, localFileName);
+            }
+            progressManager.setFileName(upload_file.getName());
+            FileOutputStream out = new FileOutputStream(upload_file);
+
+            long totalBytesRead = 0;
+            byte[] buffer = new byte[8192];
+            while(totalBytesRead < size) {
+                int bytesRead = in.read(buffer);
+                totalBytesRead += bytesRead;
+                progressManager.setLoaded(totalBytesRead);
+                out.write(buffer, 0, bytesRead);
+            }
+            out.close();
+            progressManager.reportCompleted();
+            return 200;
+        } catch (IOException e) {
+            Log.e("MYLOG", "ClientHandler.StoreFile. IOException: " + e.getMessage());
+            progressManager.reportFailed();
+            return 500;
+        }
+    }
 }

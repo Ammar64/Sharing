@@ -40,8 +40,9 @@
                     android:textSize="@dimen/settings_small_text" />
 
                 <androidx.appcompat.widget.SwitchCompat
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:id="@+id/SC_DarkModeToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="10dp"/>
@@ -75,42 +76,6 @@
                     android:layout_marginEnd="10dp" />
             </RelativeLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:paddingStart="14dp">
-                <TextView
-                    android:id="@+id/TV_SettingsFontSize"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:text="Font size"
-                    android:textSize="@dimen/settings_big_text" />
-                <TextView
-                    android:id="@+id/TV_SettingsFontSizeSub"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/TV_SettingsFontSize"
-                    android:text="small ,normal ,large"
-                    android:textSize="@dimen/settings_small_text" />
-
-                <SeekBar
-                    android:max="3"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/icon_check"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/TV_SettingsFontSizeSub"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
-plug tab fast I

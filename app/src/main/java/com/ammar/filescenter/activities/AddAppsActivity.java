@@ -33,13 +33,22 @@ public class AddAppsActivity extends AppCompatActivity {
         setSupportActionBar(findViewById(R.id.TB_AddApps));
         appsRecycler = findViewById(R.id.RV_AppsRecycler);
 
+        List<ApplicationInfo> userApps = new LinkedList<>();
+        
+        int flags = PackageManager.GET_META_DATA |
+                PackageManager.GET_SHARED_LIBRARY_FILES |
+                PackageManager.GET_UNINSTALLED_PACKAGES;
+
         PackageManager pm = getPackageManager();
+        List<ApplicationInfo> applications = pm.getInstalledApplications(flags);
+        for (ApplicationInfo appInfo : applications) {
+            if ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 1) {
+                userApps.add(appInfo);
+            }
+        }
 
-        List<ApplicationInfo> appsInfo = pm.getInstalledApplications(0);
 
-
-
-        AppsRecyclerAdapter appsAdapter = new AppsRecyclerAdapter(this, appsInfo, selectedApps);
+        AppsRecyclerAdapter appsAdapter = new AppsRecyclerAdapter(this, userApps, selectedApps);
         appsRecycler.setAdapter(appsAdapter);
         appsRecycler.setLayoutManager(new GridLayoutManager(this, 3));
 

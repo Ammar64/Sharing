@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -40,6 +42,7 @@ public class SendFragment extends Fragment {
     private SendAdapter adapter;
     private ImageButton QRCodeB;
     private AlertDialog QRDialogAD;
+    private AppCompatTextView serverLinkTV;
     private ImageView QRImageIV;
 
     @Override
@@ -80,6 +83,7 @@ public class SendFragment extends Fragment {
                 })
                 .create();
         QRImageIV = QRDialogView.findViewById(R.id.IV_QRCodeImage);
+        serverLinkTV = QRDialogView.findViewById(R.id.TV_ServerLink);
 
     }
 
@@ -128,7 +132,9 @@ public class SendFragment extends Fragment {
 
 
     private void setupQrCode() {
-        byte[] qrCodeBytes = Utils.encodeTextToQR("http://" + NetworkService.getIpAddress() + ":" + NetworkService.PORT_NUMBER);
+        String link = "http://" + NetworkService.getIpAddress() + ":" + NetworkService.PORT_NUMBER;
+        serverLinkTV.setText(link);
+        byte[] qrCodeBytes = Utils.encodeTextToQR(link);
         Bitmap qrCodeBitmap = Utils.QrCodeArrayToBitmap(qrCodeBytes);
         // Display the bitmap in an ImageView or any other suitable view
         QRImageIV.setImageBitmap(qrCodeBitmap);

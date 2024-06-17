@@ -1,11 +1,15 @@
 package com.ammar.filescenter.activities.MainActivity;
 
+import android.app.UiModeManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Environment;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.ammar.filescenter.R;
@@ -22,8 +26,12 @@ public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton serverButton;
     private BottomNavigationView bottomNavigationView;
+
+    public static boolean darkMode;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        prepareActivity();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initItems();
@@ -32,12 +40,32 @@ public class MainActivity extends AppCompatActivity {
         observeStates();
     }
 
+    public void prepareActivity() {
+        SharedPreferences settingsPref = getSharedPreferences(SettingsFragment.SettingsPrefFile, MODE_PRIVATE);
+        // check for first Run
+        SharedPreferences firstRunPref = getSharedPreferences("FirstRun", MODE_PRIVATE);
+        boolean isFirstRun = firstRunPref.getBoolean("firstrun", true);
+        if (isFirstRun) {
+            // Download folder will be the default.
+            String downloadFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+
+            settingsPref.edit()
+                    .putBoolean(SettingsFragment.DarkModeKey, true)
+                    .putString(SettingsFragment.UploadDir, downloadFolder)
+                    .apply();
+
+            firstRunPref.edit().putBoolean("firstrun", false).apply();
+        }
+
+        UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
+        darkMode = settingsPref.getBoolean(SettingsFragment.DarkModeKey, true);
+        AppCompatDelegate.setDefaultNightMode(darkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+    }
+
     private void initItems() {
         bottomNavigationView = findViewById(R.id.BottomNavView);
         serverButton = findViewById(R.id.FAB_ServerButton);
         bottomNavigationView.setSelectedItemId(R.id.B_Share);
-
-
     }
 
 
@@ -85,9 +113,10 @@ public class MainActivity extends AppCompatActivity {
         serviceIntent.setAction(NetworkService.ACTION_GET_SERVER_STATUS);
         startService(serviceIntent);
     }
+
     private void observeStates() {
         NetworkService.serverStatusObserver.observe(this, running -> {
-            if(running) {
+            if (running) {
                 serverButton.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.status_on)));
             } else {
                 serverButton.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.status_off)));

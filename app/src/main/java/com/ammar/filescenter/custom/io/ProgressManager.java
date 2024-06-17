@@ -45,7 +45,7 @@ public class ProgressManager {
 
 
     public ProgressManager(String fileName, long fileSize, SocketAddress remoteIpAddress, OP opType) {
-        this.fileName = fileName;
+        this.fileName = fileName == null ? "" : fileName;
         this.total = fileSize;
         this.remoteIp = remoteIpAddress.toString();
         this.remoteIp = this.remoteIp.substring(1, this.remoteIp.lastIndexOf(":"));

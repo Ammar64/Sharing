@@ -50,6 +50,7 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
         holder.icon.setImageDrawable(appIcon);
         holder.appName.setText(appName);
         holder.itemView.setSelected(selectedApps.contains(holder.appName.getText().toString()));
+        holder.splits.setVisibility( appInfo.splitPublicSourceDirs == null ? View.INVISIBLE : View.VISIBLE );
         holder.itemView.setOnClickListener((view) -> {
             boolean isSelected = holder.itemView.isSelected();
             holder.itemView.setSelected(!isSelected);
@@ -59,6 +60,7 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
                 selectedApps.remove(appInfo.packageName);
             }
         });
+
     }
 
     @Override
@@ -69,11 +71,12 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView icon;
         public TextView appName;
-
+        public TextView splits;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             icon = itemView.findViewById(R.id.IV_AppIcon);
             appName = itemView.findViewById(R.id.TV_AppName);
+            splits = itemView.findViewById(R.id.TV_Splits);
         }
     }
 }
