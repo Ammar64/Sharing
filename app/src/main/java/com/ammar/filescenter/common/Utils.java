@@ -1,8 +1,7 @@
-package com.ammar.filescenter.utils;
+package com.ammar.filescenter.common;
 
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -12,12 +11,14 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
+
+import androidx.annotation.NonNull;
 
 import com.ammar.filescenter.activities.MainActivity.MainActivity;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
@@ -228,5 +229,21 @@ public class Utils {
         matrix.postScale(scaleWidth, scaleHeight);
         return Bitmap.createBitmap(
                 bm, 0, 0, width, height, matrix, false);
+    }
+
+    @NonNull
+    public static File createNewFile(String upload_dir, String fullFileName) {
+        int num = 1;
+        int ext_index = fullFileName.lastIndexOf('.');
+
+        String fileNameNoExt = ext_index < 0 ? fullFileName : fullFileName.substring(0, ext_index);
+        String fileExtension = ext_index < 0 ? "" : fullFileName.substring(ext_index);
+
+        File upload_file = new File(upload_dir, fullFileName);
+        while(upload_file.exists()) {
+            String localFileName = String.format(Locale.ENGLISH, "%s (%d)%s", fileNameNoExt, num++, fileExtension);
+            upload_file = new File(upload_dir, localFileName);
+        }
+        return upload_file;
     }
 }

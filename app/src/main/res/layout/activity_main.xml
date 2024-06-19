@@ -12,8 +12,7 @@
         android:id="@+id/MainActivityFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?attr/actionBarSize"
-        android:name="com.ammar.filescenter.activities.MainActivity.fragments.SendFragment"/>
+        android:name="com.ammar.filescenter.activities.MainActivity.fragments.TransferFragment"/>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/BottomAppBar"

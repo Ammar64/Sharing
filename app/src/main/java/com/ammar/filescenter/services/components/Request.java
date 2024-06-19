@@ -1,12 +1,13 @@
 package com.ammar.filescenter.services.components;
 
-import static com.ammar.filescenter.utils.Utils.readLineUTF8;
+import static com.ammar.filescenter.common.Utils.readLineUTF8;
 
 import android.os.Environment;
 import android.util.Log;
 
 import com.ammar.filescenter.custom.io.ProgressManager;
 import com.ammar.filescenter.custom.io.ProgressOutputStream;
+import com.ammar.filescenter.services.models.User;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -216,8 +217,8 @@ public class Request {
 
                                 long sz = content_length - charsRead - boundary.length() - 8;
                                 Log.d("MYLOG", String.format(Locale.ENGLISH, "sz: %d, charsRead: %d, boundary.length: %d", sz, charsRead, boundary.length()));
-
-                                ProgressManager progressManager = new ProgressManager(filename, sz, clientSocket.getRemoteSocketAddress(), ProgressManager.OP.UPLOAD);
+                                User user = User.getUserBySockAddr(clientSocket.getRemoteSocketAddress());
+                                ProgressManager progressManager = new ProgressManager(file_upload, sz, user, ProgressManager.OP.UPLOAD);
                                 try {
                                     BufferedOutputStream out = new BufferedOutputStream(new ProgressOutputStream(new FileOutputStream(file_upload), progressManager));
 
@@ -320,19 +321,15 @@ public class Request {
     /**
      * @noinspection unused
      */
-    public Map<String, String> getHeaders() {
-        return headers;
-    }
-
-    /**
-     * @noinspection unused
-     */
     public Map<String, String> getParams() {
         return params;
     }
 
     public BufferedInputStream getClientInput() {
         return clientInput;
+    }
+    public String getHeader(String header) {
+        return headers.get(header);
     }
 
     private boolean _connClose = false;

@@ -26,7 +26,6 @@ import java.util.ArrayList;
 public class SettingsFragment extends Fragment {
     public static final String SettingsPrefFile = "SettingsPref";
     public static final String DarkModeKey = "IS_DARK_MODE";
-    public static final String LanguageKey = "APP_LANGUAGE";
     public static final String UploadDir = "UPLOAD_DIR";
 
     private View v;
@@ -35,6 +34,7 @@ public class SettingsFragment extends Fragment {
 
 
     private SharedPreferences settingsPref;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

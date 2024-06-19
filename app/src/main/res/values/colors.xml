@@ -14,4 +14,5 @@
     <color name="red">#F44242</color>
 
     <color name="linkColor">#1B309F</color>
+    <color name="toolbar_bottom_color">#373737</color>
 </resources>

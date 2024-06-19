@@ -11,21 +11,20 @@ import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.MutableLiveData;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.ammar.filescenter.R;
+import com.ammar.filescenter.common.Abbrev;
 import com.ammar.filescenter.custom.data.QueueMutableLiveData;
 import com.ammar.filescenter.services.components.Server;
-import com.ammar.filescenter.services.models.AppUpload;
-import com.ammar.filescenter.services.models.Upload;
-import com.ammar.filescenter.services.objects.AppDownloadable;
-import com.ammar.filescenter.services.objects.Downloadable;
+import com.ammar.filescenter.services.models.TransferableApp;
+import com.ammar.filescenter.services.models.Transferable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,54 +33,25 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 
 /**
  * @noinspection unused
  */
 public class NetworkService extends Service {
 
-    public static final String ACTION_TOGGLE_SERVER = "com.ammar.filescenter.services.TOGGLE_SERVER";
-    public static final String ACTION_STOP_SERVICE = "com.ammar.filescenter.services.STOP_SERVICE";
-    public static final String ACTION_GET_SERVER_STATUS = "com.ammar.filescenter.services.GET_SERVER_STATUS";
-    public static final String ACTION_UPDATE_NOTIFICATION_TEXT = "com.ammar.filescenter.services.UPDATE_NOTIFICATION_STRING";
-    public static final String ACTION_ADD_DOWNLOADABLE = "com.ammar.filescenter.services.ADD_DOWNLOADABLE";
-    public static final String ACTION_ADD_APPS_DOWNLOADABLE = "com.ammar.filescenter.services.ADD_APP_DOWNLOADABLE";
-    public static final String ACTION_GET_DOWNLOADABLE = "com.ammar.filescenter.services.GET_DOWNLOADABLE";
-    public static final String ACTION_MODIFY_DOWNLOADABLE = "com.ammar.filescenter.services.MODIFY_DOWNLOADABLE";
-    public static final String ACTION_DEVICE_CONNECTED = "com.ammar.filescenter.services.DEVICE_CONNECTED";
-    public static final String ACTION_REMOVE_DOWNLOAD = "ACTION_REMOVE_DOWNLOAD";
-    public static final String ACTION_CANCEL_UPLOAD = "ACTION_UPLOAD_CANCEL";
-    public static final String ACTION_ADD_DOWNLOADS = "ACTION_ADD_DOWNLOADS";
-    public static final String ACTION_ADD_APPS_DOWNLOADS = "ACTION_ADD_APPS_DOWNLOADS";
-    public static final String ACTION_GET_DOWNLOADS = "ACTION_GET_DOWNLOADS";
-
-    public static final String EXTRA_SERVER_STATUS = "com.ammar.filescenter.services.SERVER_STATUS";
-    public static final String EXTRA_SERVER_ADDRESS = "com.ammar.filescenter.services.SERVER_ADDRESS";
-    public static final String EXTRA_SERVER_PORT = "com.ammar.filescenter.services.SERVER_PORT";
-    public static final String EXTRA_FILE_PATHS = "com.ammar.filescenter.services.FILE_PATHS";
-    public static final String EXTRA_DOWNLOADABLES_ARRAY = "com.ammar.filescenter.services.DOWNLOADABLES_LIST";
-    public static final String EXTRA_APPS_NAMES = "com.ammar.filescenter.services.APPS_NAME";
-    public static final String EXTRA_MODIFY_TYPE = "com.ammar.filescenter.services.MODIFY_TYPE";
-    public static final String EXTRA_MODIFY_DELETE_UUID = "com.ammar.filescenter.services.MODIFY_DELETE_UUID";
-    public static final String EXTRA_CONNECTED_DEVICES_LIST = "com.ammar.filescenter.services.CONNECTED_DEVICES_LIST";
-    public static final String EXTRA_DOWNLOAD_REMOVE = "EXTRA_DOWNLOAD_REMOVE";
-    public static final String EXTRA_UPLOAD_CANCEL = "EXTRA_UPLOAD_CANCEL";
-    public static final String EXTRA_DOWNLOAD_UUID = "EXTRA_DOWNLOAD_UUID";
-
 
     // observers
     public static final MutableLiveData<Boolean> serverStatusObserver = new MutableLiveData<>();
     public static final MutableLiveData<Bundle> downloadsListObserver = new MutableLiveData<>();
-    public static final MutableLiveData<List<Upload>> filesListObserver = new MutableLiveData<>();
+    public static final MutableLiveData<List<Transferable>> filesListObserver = new MutableLiveData<>();
     public static final MutableLiveData<Bundle> filesListNotifier = new MutableLiveData<>();
     public static final String DATA_DOWNLOADS_LIST = "DATA_DOWNLOADS_LIST";
     public static final String VALUE_MODIFY_DELETE = "com.ammar.filescenter.services.VALUE_MODIFY_DELETE";
     public static final QueueMutableLiveData<Bundle> filesSendNotifier = new QueueMutableLiveData<>();
+    public static final MutableLiveData<Bundle> usersListObserver = new QueueMutableLiveData<>();
 
     private final int FOREGROUND_NOTIFICATION_ID = 1;
     public static final int PORT_NUMBER = 2999;
@@ -94,7 +64,7 @@ public class NetworkService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        serverStatusIntent.setAction(ACTION_GET_SERVER_STATUS);
+        serverStatusIntent.setAction(Abbrev.ACTION_GET_SERVER_STATUS);
         assetManager = getAssets();
     }
 
@@ -114,82 +84,43 @@ public class NetworkService extends Service {
         String actionReceived = intent.getAction();
         String action = actionReceived != null ? actionReceived : "";
         switch (action) {
-            case ACTION_TOGGLE_SERVER:
+            case Abbrev.ACTION_TOGGLE_SERVER:
                 toggleServer();
                 break;
-            case ACTION_STOP_SERVICE:
+            case Abbrev.ACTION_STOP_SERVICE:
                 stopSelf();
-            case ACTION_GET_SERVER_STATUS:
+            case Abbrev.ACTION_GET_SERVER_STATUS:
                 sendServerStatusToActivity();
                 break;
-            case ACTION_UPDATE_NOTIFICATION_TEXT:
+            case Abbrev.ACTION_UPDATE_NOTIFICATION_TEXT:
                 startForeground(FOREGROUND_NOTIFICATION_ID, buildNotification(this));
                 break;
-            case ACTION_ADD_DOWNLOADABLE:
-                ArrayList<String> files = intent.getStringArrayListExtra(EXTRA_FILE_PATHS);
-                assert files != null;
-                for (String i : files) {
-                    server.downloadablesList.add(new Downloadable(i));
-                }
-                break;
-            case ACTION_GET_DOWNLOADABLE:
-                Intent downloadablesIntent = new Intent();
-                downloadablesIntent.setAction(ACTION_GET_DOWNLOADABLE);
-                downloadablesIntent.putExtra(EXTRA_DOWNLOADABLES_ARRAY, server.downloadablesList);
-
-                //noinspection deprecation
-                LocalBroadcastManager.getInstance(this).sendBroadcast(downloadablesIntent);
-                break;
-            case ACTION_MODIFY_DOWNLOADABLE:
-                String type = intent.getStringExtra(EXTRA_MODIFY_TYPE);
-                assert type != null;
-                if (type.equals(VALUE_MODIFY_DELETE)) {
-                    UUID uuid = (UUID) intent.getSerializableExtra(EXTRA_MODIFY_DELETE_UUID);
-                    for (Downloadable i : server.downloadablesList) {
-                        if (i.getUUID().equals(uuid)) {
-                            server.downloadablesList.remove(i);
-                        }
-                    }
-                }
-                break;
-            case ACTION_ADD_APPS_DOWNLOADABLE:
-                ArrayList<String> appsName = intent.getStringArrayListExtra(EXTRA_APPS_NAMES);
-                for (String i : appsName) {
-                    AppDownloadable app = new AppDownloadable(this, i);
-                    server.downloadablesList.add(app);
-                    server.downloadablesList.addAll(Arrays.asList(app.splits));
-                }
-                break;
-
-
-
-
-            case ACTION_ADD_DOWNLOADS:
-                ArrayList<String> filePaths = intent.getStringArrayListExtra(EXTRA_FILE_PATHS);
+            case Abbrev.ACTION_ADD_DOWNLOADS:
+                ArrayList<String> filePaths = intent.getStringArrayListExtra(Abbrev.EXTRA_FILE_PATHS);
                 assert filePaths != null;
                 for( String i : filePaths ) {
-                    Server.filesList.add( new Upload(i));
+                    Server.filesList.add( new Transferable(i));
                 }
                 break;
-            case ACTION_ADD_APPS_DOWNLOADS:
-                ArrayList<String> packages_name = intent.getStringArrayListExtra(EXTRA_APPS_NAMES);
+            case Abbrev.ACTION_ADD_APPS_DOWNLOADS:
+                ArrayList<String> packages_name = intent.getStringArrayListExtra(Abbrev.EXTRA_APPS_NAMES);
                 if( packages_name != null ) {
                     for( String i : packages_name ) {
                         try {
-                            Server.filesList.add(new AppUpload(this, i));
+                            Server.filesList.add(new TransferableApp(this, i));
                         } catch (PackageManager.NameNotFoundException e) {
                             throw new RuntimeException(e);
                         }
                     }
                 }
                 break;
-            case ACTION_GET_DOWNLOADS:
+            case Abbrev.ACTION_GET_DOWNLOADS:
                 filesListObserver.postValue(Server.filesList);
-            case ACTION_REMOVE_DOWNLOAD:
-                String uuid = intent.getStringExtra(EXTRA_DOWNLOAD_UUID);
+            case Abbrev.ACTION_REMOVE_DOWNLOAD:
+                String uuid = intent.getStringExtra(Abbrev.EXTRA_DOWNLOAD_UUID);
 
                 int index = 0;
-                for( Upload i : Server.filesList ) {
+                for( Transferable i : Server.filesList ) {
                     if( i.getUUID().equals(uuid) ) {
                         Server.filesList.remove(index);
                         break;
@@ -219,8 +150,6 @@ public class NetworkService extends Service {
 
     private boolean isRunningFirstTime = true;
     private void sendServerStatusToActivity() {
-        Intent intent = new Intent();
-        intent.setAction(ACTION_GET_SERVER_STATUS);
         boolean isServerRunning = server.isRunning();
 
         // stop notification or start it
@@ -234,11 +163,6 @@ public class NetworkService extends Service {
 
         // notify observer.
         serverStatusObserver.postValue(isServerRunning);
-
-        intent.putExtra(EXTRA_SERVER_STATUS, isServerRunning);
-        intent.putExtra(EXTRA_CONNECTED_DEVICES_LIST, Server.connectedDevices);
-        //noinspection deprecation
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     public Notification buildNotification(Context context) {
@@ -297,15 +221,6 @@ public class NetworkService extends Service {
         } else {
             stopForeground(true);
         }
-    }
-
-    public Downloadable getDownloadableWithUUID(String uuid) {
-        for (Downloadable i : server.downloadablesList) {
-            if (uuid.equals(i.getUUID().toString())) {
-                return i;
-            }
-        }
-        return null;
     }
 
     public static byte[] readFileFromAssets(String filepath) throws IOException {

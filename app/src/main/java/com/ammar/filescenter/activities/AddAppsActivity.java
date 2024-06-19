@@ -1,16 +1,21 @@
 package com.ammar.filescenter.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,35 +29,51 @@ public class AddAppsActivity extends AppCompatActivity {
     public static final String EXTRA_INTENT_APPS = "com.ammar.filescenter.SELECTED_APPS";
     public static final String ACTION_ADD_APPS = "ACTION_ADD_APPS";
     private RecyclerView appsRecycler;
+    private Toolbar appBar;
     LinkedList<String> selectedApps = new LinkedList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_apps);
-        setSupportActionBar(findViewById(R.id.TB_AddApps));
+        appBar = findViewById(R.id.TB_Toolbar);
+        setSupportActionBar(appBar);
         appsRecycler = findViewById(R.id.RV_AppsRecycler);
 
-        List<ApplicationInfo> userApps = new LinkedList<>();
-        
-        int flags = PackageManager.GET_META_DATA |
-                PackageManager.GET_SHARED_LIBRARY_FILES |
-                PackageManager.GET_UNINSTALLED_PACKAGES;
+        appBar.setTitle("Choose Apps");
+        TextView loadingTV = findViewById(R.id.TV_AppsLoading);
+        ProgressBar loadingPB = findViewById(R.id.PB_AppsLoading);
+        new Handler().post(() -> {
+            List<ApplicationInfo> userApps = new LinkedList<>();
+            int flags = PackageManager.GET_META_DATA |
+                    PackageManager.GET_SHARED_LIBRARY_FILES |
+                    PackageManager.GET_UNINSTALLED_PACKAGES;
 
-        PackageManager pm = getPackageManager();
-        List<ApplicationInfo> applications = pm.getInstalledApplications(flags);
-        for (ApplicationInfo appInfo : applications) {
-            if ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 1) {
-                userApps.add(appInfo);
+            PackageManager pm = getPackageManager();
+            List<ApplicationInfo> applications = pm.getInstalledApplications(flags);
+            for (ApplicationInfo appInfo : applications) {
+                if ((appInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 1) {
+                    userApps.add(appInfo);
+                }
             }
-        }
 
 
-        AppsRecyclerAdapter appsAdapter = new AppsRecyclerAdapter(this, userApps, selectedApps);
-        appsRecycler.setAdapter(appsAdapter);
-        appsRecycler.setLayoutManager(new GridLayoutManager(this, 3));
+            AppsRecyclerAdapter appsAdapter = new AppsRecyclerAdapter(this, userApps, selectedApps);
+            appsRecycler.setAdapter(appsAdapter);
+            appsRecycler.setLayoutManager(new GridLayoutManager(this, 3) {
+                @Override
+                public void onLayoutCompleted(RecyclerView.State state) {
+                    super.onLayoutCompleted(state);
+                    loadingTV.setVisibility(View.GONE);
+                    loadingPB.setVisibility(View.GONE);
+                }
+            });
 
+        });
+    }
 
+    public void setToolbarTitle(String title) {
+        appBar.setTitle(title);
     }
 
     @Override

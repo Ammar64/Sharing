@@ -7,121 +7,6 @@
 
     <include layout="@layout/toolbar" />
 
-    <ImageButton
-        android:id="@+id/B_AddApps"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/circular_button_white"
-        android:src="@drawable/apps_icon"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TB_Toolbar" />
-
-
-    <TextView
-        android:id="@+id/TV_AddApps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:labelFor="@+id/B_AddApps"
-        android:text="add apps"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/B_AddApps"
-        app:layout_constraintStart_toStartOf="@+id/B_AddApps"
-        app:layout_constraintTop_toBottomOf="@+id/B_AddApps" />
-
-
-    <ImageButton
-        android:id="@+id/B_AddFiles"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/circular_button_white"
-        android:src="@drawable/icon_file_red"
-        app:layout_constraintEnd_toStartOf="@id/B_ShowSelected"
-        app:layout_constraintStart_toEndOf="@+id/B_AddApps"
-        app:layout_constraintTop_toTopOf="@+id/B_AddApps" />
-
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="add files"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/B_AddFiles"
-        app:layout_constraintStart_toStartOf="@+id/B_AddFiles"
-        app:layout_constraintTop_toBottomOf="@+id/B_AddFiles"
-        android:labelFor="@+id/B_AddFiles"/>
-
-    <ImageButton
-        android:id="@+id/B_ShowSelected"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginEnd="32dp"
-        android:background="@drawable/circular_button_white"
-        android:src="@drawable/icon_check"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/B_AddApps" />
-
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:labelFor="@+id/B_ShowSelected"
-        android:text="choosed"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/B_ShowSelected"
-        app:layout_constraintStart_toStartOf="@+id/B_ShowSelected"
-        app:layout_constraintTop_toBottomOf="@+id/B_ShowSelected" />
-
-    <ImageButton
-        android:id="@+id/B_ShowQRCode"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/circular_button_white"
-        android:src="@drawable/icon_qrcode"
-        app:layout_constraintEnd_toStartOf="@id/B_ShowIPAddresses"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TV_AddApps"
-        android:layout_marginTop="8dp"/>
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:labelFor="@+id/B_ShowIPAddresses"
-        android:text="Show QR"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/B_ShowQRCode"
-        app:layout_constraintStart_toStartOf="@+id/B_ShowQRCode"
-        app:layout_constraintTop_toBottomOf="@+id/B_ShowQRCode" />
-
-
-    <ImageButton
-        android:id="@+id/B_ShowIPAddresses"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/circular_button_white"
-        android:src="@drawable/icon_link"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/B_ShowQRCode"
-        app:layout_constraintTop_toTopOf="@+id/B_ShowQRCode" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:labelFor="@+id/B_ShowIPAddresses"
-        android:text="Show IP"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/B_ShowIPAddresses"
-        app:layout_constraintStart_toStartOf="@+id/B_ShowIPAddresses"
-        app:layout_constraintTop_toBottomOf="@+id/B_ShowIPAddresses" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RV_FilesSend"
@@ -130,8 +15,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        tools:listitem="@layout/row_upload_view" />
+        app:layout_constraintTop_toBottomOf="@+id/LL_Toolbar"
+        tools:listitem="@layout/row_transfer_view" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

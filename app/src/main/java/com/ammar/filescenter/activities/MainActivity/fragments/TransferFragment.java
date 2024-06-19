@@ -23,28 +23,26 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity;
-import com.ammar.filescenter.activities.AddFilesActivity;
-import com.ammar.filescenter.activities.MainActivity.adapters.SendAdapter;
+import com.ammar.filescenter.activities.MainActivity.adapters.TransferAdapter;
 import com.ammar.filescenter.activities.MainActivity.dialogs.ChosenFilesDialog;
+import com.ammar.filescenter.common.Abbrev;
 import com.ammar.filescenter.services.NetworkService;
-import com.ammar.filescenter.utils.Utils;
+import com.ammar.filescenter.common.Utils;
 
 import java.util.ArrayList;
 
 
-public class SendFragment extends Fragment {
+public class TransferFragment extends Fragment {
     private View v;
     private Toolbar toolbar;
-    private ImageButton addAppsB;
-    private ImageButton addFilesB;
-    private ImageButton showSelected;
     private RecyclerView filesSendRV;
-    private SendAdapter adapter;
-    private ImageButton QRCodeB;
-    private AlertDialog QRDialogAD;
-    private AppCompatTextView serverLinkTV;
-    private ImageView QRImageIV;
+    private TransferAdapter adapter;
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,44 +63,16 @@ public class SendFragment extends Fragment {
         toolbar = v.findViewById(R.id.TB_Toolbar);
         toolbar.setTitle("Share");
 
-        addAppsB = v.findViewById(R.id.B_AddApps);
-        addFilesB = v.findViewById(R.id.B_AddFiles);
-        showSelected = v.findViewById(R.id.B_ShowSelected);
 
         filesSendRV = v.findViewById(R.id.RV_FilesSend);
-        adapter = new SendAdapter();
+        adapter = new TransferAdapter(this);
         filesSendRV.setAdapter(adapter);
         filesSendRV.setLayoutManager(new LinearLayoutManager(getContext()));
         filesSendRV.setItemAnimator(null);
         filesSendRV.setHasFixedSize(true);
-        QRCodeB = v.findViewById(R.id.B_ShowQRCode);
-        View QRDialogView = getLayoutInflater().inflate(R.layout.dialog_qrcode, null, false);
-        QRDialogAD = new AlertDialog.Builder(requireContext())
-                .setView(QRDialogView)
-                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                })
-                .create();
-        QRImageIV = QRDialogView.findViewById(R.id.IV_QRCodeImage);
-        serverLinkTV = QRDialogView.findViewById(R.id.TV_ServerLink);
-
     }
 
     private void setItemsListener() {
-
-        addAppsB.setOnClickListener((button) -> launcher.launch(new Intent(getActivity(), AddAppsActivity.class)));
-
-        addFilesB.setOnClickListener((button) -> mGetContent.launch("*/*"));
-
-        showSelected.setOnClickListener(button -> {
-            ChosenFilesDialog dialog = new ChosenFilesDialog();
-            dialog.show(requireActivity().getSupportFragmentManager(), ChosenFilesDialog.TAG);
-        });
-
-        QRCodeB.setOnClickListener( button -> {
-            QRDialogAD.show();
-            setupQrCode();
-        });
-
     }
 
     private void initObservers() {
@@ -112,7 +82,7 @@ public class SendFragment extends Fragment {
         NetworkService.filesSendNotifier.observe( requireActivity(), info -> {
             char action = info.getChar("action");
             int index = info.getInt("index");
-
+            index += 1;
             switch (action) {
                 case 'P':
                     adapter.notifyItemChanged(index);
@@ -130,32 +100,21 @@ public class SendFragment extends Fragment {
 
     }
 
-
-    private void setupQrCode() {
-        String link = "http://" + NetworkService.getIpAddress() + ":" + NetworkService.PORT_NUMBER;
-        serverLinkTV.setText(link);
-        byte[] qrCodeBytes = Utils.encodeTextToQR(link);
-        Bitmap qrCodeBitmap = Utils.QrCodeArrayToBitmap(qrCodeBytes);
-        // Display the bitmap in an ImageView or any other suitable view
-        QRImageIV.setImageBitmap(qrCodeBitmap);
-    }
-
-
-    ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
+    public ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
         if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null && result.getData().getAction() != null) {
             Intent data = result.getData();
             Intent intent = new Intent(requireContext(), NetworkService.class);
 
-            if (data.getAction().equals(AddFilesActivity.ACTION_ADD_FILES)) {
-                ArrayList<String> selectedFilePaths = data.getStringArrayListExtra(AddFilesActivity.EXTRA_INTENT_PATHS);
+            if (data.getAction().equals(Abbrev.ACTION_ADD_FILES)) {
+                ArrayList<String> selectedFilePaths = data.getStringArrayListExtra(Abbrev.EXTRA_INTENT_PATHS);
                 // intent to be sent to service
-                intent.setAction(NetworkService.ACTION_ADD_DOWNLOADS);
-                intent.putExtra(NetworkService.EXTRA_FILE_PATHS, selectedFilePaths);
+                intent.setAction(Abbrev.ACTION_ADD_DOWNLOADS);
+                intent.putExtra(Abbrev.EXTRA_FILE_PATHS, selectedFilePaths);
             } else if (data.getAction().equals(AddAppsActivity.ACTION_ADD_APPS)) {
                 ArrayList<String> selectedApps = data.getStringArrayListExtra(AddAppsActivity.EXTRA_INTENT_APPS);
 
-                intent.setAction(NetworkService.ACTION_ADD_APPS_DOWNLOADS);
-                intent.putExtra(NetworkService.EXTRA_APPS_NAMES, selectedApps);
+                intent.setAction(Abbrev.ACTION_ADD_APPS_DOWNLOADS);
+                intent.putExtra(Abbrev.EXTRA_APPS_NAMES, selectedApps);
             }
             requireContext().startService(intent);
 
@@ -163,7 +122,7 @@ public class SendFragment extends Fragment {
     });
 
 
-    ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetMultipleContents(), (result) -> {
+    public ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetMultipleContents(), (result) -> {
         ArrayList<String> files = new ArrayList<>(result.size());
 
         for( Uri i : result ) {
@@ -174,8 +133,9 @@ public class SendFragment extends Fragment {
         Intent intent = new Intent(requireContext(), NetworkService.class);
 
         // intent to be sent to service
-        intent.setAction(NetworkService.ACTION_ADD_DOWNLOADS);
-        intent.putExtra(NetworkService.EXTRA_FILE_PATHS, files);
+        intent.setAction(Abbrev.ACTION_ADD_DOWNLOADS);
+        intent.putExtra(Abbrev.EXTRA_FILE_PATHS, files);
         requireContext().startService(intent);
     });
+
 }

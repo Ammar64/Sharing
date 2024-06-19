@@ -1,9 +1,8 @@
 package com.ammar.filescenter.application;
 
 import android.app.Application;
-import android.os.Build;
 
-import com.ammar.filescenter.utils.Utils;
+import com.ammar.filescenter.common.Utils;
 
 
 public class FilesCenterApp extends Application {

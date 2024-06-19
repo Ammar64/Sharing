@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
-import androidx.documentfile.provider.DocumentFile;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,8 +15,8 @@ import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class AppUpload extends Upload {
-    public AppUpload(Context context, String package_id) throws PackageManager.NameNotFoundException {
+public class TransferableApp extends Transferable {
+    public TransferableApp(Context context, String package_id) throws PackageManager.NameNotFoundException {
         // get pm and app info
         PackageManager pm = context.getPackageManager();
         ApplicationInfo appInfo = pm.getApplicationInfo(package_id, 0);
@@ -30,14 +28,14 @@ public class AppUpload extends Upload {
         // check for splits
         String[] splitsDirs = appInfo.splitPublicSourceDirs;
         if (splitsDirs != null) {
-            splits = new Upload[splitsDirs.length];
+            splits = new Transferable[splitsDirs.length];
             for (int i = 0; i < splitsDirs.length; i++) {
-                splits[i] = new Upload(splitsDirs[i]);
+                splits[i] = new Transferable(splitsDirs[i]);
             }
             _hasSplits = true;
         }
 
-        super.file = DocumentFile.fromFile(new File(appInfo.publicSourceDir));
+        super.file = new File(appInfo.publicSourceDir);
     }
 
     private void AddFileToZipArchive(ZipOutputStream zout, String path) throws IOException {
@@ -61,7 +59,7 @@ public class AppUpload extends Upload {
         jsonObject.put("hasSplits", _hasSplits);
         if (_hasSplits) {
             JSONArray splitsArray = new JSONArray();
-            for (Upload i : splits) {
+            for (Transferable i : splits) {
                 splitsArray.put(i.getJSON());
             }
             jsonObject.put("splits", splitsArray);
@@ -81,8 +79,8 @@ public class AppUpload extends Upload {
     public String getFileName() {
         return app_name + ".apk";
     }
-    public Upload getSplitWithUUID(String uuid) {
-        for (Upload i : splits) {
+    public Transferable getSplitWithUUID(String uuid) {
+        for (Transferable i : splits) {
             if (uuid.equals(i.getUUID())) {
                 return i;
             }
@@ -91,13 +89,13 @@ public class AppUpload extends Upload {
     }
 
     private boolean _hasSplits = false;
-    Upload[] splits = null;
+    Transferable[] splits = null;
 
     public boolean hasSplits() {
         return _hasSplits;
     }
 
-    public Upload[] getSplits() {
+    public Transferable[] getSplits() {
         return splits;
     }
 }

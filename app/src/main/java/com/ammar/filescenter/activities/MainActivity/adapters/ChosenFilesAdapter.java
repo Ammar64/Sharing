@@ -15,10 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
+import com.ammar.filescenter.common.Abbrev;
 import com.ammar.filescenter.services.NetworkService;
 import com.ammar.filescenter.services.components.Server;
-import com.ammar.filescenter.services.models.Upload;
-import com.ammar.filescenter.utils.Utils;
+import com.ammar.filescenter.services.models.Transferable;
+import com.ammar.filescenter.common.Utils;
 
 public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.ViewHolder> {
 
@@ -54,7 +55,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
             removeFileB = itemView.findViewById(R.id.B_RemoveChosenFile);
         }
 
-        public void setup(Upload file) {
+        public void setup(Transferable file) {
             setFileName(file.getName());
             setFileIconIV(file);
             setFileSizeTV(file.getSize());
@@ -62,8 +63,8 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         public void setFileListener(String uuid) {
             removeFileB.setOnClickListener( button -> {
                 Intent serviceIntent = new Intent(itemView.getContext(), NetworkService.class);
-                serviceIntent.setAction(NetworkService.ACTION_REMOVE_DOWNLOAD);
-                serviceIntent.putExtra(NetworkService.EXTRA_DOWNLOAD_UUID, uuid);
+                serviceIntent.setAction(Abbrev.ACTION_REMOVE_DOWNLOAD);
+                serviceIntent.putExtra(Abbrev.EXTRA_DOWNLOAD_UUID, uuid);
                 itemView.getContext().startService(serviceIntent);
             });
         }
@@ -76,7 +77,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
             fileSizeTV.setText(Utils.getFormattedSize(size));
         }
 
-        public void setFileIconIV(@NonNull Upload file) {
+        public void setFileIconIV(@NonNull Transferable file) {
             String mimeType = file.getMimeType();
             if(mimeType.startsWith("image/")) {
                 fileIconIV.setImageDrawable(Drawable.createFromPath(file.getFilePath()));

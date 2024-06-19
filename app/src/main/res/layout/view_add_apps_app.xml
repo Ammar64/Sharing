@@ -13,10 +13,22 @@
         android:id="@+id/IV_AppIcon"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_below="@id/CB_AppCheckBox"
         tools:src="@drawable/ic_launcher_background"
         android:layout_gravity="center_horizontal"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true" />
 
+    <CheckBox
+        android:id="@+id/CB_AppCheckBox"
+        android:clickable="false"
+        android:focusable="false"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_toEndOf="@+id/IV_AppIcon"
+        android:layout_marginStart="-8dp"
+        android:layout_marginBottom="-8dp"
+        android:background="@android:color/transparent"
+        />
     <TextView
         android:id="@+id/TV_AppName"
         android:layout_width="wrap_content"

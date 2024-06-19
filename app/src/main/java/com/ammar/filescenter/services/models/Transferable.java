@@ -1,6 +1,6 @@
 package com.ammar.filescenter.services.models;
 
-import androidx.documentfile.provider.DocumentFile;
+import android.webkit.MimeTypeMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,18 +8,19 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.UUID;
 
-public class Upload {
-
+public class Transferable {
 
     protected String uuid;
-    protected DocumentFile file;
+    protected File file;
 
-    public Upload(String path) {
-        this.file = DocumentFile.fromFile(new File(path));
+    public Transferable(String path) {
+        this.file = new File(path);
         this.uuid = UUID.randomUUID().toString();
     }
 
-    protected Upload() {}
+    protected Transferable() {}
+
+    // this method is meant to be overridden.
     public String getName() {
         return file.getName();
     }
@@ -28,7 +29,7 @@ public class Upload {
     }
 
     public String getFilePath() {
-        return file.getUri().getPath();
+        return file.getPath();
     }
 
     public long getSize() {
@@ -36,7 +37,16 @@ public class Upload {
     }
 
     public String getMimeType() {
-        return file.getType();
+        String type = null;
+        final String url = file.toString();
+        final String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
+        }
+        if (type == null) {
+            type = "application/octet-stream"; // fallback type.
+        }
+        return type;
     }
 
     public String getUUID() {
@@ -53,4 +63,7 @@ public class Upload {
     }
 
 
+    public File getFile() {
+        return file;
+    }
 }

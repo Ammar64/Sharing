@@ -4,8 +4,10 @@ import android.util.Log;
 
 import com.ammar.filescenter.custom.io.ProgressManager;
 import com.ammar.filescenter.custom.io.ProgressOutputStream;
-import com.ammar.filescenter.services.models.Upload;
+import com.ammar.filescenter.services.models.Transferable;
+import com.ammar.filescenter.services.models.User;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -24,8 +26,9 @@ public class Response {
         statusCode = 200;
     }
 
-    public void sendFileResponse(Upload file) {
-        ProgressManager progressManager = new ProgressManager(file.getName(), file.getSize(), clientSocket.getRemoteSocketAddress(), ProgressManager.OP.DOWNLOAD);
+    public void sendFileResponse(Transferable file) {
+        User user = User.getUserBySockAddr(clientSocket.getRemoteSocketAddress());
+        ProgressManager progressManager = new ProgressManager(file.getFile(), file.getSize(), user, ProgressManager.OP.DOWNLOAD);
         try {
             ProgressOutputStream out = new ProgressOutputStream(clientSocket.getOutputStream(), progressManager);
 
@@ -48,22 +51,32 @@ public class Response {
             progressManager.reportCompleted();
 
         } catch (IOException e) {
-            progressManager.reportFailed();
+            if( "Broken pipe".equals(e.getMessage()) ) {
+                progressManager.reportPaused();
+            } else {
+                progressManager.reportFailed();
+            }
             Log.e("MYLOG", "SendFileResponse(). Exception: " + e.getMessage());
         }
     }
 
 
-    public void sendZippedFilesResponse(Upload[] files) {
-        ProgressManager progressManager = new ProgressManager(files[0].getName(), -1, clientSocket.getRemoteSocketAddress(), ProgressManager.OP.DOWNLOAD);
+    public void sendZippedFilesResponse(Transferable[] files) {
+        User user = User.getUserBySockAddr(clientSocket.getRemoteSocketAddress());
+        ProgressManager progressManager = new ProgressManager(files[0].getFile(), -1, user, ProgressManager.OP.DOWNLOAD);
+        progressManager.setDisplayName(files[0].getName());
         try {
-            ZipOutputStream zout = new ZipOutputStream(clientSocket.getOutputStream());
-            setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", files[0].getName() + ".zip"));
+            OutputStream out = clientSocket.getOutputStream();
+            ByteArrayOutputStream bout = new ByteArrayOutputStream(2048);
+            ZipOutputStream zout = new ZipOutputStream(bout);
+
             setHeader("Content-Type", "application/zip");
-            writeHeaders(clientSocket.getOutputStream());
+            setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", files[0].getName() + ".zip"));
+            setHeader("Transfer-Encoding", "chunked");
+            writeHeaders(out);
 
             zout.setMethod(ZipOutputStream.DEFLATED);
-            for (Upload i : files) {
+            for (Transferable i : files) {
                 ZipEntry zipEntry = new ZipEntry(i.getFileName());
                 zout.putNextEntry(zipEntry);
 
@@ -72,13 +85,27 @@ public class Response {
                 int bytesRead;
                 while ((bytesRead = fin.read(buffer)) != -1) {
                     zout.write(buffer, 0, bytesRead);
-                    progressManager.setLoaded(progressManager.getLoaded() + bytesRead);
+                    byte[] buf = bout.toByteArray();
+                    // write chunk to client socket
+                    if( buf.length != 0 ) {
+                        out.write(String.format("%x\r\n", buf.length).getBytes());
+                        out.write(buf);
+                        out.write("\r\n".getBytes());
+                    }
+                    Log.d("HTTP", String.format("%x\\r\\n", buf.length) + new String(buf) + "\\r\\n" );
+                    bout.reset();
+                    progressManager.accumulateLoaded(bytesRead);
                 }
                 fin.close();
                 zout.closeEntry();
             }
+
+            // write the end of the zip file and the last chunk
             zout.finish();
-            zout.close();
+            out.write(String.format("%X\r\n", bout.size()).getBytes());
+            out.write(bout.toByteArray());
+            out.write("\r\n0\r\n\r\n".getBytes());
+
             progressManager.reportCompleted();
 
         } catch (IOException e) {

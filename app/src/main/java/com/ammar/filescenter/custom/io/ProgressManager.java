@@ -1,19 +1,21 @@
 package com.ammar.filescenter.custom.io;
 
 import android.os.Bundle;
+import android.webkit.MimeTypeMap;
 
 import com.ammar.filescenter.services.NetworkService;
+import com.ammar.filescenter.services.models.User;
 
+import java.io.File;
 import java.net.SocketAddress;
 import java.util.LinkedList;
 
 public class ProgressManager {
 
-
-    private String fileName;
-
+    private final File file;
+    private String displayName;
     // The other device receiving or sending
-    private String remoteIp;
+    private User user;
 
 
 
@@ -44,11 +46,10 @@ public class ProgressManager {
     }
 
 
-    public ProgressManager(String fileName, long fileSize, SocketAddress remoteIpAddress, OP opType) {
-        this.fileName = fileName == null ? "" : fileName;
-        this.total = fileSize;
-        this.remoteIp = remoteIpAddress.toString();
-        this.remoteIp = this.remoteIp.substring(1, this.remoteIp.lastIndexOf(":"));
+    public ProgressManager(File file, long total, User user, OP opType) {
+        this.file = file;
+        this.total = total;
+        this.user = user;
         this.op = opType;
         progresses.add(this);
         index = progresses.lastIndexOf(this);
@@ -71,11 +72,30 @@ public class ProgressManager {
     }
 
     public String getFileName() {
-        return fileName;
+        return file.getName();
+    }
+    public String getDisplayName() {
+        return displayName;
+    }
+    public File getFile() {
+        return file;
     }
 
-    public String getRemoteIp() {
-        return remoteIp;
+    public String getFileType() {
+        String type = null;
+        final String url = file.toString();
+        final String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
+        }
+        if (type == null) {
+            type = "*/*"; // fallback type.
+        }
+        return type;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public long getLoaded() {
@@ -95,17 +115,21 @@ public class ProgressManager {
 
     long previouslyLoaded = 0;
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
     public void setLoaded(long n) {
         loaded = n;
         reportProgress();
     }
 
+    public void accumulateLoaded(int bytesRead) {
+        if( loaded >= 0 )
+            loaded += bytesRead;
+        reportProgress();
+    }
     public void setTotal(long n) {
         total = n;
+    }
+    public void setDisplayName(String name) {
+        displayName = name;
     }
 
     public int getPercentage() {
@@ -113,18 +137,13 @@ public class ProgressManager {
         return (int) ((float) loaded / (float) total * 100.0f);
     }
 
-    public void setAsCompleted() {
-        loaded = -1;
-    }
-
-
     private long lastTime = 0;
 
     private final Bundle progress_info = new Bundle();
 
 
     public void reportProgress() {
-        if ( System.currentTimeMillis() - lastTime >= 300) {
+        if (System.currentTimeMillis() - lastTime >= 300) {
             NetworkService.filesSendNotifier.postValue(progress_info);
             bytesPerSecond = getLoaded() - previouslyLoaded;
             previouslyLoaded = getLoaded();
@@ -134,11 +153,17 @@ public class ProgressManager {
 
 
     public static final int COMPLETED = -1;
-    public static final int FAILED    = -2;
+    public static final int FAILED = -2;
+    public static final int PAUSED = -3;
 
 
     public void reportCompleted() {
         setLoaded(COMPLETED);
+        NetworkService.filesSendNotifier.postValue(progress_info);
+    }
+
+    public void reportPaused() {
+        setLoaded(PAUSED);
         NetworkService.filesSendNotifier.postValue(progress_info);
     }
 

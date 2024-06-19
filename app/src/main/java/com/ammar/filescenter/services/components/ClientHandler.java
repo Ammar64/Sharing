@@ -2,33 +2,35 @@ package com.ammar.filescenter.services.components;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
 import com.ammar.filescenter.custom.io.ProgressManager;
 import com.ammar.filescenter.services.NetworkService;
-import com.ammar.filescenter.services.models.AppUpload;
-import com.ammar.filescenter.services.models.Upload;
-import com.ammar.filescenter.services.objects.Downloadable;
+import com.ammar.filescenter.services.models.TransferableApp;
+import com.ammar.filescenter.services.models.Transferable;
+import com.ammar.filescenter.common.Utils;
+import com.ammar.filescenter.services.models.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-import java.net.SocketException;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Objects;
 
 
 public class ClientHandler implements Runnable {
-    private final LinkedList<Downloadable> downloadablesList;
     /**
      * @noinspection FieldCanBeLocal
      */
@@ -36,8 +38,8 @@ public class ClientHandler implements Runnable {
     private final Socket clientSocket;
 
     private final Context context;
-    public ClientHandler(Context context, LinkedList<Downloadable> downloadablesList, Socket clientSocket) {
-        this.downloadablesList = downloadablesList;
+
+    public ClientHandler(Context context, Socket clientSocket) {
         this.clientSocket = clientSocket;
         this.context = context;
     }
@@ -56,25 +58,10 @@ public class ClientHandler implements Runnable {
                 response.setHeader("Expires", "0");
                 // multiply timeout by 0.001 to convert from milliseconds into seconds
                 response.setHeader("Keep-Alive", String.format(Locale.ENGLISH, "timeout=%d", (int) (timeout * 0.001)));
-                if ("PUT".equals(request.getMethod())) {
-                    if(path.startsWith("/upload/")) {
-                        String fileName = path.substring(8);
-                        if( fileName.contains("/") ){
-                            response.setStatusCode(400);
-                        } else {
-                            long size = Long.parseLong(request.getHeaders().get("Content-Length"));
-                            response.setStatusCode(StoreFile(request.getClientInput(), fileName, size));
-                        }
-                        response.sendResponse();
-                    }
-                } else if ("GET".equals(request.getMethod())) {
+                if ("GET".equals(request.getMethod())) {
                     if ("/available-downloads".equals(path)) {
-                        try {
-                            byte[] downloadables_response = getFileJson();
-                            response.sendResponse(downloadables_response);
-                        } catch (JSONException e) {
-                            Log.e("MYLOG", Objects.requireNonNull(e.getMessage()));
-                        }
+                        byte[] available = getFileJson();
+                        response.sendResponse(available);
                     } else if ("/".equals(path) || "/index.html".equals(path)) {
                         response.setHeader("Content-Type", "text/html");
                         response.sendResponse(NetworkService.readFileFromAssets("index.html"));
@@ -87,19 +74,19 @@ public class ClientHandler implements Runnable {
                     } else if (path.startsWith("/download/")) {
                         String requestedUUID = path.substring(10);
                         try {
-                            Upload file = getFileWithUUID(requestedUUID);
-                            if( !(file instanceof AppUpload)) {
+                            Transferable file = getFileWithUUID(requestedUUID);
+                            if (!(file instanceof TransferableApp)) {
                                 response.sendFileResponse(file);
                             } else {
-                                AppUpload app = (AppUpload) file;
-                                if( app.hasSplits() ) {
-                                    Upload[] app_splits = app.getSplits();
-                                    Upload[] app_files = new Upload[app_splits.length + 1];
+                                TransferableApp app = (TransferableApp) file;
+                                if (app.hasSplits()) {
+                                    Transferable[] app_splits = app.getSplits();
+                                    Transferable[] app_files = new Transferable[app_splits.length + 1];
 
                                     // app base.apk must be the first file because it will be the name of the zip.
                                     app_files[0] = app;
-                                    for( int i = 1 ; i < app_files.length ; i++ ) {
-                                        app_files[i] = app_splits[i-1];
+                                    for (int i = 1; i < app_files.length; i++) {
+                                        app_files[i] = app_splits[i - 1];
                                     }
                                     response.sendZippedFilesResponse(app_files);
                                 } else {
@@ -123,15 +110,48 @@ public class ClientHandler implements Runnable {
                     } else if ("/dv.png".equals(path)) {
                         response.setHeader("Content-Type", "image/png");
                         response.sendResponse(NetworkService.readFileFromAssets("dv.png"));
+                    } else if ("/register-user".equals(path)) {
+                        String userAgent = request.getHeader("User-Agent");
+                        if (userAgent != null) {
+                            // add the user
+                            User user = User.RegisterUser(clientSocket.getRemoteSocketAddress(), userAgent);
+                            JSONObject userJson = new JSONObject();
+                            userJson.put("id", user.getId());
+                            response.setStatusCode(200);
+                            response.sendResponse(userJson.toString().getBytes());
+                        } else {
+                            Log.e("MYLOG", "Browser didn't provide User-Agent");
+                            response.setStatusCode(400);
+                            response.sendResponse();
+                        }
                     } else {
                         response.setStatusCode(404);
                         response.setHeader("Content-Type", "text/html");
                         response.sendResponse("404 What are you doing ?".getBytes(StandardCharsets.UTF_8));
                     }
+                } else if ("PUT".equals(request.getMethod())) {
+                    if (path.startsWith("/upload/")) {
+                        String fileName = URLDecoder.decode(path.substring(8), "UTF-8");
+                        if (fileName.contains("/")) {
+                            response.setStatusCode(400);
+                        } else {
+                            long content_length = Long.parseLong(request.getHeader("Content-Length"));
+                            int status_code;
+                            if (request.getHeader("Content-Range") == null)
+                                status_code = StoreFile(request.getClientInput(), fileName, content_length);
+                            else status_code = 501; // not implemented
+                            response.setStatusCode(status_code);
+                        }
+                        response.sendResponse();
+                    }
+                } else if ("POST".equals(request.getMethod())) {
                 }
             }
-        } catch (IOException ignored) {
 
+        } catch (IOException e) {
+            Log.e("MYLOG", "ClientHandler.run(). IOException: " + e.getMessage());
+        } catch (JSONException e) {
+            Log.e("MYLOG", "ClientHandler.run(). JSONException: " + e.getMessage());
         } finally {
             try {
                 clientSocket.close();
@@ -141,8 +161,8 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private Upload getFileWithUUID(String uuid) throws RuntimeException {
-        for (Upload i : Server.filesList) {
+    private Transferable getFileWithUUID(String uuid) throws RuntimeException {
+        for (Transferable i : Server.filesList) {
             if (uuid.equals(i.getUUID())) {
                 return i;
             }
@@ -152,37 +172,23 @@ public class ClientHandler implements Runnable {
 
     private byte[] getFileJson() throws JSONException {
         JSONArray jsonArray = new JSONArray();
-        for (Upload i : Server.filesList) {
+        for (Transferable i : Server.filesList) {
             jsonArray.put(i.getJSON());
         }
         return jsonArray.toString().getBytes();
     }
 
     private int StoreFile(InputStream in, String fullFileName, long size) {
-        SharedPreferences settingsPrefs = context.getSharedPreferences(SettingsFragment.SettingsPrefFile, Context.MODE_PRIVATE);
-        String upload_dir = settingsPrefs.getString(SettingsFragment.UploadDir, "");
-        assert !upload_dir.isEmpty();
-
-        ProgressManager progressManager = new ProgressManager(null, size, clientSocket.getRemoteSocketAddress(), ProgressManager.OP.UPLOAD);
+        String upload_dir = getUploadDir();
+        File upload_file = Utils.createNewFile(upload_dir, fullFileName);
+        User user = User.getUserBySockAddr(clientSocket.getRemoteSocketAddress());
+        ProgressManager progressManager = new ProgressManager(upload_file, size, user, ProgressManager.OP.UPLOAD);
+        progressManager.setDisplayName(upload_file.getName());
         try {
-
-            int num = 0;
-            int ext_index = fullFileName.lastIndexOf('.');
-
-            String fileNameNoExt = ext_index < 0 ?  fullFileName : fullFileName.substring(0, ext_index);
-            String fileExtension = ext_index < 0 ? "" : fullFileName.substring(ext_index);
-
-            File upload_file = new File(upload_dir, fullFileName);
-            while(upload_file.exists()) {
-                String localFileName = String.format(Locale.ENGLISH, "%s (%d)%s", fileNameNoExt, num++, fileExtension);
-                upload_file = new File(upload_dir, localFileName);
-            }
-            progressManager.setFileName(upload_file.getName());
             FileOutputStream out = new FileOutputStream(upload_file);
-
             long totalBytesRead = 0;
             byte[] buffer = new byte[8192];
-            while(totalBytesRead < size) {
+            while (totalBytesRead < size) {
                 int bytesRead = in.read(buffer);
                 totalBytesRead += bytesRead;
                 progressManager.setLoaded(totalBytesRead);
@@ -196,5 +202,13 @@ public class ClientHandler implements Runnable {
             progressManager.reportFailed();
             return 500;
         }
+    }
+
+    @NonNull
+    private String getUploadDir() {
+        SharedPreferences settingsPrefs = context.getSharedPreferences(SettingsFragment.SettingsPrefFile, Context.MODE_PRIVATE);
+        String upload_dir = settingsPrefs.getString(SettingsFragment.UploadDir, "");
+        assert !upload_dir.isEmpty();
+        return upload_dir;
     }
 }

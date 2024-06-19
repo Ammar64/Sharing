@@ -3,14 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:background="@android:color/system_background_dark">
-
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
         android:id="@+id/IV_FileChosenIcon"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,7 +18,7 @@
         android:id="@+id/TV_FileChosenName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@id/TV_FileChosenSize"
         app:layout_constraintEnd_toStartOf="@+id/B_RemoveChosenFile"
         app:layout_constraintStart_toEndOf="@+id/IV_FileChosenIcon"
@@ -42,8 +40,8 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/B_RemoveChosenFile"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="16dp"
         app:cornerRadius="25dp"
 
