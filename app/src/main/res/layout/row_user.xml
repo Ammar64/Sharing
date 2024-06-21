@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginVertical="8dp"
         android:layout_marginStart="8dp"
-        tools:src="@drawable/icon_apps" />
+        tools:src="@drawable/icon_android" />
 
     <TextView
         android:id="@+id/TV_Username"
@@ -36,5 +36,18 @@
         app:layout_constraintStart_toStartOf="@id/TV_Username"
         tools:text="192.168.1.15"/>
 
+    <Button
+        android:id="@+id/B_ToggleUserBlock"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="8dp"
+        app:cornerRadius="15dp"
+        app:backgroundTint="@color/red"
+        android:textColor="@color/brightTextColor"
+        android:textSize="11sp"
+        tools:text="block"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

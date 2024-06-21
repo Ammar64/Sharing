@@ -26,9 +26,9 @@ public class Response {
         statusCode = 200;
     }
 
-    public void sendFileResponse(Transferable file) {
-        User user = User.getUserBySockAddr(clientSocket.getRemoteSocketAddress());
+    public void sendFileResponse(Transferable file, User user) {
         ProgressManager progressManager = new ProgressManager(file.getFile(), file.getSize(), user, ProgressManager.OP.DOWNLOAD);
+        progressManager.setUUID(file.getUUID());
         try {
             ProgressOutputStream out = new ProgressOutputStream(clientSocket.getOutputStream(), progressManager);
 
@@ -37,12 +37,11 @@ public class Response {
             setHeader("Content-Length", String.valueOf(size));
             setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getFileName()));
             setHeader("Content-Type", file.getMimeType());
-
+            setHeader("Accept-Ranges", "bytes");
             writeHeaders(out);
             try (FileInputStream input = new FileInputStream(file.getFilePath())) {
-                byte[] buffer = new byte[2048];
                 int bytesRead;
-
+                byte[] buffer = new byte[2048];
                 while ((bytesRead = input.read(buffer)) != -1) {
                     out.write(buffer, 0, bytesRead);
                 }
@@ -51,19 +50,58 @@ public class Response {
             progressManager.reportCompleted();
 
         } catch (IOException e) {
-            if( "Broken pipe".equals(e.getMessage()) ) {
-                progressManager.reportPaused();
-            } else {
-                progressManager.reportFailed();
-            }
+            progressManager.reportStopped();
             Log.e("MYLOG", "SendFileResponse(). Exception: " + e.getMessage());
         }
     }
 
 
-    public void sendZippedFilesResponse(Transferable[] files) {
-        User user = User.getUserBySockAddr(clientSocket.getRemoteSocketAddress());
+    public void resumePausedFileResponse(Transferable file, long start, User user) {
+        // get the stopped progress manager
+        ProgressManager progressManager = null;
+        for (ProgressManager i : ProgressManager.progresses) {
+            if (file.getUUID().equals(i.getUUID())) {
+                progressManager = i;
+                break;
+            }
+        }
+        try (FileInputStream input = new FileInputStream(file.getFilePath())) {
+            long n = input.skip(start);
+            if( progressManager == null || n != start ) {
+                setStatusCode(400);
+                sendResponse();
+                return;
+            }
+            setStatusCode(206);
+            setHeader("Content-Length", String.valueOf(file.getSize() - start));
+            setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getFileName()));
+            setHeader("Content-Type", file.getMimeType());
+            setHeader("Accept-Ranges", "bytes");
+            setHeader("Content-Range", String.format(Locale.ENGLISH, "bytes %d-%d/%d", start, file.getSize()-1, file.getSize()));
+
+
+            OutputStream out = new ProgressOutputStream(clientSocket.getOutputStream(), progressManager);
+            writeHeaders(out);
+            progressManager.setLoaded(start);
+
+            int bytesRead;
+            byte[] buffer = new byte[2048];
+            while ((bytesRead = input.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+            }
+            out.flush();
+            progressManager.reportCompleted();
+        } catch (IOException e) {
+            if( progressManager != null )
+                progressManager.reportStopped();
+            Log.e("MYLOG", "Response.resumePausedFileResponse. IOException: " + e.getMessage());
+        }
+
+    }
+
+    public void sendZippedFilesResponse(Transferable[] files, User user) {
         ProgressManager progressManager = new ProgressManager(files[0].getFile(), -1, user, ProgressManager.OP.DOWNLOAD);
+        progressManager.setUUID(files[0].getUUID());
         progressManager.setDisplayName(files[0].getName());
         try {
             OutputStream out = clientSocket.getOutputStream();
@@ -73,6 +111,8 @@ public class Response {
             setHeader("Content-Type", "application/zip");
             setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", files[0].getName() + ".zip"));
             setHeader("Transfer-Encoding", "chunked");
+            setHeader("Accept-Ranges", "none");
+
             writeHeaders(out);
 
             zout.setMethod(ZipOutputStream.DEFLATED);
@@ -87,12 +127,12 @@ public class Response {
                     zout.write(buffer, 0, bytesRead);
                     byte[] buf = bout.toByteArray();
                     // write chunk to client socket
-                    if( buf.length != 0 ) {
+                    if (buf.length != 0) {
                         out.write(String.format("%x\r\n", buf.length).getBytes());
                         out.write(buf);
                         out.write("\r\n".getBytes());
                     }
-                    Log.d("HTTP", String.format("%x\\r\\n", buf.length) + new String(buf) + "\\r\\n" );
+                    Log.d("HTTP", String.format("%x\\r\\n", buf.length) + new String(buf) + "\\r\\n");
                     bout.reset();
                     progressManager.accumulateLoaded(bytesRead);
                 }
@@ -109,7 +149,7 @@ public class Response {
             progressManager.reportCompleted();
 
         } catch (IOException e) {
-            progressManager.reportFailed();
+            progressManager.reportStopped();
             Log.e("MYLOG", "sendZippedFilesResponse(). Exception: " + e.getMessage());
         }
     }
@@ -149,8 +189,14 @@ public class Response {
             case 200:
                 readableStatus = "OK";
                 break;
+            case 206:
+                readableStatus = "Partial Content";
+                break;
             case 404:
                 readableStatus = "Not found";
+                break;
+            case 400:
+                readableStatus = "Bad request";
                 break;
         }
         byte[] buffer = String.format(Locale.ENGLISH, "HTTP/1.1 %d %s\r\n", statusCode, readableStatus).getBytes();

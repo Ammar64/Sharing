@@ -1,29 +1,57 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">مشاركة</string>
-    <string name="show_qr">اعرض رمز الاستجابة</string>
+    <!-- Activity Main   -->
+    <string name="about_us">عنا</string>
+    <!-- Fragment Share   -->
+    <string name="share" >مشاركة</string>
+    <string name="add_apps">أضف تطبيقا</string>
+    <string name="add_files">أضف ملفا</string>
+    <string name="selected">تم تحديده</string>
+    <string name="link">الرابط</string>
+    <string name="users">المستخدمون</string>
+
+    <string name="sending_to_user">ارسال إلى %1$s</string>
+    <string name="sending_to_user_stopped">%1$s أوقف التنزيل</string>
+    <string name="sending_to_user_done">تم الارسال إلى %1$s</string>
+    <string name="receiving_from_user">استلام من %1$s</string>
+    <string name="receiving_from_user_stopped">%1$s أوقف الإرسال</string>
+    <string name="receiving_from_user_done">تم الاستلام من %1$s</string>
+
+    <string name="completed">نجح</string>
+    <string name="stopped">توقف</string>
+
+    <!-- dialogs   -->
+    <string name="connected_users">المستخدمون المتصلون</string>
+    <string name="block">حظر</string>
+    <string name="unblock">إلغاء الحظر</string>
+    <string name="user_default_name">المستخدم %1$s</string>
+
+    <!-- Fragment Settings   -->
+    <string name="dark_mode">الوضع الداكن</string>
+    <string name="toggle_dark_mode">تشغيل الوضع الداكن</string>
+
+    <string name="disable_browser_upload">تعطيل الإرسال من المتصفح</string>
+    <string name="disable_browser_upload_desc">منع المتصفحات من إرسال ملفات إلى جهازك</string>
+
+    <string name="block_users">حظر المستخدمين فورا</string>
+    <string name="block_users_desc">يحظر المستخديم فور إتصالهم بجهازك.</string>
+
+    <string name="language">اللغة</string>
+    <string name="languages_desc">النظام, العربية, English, German</string>
+    <string name="system_default_lang">لغة النظام</string>
+
+    <!-- Activity Add Apps   -->
+    <string name="loading_apps">جار تحميل التطبيقات…</string>
+    <string name="select_apps">حدد تطبيقات</string>
+    <string name="selected_num">تم تحديد %1$d</string>
+    <string name="splits">تقسيمات</string>
+
+
+    <!-- common   -->
+    <string name="app_name">مركز الملفات</string>
     <string name="settings">الإعدادات</string>
-    <string name="off">معطل</string>
-    <string name="on">يعمل</string>
-    <string name="unknown_at_the_moment">غير معروف حاليا</string>
-    <string name="notification_refused_message">يحتاج التطبيق إلى إذن الوصول إلى الإشعارات من أجل العمل فى الخلفية</string>
-    <string name="qrcode">رمز الاستجابة السريع</string>
-    <string name="svr_notification_message">الخادم يعمل على العنوان %1$s:%2$s</string>
-    <string name="scan_qr_code_title">امسح رمز الاستجابة</string>
-    <string name="add_downloadable">أضف ملف للتنزيل</string>
-    <string name="show_files">اعرض التنزيلات</string>
-    <string name="choose_files">اختر ملفات</string>
-    <string name="file_downloads">الملفات</string>
     <string name="done">تم</string>
     <string name="ok">حسنا</string>
-    <string name="add">أضف</string>
-    <string name="remove">حذف</string>
-    <string name="add_apps">أضف تطبيقات</string>
-    <string name="add_files">أضف ملفات</string>
-    <string name="choose_apps">اختر تطبيقات</string>
-    <string name="update_ip">حدث عنوان الخادم</string>
 
-
-    <string name="about_us">عنَّا</string>
-
+    <string name="svr_notification_message">الخادم يعمل على العنوان %1$s:%2$s</string>
+    <string name="app_icon_acc_desc">أيقونة التطبيق</string>
 </resources>

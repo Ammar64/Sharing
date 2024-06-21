@@ -69,7 +69,7 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
                 // using (Integer) forces it to not use remove(int index)
                 checksPositions.remove((Integer) holder.getBindingAdapterPosition());
             }
-            activity.setToolbarTitle("Selected " + selectedApps.size());
+            activity.setToolbarTitle(activity.getString(R.string.selected_num, selectedApps.size()));
         });
 
     }

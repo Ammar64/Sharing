@@ -1,9 +1,13 @@
 package com.ammar.filescenter.services.models;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
+import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
+import com.ammar.filescenter.common.Abbrev;
 import com.ammar.filescenter.services.NetworkService;
 
 import java.net.SocketAddress;
@@ -13,8 +17,7 @@ public class User {
     public static final ArrayList<User> users = new ArrayList<>();
     private final int id;
     private final SocketAddress address;
-    private String userAgent;
-
+    private boolean _isBlocked = false;
 
 
     private String name;
@@ -23,18 +26,28 @@ public class User {
 
     private User(SocketAddress address, String userAgent) {
         this.address = address;
-        this.userAgent = userAgent;
         this.id = numUsers++;
-        this.name = "User-" + id;
+        this.name = "User-" + getId();
+
+        if( userAgent.contains("Windows") ) {
+            this.OS = Abbrev.OS.WINDOWS;
+        } else if( userAgent.contains("Android") ) {
+            this.OS = Abbrev.OS.ANDROID;
+        } else if ( userAgent.contains("Linux") ) {
+            this.OS = Abbrev.OS.LINUX;
+        } else this.OS = Abbrev.OS.UNKNOWN;
     }
     // make new user if user exist return it.
-    public static User RegisterUser(SocketAddress address, String agent) {
+    public static User RegisterUser(SharedPreferences prefs, SocketAddress address, String agent) {
         User registered_user = getUserBySockAddr(address);
         if( registered_user != null )
             return registered_user;
         else {
             User new_user = new User(address, agent);
             User.users.add(new_user);
+            // block or not
+            new_user.block( prefs.getBoolean(SettingsFragment.UsersBlock, false) );
+
             // inform UI
             Bundle bundle = new Bundle();
             bundle.putChar("action", 'A');
@@ -60,6 +73,9 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
+    public void block(boolean b) {
+        this._isBlocked = b;
+    }
 
     public int getId() {
         return id;
@@ -73,8 +89,14 @@ public class User {
         String ip = address.toString();
         return ip.substring(1, ip.lastIndexOf(":"));
     }
-
-    public Object getName() {
+    private Abbrev.OS OS;
+    public Abbrev.OS getOS() {
+        return OS;
+    }
+    public boolean isBlocked() {
+        return this._isBlocked;
+    }
+    public String getName() {
         return name;
     }
 }

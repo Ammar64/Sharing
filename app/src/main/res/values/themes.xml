@@ -7,6 +7,7 @@
         <item tools:targetApi="l" name="android:statusBarColor">#00000000</item>
         <item name="android:actionMenuTextColor">@color/brightTextColor</item>
         <item name="android:windowBackground">@drawable/gradient_background</item>
+        <item name="android:fontFamily">@font/cairo</item>
     </style>
 
     <style name="Theme.FilesCenter" parent="Base.Theme.FilesCenter" />

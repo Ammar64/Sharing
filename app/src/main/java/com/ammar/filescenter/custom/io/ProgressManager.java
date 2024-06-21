@@ -1,35 +1,30 @@
 package com.ammar.filescenter.custom.io;
 
 import android.os.Bundle;
-import android.webkit.MimeTypeMap;
 
+import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.services.NetworkService;
 import com.ammar.filescenter.services.models.User;
 
 import java.io.File;
-import java.net.SocketAddress;
 import java.util.LinkedList;
 
 public class ProgressManager {
 
     private final File file;
-    private String displayName;
+    private String displayName = null;
     // The other device receiving or sending
-    private User user;
-
-
+    private final User user;
 
     public enum OP {DOWNLOAD, UPLOAD}
-
     private final OP op;
 
     // if loaded is -1 it's completed.
     private long loaded;
     // total file size
     private long total;
-
-
     private int index;
+    private String uuid = null;
 
     private void setIndex(int index) {
         this.index = index;
@@ -67,6 +62,7 @@ public class ProgressManager {
         progress_info.putInt("index", index);
     }
 
+
     public long getTotal() {
         return total;
     }
@@ -75,23 +71,14 @@ public class ProgressManager {
         return file.getName();
     }
     public String getDisplayName() {
-        return displayName;
+        return displayName == null ? file.getName() : displayName;
     }
     public File getFile() {
         return file;
     }
 
     public String getFileType() {
-        String type = null;
-        final String url = file.toString();
-        final String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-        if (extension != null) {
-            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
-        }
-        if (type == null) {
-            type = "*/*"; // fallback type.
-        }
-        return type;
+        return Utils.getMimeType(file.getName());
     }
 
     public User getUser() {
@@ -101,7 +88,9 @@ public class ProgressManager {
     public long getLoaded() {
         return loaded;
     }
-
+    public String getUUID() {
+        return uuid;
+    }
 
     long bytesPerSecond = 0;
 
@@ -137,6 +126,10 @@ public class ProgressManager {
         return (int) ((float) loaded / (float) total * 100.0f);
     }
 
+    public void setUUID( String uuid ) {
+        this.uuid = uuid;
+    }
+
     private long lastTime = 0;
 
     private final Bundle progress_info = new Bundle();
@@ -153,8 +146,7 @@ public class ProgressManager {
 
 
     public static final int COMPLETED = -1;
-    public static final int FAILED = -2;
-    public static final int PAUSED = -3;
+    public static final int STOPPED = -2;
 
 
     public void reportCompleted() {
@@ -162,13 +154,9 @@ public class ProgressManager {
         NetworkService.filesSendNotifier.postValue(progress_info);
     }
 
-    public void reportPaused() {
-        setLoaded(PAUSED);
+    public void reportStopped() {
+        setLoaded(STOPPED);
         NetworkService.filesSendNotifier.postValue(progress_info);
     }
 
-    public void reportFailed() {
-        setLoaded(FAILED);
-        NetworkService.filesSendNotifier.postValue(progress_info);
-    }
 }

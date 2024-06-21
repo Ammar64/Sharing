@@ -1,8 +1,13 @@
 try {
+    const sendBtn = document.getElementById("sendBtn");
+    // when click shows you native choose file dialog
+    const uploadLabel = document.getElementById("uploadLabel");
     const recieveBtn = document.getElementById("recieveBtn");
     const downloadBubble = document.getElementById("downloadBubble");
+    const alertDialog = document.getElementById("alertDialog")
     const overlay = document.getElementById('overlay');
-    const okButton = document.getElementById('okButton');
+    const downloadsBubbleOkButton = document.getElementById('okButton');
+    const alertDialogOkButton = document.getElementById("alertDialogOkBtn")
     const updateBtn = document.getElementById('update');
     const downloads = document.getElementById("downloads");
     const uploadInput = document.getElementById('uploadInput');
@@ -10,7 +15,7 @@ try {
     download_item.className = "download-item";
     let userId = -1;
 
-    fetch("/register-user", {
+    fetch("/get-user-info", {
         method: "GET"
     }).then(function (res) {
         if (res.ok) return res.json();
@@ -22,9 +27,23 @@ try {
     })
 
     function executeFilesCenterFrontEnd() {
+        sendBtn.onclick = function() {
+            fetch("/check-upload-allowed", {
+                method: "PUT",
+            }).then( function( res ) {
+                if( res.ok ) {
+                    return res.json();
+                }
+            }).then( function(data){
+                if( data.allowed )
+                    uploadLabel.click();
+                else
+                    openAlertDialog();
+            });
+        }
+
         recieveBtn.onclick = () => {
-            downloadBubble.style.display = 'block';
-            overlay.style.display = 'block';
+            openDownloadsBubble();
             requestAvailableDownloads();
         };
 
@@ -32,17 +51,36 @@ try {
             requestAvailableDownloads();
         }
 
-        okButton.onclick = () => {
-            closeBubble();
+        downloadsBubbleOkButton.onclick = () => {
+            closeDownloadsBubble();
         };
 
-        overlay.onclick = () => {
-            closeBubble();
-        };
+        alertDialogOkButton.onclick = function() {
+            closeAlertDialog();
+        }
 
-        function closeBubble() {
+        function openDownloadsBubble() {
+            downloadBubble.style.display = 'block';
+            overlay.style.display = 'block';
+            overlay.onclick = closeDownloadsBubble;
+        }
+
+        function closeDownloadsBubble() {
             downloadBubble.style.display = 'none';
             overlay.style.display = 'none';
+            overlay.onclick = null;
+        }
+
+        function openAlertDialog() {
+            alertDialog.style.display = 'flex';
+            overlay.style.display = 'block';
+            overlay.onclick = closeAlertDialog;
+        }
+
+        function closeAlertDialog() {
+            alertDialog.style.display = 'none';
+            overlay.style.display = 'none';
+            overlay.onclick = null;
         }
 
         const loader = document.querySelector('.process');
@@ -78,13 +116,15 @@ try {
                     "Content-Type": "application/json"
                 }
             }).then(res => {
-                if (res.ok) {
+                if (res.status == 200) {
                     return res.json();
+                } else if (res.status == 401) {
+                    window.location.replace("/blocked");
                 }
             }).then(data => {
                 data.forEach(e => {
                     const newFileItem = download_item.cloneNode();
-                    newFileItem.textContent = `${e.name}     (${getFormattedFileSize(e.size)})`;
+                    newFileItem.textContent = e.name + (!e.hasSplits ? `     (${getFormattedFileSize(e.size)})` : '');
                     downloads.appendChild(newFileItem);
                     newFileItem.addEventListener("click", () => {
                         downloadFileWithProgress(`/download/${e.uuid}`);
@@ -102,7 +142,6 @@ try {
         function downloadFileWithProgress(url) {
             const link = document.createElement("a");
             link.href = url
-            link.setAttribute("download", "");
             document.body.append(link);
             link.click();
             link.remove();
@@ -237,7 +276,11 @@ try {
         // });
 
     }
+
+
 } catch (e) {
     let message = e.message;
     console.error(e);
 }
+
+

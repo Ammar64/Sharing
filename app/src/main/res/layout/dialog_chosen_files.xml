@@ -4,16 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
-    <TextView
-        android:id="@+id/TV_ChosenFilesDialogTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Chosen Files"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RV_ChosenFilesRecycler"
@@ -22,9 +12,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TV_ChosenFilesDialogTitle"
-        android:layout_marginBottom="8dp"
-        tools:listitem="@layout/row_chosen_files"/>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/row_chosen_files" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

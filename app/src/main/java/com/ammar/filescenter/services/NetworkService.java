@@ -3,6 +3,7 @@ package com.ammar.filescenter.services;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ammar.filescenter.R;
+import com.ammar.filescenter.activities.MainActivity.MainActivity;
 import com.ammar.filescenter.common.Abbrev;
 import com.ammar.filescenter.custom.data.QueueMutableLiveData;
 import com.ammar.filescenter.services.components.Server;
@@ -46,7 +48,6 @@ public class NetworkService extends Service {
     // observers
     public static final MutableLiveData<Boolean> serverStatusObserver = new MutableLiveData<>();
     public static final MutableLiveData<Bundle> downloadsListObserver = new MutableLiveData<>();
-    public static final MutableLiveData<List<Transferable>> filesListObserver = new MutableLiveData<>();
     public static final MutableLiveData<Bundle> filesListNotifier = new MutableLiveData<>();
     public static final String DATA_DOWNLOADS_LIST = "DATA_DOWNLOADS_LIST";
     public static final String VALUE_MODIFY_DELETE = "com.ammar.filescenter.services.VALUE_MODIFY_DELETE";
@@ -101,6 +102,9 @@ public class NetworkService extends Service {
                 for( String i : filePaths ) {
                     Server.filesList.add( new Transferable(i));
                 }
+                Bundle fb = new Bundle();
+                fb.putChar("action", 'A');
+                NetworkService.filesListNotifier.postValue(fb);
                 break;
             case Abbrev.ACTION_ADD_APPS_DOWNLOADS:
                 ArrayList<String> packages_name = intent.getStringArrayListExtra(Abbrev.EXTRA_APPS_NAMES);
@@ -113,9 +117,10 @@ public class NetworkService extends Service {
                         }
                     }
                 }
+                Bundle ab = new Bundle();
+                ab.putChar("action", 'A');
+                NetworkService.filesListNotifier.postValue(ab);
                 break;
-            case Abbrev.ACTION_GET_DOWNLOADS:
-                filesListObserver.postValue(Server.filesList);
             case Abbrev.ACTION_REMOVE_DOWNLOAD:
                 String uuid = intent.getStringExtra(Abbrev.EXTRA_DOWNLOAD_UUID);
 
@@ -189,11 +194,16 @@ public class NetworkService extends Service {
         }
 
         String address = NetworkService.getIpAddress();
-        if (address == null) address = "0.0.0.0";
+        if (address == null) address = "127.0.0.1";
         // Build the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId).setContentTitle("Server is running").setSmallIcon(android.R.drawable.ic_dialog_info);
 
-        return new NotificationCompat.BigTextStyle(builder).bigText(getResources().getString(R.string.svr_notification_message, address, String.format(Locale.ENGLISH, "%d", PORT_NUMBER))).build();
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_IMMUTABLE);
+        builder.setContentIntent(pendingIntent);
+
+        return new NotificationCompat.BigTextStyle(builder).bigText(getResources().getString(R.string.svr_notification_message, address, String.format(Locale.ENGLISH, "%d", PORT_NUMBER)))
+                .build();
     }
 
     public static String getIpAddress() {

@@ -2,21 +2,16 @@ package com.ammar.filescenter.activities.MainActivity.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity;
 import com.ammar.filescenter.activities.MainActivity.adapters.TransferAdapter;
-import com.ammar.filescenter.activities.MainActivity.dialogs.ChosenFilesDialog;
 import com.ammar.filescenter.common.Abbrev;
 import com.ammar.filescenter.services.NetworkService;
 import com.ammar.filescenter.common.Utils;
@@ -51,7 +45,7 @@ public class TransferFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_send, container, false);
+        v = inflater.inflate(R.layout.fragment_transfer, container, false);
         initItems();
         setItemsListener();
         initObservers();
@@ -61,7 +55,7 @@ public class TransferFragment extends Fragment {
 
     private void initItems() {
         toolbar = v.findViewById(R.id.TB_Toolbar);
-        toolbar.setTitle("Share");
+        toolbar.setTitle(R.string.share);
 
 
         filesSendRV = v.findViewById(R.id.RV_FilesSend);
@@ -76,8 +70,6 @@ public class TransferFragment extends Fragment {
     }
 
     private void initObservers() {
-        NetworkService.filesListObserver.observe(getViewLifecycleOwner(), data -> {
-        });
 
         NetworkService.filesSendNotifier.observe( requireActivity(), info -> {
             char action = info.getChar("action");

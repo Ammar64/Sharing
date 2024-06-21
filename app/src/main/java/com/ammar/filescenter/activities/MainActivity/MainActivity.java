@@ -20,9 +20,10 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.ammar.filescenter.R;
-import com.ammar.filescenter.activities.MainActivity.fragments.TransferFragment;
 import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
+import com.ammar.filescenter.activities.MainActivity.fragments.TransferFragment;
 import com.ammar.filescenter.common.Abbrev;
+import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.services.NetworkService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -38,12 +39,13 @@ public class MainActivity extends AppCompatActivity {
 
     public static boolean darkMode;
     public final int REQUEST_CODE_STORAGE_PERMISSION = 2;
+    public final int REQUEST_CODE_NOTIFICATION_PERMISSION = 3;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         prepareActivity();
         super.onCreate(savedInstanceState);
-        requestStorageAccess();
+        requestPermissions();
         setContentView(R.layout.activity_main);
         initItems();
         setItemsListener();
@@ -57,20 +59,24 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences firstRunPref = getSharedPreferences("FirstRun", MODE_PRIVATE);
         boolean isFirstRun = firstRunPref.getBoolean("firstrun", true);
         if (isFirstRun) {
-            // Download folder will be the default.
-            String downloadFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
-
             settingsPref.edit()
                     .putBoolean(SettingsFragment.DarkModeKey, true)
-                    .putString(SettingsFragment.UploadDir, downloadFolder)
                     .apply();
-
             firstRunPref.edit().putBoolean("firstrun", false).apply();
         }
-
-        UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
         darkMode = settingsPref.getBoolean(SettingsFragment.DarkModeKey, true);
-        AppCompatDelegate.setDefaultNightMode(darkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
+            uiModeManager.setApplicationNightMode(darkMode ? UiModeManager.MODE_NIGHT_YES : UiModeManager.MODE_NIGHT_NO);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(darkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+        String lang = settingsPref.getString(SettingsFragment.Language, "");
+        if (!lang.isEmpty()) {
+            Utils.setLocale(this, lang);
+        }
     }
 
     private void initItems() {
@@ -135,11 +141,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void requestStorageAccess() {
+    private void requestPermissions() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if(!Environment.isExternalStorageManager()) {
-                Uri uri = Uri.parse(String.format(Locale.ENGLISH,"package:%s", getApplicationContext().getPackageName()));
+            if (!Environment.isExternalStorageManager()) {
+                Uri uri = Uri.parse(String.format(Locale.ENGLISH, "package:%s", getApplicationContext().getPackageName()));
                 startActivity(
                         new Intent(
                                 Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
@@ -156,6 +162,14 @@ public class MainActivity extends AppCompatActivity {
                 }, REQUEST_CODE_STORAGE_PERMISSION);
             }
         }
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.POST_NOTIFICATIONS
+            }, REQUEST_CODE_NOTIFICATION_PERMISSION);
+        }
     }
+
 
 }

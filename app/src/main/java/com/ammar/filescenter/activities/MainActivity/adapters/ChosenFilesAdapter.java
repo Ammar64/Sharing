@@ -3,6 +3,9 @@ package com.ammar.filescenter.activities.MainActivity.adapters;
 
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +23,10 @@ import com.ammar.filescenter.services.NetworkService;
 import com.ammar.filescenter.services.components.Server;
 import com.ammar.filescenter.services.models.Transferable;
 import com.ammar.filescenter.common.Utils;
+import com.ammar.filescenter.services.models.TransferableApp;
+
+import java.util.Map;
+import java.util.TreeMap;
 
 public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.ViewHolder> {
 
@@ -33,8 +40,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setup(Server.filesList.get(position));
-        holder.setFileListener(Server.filesList.get(position).getUUID());
+        holder.setup(position);
     }
 
     @Override
@@ -42,11 +48,13 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         return Server.filesList.size();
     }
 
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView fileIconIV;
         TextView fileNameTV;
         TextView fileSizeTV;
         Button   removeFileB;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             fileIconIV  = itemView.findViewById(R.id.IV_FileChosenIcon);
@@ -55,10 +63,12 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
             removeFileB = itemView.findViewById(R.id.B_RemoveChosenFile);
         }
 
-        public void setup(Transferable file) {
+        public void setup(int pos) {
+            Transferable file = Server.filesList.get(pos);
             setFileName(file.getName());
-            setFileIconIV(file);
+            setFileIconIV(file, pos);
             setFileSizeTV(file.getSize());
+            setFileListener(file.getUUID());
         }
         public void setFileListener(String uuid) {
             removeFileB.setOnClickListener( button -> {
@@ -77,10 +87,30 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
             fileSizeTV.setText(Utils.getFormattedSize(size));
         }
 
-        public void setFileIconIV(@NonNull Transferable file) {
+        Map<Integer, Drawable> appsIconCache = new TreeMap<>();
+        public void setFileIconIV(@NonNull Transferable file, int pos) {
             String mimeType = file.getMimeType();
-            if(mimeType.startsWith("image/")) {
+            if( file instanceof TransferableApp ) {
+                TransferableApp app = (TransferableApp) file;
+                fileIconIV.setImageDrawable(app.getIcon());
+            } else if (mimeType.startsWith("image/")) {
                 fileIconIV.setImageDrawable(Drawable.createFromPath(file.getFilePath()));
+            } else if ("application/vnd.android.package-archive".equals(mimeType)){
+                Drawable appIcon = appsIconCache.get( pos );
+                if( appIcon == null ) {
+                    PackageManager pm = itemView.getContext().getApplicationContext().getPackageManager();
+                    PackageInfo packageInfo = pm.getPackageArchiveInfo(file.getFilePath(), 0);
+                    if( packageInfo != null ) {
+                        ApplicationInfo appInfo = packageInfo.applicationInfo;
+                        appInfo.sourceDir = file.getFilePath();
+                        appInfo.publicSourceDir = file.getFilePath();
+                        appIcon = appInfo.loadIcon(pm);
+                        appsIconCache.put( pos, appIcon );
+                        fileIconIV.setImageDrawable(appIcon);
+                    } else fileIconIV.setImageResource(R.drawable.icon_file_red);
+                } else {
+                    fileIconIV.setImageDrawable(appIcon);
+                }
             } else {
                 fileIconIV.setImageResource(R.drawable.icon_file_red);
             }

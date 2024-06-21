@@ -5,8 +5,6 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:paddingVertical="10dp"
-
-    android:background="@drawable/app_selector"
     xmlns:tools="http://schemas.android.com/tools">
 
     <ImageView
@@ -14,9 +12,10 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_below="@id/CB_AppCheckBox"
-        tools:src="@drawable/ic_launcher_background"
+        tools:src="@drawable/icon_app"
         android:layout_gravity="center_horizontal"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/app_icon_acc_desc"/>
 
     <CheckBox
         android:id="@+id/CB_AppCheckBox"
@@ -51,7 +50,8 @@
         android:paddingVertical="2dp"
         android:paddingHorizontal="5sp"
         android:background="@drawable/rounded_text_background"
+        app:backgroundTint="#E3E30E"
         android:textStyle="bold"
         android:textColor="#222222"
-        android:text="splits" />
+        android:text="@string/splits" />
 </RelativeLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -22,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:labelFor="@+id/B_AddApps"
-        android:text="add apps"
+        android:text="@string/add_apps"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/B_AddApps"
         app:layout_constraintStart_toStartOf="@+id/B_AddApps"
@@ -45,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="add files"
+        android:text="@string/add_files"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/B_AddFiles"
         app:layout_constraintStart_toStartOf="@+id/B_AddFiles"
@@ -62,14 +63,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/B_AddApps" />
 
-
+    <TextView
+        android:id="@+id/TV_NumberSelected"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintStart_toEndOf="@+id/B_ShowSelected"
+        app:layout_constraintBottom_toTopOf="@id/B_ShowSelected"
+        android:layout_marginBottom="@dimen/badge_pull_distance"
+        android:layout_marginStart="@dimen/badge_pull_distance"
+        android:background="@drawable/rounded_text_background"
+        android:backgroundTint="@color/red"
+        android:textAlignment="center"
+        android:textColor="@color/brightTextColor"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:text="5"/>
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:labelFor="@+id/B_ShowSelected"
-        android:text="choosed"
+        android:text="@string/selected"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/B_ShowSelected"
         app:layout_constraintStart_toStartOf="@+id/B_ShowSelected"
@@ -92,7 +108,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:labelFor="@+id/B_ShowUsers"
-        android:text="Link"
+        android:text="@string/link"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/B_ShowAddress"
         app:layout_constraintStart_toStartOf="@+id/B_ShowAddress"
@@ -104,17 +120,34 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="@drawable/circular_button_white"
-        android:src="@drawable/icon_link"
+        android:src="@drawable/icon_user"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/B_ShowAddress"
         app:layout_constraintTop_toTopOf="@+id/B_ShowAddress" />
+
+    <TextView
+        android:id="@+id/TV_NumberUsers"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintStart_toEndOf="@+id/B_ShowUsers"
+        app:layout_constraintBottom_toTopOf="@+id/B_ShowUsers"
+        android:layout_marginBottom="@dimen/badge_pull_distance"
+        android:layout_marginStart="@dimen/badge_pull_distance"
+        android:background="@drawable/rounded_text_background"
+        android:backgroundTint="@color/red"
+        android:textAlignment="center"
+        android:textColor="@color/brightTextColor"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:text="5"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:labelFor="@+id/B_ShowUsers"
-        android:text="Clients"
+        android:text="@string/users"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/B_ShowUsers"
         app:layout_constraintStart_toStartOf="@+id/B_ShowUsers"

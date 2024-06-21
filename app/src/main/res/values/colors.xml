@@ -11,8 +11,9 @@
     <color name="selected">#32000000</color>
     <color name="text_color">#777</color>
     <color name="colorTrinary">#776391</color>
-    <color name="red">#F44242</color>
 
+    <color name="red">#F44242</color>
+    <color name="green">#2FAF2F</color>
     <color name="linkColor">#1B309F</color>
     <color name="toolbar_bottom_color">#373737</color>
 </resources>

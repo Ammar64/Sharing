@@ -40,10 +40,9 @@ public class AddAppsActivity extends AppCompatActivity {
         setSupportActionBar(appBar);
         appsRecycler = findViewById(R.id.RV_AppsRecycler);
 
-        appBar.setTitle("Choose Apps");
         TextView loadingTV = findViewById(R.id.TV_AppsLoading);
         ProgressBar loadingPB = findViewById(R.id.PB_AppsLoading);
-        new Handler().post(() -> {
+        new Thread(() -> {
             List<ApplicationInfo> userApps = new LinkedList<>();
             int flags = PackageManager.GET_META_DATA |
                     PackageManager.GET_SHARED_LIBRARY_FILES |
@@ -56,20 +55,21 @@ public class AddAppsActivity extends AppCompatActivity {
                     userApps.add(appInfo);
                 }
             }
-
-
             AppsRecyclerAdapter appsAdapter = new AppsRecyclerAdapter(this, userApps, selectedApps);
-            appsRecycler.setAdapter(appsAdapter);
-            appsRecycler.setLayoutManager(new GridLayoutManager(this, 3) {
-                @Override
-                public void onLayoutCompleted(RecyclerView.State state) {
-                    super.onLayoutCompleted(state);
-                    loadingTV.setVisibility(View.GONE);
-                    loadingPB.setVisibility(View.GONE);
-                }
-            });
+            runOnUiThread(() -> {
+                appBar.setTitle(R.string.select_apps);
+                appsRecycler.setAdapter(appsAdapter);
+                appsRecycler.setLayoutManager(new GridLayoutManager(this, 3) {
+                    @Override
+                    public void onLayoutCompleted(RecyclerView.State state) {
+                        super.onLayoutCompleted(state);
+                        loadingTV.setVisibility(View.GONE);
+                        loadingPB.setVisibility(View.GONE);
+                    }
+                });
 
-        });
+            });
+        }).start();
     }
 
     public void setToolbarTitle(String title) {

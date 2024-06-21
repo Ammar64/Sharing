@@ -3,6 +3,7 @@ package com.ammar.filescenter.services.models;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,10 +17,12 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class TransferableApp extends Transferable {
+    private PackageManager pm;
+    private ApplicationInfo appInfo;
     public TransferableApp(Context context, String package_id) throws PackageManager.NameNotFoundException {
         // get pm and app info
-        PackageManager pm = context.getPackageManager();
-        ApplicationInfo appInfo = pm.getApplicationInfo(package_id, 0);
+        this.pm = context.getPackageManager();
+        this.appInfo = pm.getApplicationInfo(package_id, 0);
         app_name = appInfo.loadLabel(pm).toString();
 
         // construct base class
@@ -34,6 +37,7 @@ public class TransferableApp extends Transferable {
             }
             _hasSplits = true;
         }
+
 
         super.file = new File(appInfo.publicSourceDir);
     }
@@ -86,6 +90,13 @@ public class TransferableApp extends Transferable {
             }
         }
         throw new RuntimeException("SplitNotFound");
+    }
+    private Drawable icon = null;
+    public Drawable getIcon() {
+        if( icon == null ) {
+            icon = appInfo.loadIcon(pm);
+        }
+        return icon;
     }
 
     private boolean _hasSplits = false;

@@ -6,7 +6,7 @@
     <item
         android:id="@+id/B_Share"
         android:icon="@drawable/share_icon"
-        android:title="Share" />
+        android:title="@string/share" />
 
     <item
         android:enabled="false"
@@ -15,6 +15,6 @@
     <item
         android:id="@+id/B_Settings"
         android:icon="@drawable/baseline_settings_24"
-        android:title="Settings" />
+        android:title="@string/settings" />
 
 </menu>

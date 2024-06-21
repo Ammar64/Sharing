@@ -20,11 +20,15 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Request {
     private Socket clientSocket;
@@ -255,14 +259,14 @@ public class Request {
                                         file_upload.delete();
                                         Log.d("MYLOG", "Upload Failed");
                                         out.close();
-                                        progressManager.reportFailed();
+                                        progressManager.reportStopped();
                                         return false;
                                     }
                                     out.close();
                                     progressManager.reportCompleted();
                                     return true;
                                 } catch (Exception e) {
-                                    progressManager.reportFailed();
+                                    progressManager.reportStopped();
                                 }
                             }
                         }
@@ -331,6 +335,9 @@ public class Request {
     public String getHeader(String header) {
         return headers.get(header);
     }
-
     private boolean _connClose = false;
+    public boolean isKeepAlive() {
+        return !_connClose;
+    }
+
 }

@@ -23,23 +23,22 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:paddingVertical="8dp"
                 android:paddingStart="14dp">
                 <TextView
                     android:id="@+id/TV_SettingsTheme"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dark mode"
+                    android:text="@string/dark_mode"
                     android:textSize="@dimen/settings_big_text" />
                 <TextView
-                    android:id="@+id/TV_SettingsThemeSub"
+                    android:id="@+id/S_SettingsThemeSub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/TV_SettingsTheme"
-                    android:text="Dark, Light"
-                    android:textSize="@dimen/settings_small_text" />
-
-                <androidx.appcompat.widget.SwitchCompat
+                    android:text="@string/toggle_dark_mode"
+                    android:textSize="@dimen/settings_small_text"/>
+                <android.widget.Switch
                     android:id="@+id/SC_DarkModeToggle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -49,31 +48,85 @@
             </RelativeLayout>
 
 
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:paddingVertical="8dp"
+                android:background="?attr/selectableItemBackground"
                 android:paddingStart="14dp">
+                <TextView
+                    android:id="@+id/TV_SettingsUploadAllow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/disable_browser_upload"
+                    android:textSize="@dimen/settings_big_text" />
+                <TextView
+                    android:id="@+id/TV_SettingsUploadAllowSub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/TV_SettingsUploadAllow"
+                    android:text="@string/disable_browser_upload_desc"
+                    android:textSize="@dimen/settings_small_text" />
+                <android.widget.Switch
+                    android:id="@+id/SC_UploadAllowToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:paddingStart="14dp">
+                <TextView
+                    android:id="@+id/TV_SettingsUserBlock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/block_users"
+                    android:textSize="@dimen/settings_big_text" />
+                <TextView
+                    android:id="@+id/TV_SettingsUserBlockSub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/TV_SettingsUserBlock"
+                    android:text="@string/block_users_desc"
+                    android:textSize="@dimen/settings_small_text" />
+
+                <android.widget.Switch
+                    android:id="@+id/SC_UsersBlockToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"/>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/RL_SettingsLanguage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="8dp"
+                android:paddingStart="14dp"
+                android:background="?attr/selectableItemBackground">
                 <TextView
                     android:id="@+id/TV_SettingsLanguage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Language"
+                    android:text="@string/language"
                     android:textSize="@dimen/settings_big_text" />
                 <TextView
                     android:id="@+id/TV_SettingsLanguageSub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/TV_SettingsLanguage"
-                    android:text="ar en du"
+                    android:text="@string/languages_desc"
                     android:textSize="@dimen/settings_small_text" />
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/icon_check"
-                    android:layout_marginEnd="10dp" />
             </RelativeLayout>
 
         </LinearLayout>

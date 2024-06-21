@@ -1,20 +1,26 @@
 package com.ammar.filescenter.common;
 
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.TypedValue;
+import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
+import androidx.documentfile.provider.DocumentFile;
 
+import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.MainActivity.MainActivity;
 
 import java.io.ByteArrayOutputStream;
@@ -28,6 +34,7 @@ public class Utils {
     static {
         System.loadLibrary("NativeQRCodeGen");
     }
+
     public static String getFormattedSize(long size) {
         double s = size;
         String[] levels = {"B", "KB", "MB", "GB", "TB", "PB"};
@@ -46,6 +53,7 @@ public class Utils {
 
 
     private static Resources res;
+
     public static void setRes(Resources res) {
         Utils.res = res;
     }
@@ -62,10 +70,10 @@ public class Utils {
     public static String readLineUTF8(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         int c;
-        for (c = inputStream.read(); c != -1 ; c = inputStream.read()) {
-            if( c == '\n' ) break;
-            if( c == '\r' ) {
-                if(inputStream.read() == '\n' ) break;
+        for (c = inputStream.read(); c != -1; c = inputStream.read()) {
+            if (c == '\n') break;
+            if (c == '\r') {
+                if (inputStream.read() == '\n') break;
                 else throw new RuntimeException("No \\n after \\r");
             }
             byteArrayOutputStream.write(c);
@@ -119,7 +127,7 @@ public class Utils {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
+                final String[] selectionArgs = new String[]{
                         split[1]
                 };
 
@@ -201,9 +209,10 @@ public class Utils {
 
 
     public static native byte[] encodeTextToQR(String text);
+
     public static Bitmap QrCodeArrayToBitmap(byte[] qrCodeBytes) {
         int qrColor;
-        if(MainActivity.darkMode)
+        if (MainActivity.darkMode)
             qrColor = Color.WHITE;
         else
             qrColor = Color.BLACK;
@@ -232,7 +241,7 @@ public class Utils {
     }
 
     @NonNull
-    public static File createNewFile(String upload_dir, String fullFileName) {
+    public static File createNewFile(File upload_dir, String fullFileName) {
         int num = 1;
         int ext_index = fullFileName.lastIndexOf('.');
 
@@ -240,10 +249,130 @@ public class Utils {
         String fileExtension = ext_index < 0 ? "" : fullFileName.substring(ext_index);
 
         File upload_file = new File(upload_dir, fullFileName);
-        while(upload_file.exists()) {
+        while (upload_file.exists()) {
             String localFileName = String.format(Locale.ENGLISH, "%s (%d)%s", fileNameNoExt, num++, fileExtension);
             upload_file = new File(upload_dir, localFileName);
         }
         return upload_file;
     }
+
+    public static String getMimeType(String name) {
+        String type = null;
+        final String extension = MimeTypeMap.getFileExtensionFromUrl(name);
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
+        }
+        if (type == null) {
+            type = getDocumentType(name.substring( name.lastIndexOf(".") + 1 ));
+        }
+        return type;
+    }
+
+    private static String getDocumentType(String ext) {
+        switch (ext) {
+            case "doc":
+            case "dot":
+                return "application/msword";
+            case "docx":
+                return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            case "dotx":
+                return "application/vnd.openxmlformats-officedocument.wordprocessingml.template";
+            case "docm":
+                return "application/vnd.ms-word.document.macroEnabled.12";
+            case "dotm":
+                return "application/vnd.ms-word.template.macroEnabled.12";
+            case "xls":
+            case "xlt":
+            case "xla":
+                return "application/vnd.ms-excel";
+            case "xlsx":
+                return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            case "xltx":
+                return "application/vnd.openxmlformats-officedocument.spreadsheetml.template";
+            case "xlsm":
+                return "application/vnd.ms-excel.sheet.macroEnabled.12";
+            case "xltm":
+                return "application/vnd.ms-excel.template.macroEnabled.12";
+            case "xlam":
+                return "application/vnd.ms-excel.addin.macroEnabled.12";
+            case "xlsb":
+                return "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
+            case "ppt":
+                return "application/vnd.ms-powerpoint";
+            case "pot":
+                return "application/vnd.ms-powerpoint";
+            case "pps":
+                return "application/vnd.ms-powerpoint";
+            case "ppa":
+                return "application/vnd.ms-powerpoint";
+            case "pptx":
+                return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+            case "potx":
+                return "application/vnd.openxmlformats-officedocument.presentationml.template";
+            case "ppsx":
+                return "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
+            case "ppam":
+                return "application/vnd.ms-powerpoint.addin.macroEnabled.12";
+            case "pptm":
+                return "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
+            case "potm":
+                return "application/vnd.ms-powerpoint.template.macroEnabled.12";
+            case "ppsm":
+                return "application/vnd.ms-powerpoint.slideshow.macroEnabled.12";
+            case "mdb":
+                return "application/vnd.ms-access";
+            default:
+                return "*/*";
+        }
+    }
+
+    public static boolean isDocumentType(String mimeType) {
+        return mimeType.equals("application/pdf")
+                || mimeType.equals("application/msword")
+                || mimeType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+                || mimeType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.template")
+                || mimeType.equals("application/vnd.ms-word.document.macroEnabled.12")
+                || mimeType.equals("application/vnd.ms-word.template.macroEnabled.12")
+
+                || mimeType.equals("application/vnd.ms-excel")
+
+                || mimeType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                || mimeType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.template")
+                || mimeType.equals("application/vnd.ms-excel.sheet.macroEnabled.12")
+                || mimeType.equals("application/vnd.ms-excel.template.macroEnabled.12")
+                || mimeType.equals("application/vnd.ms-excel.addin.macroEnabled.12")
+                || mimeType.equals("application/vnd.ms-excel.sheet.binary.macroEnabled.12")
+
+                || mimeType.equals("application/vnd.ms-powerpoint")
+
+                || mimeType.equals("application/vnd.openxmlformats-officedocument.presentationml.presentation")
+                || mimeType.equals("application/vnd.openxmlformats-officedocument.presentationml.template")
+                || mimeType.equals("application/vnd.openxmlformats-officedocument.presentationml.slideshow")
+                || mimeType.equals("application/vnd.ms-powerpoint.addin.macroEnabled.12")
+                || mimeType.equals("application/vnd.ms-powerpoint.presentation.macroEnabled.12")
+                || mimeType.equals("application/vnd.ms-powerpoint.template.macroEnabled.12")
+                || mimeType.equals("application/vnd.ms-powerpoint.slideshow.macroEnabled.12")
+
+                || mimeType.equals("application/vnd.ms-acces");
+    }
+
+    public static void createAppDirs() {
+        assert Abbrev.filesCenterDir.mkdir();
+        assert Abbrev.appsDir.mkdir();
+        assert Abbrev.imagesDir.mkdir();
+        assert Abbrev.audioDir.mkdir();
+        assert Abbrev.filesDir.mkdir();
+        assert Abbrev.videosDir.mkdir();
+        assert Abbrev.documentsDir.mkdir();
+    }
+
+    public static void setLocale(MainActivity activity, String languageCode) {
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Resources resources = activity.getResources();
+        Configuration config = resources.getConfiguration();
+        config.setLocale(locale);
+        resources.updateConfiguration(config, resources.getDisplayMetrics());
+    }
+
 }

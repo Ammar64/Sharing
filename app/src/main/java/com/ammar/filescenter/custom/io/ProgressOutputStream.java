@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class ProgressOutputStream extends OutputStream {
-    long bytesWritten = 0;
     private final OutputStream output;
     ProgressManager progressManager;
     public ProgressOutputStream(OutputStream output, ProgressManager progressManager) {
@@ -15,30 +14,20 @@ public class ProgressOutputStream extends OutputStream {
     @Override
     public void write(int b) throws IOException {
         output.write(b);
-        bytesWritten += 1;
-        updateProgress();
+        progressManager.accumulateLoaded(1);
     }
 
     @Override
     public void write(byte[] b) throws IOException {
         output.write(b);
-        bytesWritten += b.length;
-        updateProgress();
-
+        progressManager.accumulateLoaded(b.length);
     }
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
         output.write(b, off, len);
-        bytesWritten += len;
-        updateProgress();
-
+        progressManager.accumulateLoaded(len);
     }
-
-    private void updateProgress() {
-        progressManager.setLoaded(bytesWritten);
-    }
-
     @Override
     public void flush() throws IOException {
         output.flush();

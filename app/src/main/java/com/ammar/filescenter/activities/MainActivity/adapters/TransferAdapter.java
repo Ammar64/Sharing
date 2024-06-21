@@ -1,5 +1,6 @@
 package com.ammar.filescenter.activities.MainActivity.adapters;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -9,7 +10,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -29,6 +29,8 @@ import com.ammar.filescenter.activities.MainActivity.fragments.TransferFragment;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.custom.io.ProgressManager;
 import com.ammar.filescenter.services.NetworkService;
+import com.ammar.filescenter.services.components.Server;
+import com.ammar.filescenter.services.models.User;
 
 import java.util.Locale;
 
@@ -40,13 +42,15 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int TYPE_FOOTER = 3;
 
     private final TransferFragment fragment;
+
     public TransferAdapter(TransferFragment fragment) {
         this.fragment = fragment;
     }
+
     @Override
     public int getItemViewType(int position) {
-        if( position == 0 ) return TYPE_HEADER;
-        else if ( position == getItemCount()-1 ) return TYPE_FOOTER;
+        if (position == 0) return TYPE_HEADER;
+        else if (position == getItemCount() - 1) return TYPE_FOOTER;
         else return TYPE_PROGRESS;
     }
 
@@ -66,11 +70,12 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Space space = new Space(parent.getContext());
                 TypedValue out = new TypedValue();
                 parent.getContext().getTheme().resolveAttribute(android.R.attr.actionBarSize, out, true);
-                int size = TypedValue.complexToDimensionPixelSize(out.data,parent.getContext().getResources().getDisplayMetrics());
+                int size = TypedValue.complexToDimensionPixelSize(out.data, parent.getContext().getResources().getDisplayMetrics());
                 size += fragment.requireActivity().findViewById(R.id.FAB_ServerButton).getMeasuredHeight();
                 ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(0, size);
                 space.setLayoutParams(params);
-                return new RecyclerView.ViewHolder(space) {};
+                return new RecyclerView.ViewHolder(space) {
+                };
         }
         throw new RuntimeException("Invalid View Type in TransferAdapter");
     }
@@ -79,7 +84,7 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case TYPE_PROGRESS:
-                ((ProgressViewHolder) holder).setup(ProgressManager.progresses.get(position-1));
+                ((ProgressViewHolder) holder).setup(ProgressManager.progresses.get(position - 1));
                 break;
             case TYPE_HEADER:
 
@@ -98,7 +103,6 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView transferInfoTV;
         ProgressBar fileProgressPB;
         TextView fileProgressTV;
-        Button removeFileB;
 
         public ProgressViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -107,7 +111,6 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             transferInfoTV = itemView.findViewById(R.id.TV_FileTransferInfo);
             fileProgressPB = itemView.findViewById(R.id.PB_FileUploadProgress);
             fileProgressTV = itemView.findViewById(R.id.TV_FileUploadProgress);
-            removeFileB = itemView.findViewById(R.id.B_StopFileUpload);
         }
 
         public void setup(ProgressManager manager) {
@@ -122,29 +125,30 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ProgressManager.OP operation = manager.getOperation();
 
             String operationText;
+            Context ctx = itemView.getContext();
+            String username = manager.getUser().getName();
             switch (operation) {
                 case DOWNLOAD:
                     if (manager.getLoaded() == ProgressManager.COMPLETED)
-                        operationText = "Sent to";
-                    else if (manager.getLoaded() == ProgressManager.FAILED)
-                        operationText = "Send failed";
+                        operationText = ctx.getString(R.string.sending_to_user_done, username);
+                    else if (manager.getLoaded() == ProgressManager.STOPPED)
+                        operationText = ctx.getString(R.string.sending_to_user_stopped, username);
                     else
-                        operationText = "Sending to";
+                        operationText = ctx.getString(R.string.sending_to_user, username);
                     break;
                 case UPLOAD:
                     if (manager.getLoaded() == ProgressManager.COMPLETED)
-                        operationText = "Received from";
-                    else if (manager.getLoaded() == ProgressManager.FAILED)
-                        operationText = "Receive failed";
+                        operationText = ctx.getString(R.string.receiving_from_user_done, username);
+                    else if (manager.getLoaded() == ProgressManager.STOPPED)
+                        operationText = ctx.getString(R.string.receiving_from_user_stopped, username);
                     else
-                        operationText = "Receiving from";
+                        operationText = ctx.getString(R.string.receiving_from_user, username);
                     break;
                 default:
                     throw new RuntimeException("UnknownOP");
             }
-            operationTV.setText(String.format("%s %s", operationText, manager.getUser().getName()));
+            operationTV.setText(operationText);
         }
-
 
         private void setFileName(String fileName) {
             fileNameTV.setText(fileName);
@@ -153,13 +157,10 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private void setFileTransferInfo(ProgressManager manager) {
             switch ((int) manager.getLoaded()) {
                 case ProgressManager.COMPLETED:
-                    transferInfoTV.setText("Completed");
+                    transferInfoTV.setText(R.string.completed);
                     return;
-                case ProgressManager.FAILED:
-                    transferInfoTV.setText("Failed");
-                    return;
-                case ProgressManager.PAUSED:
-                    transferInfoTV.setText("Paused");
+                case ProgressManager.STOPPED:
+                    transferInfoTV.setText(R.string.stopped);
                     return;
 
 
@@ -189,10 +190,7 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     case ProgressManager.COMPLETED:
                         c = Color.GREEN;
                         break;
-                    case ProgressManager.FAILED:
-                        c = Color.RED;
-                        break;
-                    case ProgressManager.PAUSED:
+                    case ProgressManager.STOPPED:
                         c = Color.YELLOW;
                         break;
                     default:
@@ -241,8 +239,8 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     intent.setAction(Intent.ACTION_VIEW);
                     Uri uri = FileProvider.getUriForFile(
                             itemView.getContext(),
-                            itemView.getContext().getApplicationContext().getPackageName() +".provider",
-                            manager.getFile() );
+                            itemView.getContext().getApplicationContext().getPackageName() + ".provider",
+                            manager.getFile());
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     intent.setDataAndType(uri, type);
                     itemView.getContext().startActivity(intent);
@@ -253,6 +251,7 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
         }
     }
+
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
         private final ImageView QRImageIV;
         private final AppCompatTextView serverLinkTV;
@@ -262,9 +261,23 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             ImageButton addAppsB = itemView.findViewById(R.id.B_AddApps);
             ImageButton addFilesB = itemView.findViewById(R.id.B_AddFiles);
-            ImageButton showSelected = itemView.findViewById(R.id.B_ShowSelected);
             ImageButton QRCodeB = itemView.findViewById(R.id.B_ShowAddress);
+
+            ImageButton showSelected = itemView.findViewById(R.id.B_ShowSelected);
             ImageButton showUsersB = itemView.findViewById(R.id.B_ShowUsers);
+
+            // setup badges
+            TextView usersNumTV = itemView.findViewById(R.id.TV_NumberUsers);
+            TextView filesNumTV = itemView.findViewById(R.id.TV_NumberSelected);
+
+            if (!Server.filesList.isEmpty()) {
+                filesNumTV.setText(String.valueOf(Server.filesList.size()));
+                filesNumTV.setVisibility(View.VISIBLE);
+            }
+            if (!User.users.isEmpty()) {
+                usersNumTV.setText(String.valueOf(User.users.size()));
+                usersNumTV.setVisibility(View.VISIBLE);
+            }
 
             addAppsB.setOnClickListener((button) -> fragment.launcher.launch(new Intent(itemView.getContext(), AddAppsActivity.class)));
             addFilesB.setOnClickListener((button) -> fragment.mGetContent.launch("*/*"));
@@ -276,7 +289,7 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .create();
             QRImageIV = QRDialogView.findViewById(R.id.IV_QRCodeImage);
             serverLinkTV = QRDialogView.findViewById(R.id.TV_ServerLink);
-            QRCodeB.setOnClickListener( button -> {
+            QRCodeB.setOnClickListener(button -> {
                 QRDialogAD.show();
                 setupQrCode();
             });
@@ -286,19 +299,28 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             AlertDialog chosenFilesAD = new AlertDialog.Builder(itemView.getContext())
                     .setView(chosenFilesView)
                     .setPositiveButton(R.string.ok, null)
+                    .setTitle(R.string.selected)
                     .create();
             RecyclerView chosenFilesRecycler = chosenFilesView.findViewById(R.id.RV_ChosenFilesRecycler);
             ChosenFilesAdapter chosenFilesAdapter = new ChosenFilesAdapter();
             chosenFilesRecycler.setAdapter(chosenFilesAdapter);
             chosenFilesRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
 
-            showSelected.setOnClickListener( button -> chosenFilesAD.show());
+            showSelected.setOnClickListener(button -> chosenFilesAD.show());
 
             NetworkService.filesListNotifier.observe(fragment.getViewLifecycleOwner(), info -> {
                 char action = info.getChar("action");
-                if( 'R' == action ) {
+                int size = Server.filesList.size();
+                if ('R' == action) {
                     int index = info.getInt("index");
                     chosenFilesAdapter.notifyItemRemoved(index);
+                }
+                if( size == 0 ) {
+                    filesNumTV.setText("0");
+                    filesNumTV.setVisibility(View.GONE);
+                } else {
+                    filesNumTV.setText(String.valueOf(size));
+                    filesNumTV.setVisibility(View.VISIBLE);
                 }
             });
 
@@ -307,18 +329,27 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             AlertDialog usersDialogAD = new AlertDialog.Builder(itemView.getContext())
                     .setView(usersDialogView)
                     .setPositiveButton(R.string.ok, null)
+                    .setTitle(R.string.connected_users)
                     .create();
             RecyclerView usersRecycler = usersDialogView.findViewById(R.id.RV_UsersRecycler);
             UsersAdapter usersAdapter = new UsersAdapter();
             usersRecycler.setAdapter(usersAdapter);
             usersRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
-            showUsersB.setOnClickListener( button -> usersDialogAD.show());
+            showUsersB.setOnClickListener(button -> usersDialogAD.show());
 
-            NetworkService.usersListObserver.observe( fragment.getViewLifecycleOwner(), info -> {
+            NetworkService.usersListObserver.observe(fragment.getViewLifecycleOwner(), info -> {
                 char action = info.getChar("action");
-                if( 'A' == action ) {
+                int size = User.users.size();
+                if ('A' == action) {
                     int index = info.getInt("index");
                     usersAdapter.notifyItemInserted(index);
+                }
+                if( size == 0 ) {
+                    usersNumTV.setText("0");
+                    usersNumTV.setVisibility(View.GONE);
+                } else {
+                    usersNumTV.setText(String.valueOf(size));
+                    usersNumTV.setVisibility(View.VISIBLE);
                 }
             });
         }
