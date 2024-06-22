@@ -386,6 +386,8 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     width: 35em;
+    height: -webkit-min-content;
+    height: -moz-min-content;
     height: min-content;
     display: flex;
     flex-direction: column;
