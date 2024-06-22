@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blocked</title>
+    <title>sharing</title>
     <style>
         /*=================
 Basic style
@@ -66,14 +66,26 @@ h2 {
     font-size: 2em;
     letter-spacing: 4px;
     overflow: hidden;
-    background: linear-gradient(90deg, #000, #fff, #000);
-    background-repeat: no-repeat;
-    background-size: 80%;
-    animation: text-animation2 2s linear infinite;
+/* Fallback for all browsers */
+color: transparent; /* Hides the text color */
+background: linear-gradient(90deg, #000, #fff, #000); /* Fallback gradient */
+background-repeat: no-repeat;
+background-size: 80%;
+
+/* For modern browsers */
+-webkit-background-clip: text; /* For older WebKit browsers */
+background-clip: text; /* Applies text clipping */
+
+/* Hide text in all browsers */
+-webkit-text-fill-color: transparent; /* For older WebKit browsers */
+text-fill-color: transparent; /* For modern browsers */
+
+/* Fallback text color */
+color: #fff; /* Fallback text color */
+
+    animation: text-animation2 3s linear infinite;
     animation-delay: 5.5s;
     opacity: 0;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: rgba(255, 255, 255, 0);
     position: absolute;
     top: calc(50% + 80px);
     transform: translateY(-50%);
@@ -1504,6 +1516,47 @@ animation06
     }
 }
 }
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+            color: #777;
+    font-family: sans-serif;
+    font-size: large;
+    opacity: 0;
+    animation: footer-delay 1s ease-in forwards;
+    animation-delay: 4.1s;
+}
+footer small {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.8em; 
+}
+footer p {
+    margin: 5px 0;
+}
+footer a{
+    text-decoration:none ;
+    color: var(--colorOne);
+}
+footer a:hover{
+    text-decoration:underline ;
+}
+    @keyframes footer-delay {
+    0% {
+        opacity:0 ;
+    }
+    100% {
+        opacity: 1;
+    }
+    }
     </style>
 </head>
 <body>
@@ -1639,10 +1692,22 @@ animation06
         <div></div>
         <div></div>
     </div>
-  
+
+
     <div class="text-container">
         <h2>you are blocked</h2>
     </div>
     <p class="text2">blocked blocked blocked blocked blocked blocked</p>
+
+    <footer>
+    <p>&copy; 2024 Sharing App. All rights reserved.</p>
+    <nav>
+        <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a
+            href="https://discord.com/channels/1233896857579687987/1233896857579687989" target="_blank">Contact
+            Us</a>
+    </nav>
+    <p>powered by <img src="dv.png" alt="Digital vibes logo"
+            style="width: 40px; position: relative; top: 10px;"></p>
+</footer>
 </body>
 </html>
