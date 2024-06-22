@@ -4,11 +4,13 @@ try {
     const uploadLabel = document.getElementById("uploadLabel");
     const recieveBtn = document.getElementById("recieveBtn");
     const downloadBubble = document.getElementById("downloadBubble");
+    const loginBubble = document.getElementById("loginBubble");
     const alertDialog = document.getElementById("alertDialog")
     const overlay = document.getElementById('overlay');
     const downloadsBubbleOkButton = document.getElementById('okButton');
     const alertDialogOkButton = document.getElementById("alertDialogOkBtn")
     const updateBtn = document.getElementById('update');
+    const loginBtn = document.getElementById('loginBtn');
     const downloads = document.getElementById("downloads");
     const uploadInput = document.getElementById('uploadInput');
 
@@ -63,8 +65,12 @@ try {
         }
 
         overlay.onclick = () => {
-            closeBubble(downloadBubble || alertDialog);
+            closeBubble(downloadBubble && alertDialog && loginBubble);
         }
+
+        loginBtn.onclick = () => {
+            openBubble(loginBubble);
+        };
 
         function openBubble(bublle){
             bublle.style.display = 'block';
