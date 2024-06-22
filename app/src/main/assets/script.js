@@ -65,7 +65,7 @@ try {
         }
 
         overlay.onclick = () => {
-            closeBubble(downloadBubble && alertDialog && loginBubble);
+            closeBubbles([downloadBubble, alertDialog, loginBubble]);
         }
 
         loginBtn.onclick = () => {
@@ -77,11 +77,14 @@ try {
             overlay.style.display = 'block';
         }
 
-        function closeBubble(bublle) {
-            bublle.style.display = 'none';
+        function closeBubbles(bubbles) {
+            bubbles.forEach(bubble => {
+                if (bubble && bubble.style.display !== 'none') {
+                    bubble.style.display = 'none';
+                }
+            });
             overlay.style.display = 'none';
-/*             overlay.onclick = null;
- */        }
+        }
 
 
         const loader = document.querySelector('.process');
