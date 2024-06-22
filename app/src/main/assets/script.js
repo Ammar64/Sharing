@@ -13,9 +13,8 @@ try {
     const uploadInput = document.getElementById('uploadInput');
 
     const download_item = document.createElement("li");
-    // line not working
-    // download_item.innerHTML = `<img class="download-item-img"><span class="download-item-name"></span>`;
     download_item.className = "download-item";
+
     let userId = -1;
 
     fetch("/get-user-info", {
@@ -26,7 +25,8 @@ try {
         userId = data.id;
         console.log("UserId: " + userId);
         // I call it here to make sure no other requests sent before getting userId from server.
-        executeFilesCenterFrontEnd();
+/*         executeFilesCenterFrontEnd(); */
+    //i think we don't need it as it must appears only when he intend to upload , so now is real practice 
     })
 
     function executeFilesCenterFrontEnd() {
@@ -37,8 +37,8 @@ try {
                 if( res.ok ) {
                     return res.json();
                 }
-            }).then( function(data){
-                if( data.allowed )
+            }).then( function(res){
+                if( res.allowed )
                     uploadLabel.click();
                 else
                     openBubble(alertDialog);

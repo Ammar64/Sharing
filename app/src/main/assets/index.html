@@ -54,14 +54,26 @@
                 <button id="update">update</button>
             </div>
         </div>
-        <div id="alertDialog">
-            <div id="alertDialogTitle" class="downloadBubble-title">
+
+        <div id="alertDialog" style="display: block;">
+            <h1 id="alertDialogTitle" class="downloadBubble-title">
                 Uploading is disabled
-            </div>
-            <div id="alertDialogContent">
+            </h1>
+            <p id="alertDialogContent">
                 You can't send files to your phone from browser unless you enable it from settings
-            </div>
-            <button id="alertDialogOkBtn" >OK</button>
+            </p>
+            <button class="bt" id="alertDialogOkBtn">
+                <strong>ammm, ok</strong>
+                <div id="container-stars">
+                    <div id="stars"></div>
+                </div>
+
+                <div id="glow">
+                    <div class="circle"></div>
+                    <div class="circle"></div>
+                </div>
+            </button>
+
         </div>
 
         <div id="overlay"></div> <!-- Overlay div for covering the page -->
