@@ -66,23 +66,11 @@ h2 {
     font-size: 2em;
     letter-spacing: 4px;
     overflow: hidden;
-/* Fallback for all browsers */
-color: transparent; /* Hides the text color */
-background: linear-gradient(90deg, #000, #fff, #000); /* Fallback gradient */
-background-repeat: no-repeat;
-background-size: 80%;
-
-/* For modern browsers */
--webkit-background-clip: text; /* For older WebKit browsers */
-background-clip: text; /* Applies text clipping */
-
-/* Hide text in all browsers */
--webkit-text-fill-color: transparent; /* For older WebKit browsers */
-text-fill-color: transparent; /* For modern browsers */
-
-/* Fallback text color */
-color: #fff; /* Fallback text color */
-
+    background: linear-gradient(90deg, #000, #fff, #000);
+    background-repeat: no-repeat;
+    background-size: 80%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0);
     animation: text-animation2 3s linear infinite;
     animation-delay: 5.5s;
     opacity: 0;
