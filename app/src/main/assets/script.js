@@ -41,12 +41,12 @@ try {
                 if( data.allowed )
                     uploadLabel.click();
                 else
-                    openAlertDialog();
+                    openBubble(alertDialog);
             });
         }
 
         recieveBtn.onclick = () => {
-            openDownloadsBubble();
+            openBubble(downloadBubble);
             requestAvailableDownloads();
         };
 
@@ -55,36 +55,28 @@ try {
         }
 
         downloadsBubbleOkButton.onclick = () => {
-            closeDownloadsBubble();
+            closeBubble(downloadBubble);
         };
 
-        alertDialogOkButton.onclick = function() {
-            closeAlertDialog();
+        alertDialogOkButton.onclick = () =>{
+            closeBubble(alertDialog);
         }
 
-        function openDownloadsBubble() {
-            downloadBubble.style.display = 'block';
+
+        function openBubble(bublle){
+            bublle.style.display = 'block';
             overlay.style.display = 'block';
-            overlay.onclick = closeDownloadsBubble;
+            overlay.onclick = () => {
+                closeBubble(bublle);
+            }
         }
 
-        function closeDownloadsBubble() {
-            downloadBubble.style.display = 'none';
+        function closeBubble(bublle) {
+            bublle.style.display = 'none';
             overlay.style.display = 'none';
-            overlay.onclick = null;
-        }
+/*             overlay.onclick = null;
+ */        }
 
-        function openAlertDialog() {
-            alertDialog.style.display = 'flex';
-            overlay.style.display = 'block';
-            overlay.onclick = closeAlertDialog;
-        }
-
-        function closeAlertDialog() {
-            alertDialog.style.display = 'none';
-            overlay.style.display = 'none';
-            overlay.onclick = null;
-        }
 
         const loader = document.querySelector('.process');
         function showLoader() {
