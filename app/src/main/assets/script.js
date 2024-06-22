@@ -25,7 +25,7 @@ try {
         userId = data.id;
         console.log("UserId: " + userId);
         // I call it here to make sure no other requests sent before getting userId from server.
-/*         executeFilesCenterFrontEnd(); */
+        executeFilesCenterFrontEnd();
     //i think we don't need it as it must appears only when he intend to upload , so now is real practice 
     })
 
@@ -62,13 +62,13 @@ try {
             closeBubble(alertDialog);
         }
 
+        overlay.onclick = () => {
+            closeBubble(downloadBubble || alertDialog);
+        }
 
         function openBubble(bublle){
             bublle.style.display = 'block';
             overlay.style.display = 'block';
-            overlay.onclick = () => {
-                closeBubble(bublle);
-            }
         }
 
         function closeBubble(bublle) {
