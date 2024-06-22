@@ -59,6 +59,8 @@ public class AddAppsActivity extends AppCompatActivity {
             runOnUiThread(() -> {
                 appBar.setTitle(R.string.select_apps);
                 appsRecycler.setAdapter(appsAdapter);
+                appsRecycler.setHasFixedSize(true);
+
                 appsRecycler.setLayoutManager(new GridLayoutManager(this, 3) {
                     @Override
                     public void onLayoutCompleted(RecyclerView.State state) {
@@ -67,6 +69,7 @@ public class AddAppsActivity extends AppCompatActivity {
                         loadingPB.setVisibility(View.GONE);
                     }
                 });
+
 
             });
         }).start();

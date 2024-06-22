@@ -23,7 +23,8 @@
     <string name="connected_users">Connected users</string>
     <string name="block">BLOCK</string>
     <string name="unblock">UNBLOCK</string>
-    <string name="user_default_name">User %1$s</string>
+    <string name="user_default_name">User %1$d</string>
+    <string name="choose_language">Choose language</string>
     <!-- Fragment Settings   -->
     <string name="dark_mode">Dark mode</string>
     <string name="toggle_dark_mode">Toggle dark mode</string>

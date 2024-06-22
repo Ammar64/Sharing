@@ -11,7 +11,10 @@ try {
     const updateBtn = document.getElementById('update');
     const downloads = document.getElementById("downloads");
     const uploadInput = document.getElementById('uploadInput');
+
     const download_item = document.createElement("li");
+    // line not working
+    // download_item.innerHTML = `<img class="download-item-img"><span class="download-item-name"></span>`;
     download_item.className = "download-item";
     let userId = -1;
 
@@ -124,7 +127,22 @@ try {
             }).then(data => {
                 data.forEach(e => {
                     const newFileItem = download_item.cloneNode();
-                    newFileItem.textContent = e.name + (!e.hasSplits ? `     (${getFormattedFileSize(e.size)})` : '');
+                    const newFileItemImg = document.createElement("img");
+                    newFileItemImg.className = "download-item-img";
+
+                    const newFileItemText = document.createElement("span");
+                    newFileItemText.className = "download-item-name";
+
+                    newFileItem.appendChild(newFileItemImg)
+                    newFileItem.appendChild(newFileItemText);
+                    
+                    if( e.type === "app" ) {
+                        newFileItemImg.style.display = "block"
+                        newFileItemImg.src = "/get-icon/".concat(e.uuid);
+                    } else {
+                        newFileItemImg.style.display = "none"
+                    }
+                    newFileItemText.textContent = e.name.concat("     ").concat(!e.hasSplits ? `(${getFormattedFileSize(e.size)})` : '(splits)');
                     downloads.appendChild(newFileItem);
                     newFileItem.addEventListener("click", () => {
                         downloadFileWithProgress(`/download/${e.uuid}`);

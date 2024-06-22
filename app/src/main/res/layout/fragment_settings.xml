@@ -37,8 +37,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/TV_SettingsTheme"
                     android:text="@string/toggle_dark_mode"
-                    android:textSize="@dimen/settings_small_text"/>
-                <android.widget.Switch
+                    android:textSize="@dimen/small_text"/>
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/SC_DarkModeToggle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -67,8 +67,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/TV_SettingsUploadAllow"
                     android:text="@string/disable_browser_upload_desc"
-                    android:textSize="@dimen/settings_small_text" />
-                <android.widget.Switch
+                    android:textSize="@dimen/small_text" />
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/SC_UploadAllowToggle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -95,9 +95,9 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/TV_SettingsUserBlock"
                     android:text="@string/block_users_desc"
-                    android:textSize="@dimen/settings_small_text" />
+                    android:textSize="@dimen/small_text" />
 
-                <android.widget.Switch
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/SC_UsersBlockToggle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/TV_SettingsLanguage"
                     android:text="@string/languages_desc"
-                    android:textSize="@dimen/settings_small_text" />
+                    android:textSize="@dimen/small_text" />
             </RelativeLayout>
 
         </LinearLayout>

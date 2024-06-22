@@ -2,5 +2,5 @@
 <resources>
     <dimen name="badge_pull_distance">-16dp</dimen>
     <dimen name="settings_big_text">18sp</dimen>
-    <dimen name="settings_small_text">11sp</dimen>
+    <dimen name="small_text">11sp</dimen>
 </resources>

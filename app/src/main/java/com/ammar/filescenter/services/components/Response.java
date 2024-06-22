@@ -1,5 +1,6 @@
 package com.ammar.filescenter.services.components;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.ammar.filescenter.custom.io.ProgressManager;
@@ -28,6 +29,7 @@ public class Response {
 
     public void sendFileResponse(Transferable file, User user) {
         ProgressManager progressManager = new ProgressManager(file.getFile(), file.getSize(), user, ProgressManager.OP.DOWNLOAD);
+        progressManager.setDisplayName( file.getName() );
         progressManager.setUUID(file.getUUID());
         try {
             ProgressOutputStream out = new ProgressOutputStream(clientSocket.getOutputStream(), progressManager);
@@ -163,7 +165,7 @@ public class Response {
             out.flush();
 
         } catch (IOException e) {
-            Log.e("MYLOG", e.getMessage());
+            Log.e("MYLOG", "Response.sendResponse(byte[])" + e.getMessage());
         }
     }
 
@@ -174,10 +176,17 @@ public class Response {
             out.flush();
 
         } catch (IOException e) {
-            Log.e("MYLOG", e.getMessage());
+            Log.e("MYLOG", "Response.sendResponse()" + e.getMessage());
         }
     }
 
+    public void sendBitmapResponse(Bitmap bitmap) {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, buffer);
+        Log.d("MYLOG", "Bitmap buffer size: " + buffer.size());
+        setHeader("Content-Type", "image/png");
+        sendResponse(buffer.toByteArray());
+    }
     public void setHeader(String key, String value) {
         headers.put(key, value);
     }

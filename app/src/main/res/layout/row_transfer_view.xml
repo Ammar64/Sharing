@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
     android:clickable="true"
     android:focusable="true">
@@ -22,12 +22,12 @@
     <TextView
         android:id="@+id/TV_FileUploadName"
         android:layout_width="0dp"
-        android:layout_height="22dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textAlignment="viewStart"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -41,10 +41,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
-        android:textSize="18sp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TV_OperationType"
+        android:layout_marginTop="-5dp"
         tools:text="60%" />
 
 
@@ -53,11 +54,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
 
-        android:textSize="15sp"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@id/TV_FileUploadName"
         app:layout_constraintEnd_toStartOf="@id/TV_FileTransferInfo"
         app:layout_constraintTop_toBottomOf="@+id/TV_FileUploadName"
         android:layout_marginEnd="4dp"
+        android:layout_marginTop="-5dp"
         android:singleLine="true"
         android:ellipsize="start"
         tools:text="Sending to 192.168.1.15" />
@@ -66,6 +68,7 @@
         android:id="@+id/TV_FileTransferInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/TV_OperationType"
         app:layout_constraintEnd_toEndOf="@+id/TV_FileUploadProgress"
         app:layout_constraintTop_toTopOf="@+id/TV_OperationType"

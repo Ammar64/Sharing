@@ -2,7 +2,11 @@ package com.ammar.filescenter.activities.recyclers;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +19,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity;
+import com.ammar.filescenter.common.Utils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapter.ViewHolder> {
-    private Drawable[] appsIcon;
+    private Bitmap[] appsIcon;
     private final PackageManager pm;
     private final AddAppsActivity activity;
     List<ApplicationInfo> apps;
@@ -31,10 +38,10 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
         this.activity = activity;
         this.apps = apps;
         this.selectedApps = selectedApps;
-        this.appsIcon = new Drawable[this.apps.size()];
+        this.appsIcon = new Bitmap[this.apps.size()];
         this.pm = this.activity.getPackageManager();
         for (int i = 0; i < this.apps.size(); i++) {
-            this.appsIcon[i] = this.apps.get(i).loadIcon(pm);
+            this.appsIcon[i] = Utils.drawableToBitmap(this.apps.get(i).loadIcon(pm));
         }
     }
 
@@ -49,15 +56,20 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
     ArrayList<Integer> checksPositions = new ArrayList<>();
 
     @Override
-    public void onBindViewHolder(@NonNull AppsRecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ApplicationInfo appInfo = apps.get(position);
-        Drawable appIcon = appsIcon[position];
+        Bitmap appIcon = appsIcon[position];
         CharSequence appName = appInfo.loadLabel(pm);
 
-        holder.icon.setImageDrawable(appIcon);
+        holder.icon.setImageBitmap(appIcon);
+
         holder.appName.setText(appName);
         holder.checkBox.setChecked(checksPositions.contains(holder.getBindingAdapterPosition()));
-        holder.splits.setVisibility(appInfo.splitPublicSourceDirs == null ? View.INVISIBLE : View.VISIBLE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            holder.splits.setVisibility(appInfo.splitPublicSourceDirs == null ? View.INVISIBLE : View.VISIBLE);
+        } else holder.splits.setVisibility(View.GONE);
+
         holder.itemView.setOnClickListener((view) -> {
             boolean isChecked = holder.checkBox.isChecked();
             holder.checkBox.setChecked(!isChecked);
@@ -93,4 +105,6 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
             splits = itemView.findViewById(R.id.TV_Splits);
         }
     }
+
+
 }

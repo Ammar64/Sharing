@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/B_AddApps"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/circular_button_white"
-        android:src="@drawable/icon_apps"
+        app:srcCompat="@drawable/icon_apps"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,12 +30,12 @@
         app:layout_constraintTop_toBottomOf="@+id/B_AddApps" />
 
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/B_AddFiles"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="@drawable/circular_button_white"
-        android:src="@drawable/icon_file_red"
+        app:srcCompat="@drawable/icon_file_red"
         app:layout_constraintEnd_toStartOf="@id/B_ShowSelected"
         app:layout_constraintStart_toEndOf="@+id/B_AddApps"
         app:layout_constraintTop_toTopOf="@+id/B_AddApps" />
@@ -53,13 +53,13 @@
         app:layout_constraintTop_toBottomOf="@+id/B_AddFiles"
         android:labelFor="@+id/B_AddFiles"/>
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/B_ShowSelected"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/circular_button_white"
-        android:src="@drawable/icon_check"
+        app:srcCompat="@drawable/icon_check"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/B_AddApps" />
 
@@ -72,12 +72,13 @@
         android:layout_marginBottom="@dimen/badge_pull_distance"
         android:layout_marginStart="@dimen/badge_pull_distance"
         android:background="@drawable/rounded_text_background"
-        android:backgroundTint="@color/red"
+        app:backgroundTint="@color/red"
         android:textAlignment="center"
         android:textColor="@color/brightTextColor"
         android:textStyle="bold"
         android:visibility="gone"
         tools:visibility="visible"
+        android:textSize="@dimen/small_text"
         tools:text="5"/>
     <TextView
         android:id="@+id/textView2"
@@ -91,12 +92,12 @@
         app:layout_constraintStart_toStartOf="@+id/B_ShowSelected"
         app:layout_constraintTop_toBottomOf="@+id/B_ShowSelected" />
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/B_ShowAddress"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="@drawable/circular_button_white"
-        android:src="@drawable/icon_link"
+        app:srcCompat="@drawable/icon_link"
         app:layout_constraintEnd_toStartOf="@id/B_ShowUsers"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TV_AddApps"
@@ -115,12 +116,12 @@
         app:layout_constraintTop_toBottomOf="@+id/B_ShowAddress" />
 
 
-    <ImageButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/B_ShowUsers"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="@drawable/circular_button_white"
-        android:src="@drawable/icon_user"
+        app:srcCompat="@drawable/icon_user"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/B_ShowAddress"
         app:layout_constraintTop_toTopOf="@+id/B_ShowAddress" />
@@ -134,11 +135,12 @@
         android:layout_marginBottom="@dimen/badge_pull_distance"
         android:layout_marginStart="@dimen/badge_pull_distance"
         android:background="@drawable/rounded_text_background"
-        android:backgroundTint="@color/red"
+        app:backgroundTint="@color/red"
         android:textAlignment="center"
         android:textColor="@color/brightTextColor"
         android:textStyle="bold"
         android:visibility="gone"
+        android:textSize="@dimen/small_text"
         tools:visibility="visible"
         tools:text="5"/>
 

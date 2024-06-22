@@ -1,4 +1,4 @@
-package com.ammar.filescenter.activities.MainActivity.adapters;
+package com.ammar.filescenter.activities.MainActivity.adaptersR;
 
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
@@ -77,10 +78,10 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
         private void setBlockButton( boolean b ) {
             if(b) {
-                userBlockToggleB.setBackgroundTintList( ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.green)));
+                ViewCompat.setBackgroundTintList(userBlockToggleB, ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.green)));
                 userBlockToggleB.setText(R.string.unblock);
             } else {
-                userBlockToggleB.setBackgroundTintList( ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.red)));
+                ViewCompat.setBackgroundTintList(userBlockToggleB, ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.red)));
                 userBlockToggleB.setText(R.string.block);
             }
         }

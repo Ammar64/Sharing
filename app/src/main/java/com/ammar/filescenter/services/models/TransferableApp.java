@@ -29,7 +29,10 @@ public class TransferableApp extends Transferable {
         super.uuid = UUID.randomUUID().toString();
 
         // check for splits
-        String[] splitsDirs = appInfo.splitPublicSourceDirs;
+        String[] splitsDirs = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            splitsDirs = appInfo.splitPublicSourceDirs;
+        }
         if (splitsDirs != null) {
             splits = new Transferable[splitsDirs.length];
             for (int i = 0; i < splitsDirs.length; i++) {

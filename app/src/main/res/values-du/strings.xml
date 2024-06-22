@@ -24,6 +24,9 @@
     <string name="block">BLOCKIEREN</string>
     <string name="unblock">ENTBLOCKIEREN</string>
     <string name="user_default_name">Benutzer %1$s</string>
+    <string name="choose_language">Sprache wählen</string>
+
+
     <!-- Fragment Settings   -->
     <string name="dark_mode">Dunkelmodus</string>
     <string name="toggle_dark_mode">Dunkelmodus umschalten</string>

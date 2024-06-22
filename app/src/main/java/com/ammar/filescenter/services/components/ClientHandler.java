@@ -3,6 +3,7 @@ package com.ammar.filescenter.services.components;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
@@ -89,7 +90,6 @@ public class ClientHandler implements Runnable {
                         } else if (path.startsWith("/download/")) {
                             String requestedUUID = path.substring(10);
                             try {
-
                                 Transferable file = getFileWithUUID(requestedUUID);
                                 if (!(file instanceof TransferableApp)) {
                                     long start = getStartRange(request);
@@ -126,6 +126,14 @@ public class ClientHandler implements Runnable {
                                 }
                             }
 
+                        } else if(path.startsWith("/get-icon/")) {
+                            String uuid = path.substring(10);
+                            Transferable file = getFileWithUUID(uuid);
+                            if( file instanceof TransferableApp ) {
+                                TransferableApp app = (TransferableApp) file;
+                                Bitmap appIconBM = Utils.drawableToBitmap(app.getIcon());
+                                response.sendBitmapResponse(appIconBM);
+                            }
                         } else if ("/favicon.ico".equals(path)) {
                             response.setHeader("Content-Type", "image/svg+xml");
                             response.sendResponse(NetworkService.readFileFromAssets("icons8-share.svg"));
@@ -183,6 +191,8 @@ public class ClientHandler implements Runnable {
             Log.e("MYLOG", "ClientHandler.run(). IOException: " + e.getMessage());
         } catch (JSONException e) {
             Log.e("MYLOG", "ClientHandler.run(). JSONException: " + e.getMessage());
+        } catch (Exception e){
+
         } finally {
             try {
                 clientSocket.close();
@@ -225,8 +235,10 @@ public class ClientHandler implements Runnable {
             while (totalBytesRead < size) {
                 int bytesRead = in.read(buffer);
                 totalBytesRead += bytesRead;
-                progressManager.setLoaded(totalBytesRead);
-                out.write(buffer, 0, bytesRead);
+                if(bytesRead != -1) {
+                    progressManager.setLoaded(totalBytesRead);
+                    out.write(buffer, 0, bytesRead);
+                } else progressManager.reportStopped();
             }
             out.close();
             progressManager.reportCompleted();

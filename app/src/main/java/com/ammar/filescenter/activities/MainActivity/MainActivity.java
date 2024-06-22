@@ -1,6 +1,7 @@
 package com.ammar.filescenter.activities.MainActivity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.UiModeManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,13 +12,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
@@ -35,6 +42,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton serverButton;
+    private ViewPager2 viewPager;
     private BottomNavigationView bottomNavigationView;
 
     public static boolean darkMode;
@@ -82,42 +90,49 @@ public class MainActivity extends AppCompatActivity {
     private void initItems() {
         bottomNavigationView = findViewById(R.id.BottomNavView);
         serverButton = findViewById(R.id.FAB_ServerButton);
+        viewPager = findViewById(R.id.MainActivityFragmentContainer);
         bottomNavigationView.setSelectedItemId(R.id.B_Share);
+
+        MainViewPagerAdapter viewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
+        viewPager.setAdapter(viewPagerAdapter);
+
     }
 
-
-    private int currentFragmentIndex = 1;
-    private final ArrayList<Class> fragments = new ArrayList<>(Arrays.asList(new Class[]{
-            TransferFragment.class,
-            SettingsFragment.class
-    }));
-
-
     private void setItemsListener() {
-        bottomNavigationView.setOnItemSelectedListener(item -> {
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            private MenuItem prevMenuItem;
 
-            int id = item.getItemId();
-            FragmentTransaction ft = getSupportFragmentManager()
-                    .beginTransaction();
+            @Override
+            public void onPageSelected(int position) {
+                if (prevMenuItem != null) {
+                    prevMenuItem.setChecked(false);
+                }
+                else
+                {
+                    bottomNavigationView.getMenu().getItem(0).setChecked(false);
+                }
+                if(position==1)position=2;
+                Log.d("page", "onPageSelected: "+position);
+                bottomNavigationView.getMenu().getItem(position).setChecked(true);
+                prevMenuItem = bottomNavigationView.getMenu().getItem(position);
 
-            int nextFragmentIndex = -1;
-            if (id == R.id.B_Share) {
-                nextFragmentIndex = fragments.indexOf(TransferFragment.class);
-                if (currentFragmentIndex < nextFragmentIndex) {
-                    ft.setCustomAnimations(R.anim.fragment_enter_left, R.anim.fragment_exit_left);
-                }
-                ft.replace(R.id.MainActivityFragmentContainer, TransferFragment.class, null);
-            } else if (id == R.id.B_Settings) {
-                nextFragmentIndex = fragments.indexOf(TransferFragment.class);
-                if (currentFragmentIndex < nextFragmentIndex) {
-                    ft.setCustomAnimations(R.anim.fragment_enter_left, R.anim.fragment_exit_left);
-                }
-                ft.replace(R.id.MainActivityFragmentContainer, SettingsFragment.class, null);
             }
-            currentFragmentIndex = nextFragmentIndex;
-            ft.commit();
-            return true;
+
+
         });
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.B_Share) {
+                viewPager.setCurrentItem(0);
+                return true;
+            } else if (id == R.id.B_Settings) {
+                viewPager.setCurrentItem(1);
+                return true;
+            }
+            return false;
+        });
+
         serverButton.setOnClickListener((button) -> {
             Intent serviceIntent = new Intent(this, NetworkService.class);
             serviceIntent.setAction(Abbrev.ACTION_TOGGLE_SERVER);
@@ -134,9 +149,9 @@ public class MainActivity extends AppCompatActivity {
     private void observeStates() {
         NetworkService.serverStatusObserver.observe(this, running -> {
             if (running) {
-                serverButton.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.status_on)));
+                ImageViewCompat.setImageTintList(serverButton, ColorStateList.valueOf(getResources().getColor(R.color.status_on)));
             } else {
-                serverButton.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.status_off)));
+                ImageViewCompat.setImageTintList(serverButton, ColorStateList.valueOf(getResources().getColor(R.color.status_off)));
             }
         });
     }

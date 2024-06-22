@@ -448,6 +448,16 @@ body {
     border-radius: 0.5em;
     cursor: pointer;
     color: #B0BEC5;
+    display: flex;
+    align-items: center;
+    height: 2.3em;
+    border: #ffffff77 1px solid;
+}
+
+.download-item-img {
+    width: 2.3em;
+    height: 2.3em;
+    margin-right: 0.5em;
 }
 
 .btns {

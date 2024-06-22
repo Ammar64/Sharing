@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity;
-import com.ammar.filescenter.activities.MainActivity.adapters.TransferAdapter;
+import com.ammar.filescenter.activities.MainActivity.adaptersR.TransferAdapter;
 import com.ammar.filescenter.common.Abbrev;
 import com.ammar.filescenter.services.NetworkService;
 import com.ammar.filescenter.common.Utils;

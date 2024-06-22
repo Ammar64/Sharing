@@ -3,8 +3,8 @@
     <string name="about_us">عنا</string>
     <!-- Fragment Share   -->
     <string name="share" >مشاركة</string>
-    <string name="add_apps">أضف تطبيقا</string>
-    <string name="add_files">أضف ملفا</string>
+    <string name="add_apps">أضف تطبيقات</string>
+    <string name="add_files">أضف ملفات</string>
     <string name="selected">تم تحديده</string>
     <string name="link">الرابط</string>
     <string name="users">المستخدمون</string>
@@ -24,6 +24,7 @@
     <string name="block">حظر</string>
     <string name="unblock">إلغاء الحظر</string>
     <string name="user_default_name">المستخدم %1$s</string>
+    <string name="choose_language">اختر لغة</string>
 
     <!-- Fragment Settings   -->
     <string name="dark_mode">الوضع الداكن</string>

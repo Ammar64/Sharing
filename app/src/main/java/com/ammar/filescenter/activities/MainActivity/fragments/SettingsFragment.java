@@ -1,7 +1,6 @@
 package com.ammar.filescenter.activities.MainActivity.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,11 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
@@ -31,10 +30,10 @@ public class SettingsFragment extends Fragment {
     public static final String Language = "LANGUAGE";
     private View v;
     private Toolbar toolbar;
-    private Switch darkModeS;
+    private SwitchCompat darkModeS;
 
-    private Switch uploadDisableS;
-    private Switch usersBlockS;
+    private SwitchCompat uploadDisableS;
+    private SwitchCompat usersBlockS;
 
     private RelativeLayout languageRL;
     private AlertDialog languageAD;
@@ -68,7 +67,7 @@ public class SettingsFragment extends Fragment {
         String lang = settingsPref.getString(Language, "");
         int selected = Abbrev.langsCode.indexOf(lang);
         languageAD = new AlertDialog.Builder(requireContext())
-                .setTitle("Choose language")
+                .setTitle(R.string.choose_language)
                 .setSingleChoiceItems(R.array.langs, selected, null)
                 .setPositiveButton(R.string.ok, (dialog, ignore) -> {
                     ListView lw = languageAD.getListView();

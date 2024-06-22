@@ -1,11 +1,11 @@
-package com.ammar.filescenter.activities.MainActivity.adapters;
+package com.ammar.filescenter.activities.MainActivity.adaptersR;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Handler;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.FileProvider;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -112,11 +113,11 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             fileProgressPB = itemView.findViewById(R.id.PB_FileUploadProgress);
             fileProgressTV = itemView.findViewById(R.id.TV_FileUploadProgress);
         }
-
+        private final Handler handler = new Handler();
         public void setup(ProgressManager manager) {
             setFileName(manager.getDisplayName());
             setFileTransferInfo(manager);
-            setProgress(manager);
+            handler.post( () -> setProgress(manager));
             setOperationText(manager);
             setClickListener(manager);
         }
@@ -196,7 +197,7 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     default:
                         throw new RuntimeException("Invalid progress status. progress is " + manager.getLoaded());
                 }
-                fileProgressPB.setProgressTintList(ColorStateList.valueOf(c));
+                DrawableCompat.setTint( fileProgressPB.getProgressDrawable(), c);
                 return;
             }
 
@@ -205,8 +206,7 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                 fileProgressTV.setVisibility(View.VISIBLE);
                 fileProgressTV.setText(String.format(Locale.ENGLISH, "%d%%", progress));
-
-                fileProgressPB.setProgressTintList(ColorStateList.valueOf(Color.CYAN));
+                DrawableCompat.setTint( fileProgressPB.getProgressDrawable(), Color.CYAN);
                 fileProgressPB.setIndeterminate(false);
                 fileProgressPB.setProgress(progress);
                 fileProgressPB.setPaddingRelative(0, 0, (int) Utils.dpToPx(8.0f), 0);
@@ -214,7 +214,7 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                 fileProgressTV.setVisibility(View.INVISIBLE);
                 fileProgressPB.setPaddingRelative(0, 0, 0, 0);
-                fileProgressPB.setProgressTintList(ColorStateList.valueOf(Color.CYAN));
+                DrawableCompat.setTint( fileProgressPB.getProgressDrawable(), Color.CYAN);
 
                 if (manager.getLoaded() == ProgressManager.COMPLETED) {
                     fileProgressPB.setIndeterminate(false);
