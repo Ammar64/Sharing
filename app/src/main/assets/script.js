@@ -284,8 +284,7 @@
 
         /* username field */
     const usernameForm = document.getElementById('usernameForm');
-/*     const loginBubble = document.getElementById('loginBubble'); // Assuming this is the login bubble element
- */
+
     // Check if username is already stored in localStorage
     let storedUsername = localStorage.getItem('username');
 
@@ -321,12 +320,12 @@
 
         const url = '/update-user-name';
 
+        // Create a FormData object
+        const formData = new FormData(usernameForm);
+
         fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username: usernameInput })
+            body: formData
         })
         .then(response => {
             if (!response.ok) {
