@@ -1,29 +1,24 @@
 package com.ammar.filescenter.services.network.sessions;
 
-import com.ammar.filescenter.services.network.sessions.base.HTTPSession;
-
 public class Sessions {
-    public void defineSessions() {
+    public static void defineSessions() {
         // main page
 
         new PageSession(new String[]{
-                "/index.html",
-                "/style.css",
-                "/script.js",
-                "/dv.png"
+                "/", "/blocked", "/index.html", "/style.css", "/script.js", "/dv.png"
         });
 
 
         new DownloadSession(new String[]{
-           "/download/"
+           "/download/", "/available-downloads" ,"/get-icon"
         });
 
         new UploadSession(new String[]{
-                "/upload"
+                "/upload/", "/check-upload-allowed"
         });
 
         new UserSession(new String[]{
-
+            "/get-user-info", "/update-user-name"
         });
     }
 
