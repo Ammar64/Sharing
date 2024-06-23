@@ -1,5 +1,5 @@
-try {
-    const sendBtn = document.getElementById("sendBtn");
+/* try {
+ */    const sendBtn = document.getElementById("sendBtn");
     // when click shows you native choose file dialog
     const uploadLabel = document.getElementById("uploadLabel");
     const recieveBtn = document.getElementById("recieveBtn");
@@ -27,12 +27,12 @@ try {
         userId = data.id;
         console.log("UserId: " + userId);
         // I call it here to make sure no other requests sent before getting userId from server.
-        executeFilesCenterFrontEnd();
-    //i think we don't need it as it must appears only when he intend to upload , so now is real practice 
+/*         executeFilesCenterFrontEnd();
+ */    //i think we don't need it as it must appears only when he intend to upload , so now is real practice 
     })
 
-    function executeFilesCenterFrontEnd() {
-        sendBtn.onclick = function() {
+/*     function executeFilesCenterFrontEnd() {
+ */        sendBtn.onclick = function() {
             fetch("/check-upload-allowed", {
                 method: "PUT",
             }).then( function( res ) {
@@ -57,11 +57,11 @@ try {
         }
 
         downloadsBubbleOkButton.onclick = () => {
-            closeBubble(downloadBubble);
+            closeBubbles(downloadBubble);
         };
 
         alertDialogOkButton.onclick = () =>{
-            closeBubble(alertDialog);
+            closeBubbles(alertDialog);
         }
 
         overlay.onclick = () => {
@@ -77,7 +77,13 @@ try {
             overlay.style.display = 'block';
         }
 
+
         function closeBubbles(bubbles) {
+            // Ensure bubbles is always treated as an array
+            if (!Array.isArray(bubbles)) {
+                bubbles = [bubbles];
+            }
+
             bubbles.forEach(bubble => {
                 if (bubble && bubble.style.display !== 'none') {
                     bubble.style.display = 'none';
@@ -275,31 +281,29 @@ try {
 
 
 
-        // /* reloading page */
-        // window.addEventListener('load', function (event) {
-        //     showLoader();
-        //     updateProgress(0);
-
-        //     let progress = 0;
-        //     const interval = setInterval(() => {
-        //         progress += 1;
-        //         if (progress > 100) {
-        //             progress = 100;
-        //             clearInterval(interval);
-        //             hideLoader();
-        //         }
-        //         updateProgress(progress);
-        //     }, 30);
-
-        //     console.log('Page is refreshing...');
-        // });
-
-    }
+/*     }
 
 
 } catch (e) {
     let message = e.message;
     console.error(e);
-}
+} */
 
+        // /* reloading page */
+        window.addEventListener('load', function (event) {
+            showLoader();
+            updateProgress(0);
 
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 1;
+                if (progress > 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    hideLoader();
+                }
+                updateProgress(progress);
+            }, 30);
+
+            console.log('Page is refreshing...');
+        });

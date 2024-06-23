@@ -130,7 +130,7 @@ body {
     100%{transform: skew(0 , 0) rotateZ(0) translate(calc(-50% + 2000px) ,-50%)}
 }
 
-.fa-jet-fighter{
+/* .jet-fighter-icon{
     font-size: 150px;
     background: linear-gradient(to right, var(--colorOne), var(--colorTwo));
     -webkit-background-clip: text;
@@ -138,9 +138,9 @@ body {
     -webkit-text-fill-color: transparent;
     position: relative;
     z-index: 2;
-}
+} */
 
-.fa-jet-fighter::after{
+/* .jet-fighter-icon::after{
     content: '';
     padding: 13px;
     height: 22px ;
@@ -152,6 +152,32 @@ body {
     background-color: var(--colorTwo);
     -webkit-filter: blur(30px);
             filter: blur(30px);
+} */
+.jet-fighter-icon {
+    width: 200px;
+    height: auto;
+    fill: url(#gradient);
+    z-index: 2;
+    position: relative;
+}
+
+.jet-fighter-icon path {
+    fill: url(#gradient);
+}
+
+.jet-fighter-icon::after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    transform: translate(-50%, 50%);
+    background-color: var(--colorTwo);
+    -webkit-filter: blur(30px);
+    filter: blur(30px);
+    z-index: -1;
 }
 
 .steamJet1 , .steamJet2, .steamJet{
@@ -247,13 +273,13 @@ body {
 .plane{
     left: 60%;
 }
-.fa-jet-fighter{
-    font-size: 50px;
+.jet-fighter-icon{
+    width: 100px;
 }
 .steamJet1 , .steamJet2{
     width: 20rem;
     top: 6px;
-    right: 95%;
+    right: 90%;
 }
 .steamJet2{
     top: -6px;
