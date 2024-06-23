@@ -34,6 +34,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         return User.users.size();
     }
 
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView userIconIV;
         private final TextView usernameTV;
@@ -85,5 +86,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                 userBlockToggleB.setText(R.string.block);
             }
         }
+
+
     }
 }

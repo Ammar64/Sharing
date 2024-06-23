@@ -1,4 +1,4 @@
-package com.ammar.filescenter.services.components;
+package com.ammar.filescenter.services.network;
 
 import android.graphics.Bitmap;
 import android.util.Log;

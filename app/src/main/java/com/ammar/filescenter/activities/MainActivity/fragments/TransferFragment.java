@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity;
 import com.ammar.filescenter.activities.MainActivity.adaptersR.TransferAdapter;
-import com.ammar.filescenter.common.Abbrev;
+import com.ammar.filescenter.common.Vals;
 import com.ammar.filescenter.services.NetworkService;
 import com.ammar.filescenter.common.Utils;
 
@@ -97,16 +97,16 @@ public class TransferFragment extends Fragment {
             Intent data = result.getData();
             Intent intent = new Intent(requireContext(), NetworkService.class);
 
-            if (data.getAction().equals(Abbrev.ACTION_ADD_FILES)) {
-                ArrayList<String> selectedFilePaths = data.getStringArrayListExtra(Abbrev.EXTRA_INTENT_PATHS);
+            if (data.getAction().equals(Vals.ACTION_ADD_FILES)) {
+                ArrayList<String> selectedFilePaths = data.getStringArrayListExtra(Vals.EXTRA_INTENT_PATHS);
                 // intent to be sent to service
-                intent.setAction(Abbrev.ACTION_ADD_DOWNLOADS);
-                intent.putExtra(Abbrev.EXTRA_FILE_PATHS, selectedFilePaths);
+                intent.setAction(Vals.ACTION_ADD_DOWNLOADS);
+                intent.putExtra(Vals.EXTRA_FILE_PATHS, selectedFilePaths);
             } else if (data.getAction().equals(AddAppsActivity.ACTION_ADD_APPS)) {
                 ArrayList<String> selectedApps = data.getStringArrayListExtra(AddAppsActivity.EXTRA_INTENT_APPS);
 
-                intent.setAction(Abbrev.ACTION_ADD_APPS_DOWNLOADS);
-                intent.putExtra(Abbrev.EXTRA_APPS_NAMES, selectedApps);
+                intent.setAction(Vals.ACTION_ADD_APPS_DOWNLOADS);
+                intent.putExtra(Vals.EXTRA_APPS_NAMES, selectedApps);
             }
             requireContext().startService(intent);
 
@@ -125,8 +125,8 @@ public class TransferFragment extends Fragment {
         Intent intent = new Intent(requireContext(), NetworkService.class);
 
         // intent to be sent to service
-        intent.setAction(Abbrev.ACTION_ADD_DOWNLOADS);
-        intent.putExtra(Abbrev.EXTRA_FILE_PATHS, files);
+        intent.setAction(Vals.ACTION_ADD_DOWNLOADS);
+        intent.putExtra(Vals.EXTRA_FILE_PATHS, files);
         requireContext().startService(intent);
     });
 

@@ -25,6 +25,8 @@
     <string name="unblock">إلغاء الحظر</string>
     <string name="user_default_name">المستخدم %1$s</string>
     <string name="choose_language">اختر لغة</string>
+    <string name="no_user_connected">لم يتصل أى مستخدم بعد</string>
+    <string name="no_files_selected">لم يتم تحديد ملف</string>
 
     <!-- Fragment Settings   -->
     <string name="dark_mode">الوضع الداكن</string>

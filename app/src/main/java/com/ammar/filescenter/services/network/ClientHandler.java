@@ -1,23 +1,18 @@
-package com.ammar.filescenter.services.components;
+package com.ammar.filescenter.services.network;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.documentfile.provider.DocumentFile;
-
 import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
-import com.ammar.filescenter.common.Abbrev;
+import com.ammar.filescenter.common.Vals;
 import com.ammar.filescenter.custom.io.ProgressManager;
-import com.ammar.filescenter.services.NetworkService;
 import com.ammar.filescenter.services.models.TransferableApp;
 import com.ammar.filescenter.services.models.Transferable;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.services.models.User;
+import com.ammar.filescenter.services.network.sessions.base.HTTPSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,10 +22,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.StringTokenizer;
@@ -46,11 +43,14 @@ public class ClientHandler implements Runnable {
     private final Context context;
     private final SharedPreferences settings;
 
+    private User user = null;
     public ClientHandler(Context context, Socket clientSocket) {
         this.clientSocket = clientSocket;
         this.context = context;
         this.settings = this.context.getSharedPreferences(SettingsFragment.SettingsPrefFile, Context.MODE_PRIVATE);
     }
+
+    private final BlockedSession blockedSession = new BlockedSession(null);
 
     // handle client here
     @Override
@@ -70,29 +70,33 @@ public class ClientHandler implements Runnable {
                 response.setHeader("Keep-Alive", request.isKeepAlive() ? String.format(Locale.ENGLISH, "timeout=%d", (int) (timeout * 0.001)) : "close");
 
                 String userAgent = request.getHeader("User-Agent");
-                User user = null;
                 if (userAgent != null)
                     user = User.RegisterUser(settings, clientSocket.getRemoteSocketAddress(), userAgent);
                 if (user != null && !user.isBlocked()) {
+
+                    for (HTTPSession i : HTTPSession.sessions) {
+                        handleSession(i, request, response);
+                    }
+
                     if ("GET".equals(request.getMethod())) {
                         if ("/available-downloads".equals(path)) {
                             byte[] available = getFileJson();
                             response.sendResponse(available);
                         } else if ("/".equals(path) || "/index.html".equals(path)) {
                             response.setHeader("Content-Type", "text/html");
-                            response.sendResponse(NetworkService.readFileFromAssets("index.html"));
+                            response.sendResponse(Utils.readFileFromAssets("index.html"));
                         } else if ("/style.css".equals(path)) {
                             response.setHeader("Content-Type", "text/css");
-                            response.sendResponse(NetworkService.readFileFromAssets("style.css"));
+                            response.sendResponse(Utils.readFileFromAssets("style.css"));
                         } else if ("/script.js".equals(path)) {
                             response.setHeader("Content-Type", "text/javascript");
-                            response.sendResponse(NetworkService.readFileFromAssets("script.js"));
+                            response.sendResponse(Utils.readFileFromAssets("script.js"));
                         } else if (path.startsWith("/download/")) {
                             String requestedUUID = path.substring(10);
                             try {
-                                Transferable file = getFileWithUUID(requestedUUID);
+                                Transferable file = Transferable.getFileWithUUID(requestedUUID);
                                 if (!(file instanceof TransferableApp)) {
-                                    long start = getStartRange(request);
+                                    long start = request.getStartRange();
                                     if (start == -1)
                                         response.sendFileResponse(file, user);
                                     else response.resumePausedFileResponse(file, start, user);
@@ -109,7 +113,7 @@ public class ClientHandler implements Runnable {
                                         }
                                         response.sendZippedFilesResponse(app_files, user);
                                     } else {
-                                        long start = getStartRange(request);
+                                        long start = request.getStartRange();
                                         if (start == -1)
                                             response.sendFileResponse(app, user);
                                         else response.resumePausedFileResponse(app, start, user);
@@ -126,20 +130,20 @@ public class ClientHandler implements Runnable {
                                 }
                             }
 
-                        } else if(path.startsWith("/get-icon/")) {
+                        } else if (path.startsWith("/get-icon/")) {
                             String uuid = path.substring(10);
-                            Transferable file = getFileWithUUID(uuid);
-                            if( file instanceof TransferableApp ) {
+                            Transferable file = Transferable.getFileWithUUID(uuid);
+                            if (file instanceof TransferableApp) {
                                 TransferableApp app = (TransferableApp) file;
                                 Bitmap appIconBM = Utils.drawableToBitmap(app.getIcon());
                                 response.sendBitmapResponse(appIconBM);
                             }
                         } else if ("/favicon.ico".equals(path)) {
                             response.setHeader("Content-Type", "image/svg+xml");
-                            response.sendResponse(NetworkService.readFileFromAssets("icons8-share.svg"));
+                            response.sendResponse(Utils.readFileFromAssets("icons8-share.svg"));
                         } else if ("/dv.png".equals(path)) {
                             response.setHeader("Content-Type", "image/png");
-                            response.sendResponse(NetworkService.readFileFromAssets("dv.png"));
+                            response.sendResponse(Utils.readFileFromAssets("dv.png"));
                         } else if ("/get-user-info".equals(path)) {
                             JSONObject userJson = new JSONObject();
                             userJson.put("id", user.getId());
@@ -154,15 +158,14 @@ public class ClientHandler implements Runnable {
                             response.setHeader("Content-Type", "text/html");
                             response.sendResponse("404 What are you doing ?".getBytes(StandardCharsets.UTF_8));
                         }
-                    } else if ("PUT".equals(request.getMethod())) {
+                    } else if ("POST".equals(request.getMethod())) {
                         boolean uploadDisabled = settings.getBoolean(SettingsFragment.UploadDisable, false);
                         if ("/check-upload-allowed".equals(path)) {
                             JSONObject uploadAllowedJson = new JSONObject();
                             uploadAllowedJson.put("allowed", !uploadDisabled);
                             response.sendResponse(uploadAllowedJson.toString().getBytes());
-                        } else if (!uploadDisabled) {
-                            if (path.startsWith("/upload/")) {
-
+                        } else if (path.startsWith("/upload/")) {
+                            if (!uploadDisabled) {
                                 String fileName = URLDecoder.decode(path.substring(8), "UTF-8");
                                 if (fileName.contains("/")) {
                                     response.setStatusCode(400);
@@ -175,44 +178,60 @@ public class ClientHandler implements Runnable {
                                     response.setStatusCode(status_code);
                                 }
                                 response.sendResponse();
+
+                            } else {
+                                response.setStatusCode(423); // locked
+                                response.sendResponse();
                             }
-                        } else {
-                            response.setStatusCode(423); // Locked
-                            response.sendResponse();
-                        }
-                    } else if ("POST".equals(request.getMethod())) {
-                        if( "/update-user-name".equals(path) ) {
+                        } else if ("/update-user-name".equals(path)) {
                             String username = request.getParam("username");
                             user.setName(username);
                         }
                     }
                     // if user is blocked redirect to blocked page
-                } else showBlockedPage(request, response);
+                } else handleSession(blockedSession, request, response);
             }
 
 
         } catch (IOException e) {
-            Log.e("MYLOG", "ClientHandler.run(). IOException: " + e.getMessage());
+            Utils.showErrorDialog("ClientHandler.run(). IOException: ", e.getMessage());
         } catch (JSONException e) {
-            Log.e("MYLOG", "ClientHandler.run(). JSONException: " + e.getMessage());
-        } catch (Exception e){
-
+            Utils.showErrorDialog("ClientHandler.run(). JSONException: ", e.getMessage());
+        } catch (Exception e) {
+            Utils.showErrorDialog("ClientHandler.run(). Exception: ", e.getMessage());
         } finally {
             try {
                 clientSocket.close();
             } catch (IOException e) {
-                Log.e("MYLOG", "ClientHandler.run().finally IOException: " + e.getMessage());
+                Utils.showErrorDialog("ClientHandler.run().finally IOException: ", e.getMessage());
             }
         }
     }
 
-    private Transferable getFileWithUUID(String uuid) throws RuntimeException {
-        for (Transferable i : Server.filesList) {
-            if (uuid.equals(i.getUUID())) {
-                return i;
+    private void handleSession(HTTPSession session, Request req, Response res) {
+        session.setUser(user);
+
+        boolean isSessionMeant = false;
+        if( session.getPaths() != null ) {
+            if (session.isParentPath()) {
+                // not that fast
+                for (String i : session.getPaths()) {
+                    if (req.getPath().startsWith(i)) {
+                        isSessionMeant = true;
+                        break;
+                    }
+                }
+            } else {
+                // fast
+                isSessionMeant = Collections.binarySearch(session.getPaths(), req.getPath()) != -1;
             }
+        } else isSessionMeant = true;
+        if (isSessionMeant) {
+            if ("GET".equals(req.getMethod()))
+                session.GET(req, res);
+            else if ("POST".equals(req.getMethod()))
+                session.POST(req, res);
         }
-        throw new RuntimeException("FileNotHosted");
     }
 
     private byte[] getFileJson() throws JSONException {
@@ -239,7 +258,7 @@ public class ClientHandler implements Runnable {
             while (totalBytesRead < size) {
                 int bytesRead = in.read(buffer);
                 totalBytesRead += bytesRead;
-                if(bytesRead != -1) {
+                if (bytesRead != -1) {
                     progressManager.setLoaded(totalBytesRead);
                     out.write(buffer, 0, bytesRead);
                 } else progressManager.reportStopped();
@@ -248,51 +267,53 @@ public class ClientHandler implements Runnable {
             progressManager.reportCompleted();
             return 200;
         } catch (IOException e) {
-            Log.e("MYLOG", "ClientHandler.StoreFile. IOException: " + e.getMessage());
+            Utils.showErrorDialog("ClientHandler.StoreFile. IOException: ", e.getMessage());
             progressManager.reportStopped();
             return 500;
         }
     }
 
 
-    private void showBlockedPage(Request req, Response res) throws IOException {
-        if (!"/blocked".equals(req.getPath())) {
-            res.setStatusCode(307);
-            res.setHeader("Location", "/blocked");
-            res.sendResponse();
-        } else {
-            res.setStatusCode(401);
-            res.setHeader("Content-Type", "text/html");
-            res.sendResponse(NetworkService.readFileFromAssets("blocked.html"));
-            clientSocket.close();
-        }
-    }
-
     private File getUploadDir(String fileName) {
         String mimeType = Utils.getMimeType(fileName);
         if (mimeType.startsWith("image/")) {
-            return Abbrev.imagesDir;
+            return Vals.imagesDir;
         } else if (mimeType.equals("application/vnd.android.package-archive")) {
-            return Abbrev.appsDir;
+            return Vals.appsDir;
         } else if (mimeType.startsWith("video/")) {
-            return Abbrev.videosDir;
+            return Vals.videosDir;
         } else if (mimeType.startsWith("audio/")) {
-            return Abbrev.audioDir;
+            return Vals.audioDir;
         } else if (Utils.isDocumentType(mimeType)) {
-            return Abbrev.documentsDir;
+            return Vals.documentsDir;
         } else {
             Log.d("MYLOG", "Type: " + mimeType);
-            return Abbrev.filesDir;
+            return Vals.filesDir;
         }
     }
 
-    private long getStartRange(Request req) {
-        String range = req.getHeader("Range");
+    private static class BlockedSession extends HTTPSession {
 
-        if (range == null) return -1;
-        StringTokenizer st = new StringTokenizer(range);
-        if (!st.hasMoreTokens() || !"bytes".equals(st.nextToken("="))) return -1;
-        String bytesStart = st.nextToken("-").replaceAll("=", "");
-        return Long.parseLong(bytesStart);
+        public BlockedSession(String[] paths) {
+            super(paths);
+        }
+
+        @Override
+        public void GET(Request req, Response res) {
+            try {
+                if (!"/blocked".equals(req.getPath())) {
+                    res.setStatusCode(307);
+                    res.setHeader("Location", "/blocked");
+                    res.sendResponse();
+                } else {
+                    res.setStatusCode(401);
+                    res.setHeader("Content-Type", "text/html");
+                    res.sendResponse(Utils.readFileFromAssets("blocked.html"));
+                    req.getClientSocket().close();
+                }
+            } catch (IOException e) {
+                Utils.showErrorDialog("ClientHandler.GET(). IOException", "Failed to read from assets");
+            }
+        }
     }
 }

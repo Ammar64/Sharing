@@ -12,7 +12,6 @@ import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -22,9 +21,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.MainActivity.MainActivity;
-import com.ammar.filescenter.common.Abbrev;
+import com.ammar.filescenter.common.Vals;
 import com.ammar.filescenter.custom.data.QueueMutableLiveData;
-import com.ammar.filescenter.services.components.Server;
+import com.ammar.filescenter.services.network.Server;
 import com.ammar.filescenter.services.models.TransferableApp;
 import com.ammar.filescenter.services.models.Transferable;
 
@@ -36,7 +35,6 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -56,7 +54,6 @@ public class NetworkService extends Service {
 
     private final int FOREGROUND_NOTIFICATION_ID = 1;
     public static final int PORT_NUMBER = 2999;
-    public static AssetManager assetManager;
 
 
     private final Server server = new Server(this);
@@ -65,8 +62,7 @@ public class NetworkService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        serverStatusIntent.setAction(Abbrev.ACTION_GET_SERVER_STATUS);
-        assetManager = getAssets();
+        serverStatusIntent.setAction(Vals.ACTION_GET_SERVER_STATUS);
     }
 
     @Nullable
@@ -85,19 +81,19 @@ public class NetworkService extends Service {
         String actionReceived = intent.getAction();
         String action = actionReceived != null ? actionReceived : "";
         switch (action) {
-            case Abbrev.ACTION_TOGGLE_SERVER:
+            case Vals.ACTION_TOGGLE_SERVER:
                 toggleServer();
                 break;
-            case Abbrev.ACTION_STOP_SERVICE:
+            case Vals.ACTION_STOP_SERVICE:
                 stopSelf();
-            case Abbrev.ACTION_GET_SERVER_STATUS:
+            case Vals.ACTION_GET_SERVER_STATUS:
                 sendServerStatusToActivity();
                 break;
-            case Abbrev.ACTION_UPDATE_NOTIFICATION_TEXT:
+            case Vals.ACTION_UPDATE_NOTIFICATION_TEXT:
                 startForeground(FOREGROUND_NOTIFICATION_ID, buildNotification(this));
                 break;
-            case Abbrev.ACTION_ADD_DOWNLOADS:
-                ArrayList<String> filePaths = intent.getStringArrayListExtra(Abbrev.EXTRA_FILE_PATHS);
+            case Vals.ACTION_ADD_DOWNLOADS:
+                ArrayList<String> filePaths = intent.getStringArrayListExtra(Vals.EXTRA_FILE_PATHS);
                 assert filePaths != null;
                 for( String i : filePaths ) {
                     Server.filesList.add( new Transferable(i));
@@ -106,8 +102,8 @@ public class NetworkService extends Service {
                 fb.putChar("action", 'A');
                 NetworkService.filesListNotifier.postValue(fb);
                 break;
-            case Abbrev.ACTION_ADD_APPS_DOWNLOADS:
-                ArrayList<String> packages_name = intent.getStringArrayListExtra(Abbrev.EXTRA_APPS_NAMES);
+            case Vals.ACTION_ADD_APPS_DOWNLOADS:
+                ArrayList<String> packages_name = intent.getStringArrayListExtra(Vals.EXTRA_APPS_NAMES);
                 if( packages_name != null ) {
                     for( String i : packages_name ) {
                         try {
@@ -121,8 +117,8 @@ public class NetworkService extends Service {
                 ab.putChar("action", 'A');
                 NetworkService.filesListNotifier.postValue(ab);
                 break;
-            case Abbrev.ACTION_REMOVE_DOWNLOAD:
-                String uuid = intent.getStringExtra(Abbrev.EXTRA_DOWNLOAD_UUID);
+            case Vals.ACTION_REMOVE_DOWNLOAD:
+                String uuid = intent.getStringExtra(Vals.EXTRA_DOWNLOAD_UUID);
 
                 int index = 0;
                 for( Transferable i : Server.filesList ) {
@@ -137,6 +133,12 @@ public class NetworkService extends Service {
                 remove_info.putInt("index", index);
                 NetworkService.filesListNotifier.postValue(remove_info);
                 break;
+            case Vals.ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN:
+                if( !server.isRunning() ) {
+                    Log.d("MYLOG", "Stopping App process");
+                    int pid = android.os.Process.myPid();
+                    android.os.Process.killProcess(pid);
+                }
             default:
                 break;
         }
@@ -233,16 +235,4 @@ public class NetworkService extends Service {
         }
     }
 
-    public static byte[] readFileFromAssets(String filepath) throws IOException {
-        InputStream input = assetManager.open(filepath);
-        int size = input.available();
-        byte[] content = new byte[size];
-        int numBytes = input.read(content);
-        input.close();
-        if (numBytes != size) {
-            throw new RuntimeException("Error reading file");
-        }
-        return content;
-
-    }
 }

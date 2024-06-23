@@ -1,7 +1,6 @@
 package com.ammar.filescenter.activities.MainActivity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.UiModeManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,29 +13,27 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
-import com.ammar.filescenter.activities.MainActivity.fragments.TransferFragment;
-import com.ammar.filescenter.common.Abbrev;
+import com.ammar.filescenter.application.FilesCenterApp;
+import com.ammar.filescenter.common.Data;
+import com.ammar.filescenter.common.Vals;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.services.NetworkService;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton serverButton;
     private ViewPager2 viewPager;
     private BottomNavigationView bottomNavigationView;
+    private AlertDialog errorDialogAD;
 
     public static boolean darkMode;
     public final int REQUEST_CODE_STORAGE_PERMISSION = 2;
@@ -96,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
         MainViewPagerAdapter viewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
         viewPager.setAdapter(viewPagerAdapter);
 
+        errorDialogAD = new AlertDialog.Builder(this)
+                .setPositiveButton(R.string.ok, null)
+                .create();
     }
 
     private void setItemsListener() {
@@ -135,14 +136,14 @@ public class MainActivity extends AppCompatActivity {
 
         serverButton.setOnClickListener((button) -> {
             Intent serviceIntent = new Intent(this, NetworkService.class);
-            serviceIntent.setAction(Abbrev.ACTION_TOGGLE_SERVER);
+            serviceIntent.setAction(Vals.ACTION_TOGGLE_SERVER);
             startService(serviceIntent);
         });
     }
 
     private void initStates() {
         Intent serviceIntent = new Intent(this, NetworkService.class);
-        serviceIntent.setAction(Abbrev.ACTION_GET_SERVER_STATUS);
+        serviceIntent.setAction(Vals.ACTION_GET_SERVER_STATUS);
         startService(serviceIntent);
     }
 
@@ -154,6 +155,13 @@ public class MainActivity extends AppCompatActivity {
                 ImageViewCompat.setImageTintList(serverButton, ColorStateList.valueOf(getResources().getColor(R.color.status_off)));
             }
         });
+        
+        if(FilesCenterApp.isDebuggable())
+            Data.alertNotifier.observe(this, info -> {
+                errorDialogAD.setTitle( info.getString("title") );
+                errorDialogAD.setMessage( info.getString("message") );
+                errorDialogAD.show();
+            });
     }
 
     private void requestPermissions() {
@@ -186,5 +194,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        Intent intent = new Intent(this, NetworkService.class);
+        intent.setAction(Vals.ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN);
+        startService(intent);
+        super.onDestroy();
+    }
 }

@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-public final class Abbrev {
+public final class Vals {
     public static final String ACTION_TOGGLE_SERVER = "com.ammar.filescenter.services.TOGGLE_SERVER";
     public static final String ACTION_STOP_SERVICE = "com.ammar.filescenter.services.STOP_SERVICE";
     public static final String ACTION_GET_SERVER_STATUS = "com.ammar.filescenter.services.GET_SERVER_STATUS";
@@ -34,7 +34,6 @@ public final class Abbrev {
     public static final List<String> langsCode = Arrays.asList("", "ar", "en", "du");
 
     public enum OS {LINUX, WINDOWS, ANDROID, IOS, MAC, UNKNOWN};
-
-    private Abbrev(){}
+    private Vals(){}
 
 }

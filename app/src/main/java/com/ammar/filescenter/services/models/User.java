@@ -4,10 +4,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 
 import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
-import com.ammar.filescenter.common.Abbrev;
+import com.ammar.filescenter.common.Vals;
 import com.ammar.filescenter.services.NetworkService;
 
 import java.net.SocketAddress;
@@ -30,12 +29,12 @@ public class User {
         this.name = "User-" + getId();
 
         if( userAgent.contains("Windows") ) {
-            this.OS = Abbrev.OS.WINDOWS;
+            this.OS = Vals.OS.WINDOWS;
         } else if( userAgent.contains("Android") ) {
-            this.OS = Abbrev.OS.ANDROID;
+            this.OS = Vals.OS.ANDROID;
         } else if ( userAgent.contains("Linux") ) {
-            this.OS = Abbrev.OS.LINUX;
-        } else this.OS = Abbrev.OS.UNKNOWN;
+            this.OS = Vals.OS.LINUX;
+        } else this.OS = Vals.OS.UNKNOWN;
     }
     // make new user if user exist return it.
     public static User RegisterUser(SharedPreferences prefs, SocketAddress address, String agent) {
@@ -72,6 +71,11 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+
+        Bundle bundle = new Bundle();
+        bundle.putChar("action", 'C');
+        bundle.putInt("index", getId());
+        NetworkService.usersListObserver.postValue(bundle);
     }
     public void block(boolean b) {
         this._isBlocked = b;
@@ -89,8 +93,8 @@ public class User {
         String ip = address.toString();
         return ip.substring(1, ip.lastIndexOf(":"));
     }
-    private Abbrev.OS OS;
-    public Abbrev.OS getOS() {
+    private Vals.OS OS;
+    public Vals.OS getOS() {
         return OS;
     }
     public boolean isBlocked() {

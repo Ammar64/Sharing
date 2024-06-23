@@ -19,32 +19,22 @@ try {
 
     let userId = -1;
 
-    fetch("/get-user-info", {
-        method: "GET"
-    }).then(function (res) {
-        if (res.ok) return res.json();
-    }).then(function (data) {
-        userId = data.id;
-        console.log("UserId: " + userId);
-        // I call it here to make sure no other requests sent before getting userId from server.
-        executeFilesCenterFrontEnd();
-    //i think we don't need it as it must appears only when he intend to upload , so now is real practice 
-    })
-
+    // fetch("/get-user-info", {
+    //     method: "GET"
+    // }).then(function (res) {
+    //     if (res.ok) return res.json();
+    // }).then(function (data) {
+    //     userId = data.id;
+    //     console.log("UserId: " + userId);
+    //     // I call it here to make sure no other requests sent before getting userId from server.
+    //     executeFilesCenterFrontEnd();
+    // //i think we don't need it as it must appears only when he intend to upload , so now is real practice 
+    // })
+executeFilesCenterFrontEnd();
     function executeFilesCenterFrontEnd() {
         sendBtn.onclick = function() {
-            fetch("/check-upload-allowed", {
-                method: "PUT",
-            }).then( function( res ) {
-                if( res.ok ) {
-                    return res.json();
-                }
-            }).then( function(res){
-                if( res.allowed )
-                    uploadLabel.click();
-                else
-                    openBubble(alertDialog);
-            });
+            uploadLabel.click();
+
         }
 
         recieveBtn.onclick = () => {

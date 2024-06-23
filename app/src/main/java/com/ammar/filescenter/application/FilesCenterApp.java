@@ -1,17 +1,20 @@
 package com.ammar.filescenter.application;
 
 import android.app.Application;
+import android.content.pm.ApplicationInfo;
 
 import com.ammar.filescenter.common.Utils;
 
 
 public class FilesCenterApp extends Application {
+    private static boolean _isDebuggable;
+
     @Override
     public void onCreate() {
         super.onCreate();
-
-        Utils.setRes(
-                getResources()
-        );
+        _isDebuggable =  ( 0 != ( getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) );
+        Utils.setupUtils(this);
     }
+
+    public static boolean isDebuggable() { return _isDebuggable; }
 }
