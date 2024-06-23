@@ -284,7 +284,75 @@ try {
 
 
         /* username field */
-        usernameForm.addEventListener('submit', function(event) {
+document.addEventListener('DOMContentLoaded', function() {
+    const usernameForm = document.getElementById('usernameForm');
+
+    // Check if username is already stored in localStorage
+    let storedUsername = localStorage.getItem('username');
+
+    // Set default username if localStorage is empty
+    if (!storedUsername) {
+        storedUsername = 'user';
+        localStorage.setItem('username', storedUsername);
+    }
+
+    // Pre-fill the input field with the stored username
+    document.getElementById('usernameInput').value = storedUsername;
+
+    usernameForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const usernameInput = document.getElementById('usernameInput').value;
+
+        // Check if username has changed
+        if (usernameInput !== storedUsername) {
+            // Save updated username to localStorage
+            localStorage.setItem('username', usernameInput);
+            storedUsername = usernameInput; // Update storedUsername variable
+        }
+
+        // Replace with your actual endpoint
+        const url = '/update-user-name';
+
+        // Example using fetch API
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: usernameInput })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Username updated successfully:', data);
+            // Optionally, perform actions after successful submission
+                closeBubbles(loginBubble);
+        })
+        .catch(error => {
+            console.error('Error updating username:', error);
+            // Handle error scenarios
+                closeBubbles(loginBubble);
+        });
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+        /* username field */
+/*         usernameForm.addEventListener('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
 
             const usernameInput = document.getElementById('usernameInput').value;
@@ -316,7 +384,17 @@ try {
                 // Handle error scenarios
                 closeBubbles(loginBubble);
             });
-        });
+        }); */
+
+
+
+
+
+
+
+
+
+
 
     }
 
