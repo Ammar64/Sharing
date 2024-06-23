@@ -442,6 +442,26 @@ button{
     z-index: 901; 
 }
 
+@media (max-width: 415px) {
+  .form-container{
+    width: 300px;
+  }
+}
+
+@-webkit-keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 @-webkit-keyframes gradient {
   0% {
     background-position: 0% 50%;
