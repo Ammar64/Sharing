@@ -18,9 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
-import com.ammar.filescenter.common.Abbrev;
+import com.ammar.filescenter.common.Vals;
 import com.ammar.filescenter.services.NetworkService;
-import com.ammar.filescenter.services.components.Server;
+import com.ammar.filescenter.services.network.Server;
 import com.ammar.filescenter.services.models.Transferable;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.services.models.TransferableApp;
@@ -73,8 +73,8 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         public void setFileListener(String uuid) {
             removeFileB.setOnClickListener( button -> {
                 Intent serviceIntent = new Intent(itemView.getContext(), NetworkService.class);
-                serviceIntent.setAction(Abbrev.ACTION_REMOVE_DOWNLOAD);
-                serviceIntent.putExtra(Abbrev.EXTRA_DOWNLOAD_UUID, uuid);
+                serviceIntent.setAction(Vals.ACTION_REMOVE_DOWNLOAD);
+                serviceIntent.putExtra(Vals.EXTRA_DOWNLOAD_UUID, uuid);
                 itemView.getContext().startService(serviceIntent);
             });
         }

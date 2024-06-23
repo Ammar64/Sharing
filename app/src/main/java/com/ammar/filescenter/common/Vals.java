@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-public final class Abbrev {
+public final class Vals {
     public static final String ACTION_TOGGLE_SERVER = "com.ammar.filescenter.services.TOGGLE_SERVER";
     public static final String ACTION_STOP_SERVICE = "com.ammar.filescenter.services.STOP_SERVICE";
     public static final String ACTION_GET_SERVER_STATUS = "com.ammar.filescenter.services.GET_SERVER_STATUS";
@@ -16,6 +16,7 @@ public final class Abbrev {
     public static final String ACTION_ADD_APPS_DOWNLOADS = "ACTION_ADD_APPS_DOWNLOADS";
     public static final String ACTION_GET_DOWNLOADS = "ACTION_GET_DOWNLOADS";
     public static final String ACTION_ADD_FILES = "ACTION_ADD_FILES";
+    public static final String ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN = "ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN";
 
     public static final String EXTRA_FILE_PATHS = "com.ammar.filescenter.services.FILE_PATHS";
     public static final String EXTRA_APPS_NAMES = "com.ammar.filescenter.services.APPS_NAME";
@@ -33,7 +34,6 @@ public final class Abbrev {
     public static final List<String> langsCode = Arrays.asList("", "ar", "en", "du");
 
     public enum OS {LINUX, WINDOWS, ANDROID, IOS, MAC, UNKNOWN};
-
-    private Abbrev(){}
+    private Vals(){}
 
 }

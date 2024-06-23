@@ -2,24 +2,23 @@ package com.ammar.filescenter.common;
 
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.res.ColorStateList;
+import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BlendMode;
-import android.graphics.BlendModeColorFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.Matrix;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.util.TypedValue;
 import android.webkit.MimeTypeMap;
 import android.widget.ProgressBar;
@@ -27,6 +26,7 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 
 import com.ammar.filescenter.activities.MainActivity.MainActivity;
+import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -58,9 +58,11 @@ public class Utils {
 
 
     private static Resources res;
-
-    public static void setRes(Resources res) {
-        Utils.res = res;
+    private static SharedPreferences settings;
+    public static void setupUtils(Context ctx) {
+        Utils.res = ctx.getResources();
+        Utils.assetManager = ctx.getAssets();
+        Utils.settings = ctx.getSharedPreferences(SettingsFragment.SettingsPrefFile, Context.MODE_PRIVATE);
     }
 
     public static float dpToPx(float dp) {
@@ -71,6 +73,9 @@ public class Utils {
         );
     }
 
+    public static SharedPreferences getSettings() {
+        return Utils.settings;
+    }
 
     public static String readLineUTF8(InputStream inputStream) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -268,13 +273,15 @@ public class Utils {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
         }
         if (type == null) {
-            type = getDocumentType(name.substring( name.lastIndexOf(".") + 1 ));
+            type = getExtraTypes(name.substring( name.lastIndexOf(".") + 1 ));
         }
         return type;
     }
 
-    private static String getDocumentType(String ext) {
+    private static String getExtraTypes(String ext) {
         switch (ext) {
+            case "apk":
+                return "application/vnd.android.package-archive";
             case "doc":
             case "dot":
                 return "application/msword";
@@ -362,13 +369,13 @@ public class Utils {
     }
 
     public static void createAppDirs() {
-        assert Abbrev.filesCenterDir.mkdir();
-        assert Abbrev.appsDir.mkdir();
-        assert Abbrev.imagesDir.mkdir();
-        assert Abbrev.audioDir.mkdir();
-        assert Abbrev.filesDir.mkdir();
-        assert Abbrev.videosDir.mkdir();
-        assert Abbrev.documentsDir.mkdir();
+        assert Vals.filesCenterDir.mkdir();
+        assert Vals.appsDir.mkdir();
+        assert Vals.imagesDir.mkdir();
+        assert Vals.audioDir.mkdir();
+        assert Vals.filesDir.mkdir();
+        assert Vals.videosDir.mkdir();
+        assert Vals.documentsDir.mkdir();
     }
 
     public static void setLocale(MainActivity activity, String languageCode) {
@@ -407,4 +414,44 @@ public class Utils {
         drawable.draw(canvas);
         return bitmap;
     }
+
+    private static AssetManager assetManager;
+    public static byte[] readFileFromAssets(String filepath) throws IOException {
+        InputStream input = assetManager.open(filepath);
+        int size = input.available();
+        byte[] content = new byte[size];
+        int numBytes = input.read(content);
+        input.close();
+        if (numBytes != size) {
+            throw new RuntimeException("Error reading file");
+        }
+        return content;
+
+    }
+
+    public static void showErrorDialog( String title, String message ) {
+        Bundle bundle = new Bundle();
+        bundle.putString("title", title);
+        bundle.putString("message",message);
+        Data.alertNotifier.postValue(bundle);
+    }
+
+    public static File getUploadDir(String fileName) {
+        String mimeType = Utils.getMimeType(fileName);
+        if (mimeType.startsWith("image/")) {
+            return Vals.imagesDir;
+        } else if (mimeType.equals("application/vnd.android.package-archive")) {
+            return Vals.appsDir;
+        } else if (mimeType.startsWith("video/")) {
+            return Vals.videosDir;
+        } else if (mimeType.startsWith("audio/")) {
+            return Vals.audioDir;
+        } else if (Utils.isDocumentType(mimeType)) {
+            return Vals.documentsDir;
+        } else {
+            Log.d("MYLOG", "Type: " + mimeType);
+            return Vals.filesDir;
+        }
+    }
+
 }

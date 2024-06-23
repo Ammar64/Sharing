@@ -25,6 +25,9 @@
     <string name="unblock">UNBLOCK</string>
     <string name="user_default_name">User %1$d</string>
     <string name="choose_language">Choose language</string>
+    <string name="no_user_connected">No user connected</string>
+    <string name="no_files_selected">No files selected</string>
+
     <!-- Fragment Settings   -->
     <string name="dark_mode">Dark mode</string>
     <string name="toggle_dark_mode">Toggle dark mode</string>

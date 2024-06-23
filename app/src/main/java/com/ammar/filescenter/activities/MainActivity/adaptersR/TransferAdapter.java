@@ -30,7 +30,7 @@ import com.ammar.filescenter.activities.MainActivity.fragments.TransferFragment;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.custom.io.ProgressManager;
 import com.ammar.filescenter.services.NetworkService;
-import com.ammar.filescenter.services.components.Server;
+import com.ammar.filescenter.services.network.Server;
 import com.ammar.filescenter.services.models.User;
 
 import java.util.Locale;
@@ -113,11 +113,13 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             fileProgressPB = itemView.findViewById(R.id.PB_FileUploadProgress);
             fileProgressTV = itemView.findViewById(R.id.TV_FileUploadProgress);
         }
+
         private final Handler handler = new Handler();
+
         public void setup(ProgressManager manager) {
             setFileName(manager.getDisplayName());
             setFileTransferInfo(manager);
-            handler.post( () -> setProgress(manager));
+            handler.post(() -> setProgress(manager));
             setOperationText(manager);
             setClickListener(manager);
         }
@@ -197,7 +199,7 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     default:
                         throw new RuntimeException("Invalid progress status. progress is " + manager.getLoaded());
                 }
-                DrawableCompat.setTint( fileProgressPB.getProgressDrawable(), c);
+                DrawableCompat.setTint(fileProgressPB.getProgressDrawable(), c);
                 return;
             }
 
@@ -206,7 +208,7 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                 fileProgressTV.setVisibility(View.VISIBLE);
                 fileProgressTV.setText(String.format(Locale.ENGLISH, "%d%%", progress));
-                DrawableCompat.setTint( fileProgressPB.getProgressDrawable(), Color.CYAN);
+                DrawableCompat.setTint(fileProgressPB.getProgressDrawable(), Color.CYAN);
                 fileProgressPB.setIndeterminate(false);
                 fileProgressPB.setProgress(progress);
                 fileProgressPB.setPaddingRelative(0, 0, (int) Utils.dpToPx(8.0f), 0);
@@ -214,7 +216,7 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
                 fileProgressTV.setVisibility(View.INVISIBLE);
                 fileProgressPB.setPaddingRelative(0, 0, 0, 0);
-                DrawableCompat.setTint( fileProgressPB.getProgressDrawable(), Color.CYAN);
+                DrawableCompat.setTint(fileProgressPB.getProgressDrawable(), Color.CYAN);
 
                 if (manager.getLoaded() == ProgressManager.COMPLETED) {
                     fileProgressPB.setIndeterminate(false);
@@ -236,14 +238,26 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 itemView.setOnClickListener((view) -> {
                     String type = manager.getFileType();
                     Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    Uri uri = FileProvider.getUriForFile(
-                            itemView.getContext(),
-                            itemView.getContext().getApplicationContext().getPackageName() + ".provider",
-                            manager.getFile());
-                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    intent.setDataAndType(uri, type);
-                    itemView.getContext().startActivity(intent);
+
+                    if (type.startsWith("image/")
+                            || type.startsWith("audio/")
+                            || type.startsWith("video")
+                            || type.equals("application/vnd.android.package-archive")
+                            || Utils.isDocumentType(type)) {
+                        intent.setAction(Intent.ACTION_VIEW);
+                        Uri uri = FileProvider.getUriForFile(
+                                itemView.getContext(),
+                                itemView.getContext().getApplicationContext().getPackageName() + ".provider",
+                                manager.getFile());
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        intent.setDataAndType(uri, type);
+                        itemView.getContext().startActivity(intent);
+                    } else {
+                        intent.setAction(Intent.ACTION_GET_CONTENT);
+                        Uri uri = Uri.parse(manager.getFile().getParent()); // a directory
+                        intent.setDataAndType(uri, "*/*");
+                        itemView.getContext().startActivity(Intent.createChooser(intent, "Open folder"));
+                    }
                 });
             } else {
                 itemView.setBackground(null);
@@ -302,6 +316,7 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .setTitle(R.string.selected)
                     .create();
             RecyclerView chosenFilesRecycler = chosenFilesView.findViewById(R.id.RV_ChosenFilesRecycler);
+            TextView noFilesTV = chosenFilesView.findViewById(R.id.TV_NoFilesSelected);
             ChosenFilesAdapter chosenFilesAdapter = new ChosenFilesAdapter();
             chosenFilesRecycler.setAdapter(chosenFilesAdapter);
             chosenFilesRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
@@ -315,12 +330,14 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     int index = info.getInt("index");
                     chosenFilesAdapter.notifyItemRemoved(index);
                 }
-                if( size == 0 ) {
+                if (size == 0) {
                     filesNumTV.setText("0");
                     filesNumTV.setVisibility(View.GONE);
+                    noFilesTV.setVisibility(View.VISIBLE);
                 } else {
                     filesNumTV.setText(String.valueOf(size));
                     filesNumTV.setVisibility(View.VISIBLE);
+                    noFilesTV.setVisibility(View.GONE);
                 }
             });
 
@@ -332,6 +349,7 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .setTitle(R.string.connected_users)
                     .create();
             RecyclerView usersRecycler = usersDialogView.findViewById(R.id.RV_UsersRecycler);
+            TextView noUserConnectedTV = usersDialogView.findViewById(R.id.TV_NoUserConnected);
             UsersAdapter usersAdapter = new UsersAdapter();
             usersRecycler.setAdapter(usersAdapter);
             usersRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
@@ -340,16 +358,20 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             NetworkService.usersListObserver.observe(fragment.getViewLifecycleOwner(), info -> {
                 char action = info.getChar("action");
                 int size = User.users.size();
+                int index = info.getInt("index");
                 if ('A' == action) {
-                    int index = info.getInt("index");
                     usersAdapter.notifyItemInserted(index);
+                } else if( 'C' == action ) {
+                    usersAdapter.notifyItemChanged(index);
                 }
-                if( size == 0 ) {
+                if (size == 0) {
                     usersNumTV.setText("0");
                     usersNumTV.setVisibility(View.GONE);
+                    noUserConnectedTV.setVisibility(View.VISIBLE);
                 } else {
                     usersNumTV.setText(String.valueOf(size));
                     usersNumTV.setVisibility(View.VISIBLE);
+                    noUserConnectedTV.setVisibility(View.GONE);
                 }
             });
         }

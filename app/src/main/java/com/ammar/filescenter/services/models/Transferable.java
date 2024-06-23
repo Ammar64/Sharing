@@ -2,6 +2,8 @@ package com.ammar.filescenter.services.models;
 
 import android.webkit.MimeTypeMap;
 
+import com.ammar.filescenter.services.network.Server;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -65,5 +67,14 @@ public class Transferable {
 
     public File getFile() {
         return file;
+    }
+
+    public static Transferable getFileWithUUID(String uuid) throws RuntimeException {
+        for (Transferable i : Server.filesList) {
+            if (uuid.equals(i.getUUID())) {
+                return i;
+            }
+        }
+        throw new RuntimeException("FileNotHosted");
     }
 }

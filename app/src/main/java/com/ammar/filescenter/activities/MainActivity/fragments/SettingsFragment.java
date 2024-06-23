@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.MainActivity.MainActivity;
-import com.ammar.filescenter.common.Abbrev;
+import com.ammar.filescenter.common.Vals;
 import com.ammar.filescenter.common.Utils;
 
 public class SettingsFragment extends Fragment {
@@ -65,7 +65,7 @@ public class SettingsFragment extends Fragment {
         languageRL = v.findViewById(R.id.RL_SettingsLanguage);
 
         String lang = settingsPref.getString(Language, "");
-        int selected = Abbrev.langsCode.indexOf(lang);
+        int selected = Vals.langsCode.indexOf(lang);
         languageAD = new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.choose_language)
                 .setSingleChoiceItems(R.array.langs, selected, null)
@@ -74,9 +74,9 @@ public class SettingsFragment extends Fragment {
                     if (lw.getCheckedItemCount() > 0) {
                         int which = lw.getCheckedItemPosition();
                         settingsPref.edit()
-                                .putString(Language, Abbrev.langsCode.get(which))
+                                .putString(Language, Vals.langsCode.get(which))
                                 .apply();
-                        Utils.setLocale((MainActivity) requireActivity(), Abbrev.langsCode.get(which));
+                        Utils.setLocale((MainActivity) requireActivity(), Vals.langsCode.get(which));
                         requireActivity().recreate();
                     }
                 })

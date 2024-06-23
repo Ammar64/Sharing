@@ -53,5 +53,4 @@ dependencies {
     implementation libs.recyclerview
     implementation libs.documentfile
     implementation libs.material
-    implementation 'com.github.bumptech.glide:glide:4.16.0'
 }
