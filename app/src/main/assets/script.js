@@ -284,7 +284,6 @@ try {
 
 
         /* username field */
-document.addEventListener('DOMContentLoaded', function() {
     const usernameForm = document.getElementById('usernameForm');
 
     // Check if username is already stored in localStorage
@@ -339,7 +338,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 closeBubbles(loginBubble);
         });
     });
-});
 
 
 
