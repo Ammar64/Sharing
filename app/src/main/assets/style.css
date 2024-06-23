@@ -525,6 +525,52 @@ button{
   transform: translateY(-30px);
 }
 
+.form-container .current-username{
+  position: absolute;
+  bottom: 30px;
+  right: 20px;
+}
+
+.form-container .current-username p{
+  color: #444;
+}
+
+.colorful-line {
+  height: 3px; /* Adjust the height of the line */
+  width: 100%;
+  background: linear-gradient(45deg, 
+    #e81cff,
+    #40c9ff,
+    #ffd700,
+    #00bfff,
+    #ff69b4
+); /* Define the gradient colors */
+  background-size: 500% 100%; /* Increase background-size to cover the whole animation */
+  -webkit-animation: gradient-animation 20s ease infinite;
+          animation: gradient-animation 20s  infinite; /* Animation properties */
+  border-radius: 6px;
+  margin-top: 5px;
+}
+
+@-webkit-keyframes gradient-animation {
+  0% {
+    background-position: 0 0; /* Start position of the animation */
+  }
+  100% {
+    background-position: 500% 0; /* End position of the animation */
+  }
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0 0; /* Start position of the animation */
+  }
+  100% {
+    background-position: 500% 0; /* End position of the animation */
+  }
+}
+
+
 
 .form-container .form-submit-btn {
   color: #000;

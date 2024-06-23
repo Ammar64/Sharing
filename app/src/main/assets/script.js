@@ -13,7 +13,6 @@ try {
     const loginBtn = document.getElementById('loginBtn');
     const downloads = document.getElementById("downloads");
     const uploadInput = document.getElementById('uploadInput');
-    const usernameForm = document.getElementById('usernameForm');
 
     const download_item = document.createElement("li");
     download_item.className = "download-item";
@@ -285,6 +284,7 @@ try {
 
         /* username field */
     const usernameForm = document.getElementById('usernameForm');
+    const loginBubble = document.getElementById('loginBubble'); // Assuming this is the login bubble element
 
     // Check if username is already stored in localStorage
     let storedUsername = localStorage.getItem('username');
@@ -295,25 +295,32 @@ try {
         localStorage.setItem('username', storedUsername);
     }
 
-    // Pre-fill the input field with the stored username
-    document.getElementById('usernameInput').value = storedUsername;
+    // Update the display of current username
+    document.querySelector('.current-username p').textContent = `Current username: ${storedUsername}`;
 
     usernameForm.addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent default form submission
 
-        const usernameInput = document.getElementById('usernameInput').value;
+        const usernameInput = document.getElementById('usernameInput').value.trim(); // Trim whitespace
+
+        // Check if username is valid (not empty or undefined)
+        if (!usernameInput || usernameInput === '') {
+            alert('Please enter a valid username.');
+            return;
+        }
 
         // Check if username has changed
         if (usernameInput !== storedUsername) {
             // Save updated username to localStorage
             localStorage.setItem('username', usernameInput);
             storedUsername = usernameInput; // Update storedUsername variable
+
+            // Update display of current username
+            document.querySelector('.current-username p').textContent = `Current username: ${storedUsername}`;
         }
 
-        // Replace with your actual endpoint
         const url = '/update-user-name';
 
-        // Example using fetch API
         fetch(url, {
             method: 'POST',
             headers: {
@@ -330,64 +337,14 @@ try {
         .then(data => {
             console.log('Username updated successfully:', data);
             // Optionally, perform actions after successful submission
-                closeBubbles(loginBubble);
+            closeBubbles([loginBubble]); // Assuming closeBubbles accepts an array
         })
         .catch(error => {
             console.error('Error updating username:', error);
             // Handle error scenarios
-                closeBubbles(loginBubble);
+            closeBubbles([loginBubble]);
         });
     });
-
-
-
-
-
-
-
-
-
-
-
-        /* username field */
-/*         usernameForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-
-            const usernameInput = document.getElementById('usernameInput').value;
-
-            // Replace with your actual endpoint
-            const url = '/update-user-name';
-
-            // Example using fetch API
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username: usernameInput })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Username updated successfully:', data);
-                // Optionally, perform actions after successful submission
-                closeBubbles(loginBubble);
-            })
-            .catch(error => {
-                console.error('Error updating username:', error);
-                // Handle error scenarios
-                closeBubbles(loginBubble);
-            });
-        }); */
-
-
-
-
-
 
 
 
