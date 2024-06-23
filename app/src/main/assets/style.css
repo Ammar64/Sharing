@@ -14,6 +14,12 @@
 body {
     background: linear-gradient(to right, #010c14, #2e012e);
 }
+button{
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
 /* glopal */
 
 
@@ -130,29 +136,6 @@ body {
     100%{transform: skew(0 , 0) rotateZ(0) translate(calc(-50% + 2000px) ,-50%)}
 }
 
-/* .jet-fighter-icon{
-    font-size: 150px;
-    background: linear-gradient(to right, var(--colorOne), var(--colorTwo));
-    -webkit-background-clip: text;
-            background-clip: text;
-    -webkit-text-fill-color: transparent;
-    position: relative;
-    z-index: 2;
-} */
-
-/* .jet-fighter-icon::after{
-    content: '';
-    padding: 13px;
-    height: 22px ;
-    border-radius: 50%;
-    position: absolute;
-    left: -1px;
-    bottom: 50%;
-    transform: translateY(50%);
-    background-color: var(--colorTwo);
-    -webkit-filter: blur(30px);
-            filter: blur(30px);
-} */
 .jet-fighter-icon {
     width: 200px;
     height: auto;
@@ -165,18 +148,16 @@ body {
     fill: url(#gradient);
 }
 
-.jet-fighter-icon::after {
-    content: '';
-    width: 100%;
-    height: 100%;
+.jet-fighter-shadow {
+  padding: 30px;
+  height: 22px ;
     border-radius: 50%;
     position: absolute;
-    left: 50%;
     bottom: 50%;
-    transform: translate(-50%, 50%);
+    transform: translate(-25%, 50%);
     background-color: var(--colorTwo);
     -webkit-filter: blur(30px);
-    filter: blur(30px);
+            filter: blur(30px);
     z-index: -1;
 }
 
@@ -275,6 +256,10 @@ body {
 }
 .jet-fighter-icon{
     width: 100px;
+}
+.jet-fighter-shadow{
+  padding: 15px;
+  transform: translate(-40% ,50%);
 }
 .steamJet1 , .steamJet2{
     width: 20rem;
