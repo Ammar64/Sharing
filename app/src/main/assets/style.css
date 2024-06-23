@@ -14,6 +14,12 @@
 body {
     background: linear-gradient(to right, #010c14, #2e012e);
 }
+button{
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
 /* glopal */
 
 
@@ -22,7 +28,7 @@ body {
     background: 
         radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 30%),
         linear-gradient(to bottom, #000, #000);
-    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
     width: 100%;
     position: fixed;
     -webkit-animation: paleArea 15s infinite;
@@ -130,28 +136,29 @@ body {
     100%{transform: skew(0 , 0) rotateZ(0) translate(calc(-50% + 2000px) ,-50%)}
 }
 
-.fa-jet-fighter{
-    font-size: 150px;
-    background: linear-gradient(to right, var(--colorOne), var(--colorTwo));
-    -webkit-background-clip: text;
-            background-clip: text;
-    -webkit-text-fill-color: transparent;
-    position: relative;
+.jet-fighter-icon {
+    width: 200px;
+    height: auto;
+    fill: url(#gradient);
     z-index: 2;
+    position: relative;
 }
 
-.fa-jet-fighter::after{
-    content: '';
-    padding: 13px;
-    height: 22px ;
+.jet-fighter-icon path {
+    fill: url(#gradient);
+}
+
+.jet-fighter-shadow {
+  padding: 30px;
+  height: 22px ;
     border-radius: 50%;
     position: absolute;
-    left: -1px;
     bottom: 50%;
-    transform: translateY(50%);
+    transform: translate(-25%, 50%);
     background-color: var(--colorTwo);
     -webkit-filter: blur(30px);
             filter: blur(30px);
+    z-index: -1;
 }
 
 .steamJet1 , .steamJet2, .steamJet{
@@ -247,13 +254,17 @@ body {
 .plane{
     left: 60%;
 }
-.fa-jet-fighter{
-    font-size: 50px;
+.jet-fighter-icon{
+    width: 100px;
+}
+.jet-fighter-shadow{
+  padding: 15px;
+  transform: translate(-40% ,50%);
 }
 .steamJet1 , .steamJet2{
     width: 20rem;
     top: 6px;
-    right: 95%;
+    right: 90%;
 }
 .steamJet2{
     top: -6px;
@@ -513,6 +524,52 @@ body {
   color: lightblue;
   transform: translateY(-30px);
 }
+
+.form-container .current-username{
+  position: absolute;
+  bottom: 30px;
+  right: 20px;
+}
+
+.form-container .current-username p{
+  color: #444;
+}
+
+.colorful-line {
+  height: 3px; /* Adjust the height of the line */
+  width: 100%;
+  background: linear-gradient(45deg, 
+    #e81cff,
+    #40c9ff,
+    #ffd700,
+    #00bfff,
+    #ff69b4
+); /* Define the gradient colors */
+  background-size: 500% 100%; /* Increase background-size to cover the whole animation */
+  -webkit-animation: gradient-animation 20s ease infinite;
+          animation: gradient-animation 20s  infinite; /* Animation properties */
+  border-radius: 6px;
+  margin-top: 5px;
+}
+
+@-webkit-keyframes gradient-animation {
+  0% {
+    background-position: 0 0; /* Start position of the animation */
+  }
+  100% {
+    background-position: 500% 0; /* End position of the animation */
+  }
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0 0; /* Start position of the animation */
+  }
+  100% {
+    background-position: 500% 0; /* End position of the animation */
+  }
+}
+
 
 
 .form-container .form-submit-btn {
