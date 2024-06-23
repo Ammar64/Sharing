@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draggable Carousel</title>
+    <script src="https://kit.fontawesome.com/d36d507b4c.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            user-select: none;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .wrapper {
+            width: 420px;
+            height: 550px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wrapper .carousel {
+            display: flex;
+            gap:20px;
+            justify-content: space-evenly;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* hide scrollbar for Firefox */
+            -ms-overflow-style: none; /* hide scrollbar for IE/Edge */
+        }
+
+        .carousel::-webkit-scrollbar {
+            display: none; /* hide scrollbar for Chrome, Safari, Opera */
+        }
+
+        .card {
+            --main-color: #000;
+            --submain-color: #78858F;
+            --bg-color: #fff;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            position: relative;
+            width: 400px; /* Fixed width */
+            min-width: 400px; /* Ensure minimum width */
+            max-width: 100%; /* Allow flexible width based on parent */
+            height: 500px; /* Fixed height */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-radius: 20px;
+            background: var(--bg-color);
+            scroll-snap-align: start;
+            overflow: hidden; /* Ensure content within doesn't affect layout */
+        }
+
+        .card:last-child{
+            margin-right: 20px;
+        }
+
+        .big-img {
+            height: 300px; /* Fixed height */
+            width: 100%; /* Full width */
+            overflow: hidden; /* Ensure image doesn't overflow */
+        }
+
+        .big-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Maintain aspect ratio */
+            border-radius: 20px 20px 0 0; /* Rounded corners */
+        }
+
+        .mini-img {
+            position: absolute;
+            width: 114px;
+            height: 114px;
+            background: var(--bg-color);
+            border-radius: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: calc(50% - 37px);
+        }
+
+        .mini-img img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover; /* Maintain aspect ratio */
+            border-radius: 50%; /* Rounded avatar */
+        }
+
+        .card-title {
+            margin-top: 60px;
+            font-weight: 500;
+            font-size: 18px;
+            color: var(--main-color);
+        }
+
+        .card-subtitle {
+            margin-top: 10px;
+            font-weight: 400;
+            font-size: 15px;
+            color: var(--submain-color);
+        }
+
+        .btns {
+            margin: 10px ;
+            margin-bottom: 50px;
+        }
+
+        .btn {
+            margin-top: 15px;
+            width: 76px;
+            height: 31px;
+            border: 2px solid var(--main-color);
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 11px;
+            color: var(--main-color);
+            background: var(--bg-color);
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .btn-solid {
+            background: var(--main-color);
+            color: var(--bg-color);
+        }
+
+        .btn:hover {
+            background: var(--main-color);
+            color: var(--bg-color);
+            }
+
+        .btn-solid:hover {
+            background: var(--bg-color);
+            color: var(--main-color);
+        }
+        .dots{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 35px;
+            transform: translateX(-10px);
+        }
+        .dot{
+            font-size: 40px;
+            color: #777;
+        }
+        .dot.active{
+            color: aqua;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="carousel">
+        <div class="card">
+            <div class="big-img"><img src="painting-mountain-lake-with-mountain-background_188544-9126.avif" alt="Card 1"></div>
+            <div class="mini-img"><img src="dv.png" alt="Avatar 1"></div>
+            <div class="card-title">Cameron Williamson</div>
+            <div class="card-subtitle">Web Development</div>
+            <div class="btns">
+                <button class="btn left">Previous</button>
+                <button class="btn right">Next</button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="big-img"><img src="painting-mountain-lake-with-mountain-background_188544-9126.avif" alt="Card 2"></div>
+            <div class="mini-img"><img src="dv.png" alt="Avatar 2"></div>
+            <div class="card-title">John Doe</div>
+            <div class="card-subtitle">Graphic Design</div>
+            <div class="btns">
+                <button class="btn left">Previous</button>
+                <button class="btn right">Next</button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="big-img"><img src="painting-mountain-lake-with-mountain-background_188544-9126.avif" alt="Card 3"></div>
+            <div class="mini-img"><img src="dv.png" alt="Avatar 3"></div>
+            <div class="card-title">Jane Smith</div>
+            <div class="card-subtitle">Marketing</div>
+            <div class="btns">
+                <button class="btn left">Previous</button>
+                <button class="btn right">Next</button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="big-img"><img src="painting-mountain-lake-with-mountain-background_188544-9126.avif" alt="Card 4"></div>
+            <div class="mini-img"><img src="dv.png" alt="Avatar 4"></div>
+            <div class="card-title">Emily Brown</div>
+            <div class="card-subtitle">Content Writing</div>
+            <div class="btns">
+                <button class="btn left">Previous</button>
+                <button class="btn right">Next</button>
+            </div>
+        </div>
+    </div>
+    <ul class="dots">
+        <li class="dot active"></li>
+        <li class="dot"></li>
+        <li class="dot"></li>
+        <li class="dot"></li>
+    </ul>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const carousel = document.querySelector(".carousel");
+        const arrowBtns = document.querySelectorAll(".btn");
+        const wrapper = document.querySelector(".wrapper");
+        const dots = document.querySelectorAll(".dot");
+
+        const firstCard = carousel.querySelector(".card");
+        const firstCardWidth = firstCard.offsetWidth + 20; // Adjust for gap
+
+        let isDragging = false,
+            startX,
+            startScrollLeft,
+            timeoutId,
+            currentIndex = 0;
+
+        const dragStart = (e) => {
+            isDragging = true;
+            carousel.classList.add("dragging");
+            startX = e.pageX;
+            startScrollLeft = carousel.scrollLeft;
+        };
+
+        const dragging = (e) => {
+            if (!isDragging) return;
+
+            const newScrollLeft = startScrollLeft - (e.pageX - startX);
+
+            if (newScrollLeft <= 0 || newScrollLeft >= carousel.scrollWidth - carousel.offsetWidth) {
+                isDragging = false;
+                return;
+            }
+
+            carousel.scrollLeft = newScrollLeft;
+        };
+
+        const dragStop = () => {
+            isDragging = false;
+            carousel.classList.remove("dragging");
+            updateDots();
+        };
+
+        const updateDots = () => {
+            const newIndex = Math.round(carousel.scrollLeft / firstCardWidth);
+            if (newIndex !== currentIndex) {
+                currentIndex = newIndex;
+                dots.forEach((dot, idx) => {
+                    dot.classList.toggle("active", idx === currentIndex);
+                });
+            }
+        };
+
+        const handleArrowClick = (direction) => {
+            const maxIndex = dots.length - 1;
+            currentIndex = Math.min(Math.max(currentIndex + direction, 0), maxIndex);
+            carousel.scrollBy({
+                left: direction * firstCardWidth,
+                behavior: "smooth"
+            });
+            updateDots();
+        };
+
+        carousel.addEventListener("mousedown", dragStart);
+        carousel.addEventListener("mousemove", dragging);
+        document.addEventListener("mouseup", dragStop);
+        carousel.addEventListener("scroll", updateDots);
+        wrapper.addEventListener("mouseenter", () => clearTimeout(timeoutId));
+
+        arrowBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                const direction = btn.classList.contains("left") ? -1 : 1;
+                handleArrowClick(direction);
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
