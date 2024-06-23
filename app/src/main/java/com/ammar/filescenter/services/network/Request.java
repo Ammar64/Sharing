@@ -15,6 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.SocketException;
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,7 +50,7 @@ public class Request {
     }
 
     public boolean readSocket() {
-        if(_connClose) return false;
+        if (_connClose) return false;
         try {
             params = new HashMap<>();
             int lineNumber = 1;
@@ -63,7 +65,7 @@ public class Request {
             charsRead += 2; // the \r and \n.
 
             String connection = headers.get("Connection");
-            if( connection != null && connection.contains("keep-alive") ) {
+            if (connection != null && connection.contains("keep-alive")) {
                 _connClose = true;
             } else {
                 try {
@@ -82,6 +84,40 @@ public class Request {
         } catch (Exception e) {
             Log.e("MYLOG", Objects.requireNonNull(e.getMessage()));
             return false;
+        }
+    }
+
+    private void parseHTTPHeader(InputStream in) throws IOException {
+        String line = readLineUTF8(clientInput);
+        StringTokenizer st = new StringTokenizer(line);
+        if (line.isEmpty()) {
+            return;
+        }
+
+        if (!st.hasMoreTokens()) {
+            throw new RuntimeException("BAD REQUEST: Syntax error. Usage: GET /example/file.html");
+        }
+
+        this.method = st.nextToken();
+
+        if (!st.hasMoreTokens()) {
+            throw new RuntimeException("BAD REQUEST: Missing URI. Usage: GET /example/file.html");
+        }
+
+        String uri = st.nextToken();
+
+        this.version = "HTTP/1.1";
+
+        while ((!(line = readLineUTF8(clientInput)).isEmpty())) {
+
+        }
+    }
+
+    private void decodeParams(String params) {
+        String[] feilds = params.split("&");
+        for( String i : feilds ) {
+            StringTokenizer st = new StringTokenizer(i);
+            String key = st.nextToken("=");
         }
     }
 
@@ -146,6 +182,7 @@ public class Request {
         }
     }
 
+    @Deprecated
     public boolean POST_StoreFile(String paramName) {
         charsRead = 0;
         if (!"POST".equals(this.method)) {
@@ -332,10 +369,17 @@ public class Request {
     public BufferedInputStream getClientInput() {
         return clientInput;
     }
+
     public String getHeader(String header) {
         return headers.get(header);
     }
+
+    public String getParam(String key) {
+        return params.get(key);
+    }
+
     private boolean _connClose = false;
+
     public boolean isKeepAlive() {
         return !_connClose;
     }

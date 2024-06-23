@@ -16,6 +16,7 @@ public final class Abbrev {
     public static final String ACTION_ADD_APPS_DOWNLOADS = "ACTION_ADD_APPS_DOWNLOADS";
     public static final String ACTION_GET_DOWNLOADS = "ACTION_GET_DOWNLOADS";
     public static final String ACTION_ADD_FILES = "ACTION_ADD_FILES";
+    public static final String ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN = "ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN";
 
     public static final String EXTRA_FILE_PATHS = "com.ammar.filescenter.services.FILE_PATHS";
     public static final String EXTRA_APPS_NAMES = "com.ammar.filescenter.services.APPS_NAME";

@@ -181,6 +181,10 @@ public class ClientHandler implements Runnable {
                             response.sendResponse();
                         }
                     } else if ("POST".equals(request.getMethod())) {
+                        if( "/update-user-name".equals(path) ) {
+                            String username = request.getParam("username");
+                            user.setName(username);
+                        }
                     }
                     // if user is blocked redirect to blocked page
                 } else showBlockedPage(request, response);
