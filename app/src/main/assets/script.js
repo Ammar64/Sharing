@@ -13,12 +13,14 @@ try {
     const loginBtn = document.getElementById('loginBtn');
     const downloads = document.getElementById("downloads");
     const uploadInput = document.getElementById('uploadInput');
+    const usernameForm = document.getElementById('usernameForm');
 
     const download_item = document.createElement("li");
     download_item.className = "download-item";
 
     let userId = -1;
 
+    /* ##########################              ????????!!!!!!!!!!!?????????               ########################## */
     fetch("/get-user-info", {
         method: "GET"
     }).then(function (res) {
@@ -30,6 +32,7 @@ try {
         executeFilesCenterFrontEnd();
     //i think we don't need it as it must appears only when he intend to upload , so now is real practice 
     })
+    /* ##########################              ????????!!!!!!!!!!!?????????               ########################## */
 
     function executeFilesCenterFrontEnd() {
         sendBtn.onclick = function() {
@@ -280,6 +283,40 @@ try {
         });
 
 
+        /* username field */
+        usernameForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const usernameInput = document.getElementById('usernameInput').value;
+
+            // Replace with your actual endpoint
+            const url = '/update-user-name';
+
+            // Example using fetch API
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: usernameInput })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Username updated successfully:', data);
+                // Optionally, perform actions after successful submission
+                closeBubbles(loginBubble);
+            })
+            .catch(error => {
+                console.error('Error updating username:', error);
+                // Handle error scenarios
+                closeBubbles(loginBubble);
+            });
+        });
 
     }
 
