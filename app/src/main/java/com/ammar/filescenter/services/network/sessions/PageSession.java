@@ -19,24 +19,37 @@ public class PageSession extends HTTPSession {
 
             String path = req.getPath();
             String file = null;
+            String content_type = "*/*";
 
             switch (path) {
                 case "/":
                 case "index.html":
                     file = "index.html";
+                    content_type = "text/html";
                     break;
                 case "/style.css":
                     file = "style.css";
+                    content_type = "text/css";
                     break;
                 case "/script.js":
                     file = "script.js";
+                    content_type = "text/javascript";
                     break;
                 case "/dv.png":
                     file = "dv.png";
+                    content_type = "image/png";
                     break;
+                case "/blocked":
+                    res.setStatusCode(307);
+                    res.setHeader("Location", "/");
+                    res.sendResponse();
+                    return;
             }
 
-            if( file != null ) res.sendResponse(Utils.readFileFromAssets(file));
+            if( file != null ) {
+                res.setHeader("Content-Type", content_type);
+                res.sendResponse(Utils.readFileFromAssets(file));
+            }
             else {
                 res.setStatusCode(400);
                 res.sendResponse();

@@ -2,6 +2,8 @@ package com.ammar.filescenter.services.network;
 
 import static com.ammar.filescenter.common.Utils.readLineUTF8;
 
+import android.util.Log;
+
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.services.network.exceptions.BadRequestException;
 import com.ammar.filescenter.services.network.exceptions.NotImplementedException;
@@ -26,7 +28,6 @@ public class Request {
     public Request(Socket clientSocket) {
         try {
             this.clientSocket = clientSocket;
-
             clientInput = new BufferedInputStream(clientSocket.getInputStream());
 
         } catch (IOException e) {
@@ -42,12 +43,14 @@ public class Request {
             parseHTTPHeader(clientInput);
 
             String connection = headers.get("Connection");
-            if (connection != null && connection.contains("keep-alive")) {
+            if (connection == null || !connection.contains("keep-alive")) {
                 _connClose = true;
+                Log.d("MYLOG", "Connection will close");
             } else {
                 try {
                     clientSocket.setKeepAlive(true);
                     clientSocket.setSoTimeout(ClientHandler.timeout);
+                    Log.d("MYLOG", "Connection will stay alive");
                 } catch (SocketException e) {
                     Utils.showErrorDialog("Request.readSocket(). SocketException:", e.getMessage());
                 }
@@ -144,10 +147,11 @@ public class Request {
         }
     }
 
-    public String getBody() throws BadRequestException {
+    public String getBody() throws BadRequestException, IOException {
         if ("application/json".equals(getHeader("Content-Type"))) {
             if (content_length <= 4096) {
                 byte[] buff = new byte[(int) content_length];
+                clientInput.read(buff);
                 return new String(buff);
             } else
                 throw new BadRequestException("Max POST request is 4MB unless it's a file upload");

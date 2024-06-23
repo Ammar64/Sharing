@@ -67,7 +67,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             }
 
             userIconIV.setImageResource(os_icon_res);
-            usernameTV.setText(itemView.getContext().getString(R.string.user_default_name, user.getId()));
+            usernameTV.setText(user.getName());
             userAddressTV.setText(user.getIp());
 
             setBlockButton(user.isBlocked());

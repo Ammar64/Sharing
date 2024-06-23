@@ -20,8 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity;
 import com.ammar.filescenter.common.Utils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
