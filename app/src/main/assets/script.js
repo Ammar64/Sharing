@@ -1,5 +1,5 @@
-/* try {
- */    const sendBtn = document.getElementById("sendBtn");
+try {
+    const sendBtn = document.getElementById("sendBtn");
     // when click shows you native choose file dialog
     const uploadLabel = document.getElementById("uploadLabel");
     const recieveBtn = document.getElementById("recieveBtn");
@@ -27,12 +27,12 @@
         userId = data.id;
         console.log("UserId: " + userId);
         // I call it here to make sure no other requests sent before getting userId from server.
-/*         executeFilesCenterFrontEnd();
- */    //i think we don't need it as it must appears only when he intend to upload , so now is real practice 
+        executeFilesCenterFrontEnd();
+    //i think we don't need it as it must appears only when he intend to upload , so now is real practice 
     })
 
-/*     function executeFilesCenterFrontEnd() {
- */        sendBtn.onclick = function() {
+    function executeFilesCenterFrontEnd() {
+        sendBtn.onclick = function() {
             fetch("/check-upload-allowed", {
                 method: "PUT",
             }).then( function( res ) {
@@ -281,13 +281,13 @@
 
 
 
-/*     }
+    }
 
 
 } catch (e) {
     let message = e.message;
     console.error(e);
-} */
+}
 
         // /* reloading page */
         window.addEventListener('load', function (event) {
