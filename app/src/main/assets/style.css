@@ -28,7 +28,7 @@ button{
     background: 
         radial-gradient(circle at top right,var(--colorOneTransparent), rgba(255, 0, 0, 0) 30%),
         linear-gradient(to bottom, #000, #000);
-    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
     width: 100%;
     position: fixed;
     -webkit-animation: paleArea 15s infinite;

@@ -1,5 +1,5 @@
-try {
-    const sendBtn = document.getElementById("sendBtn");
+/* try {
+ */    const sendBtn = document.getElementById("sendBtn");
     // when click shows you native choose file dialog
     const uploadLabel = document.getElementById("uploadLabel");
     const recieveBtn = document.getElementById("recieveBtn");
@@ -28,12 +28,12 @@ try {
         userId = data.id;
         console.log("UserId: " + userId);
         // I call it here to make sure no other requests sent before getting userId from server.
-        executeFilesCenterFrontEnd();
-    //i think we don't need it as it must appears only when he intend to upload , so now is real practice 
+/*         executeFilesCenterFrontEnd();
+ */    //i think we don't need it as it must appears only when he intend to upload , so now is real practice 
     })
     /* ##########################              ????????!!!!!!!!!!!?????????               ########################## */
 
-    function executeFilesCenterFrontEnd() {
+/*     function executeFilesCenterFrontEnd() { */
         sendBtn.onclick = function() {
             fetch("/check-upload-allowed", {
                 method: "PUT",
@@ -105,7 +105,7 @@ try {
             setTimeout(() => {
                 loader.style.display = 'none';
                 document.querySelector('.plane').style.animation = 'plane-on-progress 5s infinite';
-            }, 1000);
+            }, 600);
         }
 
         function updateProgress(percent) {
@@ -284,8 +284,8 @@ try {
 
         /* username field */
     const usernameForm = document.getElementById('usernameForm');
-    const loginBubble = document.getElementById('loginBubble'); // Assuming this is the login bubble element
-
+/*     const loginBubble = document.getElementById('loginBubble'); // Assuming this is the login bubble element
+ */
     // Check if username is already stored in localStorage
     let storedUsername = localStorage.getItem('username');
 
@@ -350,14 +350,14 @@ try {
 
 
 
-
+/* 
     }
 
 
 } catch (e) {
     let message = e.message;
     console.error(e);
-}
+} */
 
         // /* reloading page */
         window.addEventListener('load', function (event) {
@@ -373,7 +373,20 @@ try {
                     hideLoader();
                 }
                 updateProgress(progress);
-            }, 30);
+            }, .01);
 
             console.log('Page is refreshing...');
         });
+
+
+        /*  */
+        function setVhProperty() {
+            var vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+
+        // Set the initial value
+        setVhProperty();
+
+        // Update the value on resize
+        window.addEventListener('resize', setVhProperty);
