@@ -231,4 +231,7 @@ public class Response {
     private Map<String, String> headers = new TreeMap<>();
 
 
+    public void close() throws IOException {
+        clientSocket.close();
+    }
 }

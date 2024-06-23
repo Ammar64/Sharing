@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
-import com.ammar.filescenter.activities.AddAppsActivity;
+import com.ammar.filescenter.activities.AddAppsActivity.AddAppsActivity;
 import com.ammar.filescenter.activities.MainActivity.fragments.TransferFragment;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.custom.io.ProgressManager;

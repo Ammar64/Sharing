@@ -33,6 +33,7 @@ public class ClientHandler implements Runnable {
     }
 
     private final BlockedSession blockedSession = new BlockedSession();
+    private final NotFoundSession notFoundSession = new NotFoundSession();
 
     // handle client here
     @Override
@@ -53,9 +54,12 @@ public class ClientHandler implements Runnable {
                 if (userAgent != null)
                     user = User.RegisterUser(settings, clientSocket.getRemoteSocketAddress(), userAgent);
                 if (user != null && !user.isBlocked()) {
+                    boolean found = false;
                     for (HTTPSession i : HTTPSession.sessions) {
-                        if(handleSession(i, request, response)) break;
+                        found = handleSession(i, request, response);
+                        if(found)break;
                     }
+                    if (!found) handleSession(notFoundSession, request, response);
                 } else  // if user is blocked redirect to blocked page
                     handleSession(blockedSession, request, response);
             }
@@ -96,6 +100,8 @@ public class ClientHandler implements Runnable {
         return isRequestedSession;
     }
 
+
+    // special sessions
     private static class BlockedSession extends HTTPSession {
 
         public BlockedSession() {
@@ -105,19 +111,54 @@ public class ClientHandler implements Runnable {
         @Override
         public void GET(Request req, Response res) {
             try {
-                if (!"/blocked".equals(req.getPath())) {
-                    res.setStatusCode(307);
-                    res.setHeader("Location", "/blocked");
-                    res.sendResponse();
-                } else {
+                if ("/dv.png".equals(req.getPath())) {
+                    res.setHeader("Content-Type", "image/png");
+                    res.sendResponse(Utils.readFileFromAssets("dv.png"));
+                } else if ("/favicon.ico".equals(req.getPath())) {
+                    res.setHeader("Content-Type", "image/svg+xml");
+                    res.sendResponse(Utils.readFileFromAssets("icons8-share.svg"));
+                } //else if (!"/blocked".equals(req.getPath())) {
+//                    res.setStatusCode(307);
+//                    res.setHeader("Location", "/blocked");
+//                    res.sendResponse();
+//                }
+                else {
                     res.setStatusCode(401);
                     res.setHeader("Content-Type", "text/html");
                     res.sendResponse(Utils.readFileFromAssets("blocked.html"));
-                    req.getClientSocket().close();
+                    res.close();
                 }
             } catch (IOException e) {
                 Utils.showErrorDialog("ClientHandler.GET(). IOException", "Failed to read from assets");
             }
         }
     }
+
+    private static class NotFoundSession extends HTTPSession {
+        public NotFoundSession() {
+            super();
+        }
+
+        @Override
+        public void GET(Request req, Response res) {
+            sendRes(res);
+        }
+
+        @Override
+        public void POST(Request req, Response res) {
+            sendRes(res);
+        }
+
+        private void sendRes(Response res) {
+            try {
+                res.setStatusCode(404);
+                res.setHeader("Content-Type", "text/html");
+                res.sendResponse("404 What are you doing ?".getBytes());
+                res.close();
+            } catch (IOException e) {
+                Utils.showErrorDialog("NotFoundSession.sendRes(). IOException.", e.getMessage());
+            }
+        }
+    }
+
 }

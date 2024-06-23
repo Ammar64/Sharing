@@ -16,6 +16,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -75,7 +76,7 @@ public class Request {
         String line = readLineUTF8(clientInput);
         StringTokenizer st = new StringTokenizer(line);
         if (line.isEmpty()) {
-            return;
+            throw new RuntimeException("No Data available");
         }
 
         if (!st.hasMoreTokens()) {
@@ -83,7 +84,7 @@ public class Request {
         }
 
         this.method = st.nextToken();
-
+        if(!Arrays.asList("GET", "POST").contains( this.method ) ) throw new BadRequestException("Method not supported");
         if (!st.hasMoreTokens()) {
             throw new RuntimeException("BAD REQUEST: Missing URI. Usage: GET /example/file.html");
         }

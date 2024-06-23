@@ -39,11 +39,10 @@ public class PageSession extends HTTPSession {
                     file = "dv.png";
                     content_type = "image/png";
                     break;
-                case "/blocked":
-                    res.setStatusCode(307);
-                    res.setHeader("Location", "/");
-                    res.sendResponse();
-                    return;
+                case "/favicon.ico":
+                    file = "icons8-share.svg";
+                    content_type = "image/svg+xml";
+                    break;
             }
 
             if( file != null ) {

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/MI_Tutorial"
+        android:title="@string/tutorial"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/MI_About"
         android:title="@string/about_us"

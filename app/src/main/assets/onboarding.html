@@ -400,6 +400,12 @@
 
         const handleArrowClick = (direction) => {
             const maxIndex = dots.length - 1;
+
+            // if it's the end close Android TutorialActivity
+            if( currentIndex === maxIndex && direction === 1) {
+                AndroidNativeInterface.endTutorial();
+            }
+
             currentIndex = Math.min(Math.max(currentIndex + direction, 0), maxIndex);
             carousel.scrollBy({
                 left: direction * firstCardWidth,

@@ -55,6 +55,7 @@
 
     <string name="svr_notification_message">Server ist verfügbar unter %1$s:%2$s</string>
     <string name="app_icon_acc_desc">App-Symbol</string>
+    <string name="tutorial">Tutorial</string>
 
     <string-array name="langs">
         <item>@string/system_default_lang</item>

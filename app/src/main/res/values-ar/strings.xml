@@ -57,4 +57,5 @@
 
     <string name="svr_notification_message">الخادم يعمل على العنوان %1$s:%2$s</string>
     <string name="app_icon_acc_desc">أيقونة التطبيق</string>
+    <string name="tutorial">التعليمات</string>
 </resources>

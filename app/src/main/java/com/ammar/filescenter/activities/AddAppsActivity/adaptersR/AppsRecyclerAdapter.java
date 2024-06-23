@@ -1,11 +1,8 @@
-package com.ammar.filescenter.activities.recyclers;
+package com.ammar.filescenter.activities.AddAppsActivity.adaptersR;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
-import com.ammar.filescenter.activities.AddAppsActivity;
+import com.ammar.filescenter.activities.AddAppsActivity.AddAppsActivity;
 import com.ammar.filescenter.common.Utils;
 
 import java.util.ArrayList;

@@ -1,6 +1,7 @@
 package com.ammar.filescenter.activities.MainActivity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.UiModeManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +15,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,12 +27,12 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
+import com.ammar.filescenter.activities.TutorialActivity.TutorialActivity;
 import com.ammar.filescenter.application.FilesCenterApp;
 import com.ammar.filescenter.common.Data;
-import com.ammar.filescenter.common.Vals;
 import com.ammar.filescenter.common.Utils;
+import com.ammar.filescenter.common.Vals;
 import com.ammar.filescenter.services.NetworkService;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -69,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     .putBoolean(SettingsFragment.DarkModeKey, true)
                     .apply();
             firstRunPref.edit().putBoolean("firstrun", false).apply();
+            startActivity(new Intent(this, TutorialActivity.class));
         }
         darkMode = settingsPref.getBoolean(SettingsFragment.DarkModeKey, true);
 
@@ -107,13 +110,11 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 if (prevMenuItem != null) {
                     prevMenuItem.setChecked(false);
-                }
-                else
-                {
+                } else {
                     bottomNavigationView.getMenu().getItem(0).setChecked(false);
                 }
-                if(position==1)position=2;
-                Log.d("page", "onPageSelected: "+position);
+                if (position == 1) position = 2;
+                Log.d("page", "onPageSelected: " + position);
                 bottomNavigationView.getMenu().getItem(position).setChecked(true);
                 prevMenuItem = bottomNavigationView.getMenu().getItem(position);
 
@@ -155,11 +156,11 @@ public class MainActivity extends AppCompatActivity {
                 ImageViewCompat.setImageTintList(serverButton, ColorStateList.valueOf(getResources().getColor(R.color.status_off)));
             }
         });
-        
-        if(FilesCenterApp.isDebuggable())
+
+        if (FilesCenterApp.isDebuggable())
             Data.alertNotifier.observe(this, info -> {
-                errorDialogAD.setTitle( info.getString("title") );
-                errorDialogAD.setMessage( info.getString("message") );
+                errorDialogAD.setTitle(info.getString("title"));
+                errorDialogAD.setMessage(info.getString("message"));
                 errorDialogAD.show();
             });
     }
@@ -193,6 +194,17 @@ public class MainActivity extends AppCompatActivity {
             }, REQUEST_CODE_NOTIFICATION_PERMISSION);
         }
     }
+
+    public static boolean onOptionsItemSelectedStatic(Activity act , @NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.MI_Tutorial) {
+            act.startActivity(new Intent(act, TutorialActivity.class));
+            act.overridePendingTransition(R.anim.fragment_enter_left, R.anim.fragment_exit_left);
+            return true;
+        }
+        return false;
+    }
+
 
     @Override
     protected void onDestroy() {

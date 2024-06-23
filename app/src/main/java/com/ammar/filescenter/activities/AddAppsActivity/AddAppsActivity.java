@@ -1,11 +1,9 @@
-package com.ammar.filescenter.activities;
+package com.ammar.filescenter.activities.AddAppsActivity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
-import com.ammar.filescenter.activities.recyclers.AppsRecyclerAdapter;
+import com.ammar.filescenter.activities.AddAppsActivity.adaptersR.AppsRecyclerAdapter;
 
 import java.util.LinkedList;
 import java.util.List;

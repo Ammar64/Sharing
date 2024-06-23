@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -13,6 +16,7 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -52,6 +56,8 @@ public class SettingsFragment extends Fragment {
         settingsPref = requireContext().getSharedPreferences(SettingsPrefFile, Context.MODE_PRIVATE);
         toolbar = v.findViewById(R.id.TB_Toolbar);
         toolbar.setTitle(R.string.settings);
+        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
+        setHasOptionsMenu(true);
 
         darkModeS = v.findViewById(R.id.SC_DarkModeToggle);
         darkModeS.setChecked(settingsPref.getBoolean(DarkModeKey, true));
@@ -104,5 +110,16 @@ public class SettingsFragment extends Fragment {
 
         languageRL.setOnClickListener(view -> languageAD.show());
     }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_share, menu);
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return MainActivity.onOptionsItemSelectedStatic(requireActivity(), item);
+    }
+
 
 }

@@ -27,10 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FilesCenter"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
-
-        <activity android:name=".activities.AddAppsActivity"
-            android:exported="false" />
+        tools:targetApi="34">
 
         <activity android:name=".activities.MainActivity.MainActivity"
             android:exported="true" >
@@ -38,8 +35,13 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
         </activity>
+
+        <activity android:name=".activities.AddAppsActivity.AddAppsActivity"
+            android:exported="false" />
+
+        <activity android:name=".activities.TutorialActivity.TutorialActivity"
+            android:exported="false" />
 
         <service android:name=".services.NetworkService"
             android:exported="false"
