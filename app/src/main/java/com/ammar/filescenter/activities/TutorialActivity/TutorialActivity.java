@@ -30,7 +30,7 @@ public class TutorialActivity extends AppCompatActivity {
         WebView wv = findViewById(R.id.WV_Tutorial);
         wv.getSettings().setJavaScriptEnabled(true);
         wv.addJavascriptInterface(this, "AndroidNativeInterface");
-        wv.loadUrl("file:///android_asset/onboarding.html");
+        wv.loadUrl("file:///android_asset/tutorial/onboarding.html");
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {

@@ -47,7 +47,7 @@ public class PageSession extends HTTPSession {
 
             if( file != null ) {
                 res.setHeader("Content-Type", content_type);
-                res.sendResponse(Utils.readFileFromAssets(file));
+                res.sendResponse(Utils.readFileFromWebAssets(file));
             }
             else {
                 res.setStatusCode(400);
