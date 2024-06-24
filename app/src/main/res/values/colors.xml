@@ -16,4 +16,6 @@
     <color name="green">#2FAF2F</color>
     <color name="linkColor">#1B309F</color>
     <color name="toolbar_bottom_color">#373737</color>
+    <color name="iconColor">#222</color>
+
 </resources>

@@ -40,7 +40,7 @@
         tools:text="(15 MB)" />
 
 
-    <com.google.android.material.button.MaterialButton
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/B_RemoveChosenFile"
         android:layout_width="50dp"
         android:layout_height="40dp"
@@ -53,15 +53,14 @@
         android:insetRight="0dp"
         android:padding="0dp"
 
-        android:text="X"
         android:textStyle="bold"
         android:fontFamily="sans-serif-medium"
         android:textSize="28sp"
         android:textColor="@color/white"
-
-        android:backgroundTint="@color/red"
+        app:srcCompat="@drawable/icon_trash"
+        app:tint="@color/iconColor"
         app:layout_constraintBottom_toBottomOf="parent"
-
+        app:backgroundTint="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

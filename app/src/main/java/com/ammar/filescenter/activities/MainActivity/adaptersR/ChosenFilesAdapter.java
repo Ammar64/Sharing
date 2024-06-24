@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
@@ -53,7 +54,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         ImageView fileIconIV;
         TextView fileNameTV;
         TextView fileSizeTV;
-        Button   removeFileB;
+        AppCompatImageButton removeFileB;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
