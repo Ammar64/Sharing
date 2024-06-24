@@ -130,7 +130,7 @@ function requestAvailableDownloads() {
             newFileItem.appendChild(newFileItemImg)
             newFileItem.appendChild(newFileItemText);
 
-            if (e.type === "app") {
+            if (e.type !== "file") {
                 newFileItemImg.style.display = "block"
                 newFileItemImg.src = "/get-icon/".concat(e.uuid);
             } else {

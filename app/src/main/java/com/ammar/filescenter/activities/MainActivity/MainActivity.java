@@ -2,7 +2,6 @@ package com.ammar.filescenter.activities.MainActivity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.UiModeManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -75,12 +74,9 @@ public class MainActivity extends AppCompatActivity {
         }
         darkMode = settingsPref.getBoolean(SettingsFragment.DarkModeKey, true);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
-            uiModeManager.setApplicationNightMode(darkMode ? UiModeManager.MODE_NIGHT_YES : UiModeManager.MODE_NIGHT_NO);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(darkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-        }
+
+        AppCompatDelegate.setDefaultNightMode(darkMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+
 
         String lang = settingsPref.getString(SettingsFragment.Language, "");
         if (!lang.isEmpty()) {
@@ -199,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.MI_Tutorial) {
             act.startActivity(new Intent(act, TutorialActivity.class));
-            act.overridePendingTransition(R.anim.fragment_enter_left, R.anim.fragment_exit_left);
+            act.overridePendingTransition(R.anim.enter_left, R.anim.exit_left);
             return true;
         }
         return false;

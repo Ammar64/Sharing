@@ -61,6 +61,13 @@ public class DownloadSession extends HTTPSession {
                     TransferableApp app = (TransferableApp) file;
                     Bitmap appIconBM = Utils.drawableToBitmap(app.getIcon());
                     res.sendBitmapResponse(appIconBM);
+                } else {
+                    if( file.getMimeType().startsWith("image/") ) {
+                        res.sendFileResponse(file, false, user);
+                    } else{
+                        res.setStatusCode(400);
+                        res.sendResponse();
+                    }
                 }
             }
         } catch (RuntimeException e) {

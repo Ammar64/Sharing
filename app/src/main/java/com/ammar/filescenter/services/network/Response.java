@@ -28,11 +28,25 @@ public class Response {
     }
 
     public void sendFileResponse(Transferable file, User user) {
-        ProgressManager progressManager = new ProgressManager(file.getFile(), file.getSize(), user, ProgressManager.OP.DOWNLOAD);
-        progressManager.setDisplayName( file.getName() );
-        progressManager.setUUID(file.getUUID());
+        sendFileResponse(file, true, user);
+    }
+
+
+    public void sendFileResponse(Transferable file, boolean progress, User user) {
+        ProgressManager progressManager = null;
+        if( progress ) {
+            progressManager = new ProgressManager(file.getFile(), file.getSize(), user, ProgressManager.OP.DOWNLOAD);
+            progressManager.setDisplayName(file.getName());
+            progressManager.setUUID(file.getUUID());
+        }
+
         try {
-            ProgressOutputStream out = new ProgressOutputStream(clientSocket.getOutputStream(), progressManager);
+            OutputStream out;
+
+            if( progress )
+                out = new ProgressOutputStream(clientSocket.getOutputStream(), progressManager);
+            else
+                out = clientSocket.getOutputStream();
 
             long size = file.getSize();
 
@@ -49,14 +63,16 @@ public class Response {
                 }
                 out.flush();
             }
-            progressManager.reportCompleted();
+
+            if( progress )
+                progressManager.reportCompleted();
 
         } catch (IOException e) {
-            progressManager.reportStopped();
+            if(progress)
+                progressManager.reportStopped();
             Log.e("MYLOG", "SendFileResponse(). Exception: " + e.getMessage());
         }
     }
-
 
     public void resumePausedFileResponse(Transferable file, long start, User user) {
         // get the stopped progress manager

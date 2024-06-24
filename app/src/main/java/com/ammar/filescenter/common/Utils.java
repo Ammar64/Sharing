@@ -268,7 +268,12 @@ public class Utils {
 
     public static String getMimeType(String name) {
         String type = null;
-        final String extension = MimeTypeMap.getFileExtensionFromUrl(name);
+
+        // extension
+        String extension = null;
+        int dotIndex = name.lastIndexOf(".");
+        if( dotIndex != -1 ) extension = name.substring( dotIndex + 1 );
+
         if (extension != null) {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
         }
