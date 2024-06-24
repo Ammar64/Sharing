@@ -18,8 +18,10 @@
         .wrapper {
             width: 420px;
             height: 550px;
-            position: relative;
             overflow: hidden;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .wrapper .carousel {
@@ -146,7 +148,6 @@
             justify-content: center;
             align-items: center;
             gap: 35px;
-            transform: translateX(-10px);
         }
         .dot{
             font-size: 40px;
@@ -163,8 +164,8 @@
         }
 
         .card {
-            width: 280px; /* Adjusted width */
-            min-width: 280px; /* Ensure minimum width */
+            width: 300px; /* Adjusted width */
+            min-width: 300px; /* Ensure minimum width */
             height: 460px; /* Adjusted height */
         }
 
