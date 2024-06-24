@@ -113,10 +113,10 @@ public class ClientHandler implements Runnable {
             try {
                 if ("/dv.png".equals(req.getPath())) {
                     res.setHeader("Content-Type", "image/png");
-                    res.sendResponse(Utils.readFileFromAssets("dv.png"));
+                    res.sendResponse(Utils.readFileFromWebAssets("dv.png"));
                 } else if ("/favicon.ico".equals(req.getPath())) {
                     res.setHeader("Content-Type", "image/svg+xml");
-                    res.sendResponse(Utils.readFileFromAssets("icons8-share.svg"));
+                    res.sendResponse(Utils.readFileFromWebAssets("icons8-share.svg"));
                 } //else if (!"/blocked".equals(req.getPath())) {
 //                    res.setStatusCode(307);
 //                    res.setHeader("Location", "/blocked");
@@ -125,7 +125,7 @@ public class ClientHandler implements Runnable {
                 else {
                     res.setStatusCode(401);
                     res.setHeader("Content-Type", "text/html");
-                    res.sendResponse(Utils.readFileFromAssets("blocked.html"));
+                    res.sendResponse(Utils.readFileFromWebAssets("blocked.html"));
                     res.close();
                 }
             } catch (IOException e) {

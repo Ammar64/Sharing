@@ -421,8 +421,8 @@ public class Utils {
     }
 
     private static AssetManager assetManager;
-    public static byte[] readFileFromAssets(String filepath) throws IOException {
-        InputStream input = assetManager.open(filepath);
+    public static byte[] readFileFromWebAssets(String filepath) throws IOException {
+        InputStream input = assetManager.open( "web_app/" + filepath);
         int size = input.available();
         byte[] content = new byte[size];
         int numBytes = input.read(content);
