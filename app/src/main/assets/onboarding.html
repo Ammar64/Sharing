@@ -12,7 +12,8 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            height: 100vh;
+            height: 100%;
+            width: 100vh;
         }
 
         .wrapper {
@@ -21,7 +22,8 @@
             overflow: hidden;
             position: absolute;
             left: 50%;
-            transform: translateX(-50%);
+            top: 50%;
+            transform: translate(-50%, -50%);
         }
 
         .wrapper .carousel {
@@ -129,20 +131,12 @@
             transition: all 0.3s;
         }
 
-        .btn-solid {
-            background: var(--main-color);
-            color: var(--bg-color);
-        }
 
         .btn:hover {
             background: var(--main-color);
             color: var(--bg-color);
             }
 
-        .btn-solid:hover {
-            background: var(--bg-color);
-            color: var(--main-color);
-        }
         .dots{
             display: flex;
             justify-content: center;
@@ -157,6 +151,179 @@
         .dot.active{
             color: aqua;
         }
+
+        .card.inactive .big-img img,
+        .card.inactive .mini-img img,
+        .card.inactive .card-title,
+        .card.inactive .card-subtitle,
+        .card.inactive .btns .btn,
+        .card.inactive .lastBtn {
+            opacity: 0; /* Ensure elements are hidden */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounceIn {
+            0%, 20%, 40%, 60%, 80%, 100% {
+                transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+            }
+            0% {
+                opacity: 0;
+                transform: scale3d(0.3, 0.3, 0.3);
+            }
+            20% {
+                transform: scale3d(1.1, 1.1, 1.1);
+            }
+            40% {
+                transform: scale3d(0.9, 0.9, 0.9);
+            }
+            60% {
+                opacity: 1;
+                transform: scale3d(1.03, 1.03, 1.03);
+            }
+            80% {
+                transform: scale3d(0.97, 0.97, 0.97);
+            }
+            100% {
+                opacity: 1;
+                transform: scale3d(1, 1, 1);
+            }
+        }
+
+        .card.active .big-img img {
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .card.active .mini-img img {
+            animation: fadeIn 1s ease-in-out 0.5s;
+        }
+
+        .card.active .card-title {
+            animation: slideIn 0.8s ease-out 1s;
+        }
+
+        .card.active .card-subtitle {
+            animation: slideUp 0.8s ease-out 1.2s;
+        }
+
+        .card.active .btns .btn {
+            animation: bounceIn 0.8s ease-out 1.4s;
+        }
+
+        .card:last-child.active .btns .btn {
+            animation-duration: .8s;
+            animation-delay: .5s;
+        }
+
+        .card.active .lastBtn {
+            animation: bounceIn 0.8s ease-out .5s;
+        }
+
+        /* Additional Styles for Smooth Animation */
+        .card.active .big-img img,
+        .card.active .mini-img img,
+        .card.active .card-title,
+        .card.active .card-subtitle,
+        .card.active .btns .btn,
+        .card.active .lastBtn {
+            opacity: 0; /* Ensure elements are hidden */
+            animation-fill-mode: forwards; /* Retain the end state of the animation */
+        }
+
+        .lastBtn {
+        --glow-color: rgb(217, 176, 255);
+        --glow-spread-color: rgba(191, 123, 255, 0.781);
+        --enhanced-glow-color: rgb(231, 206, 255);
+        --btn-color: rgb(100, 61, 136);
+        border: .25em solid var(--glow-color);
+        padding: 1em 3em;
+        color: var(--glow-color);
+        font-size: 15px;
+        font-weight: bold;
+        background-color: var(--btn-color);
+        border-radius: 1em;
+        outline: none;
+        box-shadow: 0 0 1em .25em var(--glow-color),
+                0 0 4em 1em var(--glow-spread-color),
+                inset 0 0 .75em .25em var(--glow-color);
+        text-shadow: 0 0 .5em var(--glow-color);
+        position: relative;
+        transition: all 0.3s;
+        }
+
+        .lastBtn::after {
+        pointer-events: none;
+        content: "";
+        position: absolute;
+        top: 120%;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: var(--glow-spread-color);
+        filter: blur(2em);
+        opacity: .7;
+        transform: perspective(1.5em) rotateX(35deg) scale(1, .6);
+        }
+
+        .lastBtn:hover {
+        color: var(--btn-color);
+        background-color: var(--glow-color);
+        box-shadow: 0 0 1em .25em var(--glow-color),
+                0 0 4em 2em var(--glow-spread-color),
+                inset 0 0 .75em .25em var(--glow-color);
+        }
+
+        .card:last-child {
+            background-color: #000;
+            justify-content: center;
+            overflow: visible;
+        }
+
+        .card:last-child .btns {
+            margin-top: 50px;
+            position: relative;
+            top:123px ;
+        }
+
+        .card:last-child .btn {
+            border: 2px solid var(--bg-color);
+            color: var(--bg-color);
+            background: var(--main-color);
+        }
+
+        .card:last-child .btn:hover {
+            background: var(--bg-color);
+            color: var(--main-color);
+            }
 
         @media (max-width: 541px) {
         .wrapper {
@@ -180,7 +347,7 @@
         .mini-img {
             width: 90px; /* Adjusted size */
             height: 90px; /* Adjusted size */
-            top: calc(50% - 65px); /* Adjusted positioning */
+            top: calc(50% - 48px); /* Adjusted positioning */
         }
 
         .mini-img img {
@@ -245,12 +412,20 @@
                 <button class="btn right">Next</button>
             </div>
         </div>
+        <div class="card">
+            <button class="lastBtn"> Get started</button>
+            <div class="btns">
+                <button class="btn left">Previous</button>
+                <button class="btn right">Next</button>
+            </div>
+        </div>
     </div>
     <ul class="dots">
         <li class="dot active" data-index="0"></li>
         <li class="dot" data-index="1"></li>
         <li class="dot" data-index="2"></li>
         <li class="dot" data-index="3"></li>
+        <li class="dot" data-index="4"></li>
     </ul>
 </div>
 
@@ -260,6 +435,7 @@
         const arrowBtns = document.querySelectorAll(".btn");
         const wrapper = document.querySelector(".wrapper");
         const dots = document.querySelectorAll(".dot");
+        const lastBtn = document.querySelector(".lastBtn");
 
         const firstCard = carousel.querySelector(".card");
         const firstCardWidth = firstCard.offsetWidth + 20; // Adjust for gap
@@ -311,6 +487,7 @@
             const cards = carousel.querySelectorAll(".card");
             cards.forEach((card, idx) => {
                 card.classList.toggle("active", idx === currentIndex);
+                card.classList.toggle("inactive", idx !== currentIndex);
             });
         };
 
@@ -361,8 +538,24 @@
             });
         });
 
+        lastBtn.onclick = () => {
+            AndroidNativeInterface.endTutorial();
+        }
+
         updateCards();
     });
+
+
+    function setVhProperty() {
+        var vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+
+    // Set the initial value
+    setVhProperty();
+
+    // Update the value on resize
+    window.addEventListener('resize', setVhProperty);
 </script>
 
 
