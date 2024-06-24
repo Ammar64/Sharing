@@ -2,6 +2,7 @@ package com.ammar.filescenter.services.models;
 
 import android.webkit.MimeTypeMap;
 
+import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.services.network.Server;
 
 import org.json.JSONException;
@@ -18,14 +19,18 @@ public class Transferable {
     public Transferable(String path) {
         this.file = new File(path);
         this.uuid = UUID.randomUUID().toString();
+        this.mimeType = Utils.getMimeType(file.getName());
+        if(mimeType.equals("*/*")) mimeType = "application/octet-stream";
     }
 
-    protected Transferable() {}
+    protected Transferable() {
+    }
 
     // this method is meant to be overridden.
     public String getName() {
         return file.getName();
     }
+
     public String getFileName() {
         return file.getName();
     }
@@ -37,30 +42,24 @@ public class Transferable {
     public long getSize() {
         return file.length();
     }
+    private String mimeType;
 
-    public String getMimeType() {
-        String type = null;
-        final String url = file.toString();
-        final String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-        if (extension != null) {
-            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
-        }
-        if (type == null) {
-            type = "application/octet-stream"; // fallback type.
-        }
-        return type;
-    }
 
     public String getUUID() {
         return uuid;
     }
+    public String getMimeType() {return mimeType;}
 
     public JSONObject getJSON() throws JSONException {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("uuid", getUUID());
         jsonObject.put("name", getName());
         jsonObject.put("size", getSize());
-        jsonObject.put("type", "file");
+
+        if (mimeType.startsWith("image/"))
+            jsonObject.put("type", "img");
+        else
+            jsonObject.put("type", "file");
         return jsonObject;
     }
 

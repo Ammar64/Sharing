@@ -1,7 +1,10 @@
 package com.ammar.filescenter.activities.TutorialActivity;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
-import android.telecom.Call;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
@@ -16,6 +19,14 @@ public class TutorialActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutorial);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.BLACK);
+        }
         WebView wv = findViewById(R.id.WV_Tutorial);
         wv.getSettings().setJavaScriptEnabled(true);
         wv.addJavascriptInterface(this, "AndroidNativeInterface");
@@ -32,6 +43,6 @@ public class TutorialActivity extends AppCompatActivity {
     @JavascriptInterface
     public void endTutorial() {
         finish();
-        overridePendingTransition(R.anim.fragment_enter_left, R.anim.fragment_exit_left);
+        overridePendingTransition(R.anim.enter_left, R.anim.exit_left);
     }
 }

@@ -167,7 +167,7 @@ function requestAvailableDownloads() {
             newFileItem.appendChild(infoContainer);
             newFileItem.appendChild(colorfulLine);
 
-            if (e.type === "app") {
+            if (e.type !== "file") {
                 newFileItemImg.style.display = "block"
                 newFileItemImg.src = "/get-icon/".concat(e.uuid);
             } else {
