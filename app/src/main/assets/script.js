@@ -189,52 +189,52 @@ function requestAvailableDownloads() {
 }
 
 function downloadFileWithProgress(url) {
-    const link = document.createElement("a");
+/*     const link = document.createElement("a");
     link.href = url
     document.body.append(link);
     link.click();
-    link.remove();
-    // const xhr = new XMLHttpRequest();
-    // xhr.open("GET", url, true);
-    // xhr.responseType = "blob";
+    link.remove(); */
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.responseType = "blob";
 
-    // xhr.onprogress = function(event) {
-    //     if (event.lengthComputable) {
-    //         const percentComplete = (event.loaded / event.total) * 100;
-    //         updateProgress(Math.round(percentComplete));
-    //     }
-    // };
+    xhr.onprogress = function(event) {
+        if (event.lengthComputable) {
+             const percentComplete = (event.loaded / event.total) * 100;
+            updateProgress(Math.round(percentComplete));
+        }
+    };
 
-    // xhr.onloadstart = function() {
-    //     showLoader();
-    //     updateProgress(0);
-    // };
+    xhr.onloadstart = function() {
+        showLoader();
+        updateProgress(0);
+    };
 
-    // xhr.onloadend = function() {
-    //     hideLoader();
-    // };
+    xhr.onloadend = function() {
+        hideLoader();
+    };
 
-    // xhr.onload = function() {
-    //     if (xhr.status === 200) {
-    //         // Create a link to download the file
-    //         const link = document.createElement("a");
-    //         link.style.display = "none";
-    //         const url = window.URL.createObjectURL(xhr.response);
-    //         link.href = url;
-    //         link.download = getFileNameFromContentDisposition(xhr.getResponseHeader('Content-Disposition'));
-    //         document.body.appendChild(link);
-    //         link.click();
-    //         window.URL.revokeObjectURL(url);
-    //         document.body.removeChild(link);
-    //     }
-    // };
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            // Create a link to download the file
+            const link = document.createElement("a");
+            link.style.display = "none";
+            const url = window.URL.createObjectURL(xhr.response);
+            link.href = url;
+            link.download = getFileNameFromContentDisposition(xhr.getResponseHeader('Content-Disposition'));
+            document.body.appendChild(link);
+            link.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(link);
+        }
+    };
 
-    // xhr.onerror = function() {
-    //     console.error('Error downloading the file');
-    //     hideLoader();
-    // };
+    xhr.onerror = function() {
+        console.error('Error downloading the file');
+        hideLoader();
+    };
 
-    // xhr.send();
+    xhr.send();
 }
 
 function getFileNameFromContentDisposition(contentDisposition) {
