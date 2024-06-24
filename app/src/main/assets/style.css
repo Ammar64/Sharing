@@ -918,17 +918,19 @@ strong {
 }
 
 
-
 .download-item {
     margin-top: 1em;
     padding: 1em;
     border-radius: 0.5em;
-    cursor: pointer;
-    color: #B0BEC5;
+    color: #fff;
     display: flex;
-    align-items: center;
-    height: 2.3em;
-    border: #ffffff77 1px solid;
+    height: 4.3em;
+    border: none;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    scrollbar-width: 0;
+    text-shadow: 7px 0px 7px #00BCD4;
 }
 
 .download-item-img {
@@ -936,6 +938,30 @@ strong {
     height: 2.3em;
     margin-right: 0.5em;
 }
+
+.infoContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+  width: 100%;
+
+}
+
+.infoContainer .Btn1{
+  position: absolute;
+  right: 0;
+  top: -12px;
+  width: 29px;
+  height: 29px;
+  cursor: pointer;
+  background-color: #00BCD4;
+}
+.infoContainer .Btn1:hover{
+  width: 129px;
+}
+
+
 
 .btns {
     display: flex;
