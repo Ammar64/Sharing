@@ -39,10 +39,11 @@ public class TransferableApp extends Transferable {
                 splits[i] = new Transferable(splitsDirs[i]);
             }
             _hasSplits = true;
-        }
+        } -
 
 
         super.file = new File(appInfo.publicSourceDir);
+        this.mimeType = "application/vnd.android.package-archive";
     }
 
     private void AddFileToZipArchive(ZipOutputStream zout, String path) throws IOException {
