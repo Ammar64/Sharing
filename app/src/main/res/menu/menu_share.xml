@@ -5,7 +5,6 @@
     <item
         android:id="@+id/MI_ThemeToggle"
         android:title="@string/dark_mode"
-        android:icon="@drawable/icon_app"
         app:showAsAction="ifRoom"/>
 
     <item

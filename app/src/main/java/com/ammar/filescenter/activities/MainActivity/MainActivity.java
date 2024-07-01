@@ -325,6 +325,7 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.setItemTextColor(stateList);
 
             textsColor = getResources().getColor(R.color.text_color_light);
+            toolbar.getMenu().getItem(0).setIcon(R.drawable.icon_sun);
         } else {
             layout.setBackgroundResource(R.drawable.gradient_background_light);
             DrawableCompat.setTint(toolbar.getOverflowIcon(), getResources().getColor(R.color.black));
@@ -335,6 +336,7 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.setItemTextColor(stateList);
 
             textsColor = getResources().getColor(R.color.text_color_dark);
+            toolbar.getMenu().getItem(0).setIcon(R.drawable.icon_moon);
         }
 
         for (WeakReference<TrackedTextView> i : TrackedTextView.textViews) {
