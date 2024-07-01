@@ -5,23 +5,35 @@
     android:layout_height="400dp"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <com.ammar.filescenter.custom.ui.TrackedTextView
+        android:id="@+id/TV_FilesDialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="24sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="12dp"
+        android:text="@string/selected"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RV_ChosenFilesRecycler"
         android:layout_width="0dp"
         android:layout_height="400dp"
+        app:layout_constraintTop_toBottomOf="@id/TV_FilesDialogTitle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/row_chosen_files" />
 
 
-    <TextView
+    <com.ammar.filescenter.custom.ui.TrackedTextView
         android:id="@+id/TV_NoFilesSelected"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TV_FilesDialogTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp"

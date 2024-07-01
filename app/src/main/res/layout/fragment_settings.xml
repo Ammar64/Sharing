@@ -5,8 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        layout="@layout/toolbar" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -14,67 +12,69 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LL_Toolbar">
+        app:layout_constraintTop_toTopOf="parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+<!--            <RelativeLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:paddingVertical="8dp"-->
+<!--                android:paddingStart="14dp">-->
+<!--                <com.ammar.filescenter.custom.ui.TrackedTextView-->
+<!--                    android:id="@+id/TV_SettingsTheme"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="@string/dark_mode"-->
+<!--                    android:textSize="@dimen/settings_big_text" />-->
+<!--                <com.ammar.filescenter.custom.ui.TrackedTextView-->
+<!--                    android:id="@+id/S_SettingsThemeSub"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@id/TV_SettingsTheme"-->
+<!--                    android:text="@string/toggle_dark_mode"-->
+<!--                    android:textSize="@dimen/small_text"/>-->
+<!--                <androidx.appcompat.widget.SwitchCompat-->
+<!--                    android:id="@+id/SC_DarkModeToggle"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignParentEnd="true"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:layout_marginEnd="10dp"/>-->
+<!--            </RelativeLayout>-->
+
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="8dp"
-                android:paddingStart="14dp">
-                <TextView
-                    android:id="@+id/TV_SettingsTheme"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dark_mode"
-                    android:textSize="@dimen/settings_big_text" />
-                <TextView
-                    android:id="@+id/S_SettingsThemeSub"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/TV_SettingsTheme"
-                    android:text="@string/toggle_dark_mode"
-                    android:textSize="@dimen/small_text"/>
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/SC_DarkModeToggle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp"/>
-            </RelativeLayout>
-
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="8dp"
                 android:background="?attr/selectableItemBackground"
+                android:paddingVertical="8dp"
                 android:paddingStart="14dp">
-                <TextView
+
+                <com.ammar.filescenter.custom.ui.TrackedTextView
                     android:id="@+id/TV_SettingsUploadAllow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/disable_browser_upload"
                     android:textSize="@dimen/settings_big_text" />
-                <TextView
+
+                <com.ammar.filescenter.custom.ui.TrackedTextView
                     android:id="@+id/TV_SettingsUploadAllowSub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/TV_SettingsUploadAllow"
                     android:text="@string/disable_browser_upload_desc"
                     android:textSize="@dimen/small_text" />
-                <androidx.appcompat.widget.SwitchCompat
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/SC_UploadAllowToggle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp"/>
+                    android:layout_marginEnd="10dp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -83,13 +83,13 @@
                 android:paddingVertical="8dp"
                 android:background="?attr/selectableItemBackground"
                 android:paddingStart="14dp">
-                <TextView
+                <com.ammar.filescenter.custom.ui.TrackedTextView
                     android:id="@+id/TV_SettingsUserBlock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/block_users"
                     android:textSize="@dimen/settings_big_text" />
-                <TextView
+                <com.ammar.filescenter.custom.ui.TrackedTextView
                     android:id="@+id/TV_SettingsUserBlockSub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
                     android:text="@string/block_users_desc"
                     android:textSize="@dimen/small_text" />
 
-                <androidx.appcompat.widget.SwitchCompat
+                <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/SC_UsersBlockToggle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -114,13 +114,13 @@
                 android:paddingVertical="8dp"
                 android:paddingStart="14dp"
                 android:background="?attr/selectableItemBackground">
-                <TextView
+                <com.ammar.filescenter.custom.ui.TrackedTextView
                     android:id="@+id/TV_SettingsLanguage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/language"
                     android:textSize="@dimen/settings_big_text" />
-                <TextView
+                <com.ammar.filescenter.custom.ui.TrackedTextView
                     android:id="@+id/TV_SettingsLanguageSub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

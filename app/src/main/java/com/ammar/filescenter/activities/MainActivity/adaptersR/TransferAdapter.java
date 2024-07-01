@@ -1,5 +1,7 @@
 package com.ammar.filescenter.activities.MainActivity.adaptersR;
 
+import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMode;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,6 +12,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -304,6 +307,8 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             QRImageIV = QRDialogView.findViewById(R.id.IV_QRCodeImage);
             serverLinkTV = QRDialogView.findViewById(R.id.TV_ServerLink);
             QRCodeB.setOnClickListener(button -> {
+                Window window = QRDialogAD.getWindow();
+                if( window != null ) window.setBackgroundDrawableResource( darkMode ? R.color.dialogColorDark : R.color.dialogColorLight );
                 QRDialogAD.show();
                 setupQrCode();
             });
@@ -313,15 +318,20 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             AlertDialog chosenFilesAD = new AlertDialog.Builder(itemView.getContext())
                     .setView(chosenFilesView)
                     .setPositiveButton(R.string.ok, null)
-                    .setTitle(R.string.selected)
                     .create();
+
+
             RecyclerView chosenFilesRecycler = chosenFilesView.findViewById(R.id.RV_ChosenFilesRecycler);
             TextView noFilesTV = chosenFilesView.findViewById(R.id.TV_NoFilesSelected);
             ChosenFilesAdapter chosenFilesAdapter = new ChosenFilesAdapter();
             chosenFilesRecycler.setAdapter(chosenFilesAdapter);
             chosenFilesRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
 
-            showSelected.setOnClickListener(button -> chosenFilesAD.show());
+            showSelected.setOnClickListener(button -> {
+                Window window = chosenFilesAD.getWindow();
+                if( window != null ) window.setBackgroundDrawableResource( darkMode ? R.color.dialogColorDark : R.color.dialogColorLight );
+                chosenFilesAD.show();
+            });
 
             NetworkService.filesListNotifier.observe(fragment.getViewLifecycleOwner(), info -> {
                 char action = info.getChar("action");
@@ -346,14 +356,17 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             AlertDialog usersDialogAD = new AlertDialog.Builder(itemView.getContext())
                     .setView(usersDialogView)
                     .setPositiveButton(R.string.ok, null)
-                    .setTitle(R.string.connected_users)
                     .create();
             RecyclerView usersRecycler = usersDialogView.findViewById(R.id.RV_UsersRecycler);
             TextView noUserConnectedTV = usersDialogView.findViewById(R.id.TV_NoUserConnected);
             UsersAdapter usersAdapter = new UsersAdapter();
             usersRecycler.setAdapter(usersAdapter);
             usersRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
-            showUsersB.setOnClickListener(button -> usersDialogAD.show());
+            showUsersB.setOnClickListener(button -> {
+                Window window = usersDialogAD.getWindow();
+                if( window != null ) window.setBackgroundDrawableResource( darkMode ? R.color.dialogColorDark : R.color.dialogColorLight );
+                usersDialogAD.show();
+            });
 
             NetworkService.usersListObserver.observe(fragment.getViewLifecycleOwner(), info -> {
                 char action = info.getChar("action");

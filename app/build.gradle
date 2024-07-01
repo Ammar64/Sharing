@@ -51,6 +51,5 @@ dependencies {
     implementation libs.appcompat
     implementation libs.constraintlayout
     implementation libs.recyclerview
-    implementation libs.documentfile
     implementation libs.material
 }

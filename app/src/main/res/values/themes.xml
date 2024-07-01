@@ -1,16 +1,21 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Base application theme. -->
-    <style name="Base.Theme.FilesCenter" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item-->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item tools:targetApi="l" name="android:statusBarColor">#00000000</item>
-        <item name="android:actionMenuTextColor">@color/brightTextColor</item>
-        <item name="android:windowBackground">@drawable/gradient_background</item>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:fontFamily">@font/cairo</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="android:actionMenuTextColor">@color/defaultTextColor</item>
     </style>
 
-    <style name="Theme.FilesCenter" parent="Base.Theme.FilesCenter" />
+    <style name="AppThemeDark" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:fontFamily">@font/cairo</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="android:actionMenuTextColor">@color/defaultTextColor</item>
+    </style>
+
+
     <style name="ShapeAppearanceOverlay.MyApp.Button.Circle" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>

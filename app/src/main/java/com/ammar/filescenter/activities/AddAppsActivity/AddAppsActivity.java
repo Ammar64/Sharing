@@ -1,5 +1,7 @@
 package com.ammar.filescenter.activities.AddAppsActivity;
 
+import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMode;
+
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -32,6 +34,12 @@ public class AddAppsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        if( darkMode ) {
+            setTheme(R.style.AppThemeDark);
+            getWindow().setBackgroundDrawableResource(R.drawable.gradient_background_dark);
+        } else {
+            getWindow().setBackgroundDrawableResource(R.drawable.gradient_background_light);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_apps);
         appBar = findViewById(R.id.TB_Toolbar);

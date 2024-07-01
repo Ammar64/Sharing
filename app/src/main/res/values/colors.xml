@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="brightTextColor">#E6E6E6</color>
+    <color name="defaultTextColor">#E6E6E6</color>
     <color name="black">#FF000000</color>
     <color name="white">#e0e0e0</color>
     <color name="colorPrimary">#2196f3</color>
@@ -18,4 +18,12 @@
     <color name="toolbar_bottom_color">#373737</color>
     <color name="iconColor">#222</color>
 
+    <color name="bottomBarColorLight">#EFEFEF</color>
+    <color name="bottomBarColorDark">#1C1C1C</color>
+
+    <color name="dialogColorLight">#EFEFEF</color>
+    <color name="dialogColorDark">#1C1C1C</color>
+
+    <color name="text_color_dark">#111</color>
+    <color name="text_color_light">#aaa</color>
 </resources>
