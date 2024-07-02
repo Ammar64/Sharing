@@ -42,7 +42,7 @@ public class Transferable {
     public long getSize() {
         return file.length();
     }
-    private String mimeType;
+    protected String mimeType;
 
 
     public String getUUID() {

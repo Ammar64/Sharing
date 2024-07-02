@@ -1,5 +1,7 @@
 package com.ammar.filescenter.activities.AddAppsActivity;
 
+import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMode;
+
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +35,14 @@ public class AddAppsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        if( darkMode ) {
+            setTheme(R.style.AppThemeDark);
+            getWindow().setBackgroundDrawableResource(R.drawable.gradient_background_dark);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            getWindow().setBackgroundDrawableResource(R.drawable.gradient_background_light);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_apps);
         appBar = findViewById(R.id.TB_Toolbar);

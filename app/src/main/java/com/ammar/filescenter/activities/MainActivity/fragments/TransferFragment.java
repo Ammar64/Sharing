@@ -7,34 +7,28 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity.AddAppsActivity;
-import com.ammar.filescenter.activities.MainActivity.MainActivity;
 import com.ammar.filescenter.activities.MainActivity.adaptersR.TransferAdapter;
+import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.common.Vals;
 import com.ammar.filescenter.services.NetworkService;
-import com.ammar.filescenter.common.Utils;
 
 import java.util.ArrayList;
 
 
 public class TransferFragment extends Fragment {
     private View v;
-    private Toolbar toolbar;
     private RecyclerView filesSendRV;
     private TransferAdapter adapter;
 
@@ -60,11 +54,6 @@ public class TransferFragment extends Fragment {
 
 
     private void initItems() {
-        toolbar = v.findViewById(R.id.TB_Toolbar);
-        toolbar.setTitle(R.string.share);
-        ((AppCompatActivity) requireActivity()).setSupportActionBar(toolbar);
-        setHasOptionsMenu(true);
-
         filesSendRV = v.findViewById(R.id.RV_FilesSend);
         adapter = new TransferAdapter(this);
         filesSendRV.setAdapter(adapter);
@@ -97,16 +86,6 @@ public class TransferFragment extends Fragment {
 
         });
 
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_share, menu);
-        super.onCreateOptionsMenu(menu,inflater);
-    }
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return MainActivity.onOptionsItemSelectedStatic(requireActivity(), item);
     }
 
     public ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
@@ -146,5 +125,4 @@ public class TransferFragment extends Fragment {
         intent.putExtra(Vals.EXTRA_FILE_PATHS, files);
         requireContext().startService(intent);
     });
-
 }

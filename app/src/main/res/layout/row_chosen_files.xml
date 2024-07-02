@@ -15,7 +15,7 @@
         android:layout_marginStart="8dp"
         tools:src="@drawable/icon_file_red" />
 
-    <TextView
+    <com.ammar.filescenter.custom.ui.TrackedTextView
         android:id="@+id/TV_FileChosenName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         android:ellipsize="end"
         tools:text="Picture 2023-12-12 12:12:12" />
 
-    <TextView
+    <com.ammar.filescenter.custom.ui.TrackedTextView
         android:id="@+id/TV_FileChosenSize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

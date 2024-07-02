@@ -43,6 +43,7 @@ public class TransferableApp extends Transferable {
 
 
         super.file = new File(appInfo.publicSourceDir);
+        this.mimeType = "application/vnd.android.package-archive";
     }
 
     private void AddFileToZipArchive(ZipOutputStream zout, String path) throws IOException {

@@ -16,7 +16,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                abiFilters 'arm64-v8a' ,'armeabi-v7a', 'x86'
+                abiFilters 'arm64-v8a' ,'armeabi-v7a', 'x86_64'
             }
         }
     }
@@ -51,6 +51,5 @@ dependencies {
     implementation libs.appcompat
     implementation libs.constraintlayout
     implementation libs.recyclerview
-    implementation libs.documentfile
     implementation libs.material
 }

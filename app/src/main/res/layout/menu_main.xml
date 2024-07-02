@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <com.ammar.filescenter.custom.ui.TrackedTextView
+        android:id="@+id/TV_MenuMainTutorial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:background="?attr/selectableItemBackground"
+        android:paddingHorizontal="10dp"
+        android:textSize="22sp"
+        android:text="@string/tutorial" />
+
+    <com.ammar.filescenter.custom.ui.TrackedTextView
+        android:id="@+id/TV_MenuMainAboutUs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:background="?attr/selectableItemBackground"
+        android:paddingHorizontal="10dp"
+        android:textSize="22sp"
+        android:text="@string/about_us" />
+</LinearLayout>
