@@ -16,4 +16,7 @@ public class ColorsDark {
 
     @ColorRes
     public static int bottomNavColor = R.color.bottomBarColorDark;
+
+    @ColorRes
+    public static int popupBG = R.color.popupDarkBG;
 }

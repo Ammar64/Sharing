@@ -1,5 +1,7 @@
 package com.ammar.filescenter.activities.MainActivity.fragments;
 
+import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMode;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,6 +31,8 @@ public class SettingsFragment extends Fragment {
     public static final String Language = "LANGUAGE";
     private View v;
 
+    private RelativeLayout uploadDisableRL;
+    private RelativeLayout usersBlockRL;
     private SwitchMaterial uploadDisableS;
     private SwitchMaterial usersBlockS;
 
@@ -48,6 +52,8 @@ public class SettingsFragment extends Fragment {
     private void initItems() {
         settingsPref = requireContext().getSharedPreferences(SettingsPrefFile, Context.MODE_PRIVATE);
 
+        uploadDisableRL = v.findViewById(R.id.RL_UploadDisable);
+        usersBlockRL = v.findViewById(R.id.RL_UserBlock);
 
         uploadDisableS = v.findViewById(R.id.SC_UploadAllowToggle);
         uploadDisableS.setChecked(settingsPref.getBoolean(UploadDisable, false));
@@ -79,18 +85,28 @@ public class SettingsFragment extends Fragment {
     private void setItemsListeners() {
 
 
-        uploadDisableS.setOnCheckedChangeListener((view, isChecked) -> {
-            if (!settingsPref.edit().putBoolean(UploadDisable, isChecked).commit()) {
+        uploadDisableRL.setOnClickListener((view) -> {
+            boolean isChecked = uploadDisableS.isChecked();
+            uploadDisableS.setChecked(!isChecked);
+            boolean newValue = !isChecked;
+            if (!settingsPref.edit().putBoolean(UploadDisable, newValue).commit()) {
                 Log.e("MYLOG", "Failed to change dark mode");
             }
         });
 
-        usersBlockS.setOnCheckedChangeListener((view, isChecked) -> {
-            if (!settingsPref.edit().putBoolean(UsersBlock, isChecked).commit()) {
+        usersBlockRL.setOnClickListener((view) -> {
+            boolean isChecked = usersBlockS.isChecked();
+            usersBlockS.setChecked(!isChecked);
+            boolean newValue = !isChecked;
+
+            if (!settingsPref.edit().putBoolean(UsersBlock, newValue).commit()) {
                 Log.e("MYLOG", "Failed to change dark mode");
             }
         });
 
-        languageRL.setOnClickListener(view -> languageAD.show());
+        languageRL.setOnClickListener(view -> {
+            //languageAD.getWindow().setBackgroundDrawableResource( darkMode ? R.color.dialogColorDark : R.color.dialogColorLight );
+            languageAD.show();
+        });
     }
 }

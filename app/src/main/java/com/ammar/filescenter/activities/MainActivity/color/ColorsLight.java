@@ -15,4 +15,8 @@ public class ColorsLight {
 
     @ColorRes
     public static int bottomNavColor = R.color.bottomBarColorLight;
+
+
+    @ColorRes
+    public static int popupBG = R.color.popupLightBG;
 }

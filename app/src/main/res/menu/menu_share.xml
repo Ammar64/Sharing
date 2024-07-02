@@ -8,12 +8,18 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/MI_Tutorial"
-        android:title="@string/tutorial"
-        app:showAsAction="never" />
+        android:id="@+id/MI_PopupMenu"
+        android:title="@android:string/untitled"
+        android:icon="@drawable/icon_three_dots"
+        app:showAsAction="always"/>
 
-    <item
-        android:id="@+id/MI_About"
-        android:title="@string/about_us"
-        app:showAsAction="never" />
+<!--    <item-->
+<!--        android:id="@+id/MI_Tutorial"-->
+<!--        android:title="@string/tutorial"-->
+<!--        app:showAsAction="never" />-->
+
+<!--    <item-->
+<!--        android:id="@+id/MI_About"-->
+<!--        android:title="@string/about_us"-->
+<!--        app:showAsAction="never" />-->
 </menu>

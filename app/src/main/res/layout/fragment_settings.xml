@@ -18,40 +18,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-<!--            <RelativeLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:paddingVertical="8dp"-->
-<!--                android:paddingStart="14dp">-->
-<!--                <com.ammar.filescenter.custom.ui.TrackedTextView-->
-<!--                    android:id="@+id/TV_SettingsTheme"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:text="@string/dark_mode"-->
-<!--                    android:textSize="@dimen/settings_big_text" />-->
-<!--                <com.ammar.filescenter.custom.ui.TrackedTextView-->
-<!--                    android:id="@+id/S_SettingsThemeSub"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_below="@id/TV_SettingsTheme"-->
-<!--                    android:text="@string/toggle_dark_mode"-->
-<!--                    android:textSize="@dimen/small_text"/>-->
-<!--                <androidx.appcompat.widget.SwitchCompat-->
-<!--                    android:id="@+id/SC_DarkModeToggle"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_alignParentEnd="true"-->
-<!--                    android:layout_centerVertical="true"-->
-<!--                    android:layout_marginEnd="10dp"/>-->
-<!--            </RelativeLayout>-->
-
 
             <RelativeLayout
+                android:id="@+id/RL_UploadDisable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:paddingVertical="8dp"
-                android:paddingStart="14dp">
+                android:paddingStart="14dp"
+                android:clickable="true"
+                android:focusable="true">
 
                 <com.ammar.filescenter.custom.ui.TrackedTextView
                     android:id="@+id/TV_SettingsUploadAllow"
@@ -74,15 +50,20 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp" />
+                    android:layout_marginEnd="10dp"
+                    android:clickable="false"
+                    android:focusable="false" />
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/RL_UserBlock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="8dp"
                 android:background="?attr/selectableItemBackground"
-                android:paddingStart="14dp">
+                android:paddingStart="14dp"
+                android:clickable="true"
+                android:focusable="true">
                 <com.ammar.filescenter.custom.ui.TrackedTextView
                     android:id="@+id/TV_SettingsUserBlock"
                     android:layout_width="wrap_content"
@@ -103,7 +84,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp"/>
+                    android:layout_marginEnd="10dp"
+                    android:clickable="false"
+                    android:focusable="false"/>
             </RelativeLayout>
 
 

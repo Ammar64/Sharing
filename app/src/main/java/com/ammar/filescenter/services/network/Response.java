@@ -126,8 +126,8 @@ public class Response {
             ByteArrayOutputStream bout = new ByteArrayOutputStream(2048);
             ZipOutputStream zout = new ZipOutputStream(bout);
 
-            setHeader("Content-Type", "application/zip");
-            setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", files[0].getName() + ".zip"));
+            setHeader("Content-Type", "application/octet-stream");
+            setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", files[0].getName() + ".apks"));
             setHeader("Transfer-Encoding", "chunked");
             setHeader("Accept-Ranges", "none");
 

@@ -2,4 +2,6 @@
 <resources>
     <color name="linkColor">#00BCD4</color>
     <color name="iconColor">#eee</color>
+    <color name="toolbar_bottom_color">#373737</color>
+
 </resources>

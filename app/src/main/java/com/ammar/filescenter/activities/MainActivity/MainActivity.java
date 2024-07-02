@@ -3,29 +3,36 @@ package com.ammar.filescenter.activities.MainActivity;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -40,6 +47,8 @@ import androidx.core.widget.ImageViewCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.ammar.filescenter.R;
+import com.ammar.filescenter.activities.MainActivity.color.ColorsDark;
+import com.ammar.filescenter.activities.MainActivity.color.ColorsLight;
 import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
 import com.ammar.filescenter.activities.TutorialActivity.TutorialActivity;
 import com.ammar.filescenter.application.FilesCenterApp;
@@ -62,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
     private ImageView themeChangeIV;
     private Toolbar toolbar;
     private View changeThemeMI;
+    private View threeDotsMI;
+    private PopupWindow threeDotsPW;
+    private View threeDotsMenuLayout;
+    private TextView tutorialTV;
+    private TextView aboutUsTV;
     private FloatingActionButton serverButton;
     private ViewPager2 viewPager;
     private BottomAppBar bottomAppBar;
@@ -99,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     .putBoolean(SettingsFragment.DarkModeKey, true)
                     .apply();
             firstRunPref.edit().putBoolean("firstrun", false).apply();
-            startActivity(new Intent(this, TutorialActivity.class));
+            //startActivity(new Intent(this, TutorialActivity.class));
         }
 
         darkMode = settingsPref.getBoolean(SettingsFragment.DarkModeKey, true);
@@ -122,6 +136,16 @@ public class MainActivity extends AppCompatActivity {
         themeChangeIV = findViewById(R.id.IV_ThemeChange);
         toolbar = findViewById(R.id.TB_Toolbar);
         changeThemeMI = findViewById(R.id.MI_ThemeToggle);
+        threeDotsMI = findViewById(R.id.MI_PopupMenu);
+
+        // set popup window
+        threeDotsPW = new PopupWindow(this);
+        threeDotsMenuLayout = LayoutInflater.from(this).inflate(R.layout.menu_main, null);
+        threeDotsPW.setContentView(threeDotsMenuLayout);
+        threeDotsPW.setWidth((int) Utils.dpToPx(170));
+        threeDotsPW.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        threeDotsPW.setOutsideTouchable(true);
+
 
         bottomAppBar = findViewById(R.id.BAB_BottomAppBar);
         bottomNavigationView = findViewById(R.id.BottomNavView);
@@ -138,20 +162,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setItemsListener() {
-        toolbar.setOnMenuItemClickListener((item) -> {
-            int id = item.getItemId();
-            if (id == R.id.MI_ThemeToggle) {
-                return true;
-            } else if (id == R.id.MI_Tutorial) {
-                startActivity(new Intent(this, TutorialActivity.class));
-                overridePendingTransition(R.anim.enter_left, R.anim.exit_left);
-                return true;
-            }
-            return false;
-        });
-
         changeThemeMI.setOnTouchListener((view, event) -> {
-            if( event.getAction() == MotionEvent.ACTION_UP ) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
                 view.performClick();
                 int[] pos = new int[2];
                 pos[0] = (int) event.getRawX();
@@ -160,6 +172,11 @@ public class MainActivity extends AppCompatActivity {
                 changeTheme(pos);
             }
             return true;
+        });
+
+        threeDotsMI.setOnClickListener((view) -> {
+            Log.d("MYLOG", "Popup window shown");
+            threeDotsPW.showAsDropDown(view);
         });
 
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -209,11 +226,29 @@ public class MainActivity extends AppCompatActivity {
             serviceIntent.setAction(Vals.ACTION_TOGGLE_SERVER);
             startService(serviceIntent);
         });
+
+        tutorialTV = threeDotsMenuLayout.findViewById(R.id.TV_MenuMainTutorial);
+        aboutUsTV = threeDotsMenuLayout.findViewById(R.id.TV_MenuMainAboutUs);
+
+        tutorialTV.setOnClickListener((view) -> {
+            //startActivity(new Intent(this, TutorialActivity.class));
+            Toast.makeText(this, "Tutorial is currently broken.", Toast.LENGTH_SHORT).show();
+        });
+
+        aboutUsTV.setOnClickListener((view) -> {
+            Toast.makeText(this, "This page is not made yet", Toast.LENGTH_SHORT).show();
+        });
     }
 
 
     private void initStates() {
         syncTheme(darkMode);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (darkMode) getWindow().setNavigationBarColor(Color.BLACK);
+            else getWindow().setNavigationBarColor(Color.WHITE);
+        }
+
+
         Intent serviceIntent = new Intent(this, NetworkService.class);
         serviceIntent.setAction(Vals.ACTION_GET_SERVER_STATUS);
         startService(serviceIntent);
@@ -253,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{
-                        Manifest.permission.READ_EXTERNAL_STORAGE
+                        Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
                 }, REQUEST_CODE_STORAGE_PERMISSION);
             }
         }
@@ -296,6 +331,9 @@ public class MainActivity extends AppCompatActivity {
                 public void onAnimationEnd(Animator animation) {
                     themeChangeIV.setImageDrawable(null);
                     themeChangeIV.setVisibility(View.GONE);
+
+                    if (darkMode) getWindow().setNavigationBarColor(Color.BLACK);
+                    else getWindow().setNavigationBarColor(Color.WHITE);
                 }
             });
             anim.start();
@@ -303,12 +341,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onPause() {
         settingsPref.edit().putBoolean(SettingsFragment.DarkModeKey, darkMode).apply();
-//        Intent intent = new Intent(this, NetworkService.class);
-//        intent.setAction(Vals.ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN);
-//        startService(intent);
-        super.onDestroy();
+        super.onPause();
     }
 
     public void syncTheme(boolean dark) {
@@ -318,6 +353,7 @@ public class MainActivity extends AppCompatActivity {
         if (dark) {
             layout.setBackgroundResource(R.drawable.gradient_background_dark);
             DrawableCompat.setTint(toolbar.getOverflowIcon(), getResources().getColor(R.color.white));
+            threeDotsPW.setBackgroundDrawable(new ColorDrawable(getResources().getColor(ColorsDark.popupBG)));
             bottomAppBar.setBackgroundTint(ColorStateList.valueOf(getResources().getColor(R.color.bottomBarColorDark)));
 
             ColorStateList stateList = new ColorStateList(states, new int[]{ColorPrimary, getResources().getColor(R.color.text_color_light)});
@@ -326,9 +362,12 @@ public class MainActivity extends AppCompatActivity {
 
             textsColor = getResources().getColor(R.color.text_color_light);
             toolbar.getMenu().getItem(0).setIcon(R.drawable.icon_sun);
+            toolbar.setPopupTheme(R.style.AppThemeDark);
         } else {
             layout.setBackgroundResource(R.drawable.gradient_background_light);
             DrawableCompat.setTint(toolbar.getOverflowIcon(), getResources().getColor(R.color.black));
+            threeDotsPW.setBackgroundDrawable(new ColorDrawable(getResources().getColor(ColorsLight.popupBG)));
+
             bottomAppBar.setBackgroundTint(ColorStateList.valueOf(getResources().getColor(R.color.bottomBarColorLight)));
 
             ColorStateList stateList = new ColorStateList(states, new int[]{ColorPrimary, getResources().getColor(R.color.text_color_dark)});
@@ -337,13 +376,15 @@ public class MainActivity extends AppCompatActivity {
 
             textsColor = getResources().getColor(R.color.text_color_dark);
             toolbar.getMenu().getItem(0).setIcon(R.drawable.icon_moon);
+
         }
 
         for (WeakReference<TrackedTextView> i : TrackedTextView.textViews) {
             TrackedTextView textViewRef = i.get();
-            if( textViewRef != null ) {
+            if (textViewRef != null) {
                 textViewRef.setTextColor(textsColor);
             }
         }
+
     }
 }
