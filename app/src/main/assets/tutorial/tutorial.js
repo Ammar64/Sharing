@@ -8,37 +8,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const firstCard = carousel.querySelector(".card");
     const firstCardWidth = firstCard.offsetWidth + 20; // Adjust for gap
 
-    let isDragging = false,
-        startX,
-        startScrollLeft,
-        timeoutId,
+    let timeoutId,
         currentIndex = 0;
-
-    const dragStart = (e) => {
-        isDragging = true;
-        carousel.classList.add("dragging");
-        startX = e.pageX;
-        startScrollLeft = carousel.scrollLeft;
-    };
-
-    const dragging = (e) => {
-        if (!isDragging) return;
-
-        const newScrollLeft = startScrollLeft - (e.pageX - startX);
-
-        if (newScrollLeft <= 0 || newScrollLeft >= carousel.scrollWidth - carousel.offsetWidth) {
-            isDragging = false;
-            return;
-        }
-
-        carousel.scrollLeft = newScrollLeft;
-    };
-
-    const dragStop = () => {
-        isDragging = false;
-        carousel.classList.remove("dragging");
-        updateDots();
-    };
 
     const updateDots = () => {
         const newIndex = Math.round(carousel.scrollLeft / firstCardWidth);
@@ -62,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const handleArrowClick = (direction) => {
         const maxIndex = dots.length - 1;
 
-        // if it's the end close Android TutorialActivity
+        // Handle end condition
         if (currentIndex === maxIndex && direction === 1) {
             AndroidNativeInterface.endTutorial();
         }
@@ -86,11 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
         updateCards();
     };
 
-    carousel.addEventListener("mousedown", dragStart);
-    carousel.addEventListener("mousemove", dragging);
-    document.addEventListener("mouseup", dragStop);
     carousel.addEventListener("scroll", updateDots);
-    wrapper.addEventListener("mouseenter", () => clearTimeout(timeoutId));
 
     arrowBtns.forEach(btn => {
         btn.addEventListener("click", () => {
@@ -108,11 +75,28 @@ document.addEventListener("DOMContentLoaded", function() {
 
     lastBtn.onclick = () => {
         AndroidNativeInterface.endTutorial();
-    }
+    };
 
     updateCards();
-});
 
+    // Prevent swipe on touch devices
+    let startX;
+    let startY;
+
+    carousel.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+    });
+
+    carousel.addEventListener('touchmove', (e) => {
+        const deltaX = e.touches[0].clientX - startX;
+        const deltaY = e.touches[0].clientY - startY;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            e.preventDefault(); // Prevent horizontal swipe
+        }
+    });
+});
 
 function setVhProperty() {
     var vh = window.innerHeight * 0.01;
