@@ -231,8 +231,8 @@ public class MainActivity extends AppCompatActivity {
         aboutUsTV = threeDotsMenuLayout.findViewById(R.id.TV_MenuMainAboutUs);
 
         tutorialTV.setOnClickListener((view) -> {
-            //startActivity(new Intent(this, TutorialActivity.class));
-            Toast.makeText(this, "Tutorial is currently broken.", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, TutorialActivity.class));
+            //Toast.makeText(this, "Tutorial is currently broken.", Toast.LENGTH_SHORT).show();
         });
 
         aboutUsTV.setOnClickListener((view) -> {
