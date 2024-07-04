@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/IV_CardBG"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:src="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/IV_Icon"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:layout_constraintBottom_toBottomOf="@+id/IV_CardBG"
+        app:layout_constraintTop_toBottomOf="@+id/IV_CardBG"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/icon_app"/>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/B_Next"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/B_Prev"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/IV_Icon"
+        android:text="Next"
+        android:textColor="@color/white"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/B_Prev"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="Previous"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@+id/B_Next"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/IV_Icon" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
