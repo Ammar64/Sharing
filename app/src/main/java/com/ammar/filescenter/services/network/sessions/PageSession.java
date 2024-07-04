@@ -1,5 +1,6 @@
 package com.ammar.filescenter.services.network.sessions;
 
+import com.ammar.filescenter.R;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.services.network.Request;
 import com.ammar.filescenter.services.network.Response;
@@ -47,9 +48,12 @@ public class PageSession extends HTTPSession {
 
             if( file != null ) {
                 res.setHeader("Content-Type", content_type);
-                res.sendResponse(Utils.readFileFromWebAssets(file));
-            }
-            else {
+                if( file.equals("dv.png") ) {
+                    res.sendResponse(Utils.readRawRes(R.raw.dv));
+                } else {
+                    res.sendResponse(Utils.readFileFromWebAssets(file));
+                }
+            } else {
                 res.setStatusCode(400);
                 res.sendResponse();
             }

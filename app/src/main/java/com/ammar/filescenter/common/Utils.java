@@ -24,6 +24,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RawRes;
 
 import com.ammar.filescenter.activities.MainActivity.MainActivity;
 import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
@@ -434,6 +435,14 @@ public class Utils {
 
     }
 
+    public static byte[] readRawRes(@RawRes int id) throws IOException {
+        try(InputStream in = res.openRawResource(id)) {
+            int size = in.available();
+            byte[] buffer = new byte[size];
+            in.read(buffer);
+            return buffer;
+        }
+    }
     public static void showErrorDialog( String title, String message ) {
         Bundle bundle = new Bundle();
         bundle.putString("title", title);
