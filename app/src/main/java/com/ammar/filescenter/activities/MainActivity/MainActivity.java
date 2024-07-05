@@ -231,12 +231,15 @@ public class MainActivity extends AppCompatActivity {
         aboutUsTV = threeDotsMenuLayout.findViewById(R.id.TV_MenuMainAboutUs);
 
         tutorialTV.setOnClickListener((view) -> {
-            startActivity(new Intent(this, TutorialActivity.class));
-            //Toast.makeText(this, "Tutorial is currently broken.", Toast.LENGTH_SHORT).show();
+            //startActivity(new Intent(this, TutorialActivity.class));
+            Toast.makeText(this, "Soon", Toast.LENGTH_SHORT).show();
         });
 
+
+        // TODO: Add About Us page or may be I will not do it at all
+        aboutUsTV.setVisibility(View.GONE);
         aboutUsTV.setOnClickListener((view) -> {
-            Toast.makeText(this, "This page is not made yet", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "This page is not made yet", Toast.LENGTH_SHORT).show();
         });
     }
 

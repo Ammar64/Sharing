@@ -11,14 +11,23 @@ import android.webkit.WebView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.ammar.filescenter.R;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
+import java.util.ArrayList;
 
 public class TutorialActivity extends AppCompatActivity {
+    private ViewPager2 viewPager;
+
+
+    private ArrayList<FragmentHolder> holders = new ArrayList<>(2);
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tutorial);
+        setContentView(R.layout.activity_tutorial_xml);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
             Window window = getWindow();
@@ -27,21 +36,51 @@ public class TutorialActivity extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.BLACK);
         }
-        WebView wv = findViewById(R.id.WV_Tutorial);
-        wv.getSettings().setJavaScriptEnabled(true);
-        wv.addJavascriptInterface(this, "AndroidNativeInterface");
 
-        wv.loadUrl("file:///android_asset/tutorial/onboarding.html");
-        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                // override so pressing back doesn't take you back to MainActivity.
-            }
-        });
+        viewPager = findViewById(R.id.VP_Tutorial);
+
+        // init fragment
+        holders.add(
+                new FragmentHolder(
+                        R.drawable.icon_linux,
+                        R.drawable.icon_android,
+                        R.string.completed,
+                        R.string.disable_browser_upload_desc
+                )
+        );
+        holders.add(
+                new FragmentHolder(
+                        R.drawable.icon_check,
+                        R.drawable.icon_app,
+                        R.string.completed,
+                        R.string.disable_browser_upload_desc
+                )
+        );
+        holders.add(
+                new FragmentHolder(
+                        R.drawable.info_icon,
+                        R.drawable.icon_file_red,
+                        R.string.completed,
+                        R.string.receiving_from_user_stopped
+                )
+        );
+
+
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), getLifecycle(), holders);
+        viewPager.setAdapter(viewPagerAdapter);
+
+        TabLayout tabLayout = findViewById(R.id.TL_Tutorial);
+        new TabLayoutMediator(tabLayout, viewPager, (tab, pos) -> {
+
+        }).attach();
 
     }
 
-    @JavascriptInterface
+
+    public ArrayList<FragmentHolder> getHolders() {
+        return holders;
+    }
+
     public void endTutorial() {
         finish();
         overridePendingTransition(R.anim.enter_left, R.anim.exit_left);
