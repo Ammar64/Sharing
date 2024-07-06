@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:background="@color/white">
 
     <ImageView
         android:id="@+id/IV_FileChosenIcon"
@@ -37,15 +38,15 @@
         app:layout_constraintBottom_toBottomOf="@+id/IV_FileChosenIcon"
         app:layout_constraintStart_toStartOf="@+id/TV_FileChosenName"
         app:layout_constraintTop_toBottomOf="@+id/TV_FileChosenName"
+        android:layout_marginTop="-10dp"
         tools:text="(15 MB)" />
 
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/B_RemoveChosenFile"
         android:layout_width="50dp"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="16dp"
-        app:cornerRadius="25dp"
 
         android:insetTop="0dp"
         android:insetBottom="0dp"
@@ -56,11 +57,9 @@
         android:textStyle="bold"
         android:fontFamily="sans-serif-medium"
         android:textSize="28sp"
-        android:textColor="@color/white"
         app:srcCompat="@drawable/icon_trash"
-        app:tint="@color/iconColor"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:backgroundTint="@android:color/transparent"
+        app:backgroundTint="@color/red"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
