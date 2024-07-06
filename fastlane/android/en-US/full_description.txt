@@ -1,0 +1,1 @@
+Share files and apps over HTTP. you need the other device to be connected to the same network. just toggle on the server and scan the QR Code on other device and you're good to go.
