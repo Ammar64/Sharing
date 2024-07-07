@@ -1,0 +1,15 @@
+* text=auto
+
+*.c text
+*.h text
+*.java text
+*.kt text
+*.xml text
+*.txt text
+*.gradle text
+*.toml text
+*.properties text
+*.pro text
+
+*.png binary
+*.jp*g binary
