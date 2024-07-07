@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.ammar.filescenter"
-        minSdk 19 // API 19 is android 4. I'll change to 5
+        minSdk 19
         targetSdk 34
         versionCode 1
         versionName "1.0"
