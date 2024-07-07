@@ -6,5 +6,5 @@ add_subdirectory("qrcodegen")
 project("filescenter")
 
 add_library(NativeQRCodeGen SHARED qrgenerator.c)
-set(CMAKE_EXE_LINKER_FLAGS  "--build-id=none")
+add_link_options(LINKER:--build-id=none)
 target_link_libraries(NativeQRCodeGen PRIVATE qrcodegen)

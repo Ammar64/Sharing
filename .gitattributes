@@ -11,5 +11,12 @@
 *.properties text
 *.pro text
 
+# Assets
+*.html text
+*.svg text
+*.js text
+*.css text
+
+
 *.png binary
 *.jp*g binary
