@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity.AddAppsActivity;
-import com.ammar.filescenter.activities.MainActivity.adaptersR.TransferAdapter;
+import com.ammar.filescenter.activities.MainActivity.adaptersR.ShareAdapter;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.services.NetworkService;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class ShareFragment extends Fragment {
     private View v;
     private RecyclerView filesSendRV;
-    private TransferAdapter adapter;
+    private ShareAdapter adapter;
 
     @Override
     public void onResume() {
@@ -42,7 +42,7 @@ public class ShareFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_transfer, container, false);
+        v = inflater.inflate(R.layout.fragment_share, container, false);
         initItems();
         setItemsListener();
         initObservers();
@@ -52,7 +52,7 @@ public class ShareFragment extends Fragment {
 
     private void initItems() {
         filesSendRV = v.findViewById(R.id.RV_FilesSend);
-        adapter = new TransferAdapter(this);
+        adapter = new ShareAdapter(this);
         filesSendRV.setAdapter(adapter);
         filesSendRV.setLayoutManager(new LinearLayoutManager(getContext()));
         filesSendRV.setItemAnimator(null);

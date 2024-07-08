@@ -16,10 +16,10 @@ import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class TransferableApp extends Transferable {
+public class SharableApp extends Sharable {
     private PackageManager pm;
     private ApplicationInfo appInfo;
-    public TransferableApp(Context context, String package_id) throws PackageManager.NameNotFoundException {
+    public SharableApp(Context context, String package_id) throws PackageManager.NameNotFoundException {
         // get pm and app info
         this.pm = context.getPackageManager();
         this.appInfo = pm.getApplicationInfo(package_id, 0);
@@ -34,9 +34,9 @@ public class TransferableApp extends Transferable {
             splitsDirs = appInfo.splitPublicSourceDirs;
         }
         if (splitsDirs != null) {
-            splits = new Transferable[splitsDirs.length];
+            splits = new Sharable[splitsDirs.length];
             for (int i = 0; i < splitsDirs.length; i++) {
-                splits[i] = new Transferable(splitsDirs[i]);
+                splits[i] = new Sharable(splitsDirs[i]);
             }
             _hasSplits = true;
         }
@@ -67,7 +67,7 @@ public class TransferableApp extends Transferable {
         jsonObject.put("hasSplits", _hasSplits);
         if (_hasSplits) {
             JSONArray splitsArray = new JSONArray();
-            for (Transferable i : splits) {
+            for (Sharable i : splits) {
                 splitsArray.put(i.getJSON());
             }
             jsonObject.put("splits", splitsArray);
@@ -87,8 +87,8 @@ public class TransferableApp extends Transferable {
     public String getFileName() {
         return app_name + ".apk";
     }
-    public Transferable getSplitWithUUID(String uuid) {
-        for (Transferable i : splits) {
+    public Sharable getSplitWithUUID(String uuid) {
+        for (Sharable i : splits) {
             if (uuid.equals(i.getUUID())) {
                 return i;
             }
@@ -104,13 +104,13 @@ public class TransferableApp extends Transferable {
     }
 
     private boolean _hasSplits = false;
-    Transferable[] splits = null;
+    Sharable[] splits = null;
 
     public boolean hasSplits() {
         return _hasSplits;
     }
 
-    public Transferable[] getSplits() {
+    public Sharable[] getSplits() {
         return splits;
     }
 }

@@ -23,8 +23,8 @@ import com.ammar.filescenter.activities.MainActivity.MainActivity;
 import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.custom.data.QueueMutableLiveData;
 import com.ammar.filescenter.network.Server;
-import com.ammar.filescenter.models.TransferableApp;
-import com.ammar.filescenter.models.Transferable;
+import com.ammar.filescenter.models.SharableApp;
+import com.ammar.filescenter.models.Sharable;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -93,7 +93,7 @@ public class NetworkService extends Service {
                 ArrayList<String> filePaths = intent.getStringArrayListExtra(Consts.EXTRA_FILE_PATHS);
                 assert filePaths != null;
                 for( String i : filePaths ) {
-                    Server.filesList.add( new Transferable(i));
+                    Server.filesList.add( new Sharable(i));
                 }
                 Bundle fb = new Bundle();
                 fb.putChar("action", 'A');
@@ -104,7 +104,7 @@ public class NetworkService extends Service {
                 if( packages_name != null ) {
                     for( String i : packages_name ) {
                         try {
-                            Server.filesList.add(new TransferableApp(this, i));
+                            Server.filesList.add(new SharableApp(this, i));
                         } catch (PackageManager.NameNotFoundException e) {
                             throw new RuntimeException(e);
                         }
@@ -118,7 +118,7 @@ public class NetworkService extends Service {
                 String uuid = intent.getStringExtra(Consts.EXTRA_DOWNLOAD_UUID);
 
                 int index = 0;
-                for( Transferable i : Server.filesList ) {
+                for( Sharable i : Server.filesList ) {
                     if( i.getUUID().equals(uuid) ) {
                         Server.filesList.remove(index);
                         break;

@@ -21,9 +21,9 @@ import com.ammar.filescenter.R;
 import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.services.NetworkService;
 import com.ammar.filescenter.network.Server;
-import com.ammar.filescenter.models.Transferable;
+import com.ammar.filescenter.models.Sharable;
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.models.TransferableApp;
+import com.ammar.filescenter.models.SharableApp;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -64,7 +64,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         }
 
         public void setup(int pos) {
-            Transferable file = Server.filesList.get(pos);
+            Sharable file = Server.filesList.get(pos);
             setFileName(file.getName());
             setFileIconIV(file, pos);
             setFileSizeTV(file.getSize());
@@ -88,10 +88,10 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         }
 
         Map<Integer, Drawable> appsIconCache = new TreeMap<>();
-        public void setFileIconIV(@NonNull Transferable file, int pos) {
+        public void setFileIconIV(@NonNull Sharable file, int pos) {
             String mimeType = file.getMimeType();
-            if( file instanceof TransferableApp ) {
-                TransferableApp app = (TransferableApp) file;
+            if( file instanceof SharableApp) {
+                SharableApp app = (SharableApp) file;
                 fileIconIV.setImageDrawable(app.getIcon());
             } else if (mimeType.startsWith("image/")) {
                 fileIconIV.setImageDrawable(Drawable.createFromPath(file.getFilePath()));

@@ -3,7 +3,7 @@ package com.ammar.filescenter.network;
 import android.content.Context;
 import android.util.Log;
 
-import com.ammar.filescenter.models.Transferable;
+import com.ammar.filescenter.models.Sharable;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -17,7 +17,7 @@ public class Server {
     private ServerSocket serverSocket;
     private Thread serverThread;
 
-    public static final LinkedList<Transferable> filesList = new LinkedList<>();
+    public static final LinkedList<Sharable> filesList = new LinkedList<>();
     private boolean running = false;
     private final Context context;
 

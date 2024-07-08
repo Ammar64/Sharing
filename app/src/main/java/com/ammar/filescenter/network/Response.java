@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.ammar.filescenter.custom.io.ProgressManager;
 import com.ammar.filescenter.custom.io.ProgressOutputStream;
-import com.ammar.filescenter.models.Transferable;
+import com.ammar.filescenter.models.Sharable;
 import com.ammar.filescenter.models.User;
 
 import java.io.ByteArrayOutputStream;
@@ -27,12 +27,12 @@ public class Response {
         statusCode = 200;
     }
 
-    public void sendFileResponse(Transferable file, User user) {
+    public void sendFileResponse(Sharable file, User user) {
         sendFileResponse(file, true, user);
     }
 
 
-    public void sendFileResponse(Transferable file, boolean progress, User user) {
+    public void sendFileResponse(Sharable file, boolean progress, User user) {
         ProgressManager progressManager = null;
         if( progress ) {
             progressManager = new ProgressManager(file.getFile(), file.getSize(), user, ProgressManager.OP.DOWNLOAD);
@@ -74,7 +74,7 @@ public class Response {
         }
     }
 
-    public void resumePausedFileResponse(Transferable file, long start, User user) {
+    public void resumePausedFileResponse(Sharable file, long start, User user) {
         // get the stopped progress manager
         ProgressManager progressManager = null;
         for (ProgressManager i : ProgressManager.progresses) {
@@ -117,7 +117,7 @@ public class Response {
 
     }
 
-    public void sendZippedFilesResponse(Transferable[] files, User user) {
+    public void sendZippedFilesResponse(Sharable[] files, User user) {
         ProgressManager progressManager = new ProgressManager(files[0].getFile(), -1, user, ProgressManager.OP.DOWNLOAD);
         progressManager.setUUID(files[0].getUUID());
         progressManager.setDisplayName(files[0].getName());
@@ -134,7 +134,7 @@ public class Response {
             writeHeaders(out);
 
             zout.setMethod(ZipOutputStream.DEFLATED);
-            for (Transferable i : files) {
+            for (Sharable i : files) {
                 ZipEntry zipEntry = new ZipEntry(i.getFileName());
                 zout.putNextEntry(zipEntry);
 

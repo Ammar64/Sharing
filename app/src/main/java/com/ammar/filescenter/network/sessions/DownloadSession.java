@@ -4,8 +4,8 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.models.Transferable;
-import com.ammar.filescenter.models.TransferableApp;
+import com.ammar.filescenter.models.Sharable;
+import com.ammar.filescenter.models.SharableApp;
 import com.ammar.filescenter.network.Request;
 import com.ammar.filescenter.network.Response;
 import com.ammar.filescenter.network.Server;
@@ -27,17 +27,17 @@ public class DownloadSession extends HTTPSession {
         String requestedUUID = req.getPath().substring(10);
         try {
             if (req.getPath().startsWith("/download/")) {
-                Transferable file = Transferable.getFileWithUUID(requestedUUID);
-                if (!(file instanceof TransferableApp)) {
+                Sharable file = Sharable.getFileWithUUID(requestedUUID);
+                if (!(file instanceof SharableApp)) {
                     long start = req.getStartRange();
                     if (start == -1)
                         res.sendFileResponse(file, user);
                     else res.resumePausedFileResponse(file, start, user);
                 } else {
-                    TransferableApp app = (TransferableApp) file;
+                    SharableApp app = (SharableApp) file;
                     if (app.hasSplits()) {
-                        Transferable[] app_splits = app.getSplits();
-                        Transferable[] app_files = new Transferable[app_splits.length + 1];
+                        Sharable[] app_splits = app.getSplits();
+                        Sharable[] app_files = new Sharable[app_splits.length + 1];
 
                         // app base.apk must be the first file because it will be the name of the zip.
                         app_files[0] = app;
@@ -56,9 +56,9 @@ public class DownloadSession extends HTTPSession {
                 byte[] available = getFilesJson();
                 res.sendResponse(available);
             } else if (req.getPath().startsWith("/get-icon/")) {
-                Transferable file = Transferable.getFileWithUUID(requestedUUID);
-                if (file instanceof TransferableApp) {
-                    TransferableApp app = (TransferableApp) file;
+                Sharable file = Sharable.getFileWithUUID(requestedUUID);
+                if (file instanceof SharableApp) {
+                    SharableApp app = (SharableApp) file;
                     Bitmap appIconBM = Utils.drawableToBitmap(app.getIcon());
                     res.sendBitmapResponse(appIconBM);
                 } else {
@@ -90,7 +90,7 @@ public class DownloadSession extends HTTPSession {
 
     private byte[] getFilesJson() throws JSONException {
         JSONArray jsonArray = new JSONArray();
-        for (Transferable i : Server.filesList) {
+        for (Sharable i : Server.filesList) {
             jsonArray.put(i.getJSON());
         }
         return jsonArray.toString().getBytes();

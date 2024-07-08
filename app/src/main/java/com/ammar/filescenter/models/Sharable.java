@@ -9,19 +9,19 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.UUID;
 
-public class Transferable {
+public class Sharable {
 
     protected String uuid;
     protected File file;
 
-    public Transferable(String path) {
+    public Sharable(String path) {
         this.file = new File(path);
         this.uuid = UUID.randomUUID().toString();
         this.mimeType = Utils.getMimeType(file.getName());
         if(mimeType.equals("*/*")) mimeType = "application/octet-stream";
     }
 
-    protected Transferable() {
+    protected Sharable() {
     }
 
     // this method is meant to be overridden.
@@ -66,8 +66,8 @@ public class Transferable {
         return file;
     }
 
-    public static Transferable getFileWithUUID(String uuid) throws RuntimeException {
-        for (Transferable i : Server.filesList) {
+    public static Sharable getFileWithUUID(String uuid) throws RuntimeException {
+        for (Sharable i : Server.filesList) {
             if (uuid.equals(i.getUUID())) {
                 return i;
             }

@@ -40,14 +40,14 @@ import java.util.Locale;
 
 
 // this adapter is for files that is currently uploading.
-public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_HEADER = 1;
     private static final int TYPE_PROGRESS = 2;
     private static final int TYPE_FOOTER = 3;
 
     private final ShareFragment fragment;
 
-    public TransferAdapter(ShareFragment fragment) {
+    public ShareAdapter(ShareFragment fragment) {
         this.fragment = fragment;
     }
 
