@@ -24,9 +24,15 @@
     <string name="block">حظر</string>
     <string name="unblock">إلغاء الحظر</string>
     <string name="user_default_name">المستخدم %1$s</string>
+
     <string name="choose_language">اختر لغة</string>
+
     <string name="no_user_connected">لم يتصل أى مستخدم بعد</string>
     <string name="no_files_selected">لم يتم تحديد ملف</string>
+
+    <string name="warning">تنبيه !!</string>
+    <string name="warning_details">هذا التطبيق لا ينقل الملفات باستعمال بروتوكول https مما يجعله عرضه لهجمات الرجل فى المنتصف.\nلتكون أكثر أمانا اللآن أوصى بتشغيل نقطة اتصال على هذا الجهاز و التأكد من أن الأجهزة الأخرى المرغوبة هى الوحيدة المتصلة بها.</string>
+    <string name="dont_show_again">لا تظهر هذه الرسالة مرة أخرى</string>
 
     <!-- Fragment Settings   -->
     <string name="dark_mode">الوضع الداكن</string>

@@ -22,9 +22,9 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
-import android.view.WindowInsetsController;
+import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -32,7 +32,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -49,13 +48,11 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.MainActivity.color.ColorsDark;
 import com.ammar.filescenter.activities.MainActivity.color.ColorsLight;
-import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
-import com.ammar.filescenter.activities.TutorialActivity.TutorialActivity;
 import com.ammar.filescenter.application.FilesCenterApp;
 import com.ammar.filescenter.common.Data;
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.common.Vals;
-import com.ammar.filescenter.custom.ui.TrackedTextView;
+import com.ammar.filescenter.common.Consts;
+import com.ammar.filescenter.custom.ui.AdaptiveTextView;
 import com.ammar.filescenter.services.NetworkService;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -66,7 +63,6 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FrameLayout drawerContainer;
     private CoordinatorLayout layout;
     private ImageView themeChangeIV;
     private Toolbar toolbar;
@@ -75,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
     private PopupWindow threeDotsPW;
     private View threeDotsMenuLayout;
     private TextView tutorialTV;
-    private TextView aboutUsTV;
     private FloatingActionButton serverButton;
     private ViewPager2 viewPager;
     private BottomAppBar bottomAppBar;
@@ -84,7 +79,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     private SharedPreferences settingsPref;
-    public static boolean darkMode = false;
+    private SharedPreferences appInfoPref;
+
+    public static boolean darkMode = true;
+    public static boolean isFirstRun = false;
     public final int REQUEST_CODE_STORAGE_PERMISSION = 2;
     public final int REQUEST_CODE_NOTIFICATION_PERMISSION = 3;
 
@@ -104,29 +102,30 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN);
 
 
-        settingsPref = getSharedPreferences(SettingsFragment.SettingsPrefFile, MODE_PRIVATE);
+        settingsPref = getSharedPreferences(Consts.PREF_SETTINGS, MODE_PRIVATE);
         // check for first Run
-        SharedPreferences firstRunPref = getSharedPreferences("FirstRun", MODE_PRIVATE);
-        boolean isFirstRun = firstRunPref.getBoolean("firstrun", true);
+        appInfoPref = getSharedPreferences(Consts.PREF_APP_INFO, MODE_PRIVATE);
+        isFirstRun = appInfoPref.getBoolean(Consts.PREF_FIELD_IS_FIRST_RUN, true);
         if (isFirstRun) {
             settingsPref.edit()
-                    .putBoolean(SettingsFragment.DarkModeKey, true)
+                    .putBoolean(Consts.PREF_FIELD_IS_DARK, true)
                     .apply();
-            firstRunPref.edit().putBoolean("firstrun", false).apply();
+            appInfoPref.edit().putBoolean(Consts.PREF_FIELD_IS_FIRST_RUN, false).apply();
+
+
+            //tutorial is more like a welcome page. and it's not really necessary
             //startActivity(new Intent(this, TutorialActivity.class));
         }
 
-        darkMode = settingsPref.getBoolean(SettingsFragment.DarkModeKey, true);
-//        String lang = settingsPref.getString(SettingsFragment.Language, "");
-//        if (!lang.isEmpty()) {
-//            Utils.setLocale(this, lang);
-//        }
-
+        darkMode = settingsPref.getBoolean(Consts.PREF_FIELD_IS_DARK, true);
+        String lang = settingsPref.getString(Consts.PREF_FIELD_LANG, "");
+        if (!lang.isEmpty()) {
+            Utils.setLocale(this, lang);
+        }
     }
 
     private void initItems() {
         layout = findViewById(R.id.CL_MainLayout);
-        drawerContainer = findViewById(R.id.FL_drawerContainerLayout);
 
         ViewCompat.setOnApplyWindowInsetsListener(layout, (v, insets) -> {
             Insets paddings = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -138,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
         changeThemeMI = findViewById(R.id.MI_ThemeToggle);
         threeDotsMI = findViewById(R.id.MI_PopupMenu);
 
-        // set popup window
+        // setup popup window
         threeDotsPW = new PopupWindow(this);
         threeDotsMenuLayout = LayoutInflater.from(this).inflate(R.layout.menu_main, null);
         threeDotsPW.setContentView(threeDotsMenuLayout);
@@ -156,9 +155,38 @@ public class MainActivity extends AppCompatActivity {
         MainViewPagerAdapter viewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
         viewPager.setAdapter(viewPagerAdapter);
 
+        // this dialog shows exceptions. it's not shown when app is built for release
         errorDialogAD = new AlertDialog.Builder(this)
                 .setPositiveButton(R.string.ok, null)
                 .create();
+
+
+        // show warning if user didn't choose to not show it again
+        final boolean isUserWantsWarning = appInfoPref.getBoolean(Consts.PREF_FIELD_IS_USER_WANTS_WARNING, true);
+        if (isUserWantsWarning) {
+            View warningDialogLayout = LayoutInflater.from(this).inflate(R.layout.dialog_warning, null, false);
+            CheckBox dontShowAgainCB = warningDialogLayout.findViewById(R.id.CB_DialogWarningDontShowAgain);
+            TextView dontShowAgainTV = warningDialogLayout.findViewById(R.id.TB_DialogWarningDontShowAgainTV);
+
+            dontShowAgainTV.setOnClickListener((view) -> {
+                dontShowAgainCB.toggle();
+            });
+            AlertDialog warningDialog = new AlertDialog.Builder(this)
+                    .setView(warningDialogLayout)
+                    .setPositiveButton(android.R.string.ok, null)
+                    .setOnDismissListener((dialog) -> {
+                        boolean showAgain = !dontShowAgainCB.isChecked();
+                        appInfoPref.edit().putBoolean(Consts.PREF_FIELD_IS_USER_WANTS_WARNING, showAgain).apply();
+                    })
+                    .create();
+            // set dialog bg color
+            Window window = warningDialog.getWindow();
+            if (window != null)
+                window.setBackgroundDrawableResource(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight);
+
+            // show dialog
+            warningDialog.show();
+        }
     }
 
     private void setItemsListener() {
@@ -223,23 +251,15 @@ public class MainActivity extends AppCompatActivity {
 
         serverButton.setOnClickListener((button) -> {
             Intent serviceIntent = new Intent(this, NetworkService.class);
-            serviceIntent.setAction(Vals.ACTION_TOGGLE_SERVER);
+            serviceIntent.setAction(Consts.ACTION_TOGGLE_SERVER);
             startService(serviceIntent);
         });
 
         tutorialTV = threeDotsMenuLayout.findViewById(R.id.TV_MenuMainTutorial);
-        aboutUsTV = threeDotsMenuLayout.findViewById(R.id.TV_MenuMainAboutUs);
 
         tutorialTV.setOnClickListener((view) -> {
             //startActivity(new Intent(this, TutorialActivity.class));
             Toast.makeText(this, "Soon", Toast.LENGTH_SHORT).show();
-        });
-
-
-        // TODO: Add About Us page or may be I will not do it at all
-        aboutUsTV.setVisibility(View.GONE);
-        aboutUsTV.setOnClickListener((view) -> {
-            //Toast.makeText(this, "This page is not made yet", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -253,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         Intent serviceIntent = new Intent(this, NetworkService.class);
-        serviceIntent.setAction(Vals.ACTION_GET_SERVER_STATUS);
+        serviceIntent.setAction(Consts.ACTION_GET_SERVER_STATUS);
         startService(serviceIntent);
     }
 
@@ -345,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        settingsPref.edit().putBoolean(SettingsFragment.DarkModeKey, darkMode).apply();
+        settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_DARK, darkMode).apply();
         super.onPause();
     }
 
@@ -382,8 +402,8 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        for (WeakReference<TrackedTextView> i : TrackedTextView.textViews) {
-            TrackedTextView textViewRef = i.get();
+        for (WeakReference<AdaptiveTextView> i : AdaptiveTextView.textViews) {
+            AdaptiveTextView textViewRef = i.get();
             if (textViewRef != null) {
                 textViewRef.setTextColor(textsColor);
             }

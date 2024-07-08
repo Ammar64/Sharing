@@ -1,15 +1,15 @@
-package com.ammar.filescenter.services.network.sessions;
+package com.ammar.filescenter.network.sessions;
 
 import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.services.models.Transferable;
-import com.ammar.filescenter.services.models.TransferableApp;
-import com.ammar.filescenter.services.network.Request;
-import com.ammar.filescenter.services.network.Response;
-import com.ammar.filescenter.services.network.Server;
-import com.ammar.filescenter.services.network.sessions.base.HTTPSession;
+import com.ammar.filescenter.models.Transferable;
+import com.ammar.filescenter.models.TransferableApp;
+import com.ammar.filescenter.network.Request;
+import com.ammar.filescenter.network.Response;
+import com.ammar.filescenter.network.Server;
+import com.ammar.filescenter.network.sessions.base.HTTPSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;

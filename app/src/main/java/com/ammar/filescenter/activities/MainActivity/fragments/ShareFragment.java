@@ -5,14 +5,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,13 +18,13 @@ import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity.AddAppsActivity;
 import com.ammar.filescenter.activities.MainActivity.adaptersR.TransferAdapter;
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.common.Vals;
+import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.services.NetworkService;
 
 import java.util.ArrayList;
 
 
-public class TransferFragment extends Fragment {
+public class ShareFragment extends Fragment {
     private View v;
     private RecyclerView filesSendRV;
     private TransferAdapter adapter;
@@ -93,16 +90,16 @@ public class TransferFragment extends Fragment {
             Intent data = result.getData();
             Intent intent = new Intent(requireContext(), NetworkService.class);
 
-            if (data.getAction().equals(Vals.ACTION_ADD_FILES)) {
-                ArrayList<String> selectedFilePaths = data.getStringArrayListExtra(Vals.EXTRA_INTENT_PATHS);
+            if (data.getAction().equals(Consts.ACTION_ADD_FILES)) {
+                ArrayList<String> selectedFilePaths = data.getStringArrayListExtra(Consts.EXTRA_INTENT_PATHS);
                 // intent to be sent to service
-                intent.setAction(Vals.ACTION_ADD_DOWNLOADS);
-                intent.putExtra(Vals.EXTRA_FILE_PATHS, selectedFilePaths);
+                intent.setAction(Consts.ACTION_ADD_DOWNLOADS);
+                intent.putExtra(Consts.EXTRA_FILE_PATHS, selectedFilePaths);
             } else if (data.getAction().equals(AddAppsActivity.ACTION_ADD_APPS)) {
                 ArrayList<String> selectedApps = data.getStringArrayListExtra(AddAppsActivity.EXTRA_INTENT_APPS);
 
-                intent.setAction(Vals.ACTION_ADD_APPS_DOWNLOADS);
-                intent.putExtra(Vals.EXTRA_APPS_NAMES, selectedApps);
+                intent.setAction(Consts.ACTION_ADD_APPS_DOWNLOADS);
+                intent.putExtra(Consts.EXTRA_APPS_NAMES, selectedApps);
             }
             requireContext().startService(intent);
 
@@ -121,8 +118,8 @@ public class TransferFragment extends Fragment {
         Intent intent = new Intent(requireContext(), NetworkService.class);
 
         // intent to be sent to service
-        intent.setAction(Vals.ACTION_ADD_DOWNLOADS);
-        intent.putExtra(Vals.EXTRA_FILE_PATHS, files);
+        intent.setAction(Consts.ACTION_ADD_DOWNLOADS);
+        intent.putExtra(Consts.EXTRA_FILE_PATHS, files);
         requireContext().startService(intent);
     });
 }

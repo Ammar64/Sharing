@@ -1,12 +1,12 @@
-package com.ammar.filescenter.services.network;
+package com.ammar.filescenter.network;
 
 import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.ammar.filescenter.custom.io.ProgressManager;
 import com.ammar.filescenter.custom.io.ProgressOutputStream;
-import com.ammar.filescenter.services.models.Transferable;
-import com.ammar.filescenter.services.models.User;
+import com.ammar.filescenter.models.Transferable;
+import com.ammar.filescenter.models.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;

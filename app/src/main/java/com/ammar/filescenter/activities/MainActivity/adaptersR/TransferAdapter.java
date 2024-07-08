@@ -29,12 +29,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity.AddAppsActivity;
-import com.ammar.filescenter.activities.MainActivity.fragments.TransferFragment;
+import com.ammar.filescenter.activities.MainActivity.fragments.ShareFragment;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.custom.io.ProgressManager;
 import com.ammar.filescenter.services.NetworkService;
-import com.ammar.filescenter.services.network.Server;
-import com.ammar.filescenter.services.models.User;
+import com.ammar.filescenter.network.Server;
+import com.ammar.filescenter.models.User;
 
 import java.util.Locale;
 
@@ -45,9 +45,9 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int TYPE_PROGRESS = 2;
     private static final int TYPE_FOOTER = 3;
 
-    private final TransferFragment fragment;
+    private final ShareFragment fragment;
 
-    public TransferAdapter(TransferFragment fragment) {
+    public TransferAdapter(ShareFragment fragment) {
         this.fragment = fragment;
     }
 
@@ -100,6 +100,139 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public int getItemCount() {
         return ProgressManager.progresses.size() + 2;
     }
+
+
+    // This is just the first row in the recycler view
+    public static class HeaderViewHolder extends RecyclerView.ViewHolder {
+        private final ImageView QRImageIV;
+        private final AppCompatTextView serverLinkTV;
+
+        public HeaderViewHolder(@NonNull View itemView, ShareFragment fragment) {
+            super(itemView);
+
+            ImageButton addAppsB = itemView.findViewById(R.id.B_AddApps);
+            ImageButton addFilesB = itemView.findViewById(R.id.B_AddFiles);
+            ImageButton QRCodeB = itemView.findViewById(R.id.B_ShowAddress);
+
+            ImageButton showSelected = itemView.findViewById(R.id.B_ShowSelected);
+            ImageButton showUsersB = itemView.findViewById(R.id.B_ShowUsers);
+
+            // setup badges
+            TextView usersNumTV = itemView.findViewById(R.id.TV_NumberUsers);
+            TextView filesNumTV = itemView.findViewById(R.id.TV_NumberSelected);
+
+            if (!Server.filesList.isEmpty()) {
+                filesNumTV.setText(String.valueOf(Server.filesList.size()));
+                filesNumTV.setVisibility(View.VISIBLE);
+            }
+            if (!User.users.isEmpty()) {
+                usersNumTV.setText(String.valueOf(User.users.size()));
+                usersNumTV.setVisibility(View.VISIBLE);
+            }
+
+            addAppsB.setOnClickListener((button) -> fragment.launcher.launch(new Intent(itemView.getContext(), AddAppsActivity.class)));
+            addFilesB.setOnClickListener((button) -> fragment.mGetContent.launch("*/*"));
+            // setup QR Code dialog
+            View QRDialogView = LayoutInflater.from(itemView.getContext()).inflate(R.layout.dialog_qrcode, null, false);
+            AlertDialog QRDialogAD = new AlertDialog.Builder(itemView.getContext())
+                    .setView(QRDialogView)
+                    .setPositiveButton(R.string.ok, null)
+                    .create();
+            QRImageIV = QRDialogView.findViewById(R.id.IV_QRCodeImage);
+            serverLinkTV = QRDialogView.findViewById(R.id.TV_ServerLink);
+            QRCodeB.setOnClickListener(button -> {
+                Window window = QRDialogAD.getWindow();
+                if( window != null ) window.setBackgroundDrawableResource( darkMode ? R.color.dialogColorDark : R.color.dialogColorLight );
+                QRDialogAD.show();
+                setupQrCode();
+            });
+
+            // setup Chosen files dialog
+            View chosenFilesView = LayoutInflater.from(itemView.getContext()).inflate(R.layout.dialog_chosen_files, null, false);
+            AlertDialog chosenFilesAD = new AlertDialog.Builder(itemView.getContext())
+                    .setView(chosenFilesView)
+                    .setPositiveButton(R.string.ok, null)
+                    .create();
+
+
+            RecyclerView chosenFilesRecycler = chosenFilesView.findViewById(R.id.RV_ChosenFilesRecycler);
+            TextView noFilesTV = chosenFilesView.findViewById(R.id.TV_NoFilesSelected);
+            ChosenFilesAdapter chosenFilesAdapter = new ChosenFilesAdapter();
+            chosenFilesRecycler.setAdapter(chosenFilesAdapter);
+            chosenFilesRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
+
+            showSelected.setOnClickListener(button -> {
+                Window window = chosenFilesAD.getWindow();
+                if( window != null ) window.setBackgroundDrawableResource( darkMode ? R.color.dialogColorDark : R.color.dialogColorLight );
+                chosenFilesAD.show();
+            });
+
+            NetworkService.filesListNotifier.observe(fragment.getViewLifecycleOwner(), info -> {
+                char action = info.getChar("action");
+                int size = Server.filesList.size();
+                if ('R' == action) {
+                    int index = info.getInt("index");
+                    chosenFilesAdapter.notifyItemRemoved(index);
+                }
+                if (size == 0) {
+                    filesNumTV.setText("0");
+                    filesNumTV.setVisibility(View.GONE);
+                    noFilesTV.setVisibility(View.VISIBLE);
+                } else {
+                    filesNumTV.setText(String.valueOf(size));
+                    filesNumTV.setVisibility(View.VISIBLE);
+                    noFilesTV.setVisibility(View.GONE);
+                }
+            });
+
+            // setup users dialog
+            View usersDialogView = LayoutInflater.from(itemView.getContext()).inflate(R.layout.dialog_users, null, false);
+            AlertDialog usersDialogAD = new AlertDialog.Builder(itemView.getContext())
+                    .setView(usersDialogView)
+                    .setPositiveButton(R.string.ok, null)
+                    .create();
+            RecyclerView usersRecycler = usersDialogView.findViewById(R.id.RV_UsersRecycler);
+            TextView noUserConnectedTV = usersDialogView.findViewById(R.id.TV_NoUserConnected);
+            UsersAdapter usersAdapter = new UsersAdapter();
+            usersRecycler.setAdapter(usersAdapter);
+            usersRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
+            showUsersB.setOnClickListener(button -> {
+                Window window = usersDialogAD.getWindow();
+                if( window != null ) window.setBackgroundDrawableResource( darkMode ? R.color.dialogColorDark : R.color.dialogColorLight );
+                usersDialogAD.show();
+            });
+
+            NetworkService.usersListObserver.observe(fragment.getViewLifecycleOwner(), info -> {
+                char action = info.getChar("action");
+                int size = User.users.size();
+                int index = info.getInt("index");
+                if ('A' == action) {
+                    usersAdapter.notifyItemInserted(index);
+                } else if( 'C' == action ) {
+                    usersAdapter.notifyItemChanged(index);
+                }
+                if (size == 0) {
+                    usersNumTV.setText("0");
+                    usersNumTV.setVisibility(View.GONE);
+                    noUserConnectedTV.setVisibility(View.VISIBLE);
+                } else {
+                    usersNumTV.setText(String.valueOf(size));
+                    usersNumTV.setVisibility(View.VISIBLE);
+                    noUserConnectedTV.setVisibility(View.GONE);
+                }
+            });
+        }
+
+        private void setupQrCode() {
+            String link = "http://" + NetworkService.getIpAddress() + ":" + NetworkService.PORT_NUMBER;
+            serverLinkTV.setText(link);
+            byte[] qrCodeBytes = Utils.encodeTextToQR(link);
+            Bitmap qrCodeBitmap = Utils.QrCodeArrayToBitmap(qrCodeBytes);
+            // Display the bitmap in an ImageView or any other suitable view
+            QRImageIV.setImageBitmap(qrCodeBitmap);
+        }
+    }
+
 
     public static class ProgressViewHolder extends RecyclerView.ViewHolder {
         TextView fileNameTV;
@@ -269,134 +402,5 @@ public class TransferAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public static class HeaderViewHolder extends RecyclerView.ViewHolder {
-        private final ImageView QRImageIV;
-        private final AppCompatTextView serverLinkTV;
-
-        public HeaderViewHolder(@NonNull View itemView, TransferFragment fragment) {
-            super(itemView);
-
-            ImageButton addAppsB = itemView.findViewById(R.id.B_AddApps);
-            ImageButton addFilesB = itemView.findViewById(R.id.B_AddFiles);
-            ImageButton QRCodeB = itemView.findViewById(R.id.B_ShowAddress);
-
-            ImageButton showSelected = itemView.findViewById(R.id.B_ShowSelected);
-            ImageButton showUsersB = itemView.findViewById(R.id.B_ShowUsers);
-
-            // setup badges
-            TextView usersNumTV = itemView.findViewById(R.id.TV_NumberUsers);
-            TextView filesNumTV = itemView.findViewById(R.id.TV_NumberSelected);
-
-            if (!Server.filesList.isEmpty()) {
-                filesNumTV.setText(String.valueOf(Server.filesList.size()));
-                filesNumTV.setVisibility(View.VISIBLE);
-            }
-            if (!User.users.isEmpty()) {
-                usersNumTV.setText(String.valueOf(User.users.size()));
-                usersNumTV.setVisibility(View.VISIBLE);
-            }
-
-            addAppsB.setOnClickListener((button) -> fragment.launcher.launch(new Intent(itemView.getContext(), AddAppsActivity.class)));
-            addFilesB.setOnClickListener((button) -> fragment.mGetContent.launch("*/*"));
-            // setup QR Code dialog
-            View QRDialogView = LayoutInflater.from(itemView.getContext()).inflate(R.layout.dialog_qrcode, null, false);
-            AlertDialog QRDialogAD = new AlertDialog.Builder(itemView.getContext())
-                    .setView(QRDialogView)
-                    .setPositiveButton(R.string.ok, null)
-                    .create();
-            QRImageIV = QRDialogView.findViewById(R.id.IV_QRCodeImage);
-            serverLinkTV = QRDialogView.findViewById(R.id.TV_ServerLink);
-            QRCodeB.setOnClickListener(button -> {
-                Window window = QRDialogAD.getWindow();
-                if( window != null ) window.setBackgroundDrawableResource( darkMode ? R.color.dialogColorDark : R.color.dialogColorLight );
-                QRDialogAD.show();
-                setupQrCode();
-            });
-
-            // setup Chosen files dialog
-            View chosenFilesView = LayoutInflater.from(itemView.getContext()).inflate(R.layout.dialog_chosen_files, null, false);
-            AlertDialog chosenFilesAD = new AlertDialog.Builder(itemView.getContext())
-                    .setView(chosenFilesView)
-                    .setPositiveButton(R.string.ok, null)
-                    .create();
-
-
-            RecyclerView chosenFilesRecycler = chosenFilesView.findViewById(R.id.RV_ChosenFilesRecycler);
-            TextView noFilesTV = chosenFilesView.findViewById(R.id.TV_NoFilesSelected);
-            ChosenFilesAdapter chosenFilesAdapter = new ChosenFilesAdapter();
-            chosenFilesRecycler.setAdapter(chosenFilesAdapter);
-            chosenFilesRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
-
-            showSelected.setOnClickListener(button -> {
-                Window window = chosenFilesAD.getWindow();
-                if( window != null ) window.setBackgroundDrawableResource( darkMode ? R.color.dialogColorDark : R.color.dialogColorLight );
-                chosenFilesAD.show();
-            });
-
-            NetworkService.filesListNotifier.observe(fragment.getViewLifecycleOwner(), info -> {
-                char action = info.getChar("action");
-                int size = Server.filesList.size();
-                if ('R' == action) {
-                    int index = info.getInt("index");
-                    chosenFilesAdapter.notifyItemRemoved(index);
-                }
-                if (size == 0) {
-                    filesNumTV.setText("0");
-                    filesNumTV.setVisibility(View.GONE);
-                    noFilesTV.setVisibility(View.VISIBLE);
-                } else {
-                    filesNumTV.setText(String.valueOf(size));
-                    filesNumTV.setVisibility(View.VISIBLE);
-                    noFilesTV.setVisibility(View.GONE);
-                }
-            });
-
-            // setup users dialog
-            View usersDialogView = LayoutInflater.from(itemView.getContext()).inflate(R.layout.dialog_users, null, false);
-            AlertDialog usersDialogAD = new AlertDialog.Builder(itemView.getContext())
-                    .setView(usersDialogView)
-                    .setPositiveButton(R.string.ok, null)
-                    .create();
-            RecyclerView usersRecycler = usersDialogView.findViewById(R.id.RV_UsersRecycler);
-            TextView noUserConnectedTV = usersDialogView.findViewById(R.id.TV_NoUserConnected);
-            UsersAdapter usersAdapter = new UsersAdapter();
-            usersRecycler.setAdapter(usersAdapter);
-            usersRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
-            showUsersB.setOnClickListener(button -> {
-                Window window = usersDialogAD.getWindow();
-                if( window != null ) window.setBackgroundDrawableResource( darkMode ? R.color.dialogColorDark : R.color.dialogColorLight );
-                usersDialogAD.show();
-            });
-
-            NetworkService.usersListObserver.observe(fragment.getViewLifecycleOwner(), info -> {
-                char action = info.getChar("action");
-                int size = User.users.size();
-                int index = info.getInt("index");
-                if ('A' == action) {
-                    usersAdapter.notifyItemInserted(index);
-                } else if( 'C' == action ) {
-                    usersAdapter.notifyItemChanged(index);
-                }
-                if (size == 0) {
-                    usersNumTV.setText("0");
-                    usersNumTV.setVisibility(View.GONE);
-                    noUserConnectedTV.setVisibility(View.VISIBLE);
-                } else {
-                    usersNumTV.setText(String.valueOf(size));
-                    usersNumTV.setVisibility(View.VISIBLE);
-                    noUserConnectedTV.setVisibility(View.GONE);
-                }
-            });
-        }
-
-        private void setupQrCode() {
-            String link = "http://" + NetworkService.getIpAddress() + ":" + NetworkService.PORT_NUMBER;
-            serverLinkTV.setText(link);
-            byte[] qrCodeBytes = Utils.encodeTextToQR(link);
-            Bitmap qrCodeBitmap = Utils.QrCodeArrayToBitmap(qrCodeBytes);
-            // Display the bitmap in an ImageView or any other suitable view
-            QRImageIV.setImageBitmap(qrCodeBitmap);
-        }
-    }
 }
 

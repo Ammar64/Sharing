@@ -1,9 +1,7 @@
-package com.ammar.filescenter.services.models;
-
-import android.webkit.MimeTypeMap;
+package com.ammar.filescenter.models;
 
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.services.network.Server;
+import com.ammar.filescenter.network.Server;
 
 import org.json.JSONException;
 import org.json.JSONObject;

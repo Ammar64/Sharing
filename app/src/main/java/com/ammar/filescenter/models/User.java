@@ -1,12 +1,11 @@
-package com.ammar.filescenter.services.models;
+package com.ammar.filescenter.models;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
-import com.ammar.filescenter.common.Vals;
+import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.services.NetworkService;
 
 import java.net.SocketAddress;
@@ -29,12 +28,12 @@ public class User {
         this.name = "User-" + getId();
 
         if( userAgent.contains("Windows") ) {
-            this.OS = Vals.OS.WINDOWS;
+            this.OS = Consts.OS.WINDOWS;
         } else if( userAgent.contains("Android") ) {
-            this.OS = Vals.OS.ANDROID;
+            this.OS = Consts.OS.ANDROID;
         } else if ( userAgent.contains("Linux") ) {
-            this.OS = Vals.OS.LINUX;
-        } else this.OS = Vals.OS.UNKNOWN;
+            this.OS = Consts.OS.LINUX;
+        } else this.OS = Consts.OS.UNKNOWN;
     }
     // make new user if user exist return it.
     public static User RegisterUser(SharedPreferences prefs, SocketAddress address, String agent) {
@@ -45,7 +44,7 @@ public class User {
             User new_user = new User(address, agent);
             User.users.add(new_user);
             // block or not
-            new_user.block( prefs.getBoolean(SettingsFragment.UsersBlock, false) );
+            new_user.block( prefs.getBoolean(Consts.PREF_FIELD_ARE_USER_BLOCKED, false) );
 
             // inform UI
             Bundle bundle = new Bundle();
@@ -93,8 +92,8 @@ public class User {
         String ip = address.toString();
         return ip.substring(1, ip.lastIndexOf(":"));
     }
-    private Vals.OS OS;
-    public Vals.OS getOS() {
+    private Consts.OS OS;
+    public Consts.OS getOS() {
         return OS;
     }
     public boolean isBlocked() {

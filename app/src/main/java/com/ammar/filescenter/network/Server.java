@@ -1,9 +1,9 @@
-package com.ammar.filescenter.services.network;
+package com.ammar.filescenter.network;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.ammar.filescenter.services.models.Transferable;
+import com.ammar.filescenter.models.Transferable;
 
 import java.io.IOException;
 import java.net.ServerSocket;

@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.pm.ApplicationInfo;
 
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.services.network.sessions.Sessions;
+import com.ammar.filescenter.network.sessions.Sessions;
 
 
 public class FilesCenterApp extends Application {

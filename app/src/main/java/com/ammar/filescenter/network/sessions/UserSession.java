@@ -1,10 +1,10 @@
-package com.ammar.filescenter.services.network.sessions;
+package com.ammar.filescenter.network.sessions;
 
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.services.network.Request;
-import com.ammar.filescenter.services.network.Response;
-import com.ammar.filescenter.services.network.exceptions.BadRequestException;
-import com.ammar.filescenter.services.network.sessions.base.HTTPSession;
+import com.ammar.filescenter.network.Request;
+import com.ammar.filescenter.network.Response;
+import com.ammar.filescenter.network.exceptions.BadRequestException;
+import com.ammar.filescenter.network.sessions.base.HTTPSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;

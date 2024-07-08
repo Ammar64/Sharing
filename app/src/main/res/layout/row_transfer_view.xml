@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="@id/TV_FileUploadProgress"
         android:paddingEnd="8dp"/>
 
-    <com.ammar.filescenter.custom.ui.TrackedTextView
+    <com.ammar.filescenter.custom.ui.AdaptiveTextView
         android:id="@+id/TV_FileUploadName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
         tools:text="file.png" />
 
 
-    <com.ammar.filescenter.custom.ui.TrackedTextView
+    <com.ammar.filescenter.custom.ui.AdaptiveTextView
         android:id="@+id/TV_FileUploadProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
         tools:text="60%" />
 
 
-    <com.ammar.filescenter.custom.ui.TrackedTextView
+    <com.ammar.filescenter.custom.ui.AdaptiveTextView
         android:id="@+id/TV_OperationType"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
         android:ellipsize="start"
         tools:text="Sending to 192.168.1.15" />
 
-    <com.ammar.filescenter.custom.ui.TrackedTextView
+    <com.ammar.filescenter.custom.ui.AdaptiveTextView
         android:id="@+id/TV_FileTransferInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

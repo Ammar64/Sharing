@@ -1,4 +1,4 @@
-package com.ammar.filescenter.services.models;
+package com.ammar.filescenter.models;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;

@@ -24,9 +24,15 @@
     <string name="block">BLOCK</string>
     <string name="unblock">UNBLOCK</string>
     <string name="user_default_name">User %1$d</string>
+
     <string name="choose_language">Choose language</string>
+
     <string name="no_user_connected">No user connected</string>
     <string name="no_files_selected">No files selected</string>
+
+    <string name="warning">Warning !!</string>
+    <string name="warning_details">This app doesn\'t use https to transfer your files which make it vulnerable to man in the middle attacks.\nTo be safer for now I recommend activating hotspot on this device and make sure the other wanted devices are the only devices connected to it.</string>
+    <string name="dont_show_again">Don\'t show this message again</string>
 
     <!-- Fragment Settings   -->
     <string name="toggle_dark_mode">Toggle dark mode</string>

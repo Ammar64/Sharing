@@ -1,13 +1,12 @@
-package com.ammar.filescenter.services.network.sessions;
+package com.ammar.filescenter.network.sessions;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.services.network.Request;
-import com.ammar.filescenter.services.network.Response;
-import com.ammar.filescenter.services.network.sessions.base.HTTPSession;
+import com.ammar.filescenter.network.Request;
+import com.ammar.filescenter.network.Response;
+import com.ammar.filescenter.network.sessions.base.HTTPSession;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class PageSession extends HTTPSession {
     public PageSession(String[] paths) {

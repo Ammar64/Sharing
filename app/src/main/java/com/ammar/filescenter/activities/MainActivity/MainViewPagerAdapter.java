@@ -7,14 +7,14 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
-import com.ammar.filescenter.activities.MainActivity.fragments.TransferFragment;
+import com.ammar.filescenter.activities.MainActivity.fragments.ShareFragment;
 
 public class MainViewPagerAdapter extends FragmentStateAdapter {
     private final Fragment[] fragments;
 
     public MainViewPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
-        fragments = new Fragment[]{new TransferFragment(), new SettingsFragment()};
+        fragments = new Fragment[]{new ShareFragment(), new SettingsFragment()};
     }
 
 

@@ -1,15 +1,11 @@
-package com.ammar.filescenter.services.network.sessions;
+package com.ammar.filescenter.network.sessions;
 
-import android.util.Log;
-
-import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
+import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.common.Vals;
 import com.ammar.filescenter.custom.io.ProgressManager;
-import com.ammar.filescenter.services.models.User;
-import com.ammar.filescenter.services.network.Request;
-import com.ammar.filescenter.services.network.Response;
-import com.ammar.filescenter.services.network.sessions.base.HTTPSession;
+import com.ammar.filescenter.network.Request;
+import com.ammar.filescenter.network.Response;
+import com.ammar.filescenter.network.sessions.base.HTTPSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +24,7 @@ public class UploadSession extends HTTPSession {
 
     @Override
     public void POST(Request req, Response res) {
-        boolean uploadDisabled = Utils.getSettings().getBoolean(SettingsFragment.UploadDisable, false);
+        boolean uploadDisabled = Utils.getSettings().getBoolean(Consts.PREF_FIELD_IS_UPLOAD_DISABLED, false);
 
         try {
             String path = req.getPath();

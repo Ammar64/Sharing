@@ -1,16 +1,16 @@
-package com.ammar.filescenter.services.network;
+package com.ammar.filescenter.network;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
+import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.services.models.User;
-import com.ammar.filescenter.services.network.sessions.base.HTTPSession;
+import com.ammar.filescenter.models.User;
+import com.ammar.filescenter.network.sessions.base.HTTPSession;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Collections;
 import java.util.Locale;
 
 
@@ -29,7 +29,7 @@ public class ClientHandler implements Runnable {
     public ClientHandler(Context context, Socket clientSocket) {
         this.clientSocket = clientSocket;
         this.context = context;
-        this.settings = this.context.getSharedPreferences(SettingsFragment.SettingsPrefFile, Context.MODE_PRIVATE);
+        this.settings = this.context.getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
     }
 
     private final BlockedSession blockedSession = new BlockedSession();

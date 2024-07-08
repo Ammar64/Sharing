@@ -1,7 +1,5 @@
 package com.ammar.filescenter.activities.MainActivity.fragments;
 
-import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMode;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,15 +18,10 @@ import androidx.fragment.app.Fragment;
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.MainActivity.MainActivity;
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.common.Vals;
+import com.ammar.filescenter.common.Consts;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SettingsFragment extends Fragment {
-    public static final String SettingsPrefFile = "SettingsPref";
-    public static final String DarkModeKey = "IS_DARK_MODE";
-    public static final String UploadDisable = "UPLOAD_DISABLE";
-    public static final String UsersBlock = "USERS_BLOCK";
-    public static final String Language = "LANGUAGE";
     private View v;
 
     private RelativeLayout uploadDisableRL;
@@ -50,21 +43,21 @@ public class SettingsFragment extends Fragment {
     }
 
     private void initItems() {
-        settingsPref = requireContext().getSharedPreferences(SettingsPrefFile, Context.MODE_PRIVATE);
+        settingsPref = requireContext().getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
 
         uploadDisableRL = v.findViewById(R.id.RL_UploadDisable);
         usersBlockRL = v.findViewById(R.id.RL_UserBlock);
 
         uploadDisableS = v.findViewById(R.id.SC_UploadAllowToggle);
-        uploadDisableS.setChecked(settingsPref.getBoolean(UploadDisable, false));
+        uploadDisableS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_IS_UPLOAD_DISABLED, false));
 
         usersBlockS = v.findViewById(R.id.SC_UsersBlockToggle);
-        usersBlockS.setChecked(settingsPref.getBoolean(UsersBlock, false));
+        usersBlockS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_ARE_USER_BLOCKED, false));
 
         languageRL = v.findViewById(R.id.RL_SettingsLanguage);
 
-        String lang = settingsPref.getString(Language, "");
-        int selected = Vals.langsCode.indexOf(lang);
+        String lang = settingsPref.getString(Consts.PREF_FIELD_LANG, "");
+        int selected = Consts.langsCode.indexOf(lang);
         languageAD = new AlertDialog.Builder(requireContext())
                 .setTitle(R.string.choose_language)
                 .setSingleChoiceItems(R.array.langs, selected, null)
@@ -73,9 +66,9 @@ public class SettingsFragment extends Fragment {
                     if (lw.getCheckedItemCount() > 0) {
                         int which = lw.getCheckedItemPosition();
                         settingsPref.edit()
-                                .putString(Language, Vals.langsCode.get(which))
+                                .putString(Consts.PREF_FIELD_LANG, Consts.langsCode.get(which))
                                 .apply();
-                        Utils.setLocale((MainActivity) requireActivity(), Vals.langsCode.get(which));
+                        Utils.setLocale((MainActivity) requireActivity(), Consts.langsCode.get(which));
                         requireActivity().recreate();
                     }
                 })
@@ -89,7 +82,7 @@ public class SettingsFragment extends Fragment {
             boolean isChecked = uploadDisableS.isChecked();
             uploadDisableS.setChecked(!isChecked);
             boolean newValue = !isChecked;
-            if (!settingsPref.edit().putBoolean(UploadDisable, newValue).commit()) {
+            if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_UPLOAD_DISABLED, newValue).commit()) {
                 Log.e("MYLOG", "Failed to change dark mode");
             }
         });
@@ -99,7 +92,7 @@ public class SettingsFragment extends Fragment {
             usersBlockS.setChecked(!isChecked);
             boolean newValue = !isChecked;
 
-            if (!settingsPref.edit().putBoolean(UsersBlock, newValue).commit()) {
+            if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_ARE_USER_BLOCKED, newValue).commit()) {
                 Log.e("MYLOG", "Failed to change dark mode");
             }
         });

@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.services.NetworkService;
-import com.ammar.filescenter.services.models.User;
+import com.ammar.filescenter.models.User;
 
 import java.io.File;
 import java.util.LinkedList;

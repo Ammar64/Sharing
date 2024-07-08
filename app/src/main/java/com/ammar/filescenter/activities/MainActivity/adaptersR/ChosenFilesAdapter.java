@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,12 +18,12 @@ import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
-import com.ammar.filescenter.common.Vals;
+import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.services.NetworkService;
-import com.ammar.filescenter.services.network.Server;
-import com.ammar.filescenter.services.models.Transferable;
+import com.ammar.filescenter.network.Server;
+import com.ammar.filescenter.models.Transferable;
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.services.models.TransferableApp;
+import com.ammar.filescenter.models.TransferableApp;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -74,8 +73,8 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         public void setFileListener(String uuid) {
             removeFileB.setOnClickListener( button -> {
                 Intent serviceIntent = new Intent(itemView.getContext(), NetworkService.class);
-                serviceIntent.setAction(Vals.ACTION_REMOVE_DOWNLOAD);
-                serviceIntent.putExtra(Vals.EXTRA_DOWNLOAD_UUID, uuid);
+                serviceIntent.setAction(Consts.ACTION_REMOVE_DOWNLOAD);
+                serviceIntent.putExtra(Consts.EXTRA_DOWNLOAD_UUID, uuid);
                 itemView.getContext().startService(serviceIntent);
             });
         }

@@ -1,4 +1,4 @@
-package com.ammar.filescenter.services.network.sessions;
+package com.ammar.filescenter.network.sessions;
 
 public class Sessions {
     public static void defineSessions() {

@@ -8,7 +8,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,14 +20,12 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.MainActivity.MainActivity;
-import com.ammar.filescenter.common.Vals;
+import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.custom.data.QueueMutableLiveData;
-import com.ammar.filescenter.services.network.Server;
-import com.ammar.filescenter.services.models.TransferableApp;
-import com.ammar.filescenter.services.models.Transferable;
+import com.ammar.filescenter.network.Server;
+import com.ammar.filescenter.models.TransferableApp;
+import com.ammar.filescenter.models.Transferable;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -62,7 +59,7 @@ public class NetworkService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        serverStatusIntent.setAction(Vals.ACTION_GET_SERVER_STATUS);
+        serverStatusIntent.setAction(Consts.ACTION_GET_SERVER_STATUS);
     }
 
     @Nullable
@@ -81,19 +78,19 @@ public class NetworkService extends Service {
         String actionReceived = intent.getAction();
         String action = actionReceived != null ? actionReceived : "";
         switch (action) {
-            case Vals.ACTION_TOGGLE_SERVER:
+            case Consts.ACTION_TOGGLE_SERVER:
                 toggleServer();
                 break;
-            case Vals.ACTION_STOP_SERVICE:
+            case Consts.ACTION_STOP_SERVICE:
                 stopSelf();
-            case Vals.ACTION_GET_SERVER_STATUS:
+            case Consts.ACTION_GET_SERVER_STATUS:
                 sendServerStatusToActivity();
                 break;
-            case Vals.ACTION_UPDATE_NOTIFICATION_TEXT:
+            case Consts.ACTION_UPDATE_NOTIFICATION_TEXT:
                 startForeground(FOREGROUND_NOTIFICATION_ID, buildNotification(this));
                 break;
-            case Vals.ACTION_ADD_DOWNLOADS:
-                ArrayList<String> filePaths = intent.getStringArrayListExtra(Vals.EXTRA_FILE_PATHS);
+            case Consts.ACTION_ADD_DOWNLOADS:
+                ArrayList<String> filePaths = intent.getStringArrayListExtra(Consts.EXTRA_FILE_PATHS);
                 assert filePaths != null;
                 for( String i : filePaths ) {
                     Server.filesList.add( new Transferable(i));
@@ -102,8 +99,8 @@ public class NetworkService extends Service {
                 fb.putChar("action", 'A');
                 NetworkService.filesListNotifier.postValue(fb);
                 break;
-            case Vals.ACTION_ADD_APPS_DOWNLOADS:
-                ArrayList<String> packages_name = intent.getStringArrayListExtra(Vals.EXTRA_APPS_NAMES);
+            case Consts.ACTION_ADD_APPS_DOWNLOADS:
+                ArrayList<String> packages_name = intent.getStringArrayListExtra(Consts.EXTRA_APPS_NAMES);
                 if( packages_name != null ) {
                     for( String i : packages_name ) {
                         try {
@@ -117,8 +114,8 @@ public class NetworkService extends Service {
                 ab.putChar("action", 'A');
                 NetworkService.filesListNotifier.postValue(ab);
                 break;
-            case Vals.ACTION_REMOVE_DOWNLOAD:
-                String uuid = intent.getStringExtra(Vals.EXTRA_DOWNLOAD_UUID);
+            case Consts.ACTION_REMOVE_DOWNLOAD:
+                String uuid = intent.getStringExtra(Consts.EXTRA_DOWNLOAD_UUID);
 
                 int index = 0;
                 for( Transferable i : Server.filesList ) {
@@ -133,7 +130,7 @@ public class NetworkService extends Service {
                 remove_info.putInt("index", index);
                 NetworkService.filesListNotifier.postValue(remove_info);
                 break;
-            case Vals.ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN:
+            case Consts.ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN:
                 if( !server.isRunning() ) {
                     Log.d("MYLOG", "Stopping App process");
                     int pid = android.os.Process.myPid();

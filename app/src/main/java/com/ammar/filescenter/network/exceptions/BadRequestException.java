@@ -1,4 +1,4 @@
-package com.ammar.filescenter.services.network.exceptions;
+package com.ammar.filescenter.network.exceptions;
 
 public class BadRequestException extends Exception {
     public BadRequestException(String message) {

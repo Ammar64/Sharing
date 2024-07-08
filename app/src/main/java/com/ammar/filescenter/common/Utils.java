@@ -63,7 +63,7 @@ public class Utils {
     public static void setupUtils(Context ctx) {
         Utils.res = ctx.getResources();
         Utils.assetManager = ctx.getAssets();
-        Utils.settings = ctx.getSharedPreferences(SettingsFragment.SettingsPrefFile, Context.MODE_PRIVATE);
+        Utils.settings = ctx.getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
     }
 
     public static float dpToPx(float dp) {
@@ -375,13 +375,13 @@ public class Utils {
     }
 
     public static void createAppDirs() {
-        assert Vals.filesCenterDir.mkdir();
-        assert Vals.appsDir.mkdir();
-        assert Vals.imagesDir.mkdir();
-        assert Vals.audioDir.mkdir();
-        assert Vals.filesDir.mkdir();
-        assert Vals.videosDir.mkdir();
-        assert Vals.documentsDir.mkdir();
+        assert Consts.filesCenterDir.mkdir();
+        assert Consts.appsDir.mkdir();
+        assert Consts.imagesDir.mkdir();
+        assert Consts.audioDir.mkdir();
+        assert Consts.filesDir.mkdir();
+        assert Consts.videosDir.mkdir();
+        assert Consts.documentsDir.mkdir();
     }
 
     public static void setLocale(MainActivity activity, String languageCode) {
@@ -453,18 +453,18 @@ public class Utils {
     public static File getUploadDir(String fileName) {
         String mimeType = Utils.getMimeType(fileName);
         if (mimeType.startsWith("image/")) {
-            return Vals.imagesDir;
+            return Consts.imagesDir;
         } else if (mimeType.equals("application/vnd.android.package-archive")) {
-            return Vals.appsDir;
+            return Consts.appsDir;
         } else if (mimeType.startsWith("video/")) {
-            return Vals.videosDir;
+            return Consts.videosDir;
         } else if (mimeType.startsWith("audio/")) {
-            return Vals.audioDir;
+            return Consts.audioDir;
         } else if (Utils.isDocumentType(mimeType)) {
-            return Vals.documentsDir;
+            return Consts.documentsDir;
         } else {
             Log.d("MYLOG", "Type: " + mimeType);
-            return Vals.filesDir;
+            return Consts.filesDir;
         }
     }
 
