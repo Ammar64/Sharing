@@ -267,7 +267,8 @@ public class Utils {
         return upload_file;
     }
 
-    public static String getMimeType(String name) {
+
+    public static String getMimeType(String name, boolean extraTypes) {
         String type = null;
 
         // extension
@@ -279,9 +280,14 @@ public class Utils {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
         }
         if (type == null) {
-            type = getExtraTypes(name.substring( name.lastIndexOf(".") + 1 ));
+            if( extraTypes )
+                type = getExtraTypes(name.substring( name.lastIndexOf(".") + 1 ));
+            else type = "*/*";
         }
         return type;
+    }
+    public static String getMimeType(String name) {
+        return getMimeType(name, true);
     }
 
     private static String getExtraTypes(String ext) {

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <include layout="@layout/toolbar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/RV_FilesRecycler"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/LL_Toolbar"
+        tools:listitem="@layout/row_file"
+        tools:itemCount="0" />
+
+
+    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+        android:id="@+id/TV_FolderEmpty"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="@string/folder_is_empty"
+        app:layout_constraintTop_toBottomOf="@id/LL_Toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textAlignment="center"
+        app:autoSizeTextType="uniform"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

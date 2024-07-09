@@ -94,7 +94,7 @@ public class ShareFragment extends Fragment {
                 ArrayList<String> selectedFilePaths = data.getStringArrayListExtra(Consts.EXTRA_INTENT_PATHS);
                 // intent to be sent to service
                 intent.setAction(Consts.ACTION_ADD_DOWNLOADS);
-                intent.putExtra(Consts.EXTRA_FILE_PATHS, selectedFilePaths);
+                intent.putExtra(Consts.EXTRA_FILES_PATH, selectedFilePaths);
             } else if (data.getAction().equals(AddAppsActivity.ACTION_ADD_APPS)) {
                 ArrayList<String> selectedApps = data.getStringArrayListExtra(AddAppsActivity.EXTRA_INTENT_APPS);
 
@@ -107,19 +107,14 @@ public class ShareFragment extends Fragment {
     });
 
 
-    public ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetMultipleContents(), (result) -> {
-        ArrayList<String> files = new ArrayList<>(result.size());
-
-        for( Uri i : result ) {
-            String path = Utils.getPathFromUri(requireContext(), i);
-            files.add(path);
+    public ActivityResultLauncher<Intent> mGetContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
+        Intent intent = result.getData();
+        if ( result.getResultCode() == Activity.RESULT_OK && intent != null && Consts.ACTION_ADD_FILES.equals( intent.getAction())) {
+           ArrayList<String> filesPath = intent.getStringArrayListExtra(Consts.EXTRA_FILES_PATH);
+           Intent serviceIntent = new Intent(requireContext(), NetworkService.class);
+           serviceIntent.setAction(Consts.ACTION_ADD_DOWNLOADS);
+           serviceIntent.putStringArrayListExtra(Consts.EXTRA_FILES_PATH, filesPath);
+           requireContext().startService(serviceIntent);
         }
-
-        Intent intent = new Intent(requireContext(), NetworkService.class);
-
-        // intent to be sent to service
-        intent.setAction(Consts.ACTION_ADD_DOWNLOADS);
-        intent.putExtra(Consts.EXTRA_FILE_PATHS, files);
-        requireContext().startService(intent);
     });
 }

@@ -38,6 +38,9 @@
         <activity android:name=".activities.AddAppsActivity.AddAppsActivity"
             android:exported="false" />
 
+        <activity android:name=".activities.AddFilesActivity.AddFilesActivity"
+            android:exported="false"/>
+
         <activity android:name=".activities.TutorialActivity.TutorialActivity"
             android:exported="true" />
 

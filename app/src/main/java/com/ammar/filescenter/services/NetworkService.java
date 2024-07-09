@@ -90,7 +90,7 @@ public class NetworkService extends Service {
                 startForeground(FOREGROUND_NOTIFICATION_ID, buildNotification(this));
                 break;
             case Consts.ACTION_ADD_DOWNLOADS:
-                ArrayList<String> filePaths = intent.getStringArrayListExtra(Consts.EXTRA_FILE_PATHS);
+                ArrayList<String> filePaths = intent.getStringArrayListExtra(Consts.EXTRA_FILES_PATH);
                 assert filePaths != null;
                 for( String i : filePaths ) {
                     Server.filesList.add( new Sharable(i));

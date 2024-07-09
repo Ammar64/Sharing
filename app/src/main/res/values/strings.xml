@@ -53,7 +53,12 @@
     <string name="selected_num">Selected %1$d</string>
     <string name="splits">splits</string>
 
-
+    <!-- Activity Add Files  -->
+    <string name="select_files">Select files</string>
+    <string name="folder_is_empty">This folder is empty</string>
+    <string name="internal_storage">Internal storage</string>
+    <string name="file_type">%1$s file</string>
+    <string name="permission_denied">Permission denied</string>
     <!-- common   -->
     <string name="app_name">sharing</string>
     <string name="settings">Settings</string>

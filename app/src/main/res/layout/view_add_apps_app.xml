@@ -27,8 +27,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@+id/IV_AppIcon"
         android:layout_marginStart="-8dp"
-        android:background="@android:color/transparent"
-        />
+        android:background="@null" />
     <TextView
         android:id="@+id/TV_AppName"
         android:layout_width="wrap_content"

@@ -35,7 +35,6 @@
     <string name="dont_show_again">لا تظهر هذه الرسالة مرة أخرى</string>
 
     <!-- Fragment Settings   -->
-    <string name="dark_mode">الوضع الداكن</string>
     <string name="toggle_dark_mode">تشغيل الوضع الداكن</string>
 
     <string name="disable_browser_upload">تعطيل الإرسال من المتصفح</string>
@@ -53,13 +52,21 @@
     <string name="select_apps">حدد تطبيقات</string>
     <string name="selected_num">تم تحديد %1$d</string>
     <string name="splits">تقسيمات</string>
-
+    <!-- Activity Add Files  -->
+    <string name="select_files">حدد ملفات</string>
+    <string name="folder_is_empty">مجلد فارغ</string>
+    <string name="internal_storage">وحدة التخزين الداخلية</string>
+    <string name="file_type">ملف %1$s</string>
+    <string name="permission_denied">الوصول مرفوض</string>
 
     <!-- common   -->
     <string name="app_name">شارك</string>
     <string name="settings">الإعدادات</string>
     <string name="done">تم</string>
     <string name="ok">حسنا</string>
+
+    <string name="dark_mode">الوضع الداكن</string>
+    <string name="light_mode">الوضع الفاتح</string>
 
     <string name="svr_notification_message">الخادم يعمل على العنوان %1$s:%2$s</string>
     <string name="app_icon_acc_desc">أيقونة التطبيق</string>

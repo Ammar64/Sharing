@@ -1,5 +1,7 @@
+<!--AUTHOR: Dazzle UI-->
+<!--  Attribution CC:  https://www.svgrepo.com/page/licensing/#CC%20Attribution -->
+<!-- this file was converted from svg to android xml -->
+
 <vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="30dp" android:viewportHeight="24" android:viewportWidth="24" android:width="30dp">
-      
     <path android:fillColor="#00000000" android:pathData="M12,3V4M12,20V21M4,12H3M6.314,6.314L5.5,5.5M17.686,6.314L18.5,5.5M6.314,17.69L5.5,18.5M17.686,17.69L18.5,18.5M21,12H20M16,12C16,14.209 14.209,16 12,16C9.791,16 8,14.209 8,12C8,9.791 9.791,8 12,8C14.209,8 16,9.791 16,12Z" android:strokeColor="#ffffff" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeWidth="2"/>
-    
 </vector>
