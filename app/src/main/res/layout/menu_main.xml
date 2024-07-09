@@ -14,13 +14,4 @@
         android:textSize="22sp"
         android:text="@string/tutorial" />
 
-    <com.ammar.filescenter.custom.ui.AdaptiveTextView
-        android:id="@+id/TV_MenuMainAboutUs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:background="?attr/selectableItemBackground"
-        android:paddingHorizontal="10dp"
-        android:textSize="22sp"
-        android:text="@string/about_us" />
 </LinearLayout>
