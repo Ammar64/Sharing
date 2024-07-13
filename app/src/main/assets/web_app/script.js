@@ -4,6 +4,7 @@
 const uploadLabel = document.getElementById("uploadLabel");
 const recieveBtn = document.getElementById("recieveBtn");
 const downloadBubble = document.getElementById("downloadBubble");
+const noDownloadsText = document.getElementById("no-downloads-text");
 const loginBubble = document.getElementById("loginBubble");
 const alertDialog = document.getElementById("alertDialog")
 const overlay = document.getElementById('overlay');
@@ -102,8 +103,7 @@ function updateProgress(percent) {
 
 
 function requestAvailableDownloads() {
-    // Show the loader when the request starts
-    showLoader();
+    noDownloadsText.style.display = "none";
     while (downloads.lastChild) {
         downloads.lastChild.remove();
     }
@@ -119,6 +119,12 @@ function requestAvailableDownloads() {
             window.location.replace("/blocked");
         }
     }).then(data => {
+        if( data.length == 0 ) {
+            noDownloadsText.style.display = "block";
+            return;
+        } else {
+            noDownloadsText.style.display = "none";
+        }
         data.forEach(e => {
             const newFileItem = download_item.cloneNode();
 
@@ -179,12 +185,8 @@ function requestAvailableDownloads() {
                 downloadFileWithProgress(`/download/${e.uuid}`);
             });
         });
-        // Hide the loader when the request is complete
-        hideLoader();
     }).catch(error => {
         console.error('Error fetching available downloads:', error);
-        // Hide the loader even if there is an error
-        hideLoader();
     });
 }
 
@@ -316,23 +318,23 @@ if (!storedUsername) {
     fetch("/get-user-info", {
         method: "GET"
     }).then(function (res) {
-        if (res.ok) return res.json();
+        if (res.status === 200) return res.json();
         else throw "ERROR GETTING USER INFO";
     }).then(function (res) {
         userId = res.id;
-        storedUsername = res.username;
-        localStorage.setItem('username', storedUsername);
+        updateStoredUsername(res.username);
+
+
     }).catch(function (err) {
         console.error(err.message);
     })
+} else { // else tell the server about the stored name
+    updateUsername(storedUsername);
 }
 
-// Update the display of current username
-document.querySelector('.current-username p').textContent = `Current username: ${storedUsername}`;
 
 usernameForm.addEventListener('submit', function (event) {
     event.preventDefault(); // Prevent default form submission
-
     const usernameInput = document.getElementById('usernameInput').value.trim(); // Trim whitespace
 
     // Check if username is valid (not empty or undefined)
@@ -341,34 +343,41 @@ usernameForm.addEventListener('submit', function (event) {
         return;
     }
 
+    updateUsername(usernameInput);
     // Check if username has changed
     if (usernameInput !== storedUsername) {
         // Save updated username to localStorage
         localStorage.setItem('username', usernameInput);
         storedUsername = usernameInput; // Update storedUsername variable
-
+        
         // Update display of current username
         document.querySelector('.current-username p').textContent = `Current username: ${storedUsername}`;
     }
 
-    const url = '/update-user-name';
+});
 
-    fetch(url, {
+/**
+ * @param {string} username 
+ */
+function updateUsername(username) {
+    fetch('/update-user-name', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username: usernameInput })
+        body: JSON.stringify({ username: username })
     })
         .then(response => {
-            if (!response.ok) {
+            if (response.status !== 200) {
                 throw new Error('Network response was not ok');
             }
             return response.json();
         })
         .then(data => {
             console.log('Username updated successfully:', data);
-            // Optionally, perform actions after successful submission
+            if(data.changed) {
+                updateStoredUsername(data.username);
+            }
             closeBubbles([loginBubble]); // Assuming closeBubbles accepts an array
         })
         .catch(error => {
@@ -376,28 +385,14 @@ usernameForm.addEventListener('submit', function (event) {
             // Handle error scenarios
             closeBubbles([loginBubble]);
         });
-});
+}
 
-// /* reloading page */
-window.addEventListener('load', function (event) {
-    showLoader();
-    updateProgress(0);
-
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += 1;
-        if (progress > 100) {
-            progress = 100;
-            clearInterval(interval);
-            hideLoader();
-        }
-        updateProgress(progress);
-    }, .01);
-
-    console.log('Page is refreshing...');
-});
-
-
+function updateStoredUsername(username) {
+    localStorage.setItem("username", username);
+    storedUsername = username;
+    // Update the display of current username
+    document.querySelector('.current-username p').textContent = `Current username: ${storedUsername}`;
+}
 /*  */
 function setVhProperty() {
     var vh = window.innerHeight * 0.01;

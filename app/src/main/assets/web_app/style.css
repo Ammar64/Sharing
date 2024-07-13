@@ -664,6 +664,14 @@ button{
     z-index: 901; 
 }
 
+#no-downloads-text {
+  position: absolute;
+  color: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+}
 
 .bt {
   display: flex;

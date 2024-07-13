@@ -90,8 +90,6 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
         return new ViewHolder(view);
     }
 
-    ArrayList<Integer> checksPositions = new ArrayList<>();
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
@@ -102,7 +100,7 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
                 .into(holder.icon);
 
         holder.appName.setText(displayedApps[position].label);
-        holder.checkBox.setChecked(checksPositions.contains(holder.getAdapterPosition()));
+        holder.checkBox.setChecked(displayedApps[position].isChecked);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             holder.splits.setVisibility(displayedApps[position].hasSplits ? View.VISIBLE : View.INVISIBLE);
@@ -114,12 +112,10 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
             holder.checkBox.setChecked(!isChecked);
             if (!isChecked) {
                 selectedApps.add(displayedApps[position].packageName);
-                checksPositions.add(holder.getBindingAdapterPosition());
             } else {
                 selectedApps.remove(displayedApps[position].packageName);
-                // using (Integer) forces it to not use remove(int index)
-                checksPositions.remove((Integer) holder.getBindingAdapterPosition());
             }
+            this.displayedApps[position].isChecked = !isChecked;
             activity.setToolbarTitle(activity.getString(R.string.selected_num, selectedApps.size()));
         });
 
@@ -151,6 +147,7 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
         Bitmap icon;
         String label;
         boolean hasSplits;
+        boolean isChecked = false;
     }
 
 }

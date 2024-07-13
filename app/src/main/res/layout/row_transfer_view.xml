@@ -4,7 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="5dp">
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="4dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="#44000000">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,18 +18,18 @@
         android:focusable="true">
 
         <ProgressBar
-            android:id="@+id/PB_FileUploadProgress"
+            android:id="@+id/PB_SharedFileProgress"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:paddingEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@id/TV_FileUploadProgress"
-            app:layout_constraintEnd_toStartOf="@id/TV_FileUploadProgress"
+            app:layout_constraintBottom_toBottomOf="@id/TV_SharedFileProgress"
+            app:layout_constraintEnd_toStartOf="@id/TV_SharedFileProgress"
             app:layout_constraintStart_toStartOf="@+id/TV_OperationType"
-            app:layout_constraintTop_toTopOf="@id/TV_FileUploadProgress" />
+            app:layout_constraintTop_toTopOf="@id/TV_SharedFileProgress" />
 
         <com.ammar.filescenter.custom.ui.AdaptiveTextView
-            android:id="@+id/TV_FileUploadName"
+            android:id="@+id/TV_SharedFileName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -42,7 +46,7 @@
 
 
         <com.ammar.filescenter.custom.ui.AdaptiveTextView
-            android:id="@+id/TV_FileUploadProgress"
+            android:id="@+id/TV_SharedFileProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
@@ -65,8 +69,8 @@
             android:singleLine="true"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@id/TV_FileTransferInfo"
-            app:layout_constraintStart_toStartOf="@id/TV_FileUploadName"
-            app:layout_constraintTop_toBottomOf="@+id/TV_FileUploadName"
+            app:layout_constraintStart_toStartOf="@id/TV_SharedFileName"
+            app:layout_constraintTop_toBottomOf="@+id/TV_SharedFileName"
             tools:text="Sending to 192.168.1.15" />
 
         <com.ammar.filescenter.custom.ui.AdaptiveTextView
@@ -76,7 +80,7 @@
             android:maxLines="1"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/TV_OperationType"
-            app:layout_constraintEnd_toEndOf="@+id/TV_FileUploadProgress"
+            app:layout_constraintEnd_toEndOf="@+id/TV_SharedFileProgress"
             app:layout_constraintTop_toTopOf="@+id/TV_OperationType"
             tools:text="24 MB / 35 MB            2 MB/S" />
 

@@ -46,12 +46,10 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private AddFilesActivity act;
 
     private final Stack<Parcelable> recyclerViewStates = new Stack<>();
-    private final Animation anim;
 
     public StorageAdapter(AddFilesActivity act) {
         this.act = act;
         viewDirectory(currentDir);
-        anim = AnimationUtils.loadAnimation(act, R.anim.appear);
 
         act.getOnBackPressedDispatcher().addCallback(act, new OnBackPressedCallback(true) {
             @Override
@@ -137,8 +135,8 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
         // animate when scroll down only
         if (position > lastPosition) {
-            holder.itemView.startAnimation(anim);
-            lastPosition = holder.getAdapterPosition();
+            holder.itemView.startAnimation(AnimationUtils.loadAnimation(act, R.anim.appear));
+            lastPosition = holder.getBindingAdapterPosition();
         }
     }
 
@@ -173,8 +171,9 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         if (this.displayedFiles.length == 0) {
             act.folderEmptyTV.setVisibility(View.VISIBLE);
-            act.folderEmptyTV.startAnimation(anim);
+            act.folderEmptyTV.startAnimation(AnimationUtils.loadAnimation(act, R.anim.appear));
         } else act.folderEmptyTV.setVisibility(View.GONE);
+
 
         notifyDataSetChanged();
         lastPosition = -1; // to animate all

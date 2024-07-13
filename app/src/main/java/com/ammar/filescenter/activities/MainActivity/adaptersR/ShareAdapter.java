@@ -40,7 +40,8 @@ import com.ammar.filescenter.models.User;
 import java.util.Locale;
 
 
-// this adapter is for files that is currently uploading.
+// this adapter for the recycler view you see when you open the app
+// it takes the entire screen except for the top and bottom bars
 public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_HEADER = 1;
     private static final int TYPE_PROGRESS = 2;
@@ -71,7 +72,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 LayoutInflater headerInflater = LayoutInflater.from(parent.getContext());
                 View header = headerInflater.inflate(R.layout.row_transfer_header, parent, false);
                 return new HeaderViewHolder(header, fragment);
-            case TYPE_FOOTER:
+            case TYPE_FOOTER: // this is bottom app bar
                 Space space = new Space(parent.getContext());
                 TypedValue out = new TypedValue();
                 parent.getContext().getTheme().resolveAttribute(android.R.attr.actionBarSize, out, true);
@@ -244,11 +245,11 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         public ProgressViewHolder(@NonNull View itemView) {
             super(itemView);
-            fileNameTV = itemView.findViewById(R.id.TV_FileUploadName);
+            fileNameTV = itemView.findViewById(R.id.TV_SharedFileName);
             operationTV = itemView.findViewById(R.id.TV_OperationType);
             transferInfoTV = itemView.findViewById(R.id.TV_FileTransferInfo);
-            fileProgressPB = itemView.findViewById(R.id.PB_FileUploadProgress);
-            fileProgressTV = itemView.findViewById(R.id.TV_FileUploadProgress);
+            fileProgressPB = itemView.findViewById(R.id.PB_SharedFileProgress);
+            fileProgressTV = itemView.findViewById(R.id.TV_SharedFileProgress);
         }
 
         private final Handler handler = new Handler();
@@ -368,9 +369,6 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         private void setClickListener(ProgressManager manager) {
             if (manager.getOperation() == ProgressManager.OP.UPLOAD) {
-                TypedValue outValue = new TypedValue();
-                itemView.getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
-                itemView.setBackgroundResource(outValue.resourceId);
 
                 itemView.setOnClickListener((view) -> {
                     String type = manager.getFileType();
@@ -397,7 +395,6 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     }
                 });
             } else {
-                itemView.setBackground(null);
                 itemView.setOnClickListener(null);
             }
         }
