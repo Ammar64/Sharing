@@ -3,6 +3,8 @@ package com.ammar.filescenter.activities.AddFilesActivity.adaptersR;
 import android.app.Activity;
 import android.os.Environment;
 import android.os.Parcelable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +22,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddFilesActivity.AddFilesActivity;
-import com.ammar.filescenter.activities.AddFilesActivity.FileTypeName;
+import com.ammar.filescenter.activities.AddFilesActivity.FileTypeUtils;
 import com.ammar.filescenter.common.Utils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.ListIterator;
@@ -37,6 +40,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private final File internalStorage = Environment.getExternalStorageDirectory();
     private File currentDir = internalStorage;
     private File[] files;
+    private File[] displayedFiles;
 
     private int lastDirIndex = -1;
     private AddFilesActivity act;
@@ -60,6 +64,24 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             }
         });
+
+
+        this.act.searchInputET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchDirectory(s.toString().toLowerCase());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -70,7 +92,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return TYPE_SPACE;
         }
         if (position > lastDirIndex && hasSpaceView) position--;
-        return files[position].isDirectory() ? TYPE_DIR : TYPE_FILE;
+        return displayedFiles[position].isDirectory() ? TYPE_DIR : TYPE_FILE;
     }
 
     @NonNull
@@ -100,8 +122,8 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         switch (type) {
             case TYPE_DIR:
                 DirectoryViewHolder dirHolder = (DirectoryViewHolder) holder;
-                dirHolder.setup(files[position], (view) -> {
-                    viewDirectory(files[position]);
+                dirHolder.setup(displayedFiles[position], (view) -> {
+                    viewDirectory(displayedFiles[position]);
                 });
                 break;
             case TYPE_FILE:
@@ -116,7 +138,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         // animate when scroll down only
         if (position > lastPosition) {
             holder.itemView.startAnimation(anim);
-            lastPosition = holder.getBindingAdapterPosition();
+            lastPosition = holder.getAdapterPosition();
         }
     }
 
@@ -125,10 +147,13 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemCount() {
         // if the last directory index is even add 1 to item count to put empty space in it
         // if no directories present then lastDirIndex will be -1 and (-1 & 1) is 1
-        return (lastDirIndex & 1) == 1 ? files.length : files.length + 1;
+        return (lastDirIndex & 1) == 1 ? displayedFiles.length : displayedFiles.length + 1;
     }
 
     private void viewDirectory(File dir, boolean pop) {
+        this.act.searchInputET.clearFocus();
+        this.act.searchInputET.setText("");
+
         this.currentDir = dir;
         File[] listedFiles = currentDir.listFiles();
         if (listedFiles == null) { // permission denied
@@ -136,16 +161,17 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return;
         }
         this.files = listedFiles;
+        this.displayedFiles = files;
 
         if (!pop)
             recyclerViewStates.push(act.recyclerView.getLayoutManager().onSaveInstanceState());
         else
             act.recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewStates.pop());
 
-        sortFiles(files);
+        sortFiles(this.files);
         lastDirIndex = getLastDirectoryIndex();
 
-        if (this.files.length == 0) {
+        if (this.displayedFiles.length == 0) {
             act.folderEmptyTV.setVisibility(View.VISIBLE);
             act.folderEmptyTV.startAnimation(anim);
         } else act.folderEmptyTV.setVisibility(View.GONE);
@@ -157,7 +183,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else {
             act.setTitle(dir.getName());
         }
-        //act.recyclerView.startLayoutAnimation();
+//        act.recyclerView.startLayoutAnimation();
 
     }
 
@@ -195,22 +221,43 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private int getLastDirectoryIndex() {
         // use binary search :)
         int low = 0;
-        int high = files.length - 1;
+        int high = displayedFiles.length - 1;
         while (low <= high) {
             int mid = (low + high) >>> 1;
-            if (files[mid].isDirectory() && ((files.length >= mid + 2 && files[mid + 1].isFile())
-                    || files.length <= mid + 1)) {
+            if (displayedFiles[mid].isDirectory() && ((displayedFiles.length >= mid + 2 && displayedFiles[mid + 1].isFile())
+                    || displayedFiles.length <= mid + 1)) {
                 return mid;
             }
-            if (files[mid].isFile() && (files.length >= mid + 2 && files[mid + 1].isFile())) {
+            if (displayedFiles[mid].isFile() && (displayedFiles.length >= mid + 2 && displayedFiles[mid + 1].isFile())) {
                 high = mid - 1;
-            } else if (files[mid].isDirectory() && files.length >= mid + 2 && files[mid + 1].isDirectory()) {
+            } else if (displayedFiles[mid].isDirectory() && displayedFiles.length >= mid + 2 && displayedFiles[mid + 1].isDirectory()) {
                 low = mid + 1;
-            } else if (files[mid].isFile() && files.length <= mid + 1) { // only files
+            } else if (displayedFiles[mid].isFile() && displayedFiles.length <= mid + 1) { // only files
                 return -1;
             }
         }
         return -1;  // dir empty
+    }
+
+    // use lowercase only
+    private void searchDirectory(String searchInput) {
+        if(searchInput.isEmpty()) {
+            this.displayedFiles = this.files;
+            lastDirIndex = getLastDirectoryIndex();
+            notifyDataSetChanged();
+            return;
+        }
+
+        ArrayList<File> searchedFiles = new ArrayList<>(10);
+        for( File i : this.files ) {
+            if( i.getName().toLowerCase().contains(searchInput) ) {
+                searchedFiles.add(i);
+            }
+        }
+        this.displayedFiles = new File[searchedFiles.size()];
+        searchedFiles.toArray(this.displayedFiles);
+        lastDirIndex = getLastDirectoryIndex();
+        notifyDataSetChanged();
     }
 
     private static class DirectoryViewHolder extends RecyclerView.ViewHolder {
@@ -231,6 +278,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private static class FileViewHolder extends RecyclerView.ViewHolder {
         private final ImageView fileImageIV;
+        private final View lineV;
         private final TextView fileNameTV;
         private final TextView fileSizeTV;
         private final TextView fileTypeNameTV;
@@ -239,6 +287,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public FileViewHolder(@NonNull View itemView) {
             super(itemView);
             fileImageIV = itemView.findViewById(R.id.IV_FileImage);
+            lineV = itemView.findViewById(R.id.V_Line);
             fileNameTV = itemView.findViewById(R.id.TV_FileName);
             fileSizeTV = itemView.findViewById(R.id.TV_FileSize);
             fileTypeNameTV = itemView.findViewById(R.id.TV_FileTypeName);
@@ -248,14 +297,19 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         public void setup(StorageAdapter adapter, int pos) {
 
-            File file = adapter.files[pos];
+            File file = adapter.displayedFiles[pos];
 
-            fileImageIV.setImageResource(R.drawable.icon_file_red);
+            if(FileTypeUtils.setFileIcon(fileImageIV, file)) {
+                lineV.setVisibility(View.INVISIBLE);
+            } else {
+                lineV.setVisibility(View.VISIBLE);
+            }
+
             fileNameTV.setText(file.getName());
             fileSizeTV.setText(Utils.getFormattedSize(file.length()));
             fileCB.setChecked(Collections.binarySearch(adapter.act.selectedFilesPath, file.getPath()) >= 0);
 
-            String typeName = FileTypeName.getFileTypeName(file.getName());
+            String typeName = FileTypeUtils.getFileTypeName(file.getName());
             if (!typeName.equals("*/*") && !typeName.isEmpty())
                 fileTypeNameTV.setText(adapter.act.getString(R.string.file_type, typeName));
             else fileTypeNameTV.setText("");

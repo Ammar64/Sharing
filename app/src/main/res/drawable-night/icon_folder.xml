@@ -1,8 +1,10 @@
-<!--  AUTHOR: Dazzle UI  -->
-<!--  Attribution CC:  https://www.svgrepo.com/page/licensing/#CC%20Attribution -->
-<!-- this file was converted from svg to android xml -->
-
-
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="35dp" android:viewportHeight="24" android:viewportWidth="24" android:width="35dp">
-<path android:fillColor="#00000000" android:pathData="M3,8.2C3,7.08 3,6.52 3.218,6.092C3.41,5.716 3.716,5.41 4.092,5.218C4.52,5 5.08,5 6.2,5H9.675C10.164,5 10.408,5 10.639,5.055C10.842,5.104 11.038,5.185 11.217,5.295C11.418,5.418 11.591,5.591 11.937,5.937L12.063,6.063C12.409,6.409 12.582,6.582 12.783,6.705C12.962,6.815 13.158,6.896 13.361,6.945C13.592,7 13.836,7 14.325,7H17.8C18.92,7 19.48,7 19.908,7.218C20.284,7.41 20.59,7.716 20.782,8.092C21,8.52 21,9.08 21,10.2V15.8C21,16.92 21,17.48 20.782,17.908C20.59,18.284 20.284,18.59 19.908,18.782C19.48,19 18.92,19 17.8,19H6.2C5.08,19 4.52,19 4.092,18.782C3.716,18.59 3.41,18.284 3.218,17.908C3,17.48 3,16.92 3,15.8V8.2Z" android:strokeColor="#CCC" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeWidth="2"/>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="960"
+    android:viewportHeight="960"
+    android:tint="#ddd">
+  <path
+      android:fillColor="@android:color/white"
+      android:pathData="M160,800Q127,800 103.5,776.5Q80,753 80,720L80,240Q80,207 103.5,183.5Q127,160 160,160L400,160L480,240L800,240Q833,240 856.5,263.5Q880,287 880,320L880,720Q880,753 856.5,776.5Q833,800 800,800L160,800ZM160,720L800,720Q800,720 800,720Q800,720 800,720L800,320Q800,320 800,320Q800,320 800,320L447,320L367,240L160,240Q160,240 160,240Q160,240 160,240L160,720Q160,720 160,720Q160,720 160,720ZM160,720Q160,720 160,720Q160,720 160,720L160,240Q160,240 160,240Q160,240 160,240L160,240L160,320L160,320Q160,320 160,320Q160,320 160,320L160,720Q160,720 160,720Q160,720 160,720Z"/>
 </vector>

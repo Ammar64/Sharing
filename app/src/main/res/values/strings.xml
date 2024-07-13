@@ -59,6 +59,8 @@
     <string name="internal_storage">Internal storage</string>
     <string name="file_type">%1$s file</string>
     <string name="permission_denied">Permission denied</string>
+    <string name="search">Search</string>
+
     <!-- common   -->
     <string name="app_name">sharing</string>
     <string name="settings">Settings</string>

@@ -4,6 +4,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,27 +19,67 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity.AddAppsActivity;
 import com.ammar.filescenter.common.Utils;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapter.ViewHolder> {
-    private Bitmap[] appsIcon;
+    private final App[] apps;
+    private App[] displayedApps;
     private final PackageManager pm;
     private final AddAppsActivity activity;
-    List<ApplicationInfo> apps;
     LinkedList<String> selectedApps;
 
-    public AppsRecyclerAdapter(AddAppsActivity activity, List<ApplicationInfo> apps, LinkedList<String> selectedApps) {
+    public AppsRecyclerAdapter(AddAppsActivity activity, ArrayList<ApplicationInfo> appsInfo, LinkedList<String> selectedApps) {
         this.activity = activity;
-        this.apps = apps;
         this.selectedApps = selectedApps;
-        this.appsIcon = new Bitmap[this.apps.size()];
         this.pm = this.activity.getPackageManager();
-        for (int i = 0; i < this.apps.size(); i++) {
-            this.appsIcon[i] = Utils.drawableToBitmap(this.apps.get(i).loadIcon(pm));
+        this.apps = new App[appsInfo.size()];
+        for (int i = 0; i < appsInfo.size(); i++) {
+            this.apps[i] = new App();
+            this.apps[i].packageName = appsInfo.get(i).packageName;
+            this.apps[i].icon = Utils.drawableToBitmap(appsInfo.get(i).loadIcon(pm));
+            this.apps[i].label = appsInfo.get(i).loadLabel(pm).toString();
+            this.apps[i].hasSplits = appsInfo.get(i).splitPublicSourceDirs != null;
         }
+        this.displayedApps = this.apps;
+        this.activity.searchInputET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchApps(s.toString().toLowerCase());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void searchApps(String searchInput) {
+        if( searchInput.isEmpty() ) {
+            this.displayedApps = this.apps;
+            notifyDataSetChanged();
+            return;
+        }
+
+        ArrayList<App> searchedApps = new ArrayList<>(10);
+        for( App i : this.apps ) {
+            if( i.label.toLowerCase().contains(searchInput) ) {
+                searchedApps.add(i);
+            }
+        }
+        this.displayedApps = new App[searchedApps.size()];
+        searchedApps.toArray(this.displayedApps);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -52,27 +94,29 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ApplicationInfo appInfo = apps.get(position);
-        Bitmap appIcon = appsIcon[position];
-        CharSequence appName = appInfo.loadLabel(pm);
 
-        holder.icon.setImageBitmap(appIcon);
+        int size = (int) Utils.dpToPx(50);
+        Glide.with(holder.itemView.getContext())
+                .load(displayedApps[position].icon)
+                .override(size, size)
+                .into(holder.icon);
 
-        holder.appName.setText(appName);
-        holder.checkBox.setChecked(checksPositions.contains(holder.getBindingAdapterPosition()));
+        holder.appName.setText(displayedApps[position].label);
+        holder.checkBox.setChecked(checksPositions.contains(holder.getAdapterPosition()));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            holder.splits.setVisibility(appInfo.splitPublicSourceDirs == null ? View.INVISIBLE : View.VISIBLE);
+            holder.splits.setVisibility(displayedApps[position].hasSplits ? View.VISIBLE : View.INVISIBLE);
         } else holder.splits.setVisibility(View.GONE);
 
         holder.itemView.setOnClickListener((view) -> {
+            this.activity.searchInputET.clearFocus();
             boolean isChecked = holder.checkBox.isChecked();
             holder.checkBox.setChecked(!isChecked);
             if (!isChecked) {
-                selectedApps.add(appInfo.packageName);
+                selectedApps.add(displayedApps[position].packageName);
                 checksPositions.add(holder.getBindingAdapterPosition());
             } else {
-                selectedApps.remove(appInfo.packageName);
+                selectedApps.remove(displayedApps[position].packageName);
                 // using (Integer) forces it to not use remove(int index)
                 checksPositions.remove((Integer) holder.getBindingAdapterPosition());
             }
@@ -83,7 +127,7 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
 
     @Override
     public int getItemCount() {
-        return apps.size();
+        return displayedApps.length;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -101,5 +145,12 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
         }
     }
 
+
+    public static class App {
+        String packageName;
+        Bitmap icon;
+        String label;
+        boolean hasSplits;
+    }
 
 }

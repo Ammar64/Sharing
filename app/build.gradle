@@ -8,12 +8,12 @@ android {
 
     defaultConfig {
         applicationId "com.ammar.filescenter"
-        minSdk 19
+        minSdk 21
         targetSdk 34
         versionCode 2
         versionName "1.1"
+
         vectorDrawables.useSupportLibrary = true
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
                 abiFilters 'arm64-v8a' ,'armeabi-v7a', 'x86_64'
@@ -49,7 +49,9 @@ android {
 dependencies {
 
     implementation libs.appcompat
-    implementation libs.constraintlayout
-    implementation libs.recyclerview
+    implementation libs.constraintlayout // add this because we want negative margins
+    implementation libs.recyclerview // when you add this recycler view width issue is fixed in dialogs
     implementation libs.material
+    implementation libs.glide
+
 }

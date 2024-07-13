@@ -58,6 +58,7 @@
     <string name="internal_storage">وحدة التخزين الداخلية</string>
     <string name="file_type">ملف %1$s</string>
     <string name="permission_denied">الوصول مرفوض</string>
+    <string name="search">بحث</string>
 
     <!-- common   -->
     <string name="app_name">شارك</string>

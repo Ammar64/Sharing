@@ -119,34 +119,6 @@
                     android:textSize="@dimen/small_text" />
             </RelativeLayout>
 
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="300dp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-
-
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
-                    android:id="@+id/TV_PoweredBy"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Powered By   " />
-
-                <ImageView
-                    android:id="@+id/IV_DV"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@raw/dv"/>
-
-            </LinearLayout>
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="100dp"/>
         </LinearLayout>
 
     </ScrollView>

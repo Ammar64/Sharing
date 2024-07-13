@@ -1,36 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/LL_Toolbar"
+    android:id="@+id/TB_Toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:background="@android:color/transparent"
+    android:minHeight="?attr/actionBarSize"
+    android:theme="?attr/actionBarTheme"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    app:layout_constraintTop_toTopOf="parent"
+    app:menu="@menu/menu_share"
+    app:titleTextColor="@color/white"
+    tools:title="TitleHolder" />
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/TB_Toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/menu_share"
-        app:titleTextColor="@color/white"
-        tools:title="TitleHolder" />
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginHorizontal="8dp"
-        android:background="@color/toolbar_bottom_color" />
-
-
-</LinearLayout>
