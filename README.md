@@ -1,5 +1,21 @@
-Sharing app. share files and apps to others. no need to install on the other device<br>
-Copyright (C) 2024 Ammar Ramadan<br>
+Sharing
+-------
+
+Share files and apps over HTTP.
+
+You need the other device to be connected to the same network. just toggle on the server and scan the QR Code on other device and you're good to go.
+Files sent from browser to the app can be found in Files-Center/ folder in your internal storage.
+You can always disable uploads in the app settings. 
+
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.ammar.filescenter/)
+
+Or download the latest APK from the [Releases Section](https://github.com/Ammar64/Files-Center/releases/latest).
+
+-----------------
+
+Copyright (C) 2024 Ammar Ramadan
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
