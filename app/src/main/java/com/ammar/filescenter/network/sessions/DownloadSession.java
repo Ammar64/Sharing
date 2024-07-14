@@ -3,6 +3,7 @@ package com.ammar.filescenter.network.sessions;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.ammar.filescenter.common.FileUtils;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.models.Sharable;
 import com.ammar.filescenter.models.SharableApp;
@@ -20,6 +21,7 @@ public class DownloadSession extends HTTPSession {
     public DownloadSession(String[] paths) {
         super(paths, true);
     }
+
 
     @Override
     public void GET(Request req, Response res) {
@@ -63,7 +65,8 @@ public class DownloadSession extends HTTPSession {
                     res.sendBitmapResponse(appIconBM);
                 } else {
                     if( file.getMimeType().startsWith("image/") ) {
-                        res.sendFileResponse(file, false, user);
+                        Bitmap imageBM = FileUtils.decodeSampledImage(file.getFile(), 128, 128);
+                        res.sendBitmapResponse(imageBM);
                     } else{
                         res.setStatusCode(400);
                         res.sendResponse();

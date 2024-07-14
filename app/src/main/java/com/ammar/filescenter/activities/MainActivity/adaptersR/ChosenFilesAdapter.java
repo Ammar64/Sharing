@@ -1,7 +1,6 @@
 package com.ammar.filescenter.activities.MainActivity.adaptersR;
 
 
-
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -24,6 +23,7 @@ import com.ammar.filescenter.network.Server;
 import com.ammar.filescenter.models.Sharable;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.models.SharableApp;
+import com.bumptech.glide.Glide;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -57,9 +57,9 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            fileIconIV  = itemView.findViewById(R.id.IV_FileChosenIcon);
-            fileNameTV  = itemView.findViewById(R.id.TV_FileChosenName);
-            fileSizeTV  = itemView.findViewById(R.id.TV_FileChosenSize);
+            fileIconIV = itemView.findViewById(R.id.IV_FileChosenIcon);
+            fileNameTV = itemView.findViewById(R.id.TV_FileChosenName);
+            fileSizeTV = itemView.findViewById(R.id.TV_FileChosenSize);
             removeFileB = itemView.findViewById(R.id.B_RemoveChosenFile);
         }
 
@@ -70,8 +70,9 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
             setFileSizeTV(file.getSize());
             setFileListener(file.getUUID());
         }
+
         public void setFileListener(String uuid) {
-            removeFileB.setOnClickListener( button -> {
+            removeFileB.setOnClickListener(button -> {
                 Intent serviceIntent = new Intent(itemView.getContext(), NetworkService.class);
                 serviceIntent.setAction(Consts.ACTION_REMOVE_DOWNLOAD);
                 serviceIntent.putExtra(Consts.EXTRA_DOWNLOAD_UUID, uuid);
@@ -88,31 +89,54 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         }
 
         Map<Integer, Drawable> appsIconCache = new TreeMap<>();
+
         public void setFileIconIV(@NonNull Sharable file, int pos) {
             String mimeType = file.getMimeType();
-            if( file instanceof SharableApp) {
+            int imageSize = (int) Utils.dpToPx(40);
+            if (file instanceof SharableApp) {
                 SharableApp app = (SharableApp) file;
-                fileIconIV.setImageDrawable(app.getIcon());
+                Glide.with(itemView.getContext())
+                        .load(app.getIcon())
+                        .override(imageSize, imageSize)
+                        .into(fileIconIV);
             } else if (mimeType.startsWith("image/")) {
-                fileIconIV.setImageDrawable(Drawable.createFromPath(file.getFilePath()));
-            } else if ("application/vnd.android.package-archive".equals(mimeType)){
-                Drawable appIcon = appsIconCache.get( pos );
-                if( appIcon == null ) {
+                Glide.with(itemView.getContext())
+                        .load(file.getFile())
+                        .override(imageSize, imageSize)
+                        .into(fileIconIV);
+            } else if ("application/vnd.android.package-archive".equals(mimeType)) {
+                Drawable appIcon = appsIconCache.get(pos);
+                if (appIcon == null) {
                     PackageManager pm = itemView.getContext().getApplicationContext().getPackageManager();
                     PackageInfo packageInfo = pm.getPackageArchiveInfo(file.getFilePath(), 0);
-                    if( packageInfo != null ) {
+                    if (packageInfo != null) {
                         ApplicationInfo appInfo = packageInfo.applicationInfo;
                         appInfo.sourceDir = file.getFilePath();
                         appInfo.publicSourceDir = file.getFilePath();
                         appIcon = appInfo.loadIcon(pm);
-                        appsIconCache.put( pos, appIcon );
-                        fileIconIV.setImageDrawable(appIcon);
-                    } else fileIconIV.setImageResource(R.drawable.icon_file_red);
+                        appsIconCache.put(pos, appIcon);
+
+                        Glide.with(itemView.getContext())
+                                .load(appIcon)
+                                .override(imageSize, imageSize)
+                                .into(fileIconIV);
+
+                    } else Glide.with(itemView.getContext())
+                            .load(appIcon)
+                            .override(imageSize, imageSize)
+                            .into(fileIconIV);
+
                 } else {
-                    fileIconIV.setImageDrawable(appIcon);
+                    Glide.with(itemView.getContext())
+                            .load(appIcon)
+                            .override(imageSize, imageSize)
+                            .into(fileIconIV);
                 }
             } else {
-                fileIconIV.setImageResource(R.drawable.icon_file_red);
+                Glide.with(itemView.getContext())
+                        .load(R.drawable.icon_file_red)
+                        .override(imageSize, imageSize)
+                        .into(fileIconIV);
             }
         }
     }

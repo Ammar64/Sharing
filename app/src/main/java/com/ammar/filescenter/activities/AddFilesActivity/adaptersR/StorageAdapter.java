@@ -8,7 +8,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -22,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddFilesActivity.AddFilesActivity;
-import com.ammar.filescenter.activities.AddFilesActivity.FileTypeUtils;
+import com.ammar.filescenter.common.FileUtils;
 import com.ammar.filescenter.common.Utils;
 
 import java.io.File;
@@ -298,7 +297,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             File file = adapter.displayedFiles[pos];
 
-            if(FileTypeUtils.setFileIcon(fileImageIV, file)) {
+            if(FileUtils.setFileIcon(fileImageIV, file)) {
                 lineV.setVisibility(View.INVISIBLE);
             } else {
                 lineV.setVisibility(View.VISIBLE);
@@ -308,7 +307,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             fileSizeTV.setText(Utils.getFormattedSize(file.length()));
             fileCB.setChecked(Collections.binarySearch(adapter.act.selectedFilesPath, file.getPath()) >= 0);
 
-            String typeName = FileTypeUtils.getFileTypeName(file.getName());
+            String typeName = FileUtils.getFileTypeName(file.getName());
             if (!typeName.equals("*/*") && !typeName.isEmpty())
                 fileTypeNameTV.setText(adapter.act.getString(R.string.file_type, typeName));
             else fileTypeNameTV.setText("");
