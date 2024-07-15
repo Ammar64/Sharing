@@ -2,7 +2,6 @@ package com.ammar.filescenter.activities.MainActivity.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity.AddAppsActivity;
 import com.ammar.filescenter.activities.MainActivity.adaptersR.ShareAdapter;
-import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.common.Consts;
-import com.ammar.filescenter.services.NetworkService;
+import com.ammar.filescenter.services.ServerService;
 
 import java.util.ArrayList;
 
@@ -64,7 +62,7 @@ public class ShareFragment extends Fragment {
 
     private void initObservers() {
 
-        NetworkService.filesSendNotifier.observe( requireActivity(), info -> {
+        ServerService.filesSendNotifier.observe( requireActivity(), info -> {
             char action = info.getChar("action");
             int index = info.getInt("index");
             index += 1;
@@ -88,7 +86,7 @@ public class ShareFragment extends Fragment {
     public ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
         if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null && result.getData().getAction() != null) {
             Intent data = result.getData();
-            Intent intent = new Intent(requireContext(), NetworkService.class);
+            Intent intent = new Intent(requireContext(), ServerService.class);
 
             if (data.getAction().equals(Consts.ACTION_ADD_FILES)) {
                 ArrayList<String> selectedFilePaths = data.getStringArrayListExtra(Consts.EXTRA_INTENT_PATHS);
@@ -111,7 +109,7 @@ public class ShareFragment extends Fragment {
         Intent intent = result.getData();
         if ( result.getResultCode() == Activity.RESULT_OK && intent != null && Consts.ACTION_ADD_FILES.equals( intent.getAction())) {
            ArrayList<String> filesPath = intent.getStringArrayListExtra(Consts.EXTRA_FILES_PATH);
-           Intent serviceIntent = new Intent(requireContext(), NetworkService.class);
+           Intent serviceIntent = new Intent(requireContext(), ServerService.class);
            serviceIntent.setAction(Consts.ACTION_ADD_DOWNLOADS);
            serviceIntent.putStringArrayListExtra(Consts.EXTRA_FILES_PATH, filesPath);
            requireContext().startService(serviceIntent);

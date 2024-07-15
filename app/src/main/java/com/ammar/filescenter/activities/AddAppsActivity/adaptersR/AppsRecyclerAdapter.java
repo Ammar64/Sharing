@@ -3,35 +3,40 @@ package com.ammar.filescenter.activities.AddAppsActivity.adaptersR;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.os.Build;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity.AddAppsActivity;
 import com.ammar.filescenter.common.Utils;
+import com.ammar.filescenter.custom.ui.AdaptiveTextView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
-public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapter.ViewHolder> {
+public class AppsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final App[] apps;
     private App[] displayedApps;
     private final PackageManager pm;
     private final AddAppsActivity activity;
     LinkedList<String> selectedApps;
+    private static final int TYPE_APP = 0;
+    private static final int TYPE_INFO_TEXT = 1;
 
     public AppsRecyclerAdapter(AddAppsActivity activity, ArrayList<ApplicationInfo> appsInfo, LinkedList<String> selectedApps) {
         this.activity = activity;
@@ -41,9 +46,18 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
         for (int i = 0; i < appsInfo.size(); i++) {
             this.apps[i] = new App();
             this.apps[i].packageName = appsInfo.get(i).packageName;
-            this.apps[i].icon = Utils.drawableToBitmap(appsInfo.get(i).loadIcon(pm));
-            this.apps[i].label = appsInfo.get(i).loadLabel(pm).toString();
             this.apps[i].hasSplits = appsInfo.get(i).splitPublicSourceDirs != null;
+            this.apps[i].label = appsInfo.get(i).loadLabel(pm).toString();
+
+            if (this.apps[i].hasSplits) {
+                Drawable[] layers = new Drawable[2];
+                layers[0] = appsInfo.get(i).loadIcon(pm);
+                layers[1] = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.banner_splits, null);
+                LayerDrawable layerDrawable = new LayerDrawable(layers);
+                this.apps[i].icon = Utils.drawableToBitmap(layerDrawable);
+            } else {
+                this.apps[i].icon = Utils.drawableToBitmap(appsInfo.get(i).loadIcon(pm));
+            }
         }
         this.displayedApps = this.apps;
         this.activity.searchInputET.addTextChangedListener(new TextWatcher() {
@@ -64,16 +78,26 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
         });
     }
 
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        ((GridLayoutManager) recyclerView.getLayoutManager()).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                if(position == displayedApps.length) return 3; else return 1;
+            }
+        });
+    }
+
     private void searchApps(String searchInput) {
-        if( searchInput.isEmpty() ) {
+        if (searchInput.isEmpty()) {
             this.displayedApps = this.apps;
             notifyDataSetChanged();
             return;
         }
 
         ArrayList<App> searchedApps = new ArrayList<>(10);
-        for( App i : this.apps ) {
-            if( i.label.toLowerCase().contains(searchInput) ) {
+        for (App i : this.apps) {
+            if (i.label.toLowerCase().contains(searchInput)) {
                 searchedApps.add(i);
             }
         }
@@ -82,65 +106,91 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<AppsRecyclerAdapte
         notifyDataSetChanged();
     }
 
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == displayedApps.length) return TYPE_INFO_TEXT;
+        else return TYPE_APP;
+    }
+
     @NonNull
     @Override
-    public AppsRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(activity);
-        View view = inflater.inflate(R.layout.view_add_apps_app, parent, false);
-        return new ViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case TYPE_APP:
+                LayoutInflater inflater = LayoutInflater.from(activity);
+                View view = inflater.inflate(R.layout.view_add_apps_app, parent, false);
+                return new AppViewHolder(view);
+            case TYPE_INFO_TEXT:
+                FrameLayout layout = new FrameLayout(parent.getContext());
+                return new InfoTextViewHolder(layout);
+        }
+
+        // it's impossible to reach this point
+        throw new RuntimeException();
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        int type = getItemViewType(position);
+        switch (type) {
+            case TYPE_APP:
+                AppViewHolder appHolder = (AppViewHolder) holder;
+                int size = (int) Utils.dpToPx(50);
+                Glide.with(holder.itemView.getContext())
+                        .load(displayedApps[position].icon)
+                        .override(size, size)
+                        .into(appHolder.icon);
 
-        int size = (int) Utils.dpToPx(50);
-        Glide.with(holder.itemView.getContext())
-                .load(displayedApps[position].icon)
-                .override(size, size)
-                .into(holder.icon);
+                appHolder.appName.setText(displayedApps[position].label);
+                appHolder.checkBox.setChecked(displayedApps[position].isChecked);
 
-        holder.appName.setText(displayedApps[position].label);
-        holder.checkBox.setChecked(displayedApps[position].isChecked);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            holder.splits.setVisibility(displayedApps[position].hasSplits ? View.VISIBLE : View.INVISIBLE);
-        } else holder.splits.setVisibility(View.GONE);
-
-        holder.itemView.setOnClickListener((view) -> {
-            this.activity.searchInputET.clearFocus();
-            boolean isChecked = holder.checkBox.isChecked();
-            holder.checkBox.setChecked(!isChecked);
-            if (!isChecked) {
-                selectedApps.add(displayedApps[position].packageName);
-            } else {
-                selectedApps.remove(displayedApps[position].packageName);
-            }
-            this.displayedApps[position].isChecked = !isChecked;
-            activity.setToolbarTitle(activity.getString(R.string.selected_num, selectedApps.size()));
-        });
+                appHolder.itemView.setOnClickListener((view) -> {
+                    this.activity.searchInputET.clearFocus();
+                    boolean isChecked = appHolder.checkBox.isChecked();
+                    appHolder.checkBox.setChecked(!isChecked);
+                    if (!isChecked) {
+                        selectedApps.add(displayedApps[position].packageName);
+                    } else {
+                        selectedApps.remove(displayedApps[position].packageName);
+                    }
+                    this.displayedApps[position].isChecked = !isChecked;
+                    activity.setToolbarTitle(activity.getString(R.string.selected_num, selectedApps.size()));
+                });
+        }
 
     }
 
     @Override
     public int getItemCount() {
-        return displayedApps.length;
+        return displayedApps.length == apps.length ? displayedApps.length + 1 : displayedApps.length;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class AppViewHolder extends RecyclerView.ViewHolder {
         public ImageView icon;
         public CheckBox checkBox;
         public TextView appName;
-        public TextView splits;
 
-        public ViewHolder(@NonNull View itemView) {
+        public AppViewHolder(@NonNull View itemView) {
             super(itemView);
             icon = itemView.findViewById(R.id.IV_AppIcon);
             checkBox = itemView.findViewById(R.id.CB_AppCheckBox);
             appName = itemView.findViewById(R.id.TV_AppName);
-            splits = itemView.findViewById(R.id.TV_Splits);
         }
     }
 
+    class InfoTextViewHolder extends RecyclerView.ViewHolder {
+
+        public InfoTextViewHolder(@NonNull FrameLayout itemView) {
+            super(itemView);
+            AdaptiveTextView text = new AdaptiveTextView(itemView.getContext());
+            text.setText(R.string.installer_info);
+            text.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            text.setTextSize(11);
+            text.setPadding(10, 10, 10, 10);
+            itemView.addView(text);
+        }
+    }
 
     public static class App {
         String packageName;

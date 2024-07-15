@@ -17,8 +17,8 @@ import androidx.fragment.app.Fragment;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.MainActivity.MainActivity;
-import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.common.Consts;
+import com.ammar.filescenter.common.Utils;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SettingsFragment extends Fragment {

@@ -59,6 +59,7 @@ public class AddFilesActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.RV_FilesRecycler);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setHasFixedSize(true);
         storageAdapter = new StorageAdapter(this);
         recyclerView.setAdapter(storageAdapter);
     }

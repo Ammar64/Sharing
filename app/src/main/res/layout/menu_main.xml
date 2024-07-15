@@ -11,7 +11,20 @@
         android:gravity="center_vertical"
         android:background="?attr/selectableItemBackground"
         android:paddingHorizontal="10dp"
-        android:textSize="22sp"
+        android:paddingVertical="8dp"
+        android:textSize="18sp"
         android:text="@string/tutorial" />
+
+    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+        android:id="@+id/TV_MainMenuApksInstaller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:background="?attr/selectableItemBackground"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="8dp"
+        android:textSize="18sp"
+
+        android:text="@string/apks_installer" />
 
 </LinearLayout>

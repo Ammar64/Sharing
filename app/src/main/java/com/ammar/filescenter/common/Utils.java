@@ -460,7 +460,7 @@ public class Utils {
         String mimeType = Utils.getMimeType(fileName);
         if (mimeType.startsWith("image/")) {
             return Consts.imagesDir;
-        } else if (mimeType.equals("application/vnd.android.package-archive")) {
+        } else if (mimeType.equals("application/vnd.android.package-archive")) { // apk files in apps folder
             return Consts.appsDir;
         } else if (mimeType.startsWith("video/")) {
             return Consts.videosDir;
@@ -468,6 +468,8 @@ public class Utils {
             return Consts.audioDir;
         } else if (Utils.isDocumentType(mimeType)) {
             return Consts.documentsDir;
+        } else if(fileName.substring(fileName.lastIndexOf(".")).equals(".apks")) { // apks files should go to apps folder
+            return Consts.appsDir;
         } else {
             Log.d("MYLOG", "Type: " + mimeType);
             return Consts.filesDir;

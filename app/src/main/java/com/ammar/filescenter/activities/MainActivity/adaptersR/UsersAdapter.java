@@ -13,7 +13,9 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
+import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.models.User;
+import com.bumptech.glide.Glide;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
@@ -26,7 +28,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull UsersAdapter.ViewHolder holder, int position) {
-        holder.setup( User.users.get(position) );
+        holder.setup(User.users.get(position));
     }
 
     @Override
@@ -40,6 +42,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         private final TextView usernameTV;
         private final TextView userAddressTV;
         private final Button userBlockToggleB;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             userIconIV = itemView.findViewById(R.id.IV_UserIcon);
@@ -48,7 +51,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             userBlockToggleB = itemView.findViewById(R.id.B_ToggleUserBlock);
         }
 
-        public void setup( User user ) {
+        public void setup(User user) {
             // Temporary for now
             int os_icon_res;
             switch (user.getOS()) {
@@ -65,20 +68,23 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                     os_icon_res = R.drawable.icon_question_mark;
                     break;
             }
-
-            userIconIV.setImageResource(os_icon_res);
+            int iconSize = (int) Utils.dpToPx(40);
+            Glide.with(itemView)
+                    .load(os_icon_res)
+                    .override(iconSize, iconSize)
+                    .into(userIconIV);
             usernameTV.setText(user.getName());
             userAddressTV.setText(user.getIp());
 
             setBlockButton(user.isBlocked());
-            userBlockToggleB.setOnClickListener( button -> {
+            userBlockToggleB.setOnClickListener(button -> {
                 user.block(!user.isBlocked());
                 setBlockButton(user.isBlocked());
             });
         }
 
-        private void setBlockButton( boolean b ) {
-            if(b) {
+        private void setBlockButton(boolean b) {
+            if (b) {
                 ViewCompat.setBackgroundTintList(userBlockToggleB, ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.green)));
                 userBlockToggleB.setText(R.string.unblock);
             } else {

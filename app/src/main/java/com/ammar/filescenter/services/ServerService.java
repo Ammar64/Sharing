@@ -37,7 +37,7 @@ import java.util.Locale;
 /**
  * @noinspection unused
  */
-public class NetworkService extends Service {
+public class ServerService extends Service {
 
 
     // observers
@@ -97,7 +97,7 @@ public class NetworkService extends Service {
                 }
                 Bundle fb = new Bundle();
                 fb.putChar("action", 'A');
-                NetworkService.filesListNotifier.postValue(fb);
+                ServerService.filesListNotifier.postValue(fb);
                 break;
             case Consts.ACTION_ADD_APPS_DOWNLOADS:
                 ArrayList<String> packages_name = intent.getStringArrayListExtra(Consts.EXTRA_APPS_NAMES);
@@ -112,7 +112,7 @@ public class NetworkService extends Service {
                 }
                 Bundle ab = new Bundle();
                 ab.putChar("action", 'A');
-                NetworkService.filesListNotifier.postValue(ab);
+                ServerService.filesListNotifier.postValue(ab);
                 break;
             case Consts.ACTION_REMOVE_DOWNLOAD:
                 String uuid = intent.getStringExtra(Consts.EXTRA_DOWNLOAD_UUID);
@@ -128,7 +128,7 @@ public class NetworkService extends Service {
                 Bundle remove_info = new Bundle();
                 remove_info.putChar("action", 'R');
                 remove_info.putInt("index", index);
-                NetworkService.filesListNotifier.postValue(remove_info);
+                ServerService.filesListNotifier.postValue(remove_info);
                 break;
             case Consts.ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN:
                 if( !server.isRunning() ) {
@@ -192,7 +192,7 @@ public class NetworkService extends Service {
             notificationManager.createNotificationChannel(channel);
         }
 
-        String address = NetworkService.getIpAddress();
+        String address = ServerService.getIpAddress();
         if (address == null) address = "127.0.0.1";
         // Build the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId).setContentTitle("Server is running").setSmallIcon(android.R.drawable.ic_dialog_info);

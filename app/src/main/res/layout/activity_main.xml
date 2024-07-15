@@ -73,8 +73,8 @@
                 android:background="@android:color/transparent"
                 app:elevation="0dp"
                 app:menu="@menu/bottom_bar_send" />
-        </com.google.android.material.bottomappbar.BottomAppBar>
 
+        </com.google.android.material.bottomappbar.BottomAppBar>
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/FAB_ServerButton"
             android:layout_width="wrap_content"
@@ -87,6 +87,7 @@
             app:pressedTranslationZ="0dp"
             app:srcCompat="@drawable/icon_power"
             app:tint="@color/status_off" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </FrameLayout>

@@ -72,4 +72,7 @@
     <string name="svr_notification_message">الخادم يعمل على العنوان %1$s:%2$s</string>
     <string name="app_icon_acc_desc">أيقونة التطبيق</string>
     <string name="tutorial">التعليمات</string>
+    <string name="installer_info">Apps with multiple apk files are indicated with the yellow splits banner on the app icon\nThose apps will be sent in the apks file format to install those apps on the other device you need third party installer.</string>
+    <string name="apks_installer">Apks installer</string>
+    <string name="pls_choose_apks">Please choose an apks file</string>
 </resources>

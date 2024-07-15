@@ -194,7 +194,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Arrays.sort(files, (l, r) -> {
             if (l.isDirectory() && r.isFile()) return -1;
             if (l.isFile() && r.isDirectory()) return 1;
-            else return l.compareTo(r);
+            else return Long.compare(r.lastModified(), l.lastModified());
         });
     }
 

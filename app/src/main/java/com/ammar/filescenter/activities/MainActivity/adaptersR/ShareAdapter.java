@@ -33,7 +33,7 @@ import com.ammar.filescenter.activities.AddFilesActivity.AddFilesActivity;
 import com.ammar.filescenter.activities.MainActivity.fragments.ShareFragment;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.custom.io.ProgressManager;
-import com.ammar.filescenter.services.NetworkService;
+import com.ammar.filescenter.services.ServerService;
 import com.ammar.filescenter.network.Server;
 import com.ammar.filescenter.models.User;
 
@@ -169,7 +169,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 chosenFilesAD.show();
             });
 
-            NetworkService.filesListNotifier.observe(fragment.getViewLifecycleOwner(), info -> {
+            ServerService.filesListNotifier.observe(fragment.getViewLifecycleOwner(), info -> {
                 char action = info.getChar("action");
                 int size = Server.filesList.size();
                 if ('R' == action) {
@@ -204,7 +204,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 usersDialogAD.show();
             });
 
-            NetworkService.usersListObserver.observe(fragment.getViewLifecycleOwner(), info -> {
+            ServerService.usersListObserver.observe(fragment.getViewLifecycleOwner(), info -> {
                 char action = info.getChar("action");
                 int size = User.users.size();
                 int index = info.getInt("index");
@@ -226,7 +226,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         private void setupQrCode() {
-            String link = "http://" + NetworkService.getIpAddress() + ":" + NetworkService.PORT_NUMBER;
+            String link = "http://" + ServerService.getIpAddress() + ":" + ServerService.PORT_NUMBER;
             serverLinkTV.setText(link);
             byte[] qrCodeBytes = Utils.encodeTextToQR(link);
             Bitmap qrCodeBitmap = Utils.QrCodeArrayToBitmap(qrCodeBytes);

@@ -41,19 +41,4 @@
         app:layout_constraintEnd_toEndOf="@id/IV_AppIcon"
         android:layout_centerHorizontal="true"/>
 
-    <TextView
-        android:id="@+id/TV_Splits"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingVertical="2dp"
-        android:paddingHorizontal="5sp"
-        android:background="@drawable/rounded_text_background"
-        app:backgroundTint="#E3E30E"
-        app:layout_constraintTop_toBottomOf="@id/TV_AppName"
-        app:layout_constraintStart_toStartOf="@id/TV_AppName"
-        app:layout_constraintEnd_toEndOf="@id/TV_AppName"
-        android:textStyle="bold"
-        android:textSize="@dimen/small_text"
-        android:textColor="#222222"
-        android:text="@string/splits" />
 </androidx.constraintlayout.widget.ConstraintLayout>

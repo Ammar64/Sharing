@@ -17,6 +17,9 @@ public final class Consts {
     public static final String ACTION_ADD_FILES = "ACTION_ADD_FILES";
     public static final String ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN = "ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN";
 
+    public static final String ACTION_TRIGGER_APKS_INSTALL = "ACTION_TRIGGER_APKS_INSTALL";
+    public static final String ACTION_PACKAGE_INSTALLER = "PACKAGE_INSTALLER_ACTION";
+
     public static final String EXTRA_FILES_PATH = "com.ammar.filescenter.services.FILE_PATHS";
     public static final String EXTRA_APPS_NAMES = "com.ammar.filescenter.services.APPS_NAME";
     public static final String EXTRA_DOWNLOAD_UUID = "EXTRA_DOWNLOAD_UUID";

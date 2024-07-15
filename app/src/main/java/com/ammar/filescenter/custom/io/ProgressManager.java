@@ -3,7 +3,7 @@ package com.ammar.filescenter.custom.io;
 import android.os.Bundle;
 
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.services.NetworkService;
+import com.ammar.filescenter.services.ServerService;
 import com.ammar.filescenter.models.User;
 
 import java.io.File;
@@ -55,7 +55,7 @@ public class ProgressManager {
         Bundle info_add = new Bundle();
         info_add.putChar("action", 'A');
         info_add.putInt("index", index);
-        NetworkService.filesSendNotifier.forcePostValue(info_add);
+        ServerService.filesSendNotifier.forcePostValue(info_add);
 
         // set action to P for later use
         progress_info.putChar("action", 'P');
@@ -137,7 +137,7 @@ public class ProgressManager {
 
     public void reportProgress() {
         if (System.currentTimeMillis() - lastTime >= 300) {
-            NetworkService.filesSendNotifier.postValue(progress_info);
+            ServerService.filesSendNotifier.postValue(progress_info);
             bytesPerSecond = getLoaded() - previouslyLoaded;
             previouslyLoaded = getLoaded();
             lastTime = System.currentTimeMillis();
@@ -151,12 +151,12 @@ public class ProgressManager {
 
     public void reportCompleted() {
         setLoaded(COMPLETED);
-        NetworkService.filesSendNotifier.postValue(progress_info);
+        ServerService.filesSendNotifier.postValue(progress_info);
     }
 
     public void reportStopped() {
         setLoaded(STOPPED);
-        NetworkService.filesSendNotifier.postValue(progress_info);
+        ServerService.filesSendNotifier.postValue(progress_info);
     }
 
 }

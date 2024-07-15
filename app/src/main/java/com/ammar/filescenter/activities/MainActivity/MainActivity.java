@@ -46,6 +46,7 @@ import androidx.core.widget.ImageViewCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.ammar.filescenter.R;
+import com.ammar.filescenter.activities.ApksInstallerActivity.ApksInstallerActivity;
 import com.ammar.filescenter.activities.MainActivity.color.ColorsDark;
 import com.ammar.filescenter.activities.MainActivity.color.ColorsLight;
 import com.ammar.filescenter.application.FilesCenterApp;
@@ -53,7 +54,7 @@ import com.ammar.filescenter.common.Data;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.custom.ui.AdaptiveTextView;
-import com.ammar.filescenter.services.NetworkService;
+import com.ammar.filescenter.services.ServerService;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private PopupWindow threeDotsPW;
     private View threeDotsMenuLayout;
     private TextView tutorialTV;
+    private TextView apksInstallerTV;
     private FloatingActionButton serverButton;
     private ViewPager2 viewPager;
     private BottomAppBar bottomAppBar;
@@ -144,6 +146,9 @@ public class MainActivity extends AppCompatActivity {
         threeDotsPW.setWidth((int) Utils.dpToPx(170));
         threeDotsPW.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         threeDotsPW.setOutsideTouchable(true);
+
+        tutorialTV = threeDotsMenuLayout.findViewById(R.id.TV_MenuMainTutorial);
+        apksInstallerTV = threeDotsMenuLayout.findViewById(R.id.TV_MainMenuApksInstaller);
 
 
         bottomAppBar = findViewById(R.id.BAB_BottomAppBar);
@@ -250,16 +255,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
         serverButton.setOnClickListener((button) -> {
-            Intent serviceIntent = new Intent(this, NetworkService.class);
+            Intent serviceIntent = new Intent(this, ServerService.class);
             serviceIntent.setAction(Consts.ACTION_TOGGLE_SERVER);
             startService(serviceIntent);
         });
 
-        tutorialTV = threeDotsMenuLayout.findViewById(R.id.TV_MenuMainTutorial);
 
         tutorialTV.setOnClickListener((view) -> {
             //startActivity(new Intent(this, TutorialActivity.class));
             Toast.makeText(this, "Soon", Toast.LENGTH_SHORT).show();
+        });
+
+        apksInstallerTV.setOnClickListener((view) -> {
+            startActivity(new Intent(this, ApksInstallerActivity.class));
         });
     }
 
@@ -272,13 +280,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        Intent serviceIntent = new Intent(this, NetworkService.class);
+        Intent serviceIntent = new Intent(this, ServerService.class);
         serviceIntent.setAction(Consts.ACTION_GET_SERVER_STATUS);
         startService(serviceIntent);
     }
 
     private void observeStates() {
-        NetworkService.serverStatusObserver.observe(this, running -> {
+        ServerService.serverStatusObserver.observe(this, running -> {
             if (running) {
                 ImageViewCompat.setImageTintList(serverButton, ColorStateList.valueOf(getResources().getColor(R.color.status_on)));
             } else {

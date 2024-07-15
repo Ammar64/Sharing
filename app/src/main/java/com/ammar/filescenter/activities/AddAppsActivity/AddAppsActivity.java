@@ -71,10 +71,8 @@ public class AddAppsActivity extends AppCompatActivity {
             }
             AppsRecyclerAdapter appsAdapter = new AppsRecyclerAdapter(this, userApps, selectedApps);
             runOnUiThread(() -> {
-                appsRecycler.setAdapter(appsAdapter);
-                appsRecycler.setHasFixedSize(true);
-
                 appsRecycler.setLayoutManager(new GridLayoutManager(this, 3) {
+
                     @Override
                     public void onLayoutCompleted(RecyclerView.State state) {
                         super.onLayoutCompleted(state);
@@ -84,8 +82,8 @@ public class AddAppsActivity extends AppCompatActivity {
                         findViewById(R.id.V_Border).setVisibility(View.VISIBLE);
                     }
                 });
-
-
+                appsRecycler.setAdapter(appsAdapter);
+                appsRecycler.setHasFixedSize(true);
             });
         }).start();
     }
