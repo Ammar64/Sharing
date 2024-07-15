@@ -63,6 +63,16 @@
                     android:resource="@xml/paths_provider"/>
         </provider>
 
+        <!-- Declare MainActivity -->
+        <activity android:name=".activities.welcome.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
