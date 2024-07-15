@@ -103,7 +103,7 @@ public class FileUtils {
                 break;
         }
         Glide.with(img.getContext())
-                .load(R.drawable.icon_file)
+                .load(R.drawable.icon_file_red)
                 .into(img);
         return false;
     }
