@@ -44,7 +44,29 @@
             android:exported="true" />
 
         <activity android:name=".activities.ApksInstallerActivity.ApksInstallerActivity"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="file"/>
+                <data android:scheme="content"/>
+                <data android:host="*"/>
+                <data android:mimeType="*/*"/>
+                <data android:mimeType="application/x-apks"/>
+                <data android:pathPattern=".*\.apks"/>
+                <data android:pathPattern=".*\..*\.apks"/>
+                <data android:pathPattern=".*\..*\..*\.apks"/>
+                <data android:pathPattern=".*\..*\..*\..*\.apks"/>
+                <data android:pathPattern=".*\..*\..*\..*\..*\.apks"/>
+                <data android:pathPattern=".*\..*\..*\..*\..*\..*\.apks"/>
+                <data android:pathPattern=".*\..*\..*\..*\..*\..*\..*\.apks"/>
+                <data android:pathPattern=".*\..*\..*\..*\..*\..*\..*\..*\.apks"/>
+                <data android:pathPattern=".*\..*\..*\..*\..*\..*\..*\..*\..*\.apks"/>
+            </intent-filter>
+        </activity>
 
         <service android:name=".services.ServerService"
             android:exported="false"
