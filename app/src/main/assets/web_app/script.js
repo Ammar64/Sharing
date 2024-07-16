@@ -17,6 +17,8 @@ const uploadInput = document.getElementById('uploadInput');
 
 const download_item = document.createElement("li");
 download_item.className = "download-item";
+changeTheme(download_item);
+
 
 let userId = -1;
 
@@ -143,6 +145,7 @@ function requestAvailableDownloads() {
             // Create button element
             var downloadBtn = document.createElement('button');
             downloadBtn.classList.add('Btn1');
+
 
             // Create div for the sign
             var markDiv = document.createElement('div');
@@ -393,6 +396,54 @@ function updateStoredUsername(username) {
     // Update the display of current username
     document.querySelector('.current-username p').textContent = `Current username: ${storedUsername}`;
 }
+
+
+
+
+
+
+
+function changeTheme(elements) {
+    const checkbox = document.querySelector('.theme-switch__checkbox');
+
+    // Ensure elements is always an array
+    elements = Array.isArray(elements) ? elements : [elements];
+
+    // Filter out any null or undefined values from elements array
+    elements = elements.filter(element => element !== null && element !== undefined);
+
+    checkbox.addEventListener('change', function() {
+        if (checkbox.checked) {
+            elements.forEach(element => {
+                element.classList.add('light');
+            });
+        } else {
+            elements.forEach(element => {
+                element.classList.remove('light');
+            });
+        }
+    });
+};
+
+
+const elements_Theme = document.querySelectorAll('.themable');
+changeTheme([...elements_Theme]);
+
+
+
+// Show loader when DOM content is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    showLoader();
+});
+
+// Hide loader when all resources are loaded
+window.onload = () => {
+    hideLoader();
+};
+
+
+
+
 /*  */
 function setVhProperty() {
     var vh = window.innerHeight * 0.01;
