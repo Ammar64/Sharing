@@ -43,6 +43,12 @@ public class PageSession extends HTTPSession {
                     file = "icons8-share.svg";
                     content_type = "image/svg+xml";
                     break;
+                case "/blocked":
+                    res.setStatusCode(302);
+                    res.setHeader("Location", "/");
+                    res.sendResponse();
+                    res.close();
+                    return;
             }
 
             if( file != null ) {

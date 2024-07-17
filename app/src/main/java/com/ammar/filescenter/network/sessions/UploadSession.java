@@ -49,6 +49,7 @@ public class UploadSession extends HTTPSession {
                         res.setStatusCode(status_code);
                     }
                     res.sendResponse();
+                    req.getClientSocket().close();
 
                 } else {
                     res.setStatusCode(423); // locked
@@ -64,6 +65,7 @@ public class UploadSession extends HTTPSession {
             Utils.showErrorDialog("UploadSession.POST(). UnsupportedEncodingException", e.getMessage());
             res.setStatusCode(400);
             res.sendResponse();
+        } catch (IOException ignore) {
         }
     }
     private int StoreFile(InputStream in, String fullFileName, long size) {
@@ -88,6 +90,7 @@ public class UploadSession extends HTTPSession {
             }
             out.close();
             progressManager.reportCompleted();
+
             return 200;
         } catch (IOException e) {
             Utils.showErrorDialog("ClientHandler.StoreFile. IOException: ", e.getMessage());

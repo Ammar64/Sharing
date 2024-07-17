@@ -24,6 +24,7 @@ import com.ammar.filescenter.models.SharableApp;
 import com.ammar.filescenter.network.Server;
 import com.ammar.filescenter.services.ServerService;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -97,11 +98,13 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
                 SharableApp app = (SharableApp) file;
                 Glide.with(itemView.getContext())
                         .load(app.getIcon())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .override(imageSize, imageSize)
                         .into(fileIconIV);
             } else if (mimeType.startsWith("image/")) {
                 Glide.with(itemView.getContext())
                         .load(file.getFile())
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .override(imageSize, imageSize)
                         .into(fileIconIV);
             } else if ("application/vnd.android.package-archive".equals(mimeType)) {
@@ -118,23 +121,27 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
 
                         Glide.with(itemView.getContext())
                                 .load(appIcon)
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .override(imageSize, imageSize)
                                 .into(fileIconIV);
 
                     } else Glide.with(itemView.getContext())
                             .load(appIcon)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .override(imageSize, imageSize)
                             .into(fileIconIV);
 
                 } else {
                     Glide.with(itemView.getContext())
                             .load(appIcon)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .override(imageSize, imageSize)
                             .into(fileIconIV);
                 }
             } else {
                 Glide.with(itemView.getContext())
                         .load(R.drawable.icon_file_red)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .override(imageSize, imageSize)
                         .into(fileIconIV);
             }

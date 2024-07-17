@@ -2,19 +2,52 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="600dp">
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
 
-        <LinearLayout
-            android:id="@+id/LL_InstallerLogLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:paddingHorizontal="8dp"
-            android:paddingTop="8dp"/>
+    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+        android:id="@+id/TV_InstallerDialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Initializing ..."
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"/>
 
+    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+        android:id="@+id/TV_InstallerDialogOperation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/TV_InstallerDialogTitle"
+        app:layout_constraintStart_toStartOf="@id/TV_InstallerDialogTitle"
+        android:layout_marginTop="16dp"
+        android:textSize="14sp"
+        tools:text="extracting something" />
 
+    <ProgressBar
+        android:id="@+id/PB_InstallerDialogProgress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/TV_InstallerDialogOperation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginHorizontal="8dp"
+        android:indeterminate="true"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+
+    <android.widget.Button
+        android:id="@+id/B_InstallerActionButton"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/button_ok_bg"
+        android:text="@android:string/cancel"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/PB_InstallerDialogProgress" />
 </androidx.constraintlayout.widget.ConstraintLayout>

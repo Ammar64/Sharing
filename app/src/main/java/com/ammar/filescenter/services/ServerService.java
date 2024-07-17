@@ -70,9 +70,7 @@ public class ServerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("MYLOG", "Service NetworkService started");
         if (intent == null) {
-            Log.e("MYLOG", "intent is null in Service that's wrong");
             return START_STICKY;
         }
         String actionReceived = intent.getAction();

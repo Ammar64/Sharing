@@ -18,7 +18,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@color/white"
-        app:title="APKS Installer (Experimental)" />
+        app:title="@string/apks_installer_experimental" />
 
     <LinearLayout
         android:id="@+id/LL_InstallerFilePick"

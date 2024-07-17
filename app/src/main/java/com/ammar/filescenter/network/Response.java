@@ -190,7 +190,6 @@ public class Response {
             OutputStream out = clientSocket.getOutputStream();
             writeHeaders(out);
             out.flush();
-
         } catch (IOException e) {
             Log.e("MYLOG", "Response.sendResponse()" + e.getMessage());
         }

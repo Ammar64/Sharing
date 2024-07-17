@@ -33,6 +33,7 @@ import com.ammar.filescenter.activities.AddFilesActivity.AddFilesActivity;
 import com.ammar.filescenter.activities.MainActivity.fragments.ShareFragment;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.custom.io.ProgressManager;
+import com.ammar.filescenter.custom.ui.AdaptiveTextView;
 import com.ammar.filescenter.services.ServerService;
 import com.ammar.filescenter.network.Server;
 import com.ammar.filescenter.models.User;
@@ -108,7 +109,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
         private final ImageView QRImageIV;
         private final AppCompatTextView serverLinkTV;
-
+        private final AdaptiveTextView connectToWifiOrHotspotTV;
         public HeaderViewHolder(@NonNull View itemView, ShareFragment fragment) {
             super(itemView);
 
@@ -142,6 +143,8 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .create();
             QRImageIV = QRDialogView.findViewById(R.id.IV_QRCodeImage);
             serverLinkTV = QRDialogView.findViewById(R.id.TV_ServerLink);
+            connectToWifiOrHotspotTV = QRDialogView.findViewById(R.id.TV_QRDialogConnectToNetwork);
+
             QRCodeB.setOnClickListener(button -> {
                 Window window = QRDialogAD.getWindow();
                 if( window != null ) window.setBackgroundDrawableResource( darkMode ? R.color.dialogColorDark : R.color.dialogColorLight );
@@ -226,12 +229,23 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         private void setupQrCode() {
-            String link = "http://" + ServerService.getIpAddress() + ":" + ServerService.PORT_NUMBER;
-            serverLinkTV.setText(link);
-            byte[] qrCodeBytes = Utils.encodeTextToQR(link);
-            Bitmap qrCodeBitmap = Utils.QrCodeArrayToBitmap(qrCodeBytes);
-            // Display the bitmap in an ImageView or any other suitable view
-            QRImageIV.setImageBitmap(qrCodeBitmap);
+            String ip = ServerService.getIpAddress();
+            if( ip != null ) {
+                connectToWifiOrHotspotTV.setVisibility(View.GONE);
+                serverLinkTV.setVisibility(View.VISIBLE);
+                QRImageIV.setVisibility(View.VISIBLE);
+
+                String link = "http://" + ip + ":" + ServerService.PORT_NUMBER;
+                serverLinkTV.setText(link);
+                byte[] qrCodeBytes = Utils.encodeTextToQR(link);
+                Bitmap qrCodeBitmap = Utils.QrCodeArrayToBitmap(qrCodeBytes);
+                // Display the bitmap in an ImageView or any other suitable view
+                QRImageIV.setImageBitmap(qrCodeBitmap);
+            } else {
+                connectToWifiOrHotspotTV.setVisibility(View.VISIBLE);
+                serverLinkTV.setVisibility(View.GONE);
+                QRImageIV.setVisibility(View.GONE);
+            }
         }
     }
 

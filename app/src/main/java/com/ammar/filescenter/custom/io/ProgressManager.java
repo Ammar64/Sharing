@@ -92,10 +92,10 @@ public class ProgressManager {
         return uuid;
     }
 
-    long bytesPerSecond = 0;
+    long transferSpeed = 0;
 
     public long getSpeed() {
-        return bytesPerSecond;
+        return (long)(transferSpeed * ( 1000.0f / 300.0f));
     }
 
     public OP getOperation() {
@@ -138,7 +138,7 @@ public class ProgressManager {
     public void reportProgress() {
         if (System.currentTimeMillis() - lastTime >= 300) {
             ServerService.filesSendNotifier.postValue(progress_info);
-            bytesPerSecond = getLoaded() - previouslyLoaded;
+            transferSpeed = getLoaded() - previouslyLoaded;
             previouslyLoaded = getLoaded();
             lastTime = System.currentTimeMillis();
         }

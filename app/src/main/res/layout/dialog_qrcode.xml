@@ -35,4 +35,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TV_ServerLink" />
+
+    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+        android:id="@+id/TV_QRDialogConnectToNetwork"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="24sp"
+        android:textAlignment="center"
+        android:padding="8dp"
+        android:text="@string/connect_to_wifi_or_hotspot" />
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -390,10 +390,15 @@ public class Utils {
         assert Consts.documentsDir.mkdir();
     }
 
-    public static void setLocale(MainActivity activity, String languageCode) {
-        Locale locale = new Locale(languageCode);
+    public static void setLocale(Context context, String languageCode) {
+        Locale locale;
+        if(languageCode.isEmpty()) {
+            locale = Consts.SystemLocale;
+        } else {
+            locale = new Locale(languageCode);
+        }
         Locale.setDefault(locale);
-        Resources resources = activity.getResources();
+        Resources resources = context.getResources();
         Configuration config = resources.getConfiguration();
         config.setLocale(locale);
         resources.updateConfiguration(config, resources.getDisplayMetrics());

@@ -380,7 +380,6 @@ public class MainActivity extends AppCompatActivity {
     public void syncTheme(boolean dark) {
         int[][] states = new int[][]{new int[]{android.R.attr.state_checked}, new int[]{-android.R.attr.state_checked}};
         final int ColorPrimary = getResources().getColor(R.color.colorPrimary);
-        int textsColor;
         if (dark) {
             layout.setBackgroundResource(R.drawable.gradient_background_dark);
             DrawableCompat.setTint(toolbar.getOverflowIcon(), getResources().getColor(R.color.white));
@@ -391,7 +390,6 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.setItemIconTintList(stateList);
             bottomNavigationView.setItemTextColor(stateList);
 
-            textsColor = getResources().getColor(R.color.text_color_light);
             toolbar.getMenu().getItem(0).setIcon(R.drawable.icon_sun);
             toolbar.setPopupTheme(R.style.AppThemeDark);
         } else {
@@ -405,7 +403,6 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.setItemIconTintList(stateList);
             bottomNavigationView.setItemTextColor(stateList);
 
-            textsColor = getResources().getColor(R.color.text_color_dark);
             toolbar.getMenu().getItem(0).setIcon(R.drawable.icon_moon);
 
         }
@@ -413,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
         for (WeakReference<AdaptiveTextView> i : AdaptiveTextView.textViews) {
             AdaptiveTextView textViewRef = i.get();
             if (textViewRef != null) {
-                textViewRef.setTextColor(textsColor);
+                textViewRef.setDark(dark);
             }
         }
 

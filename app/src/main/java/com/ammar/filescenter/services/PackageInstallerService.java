@@ -4,19 +4,25 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInstaller;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.MutableLiveData;
 
+import com.ammar.filescenter.R;
 import com.ammar.filescenter.common.Consts;
-import com.ammar.filescenter.custom.data.QueueMutableLiveData;
+import com.ammar.filescenter.common.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -27,12 +33,7 @@ public class PackageInstallerService extends Service {
         return null;
     }
 
-    // L for LOG
-    // D for dismiss
-    // T for time (dismiss dialog after T time)
-    // P for progress (to show or not)
-
-    public static QueueMutableLiveData<Bundle> logNotifier = new QueueMutableLiveData<>();
+    public static MutableLiveData<Bundle> installInfoNotifier = new MutableLiveData<>();
     Thread worker = null;
     PackageInstaller.Session session = null;
 
@@ -43,8 +44,7 @@ public class PackageInstallerService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         String act = intent.getAction();
-        if( act == null ) return START_NOT_STICKY;
-
+        if (act == null) return START_NOT_STICKY;
         switch (act) {
             case Consts.ACTION_TRIGGER_APKS_INSTALL:
                 if (intent.getData() == null || worker != null) {
@@ -73,17 +73,19 @@ public class PackageInstallerService extends Service {
                 Bundle bundle = new Bundle();
                 switch (status) {
                     case PackageInstaller.STATUS_PENDING_USER_ACTION:
-                        bundle.putString("L", "WAITING FOR USER TO ACCEPT.");
-                        logNotifier.postValue(bundle);
+                        bundle.putString("title", getString(R.string.installing));
+                        bundle.putString("text", getString(R.string.installing));
+                        installInfoNotifier.postValue(bundle);
                         Intent confirmIntent = (Intent) extras.get(Intent.EXTRA_INTENT);
                         confirmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(confirmIntent);
                         break;
                     case PackageInstaller.STATUS_SUCCESS:
-                        bundle.putString("L", "PACKAGE INSTALLED SUCCESSFULLY");
-                        bundle.putBoolean("D", true);
-                        bundle.putInt("T", 1500);
-                        logNotifier.postValue(bundle);
+                        bundle.putString("title", getString(R.string.done));
+                        bundle.putString("text", getString(R.string.package_installed_success));
+                        bundle.putBoolean("stopProgress", true);
+                        bundle.putBoolean("buttonOk", true);
+                        installInfoNotifier.postValue(bundle);
                         break;
                     case PackageInstaller.STATUS_FAILURE:
                     case PackageInstaller.STATUS_FAILURE_ABORTED:
@@ -92,8 +94,10 @@ public class PackageInstallerService extends Service {
                     case PackageInstaller.STATUS_FAILURE_INCOMPATIBLE:
                     case PackageInstaller.STATUS_FAILURE_INVALID:
                     case PackageInstaller.STATUS_FAILURE_STORAGE:
-                        bundle.putString("L", "PACKAGE INSTALLED FAILED Because " + message );
-                        logNotifier.postValue(bundle);
+                        bundle.putString("title", getString(R.string.failed));
+                        bundle.putString("text", message);
+                        bundle.putBoolean("stopProgress", true);
+                        installInfoNotifier.postValue(bundle);
                         break;
                     default:
                         Toast.makeText(this, "Unrecognized status received from installer: " + status,
@@ -101,8 +105,8 @@ public class PackageInstallerService extends Service {
                 }
                 break;
             case Consts.ACTION_STOP_INSTALLER:
-                session.abandon();
-                worker.interrupt();
+                if (session != null) session.abandon();
+                if (worker != null) worker.interrupt();
                 session = null;
                 worker = null;
                 stopSelf();
@@ -118,34 +122,36 @@ public class PackageInstallerService extends Service {
         ZipEntry entry;
 
         Bundle bundle = new Bundle();
-        bundle.putString("L", "Extracting apks file to session...");
-        logNotifier.postValue(bundle);
-        bundle.putBoolean("P", true);
         while ((entry = zin.getNextEntry()) != null) {
-            if( !entry.getName().endsWith(".apk") ) continue; // skip any file that is not an apk file
-            bundle.putString("L", "extracting " + entry.getName());
-            logNotifier.postValue(bundle);
+            if (!entry.getName().endsWith(".apk"))
+                continue; // skip any file that is not an apk file
+            bundle.putString("text", getString(R.string.extracting_x, entry.getName()));
+            installInfoNotifier.postValue(bundle);
             extractApkToSession(zin, entry, session);
             zin.closeEntry();
         }
-        bundle.putBoolean("P", false);
-        bundle.putString("L", "EXTRACTING DONE");
-        logNotifier.postValue(bundle);
+        bundle.putString("text", getString(R.string.extracting_done));
+        installInfoNotifier.postValue(bundle);
+
     }
 
     private void extractApkToSession(ZipInputStream zin, ZipEntry entry, PackageInstaller.Session session) throws IOException {
-            try(OutputStream out = session.openWrite(entry.getName(), 0, entry.getSize())) {
-                byte[] buffer = new byte[16 * 1024];
-                int bytesRead;
-                while ((bytesRead = zin.read(buffer)) >= 0) {
-                    out.write(buffer, 0, bytesRead);
-                }
+        try (OutputStream out = session.openWrite(entry.getName(), 0, entry.getSize())) {
+            byte[] buffer = new byte[16 * 1024];
+            int bytesRead;
+            while ((bytesRead = zin.read(buffer)) >= 0) {
+                out.write(buffer, 0, bytesRead);
             }
+        }
     }
 
     private void installApksFile(InputStream in) {
         try {
-            if( session != null ) return;
+            Bundle bundle = new Bundle();
+            bundle.putString("title", getString(R.string.initialising));
+            installInfoNotifier.postValue(bundle);
+
+            if (session != null) return;
             PackageInstaller installer = getPackageManager().getPackageInstaller();
             PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL);
             int sessionId = installer.createSession(params);

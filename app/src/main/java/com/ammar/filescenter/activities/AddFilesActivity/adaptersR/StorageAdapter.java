@@ -42,7 +42,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private File[] displayedFiles;
 
     private int lastDirIndex = -1;
-    private AddFilesActivity act;
+    private final AddFilesActivity act;
 
     private final Stack<Parcelable> recyclerViewStates = new Stack<>();
 
@@ -119,9 +119,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         switch (type) {
             case TYPE_DIR:
                 DirectoryViewHolder dirHolder = (DirectoryViewHolder) holder;
-                dirHolder.setup(displayedFiles[position], (view) -> {
-                    viewDirectory(displayedFiles[position]);
-                });
+                dirHolder.setup(displayedFiles[position], (view) -> viewDirectory(displayedFiles[position]));
                 break;
             case TYPE_FILE:
                 // we might have added an empty space

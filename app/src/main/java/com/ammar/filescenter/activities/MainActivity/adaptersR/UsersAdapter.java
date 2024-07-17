@@ -16,6 +16,7 @@ import com.ammar.filescenter.R;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.models.User;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
@@ -71,6 +72,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             int iconSize = (int) Utils.dpToPx(40);
             Glide.with(itemView)
                     .load(os_icon_res)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .override(iconSize, iconSize)
                     .into(userIconIV);
             usernameTV.setText(user.getName());

@@ -36,6 +36,7 @@
                     android:id="@+id/TV_SettingsUploadAllow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:lightModeColor="#fff"
                     android:text="@string/disable_browser_upload"
                     android:textSize="@dimen/settings_big_text" />
 
@@ -43,6 +44,7 @@
                     android:id="@+id/TV_SettingsUploadAllowSub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:lightModeColor="#fff"
                     android:layout_below="@id/TV_SettingsUploadAllow"
                     android:text="@string/disable_browser_upload_desc"
                     android:textSize="@dimen/small_text" />
@@ -72,6 +74,7 @@
                     android:id="@+id/TV_SettingsUserBlock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:lightModeColor="#fff"
                     android:text="@string/block_users"
                     android:textSize="@dimen/settings_big_text" />
 
@@ -79,6 +82,7 @@
                     android:id="@+id/TV_SettingsUserBlockSub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:lightModeColor="#fff"
                     android:layout_below="@id/TV_SettingsUserBlock"
                     android:text="@string/block_users_desc"
                     android:textSize="@dimen/small_text" />
@@ -107,6 +111,7 @@
                     android:id="@+id/TV_SettingsLanguage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:lightModeColor="#fff"
                     android:text="@string/language"
                     android:textSize="@dimen/settings_big_text" />
 
@@ -114,6 +119,7 @@
                     android:id="@+id/TV_SettingsLanguageSub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:lightModeColor="#fff"
                     android:layout_below="@id/TV_SettingsLanguage"
                     android:text="@string/languages_desc"
                     android:textSize="@dimen/small_text" />

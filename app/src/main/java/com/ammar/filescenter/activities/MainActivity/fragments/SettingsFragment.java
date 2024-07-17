@@ -1,5 +1,7 @@
 package com.ammar.filescenter.activities.MainActivity.fragments;
 
+import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMode;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -68,7 +71,7 @@ public class SettingsFragment extends Fragment {
                         settingsPref.edit()
                                 .putString(Consts.PREF_FIELD_LANG, Consts.langsCode.get(which))
                                 .apply();
-                        Utils.setLocale((MainActivity) requireActivity(), Consts.langsCode.get(which));
+                        Utils.setLocale(requireActivity(), Consts.langsCode.get(which));
                         requireActivity().recreate();
                     }
                 })
@@ -98,7 +101,10 @@ public class SettingsFragment extends Fragment {
         });
 
         languageRL.setOnClickListener(view -> {
-            //languageAD.getWindow().setBackgroundDrawableResource( darkMode ? R.color.dialogColorDark : R.color.dialogColorLight );
+            // Dialog is dark but text is also dark that's the problem
+//            Window window = languageAD.getWindow();
+//            if( window != null )
+//                window.setBackgroundDrawableResource( darkMode ? R.color.dialogColorDark : R.color.dialogColorLight );
             languageAD.show();
         });
     }

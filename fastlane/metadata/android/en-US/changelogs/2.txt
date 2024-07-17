@@ -1,0 +1,8 @@
+1- Implement new UI for picking up a file
+2- add search bar to add apps activity
+3- do small changes to the UI
+4- Fix some bugs
+5- Add text to the available download bubble in the web that indicates that there no downloads
+6- Fix bug related to changing the app language
+7- Add APKS installer to the app so users can send Sharing to the other device and install apks files
+8- Fix null link issue when wifi and hotspot and mobile data are off

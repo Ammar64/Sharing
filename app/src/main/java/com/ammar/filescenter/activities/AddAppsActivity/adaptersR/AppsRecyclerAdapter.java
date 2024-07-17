@@ -11,20 +11,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity.AddAppsActivity;
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.custom.ui.AdaptiveTextView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -32,16 +30,13 @@ import java.util.LinkedList;
 public class AppsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final App[] apps;
     private App[] displayedApps;
-    private final PackageManager pm;
     private final AddAppsActivity activity;
     LinkedList<String> selectedApps;
-    private static final int TYPE_APP = 0;
-    private static final int TYPE_INFO_TEXT = 1;
 
     public AppsRecyclerAdapter(AddAppsActivity activity, ArrayList<ApplicationInfo> appsInfo, LinkedList<String> selectedApps) {
         this.activity = activity;
         this.selectedApps = selectedApps;
-        this.pm = this.activity.getPackageManager();
+        PackageManager pm = this.activity.getPackageManager();
         this.apps = new App[appsInfo.size()];
         for (int i = 0; i < appsInfo.size(); i++) {
             this.apps[i] = new App();
@@ -78,16 +73,6 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         });
     }
 
-    @Override
-    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-        ((GridLayoutManager) recyclerView.getLayoutManager()).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                if(position == displayedApps.length) return 3; else return 1;
-            }
-        });
-    }
-
     private void searchApps(String searchInput) {
         if (searchInput.isEmpty()) {
             this.displayedApps = this.apps;
@@ -106,64 +91,44 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyDataSetChanged();
     }
 
-
-    @Override
-    public int getItemViewType(int position) {
-        if (position == displayedApps.length) return TYPE_INFO_TEXT;
-        else return TYPE_APP;
-    }
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case TYPE_APP:
-                LayoutInflater inflater = LayoutInflater.from(activity);
-                View view = inflater.inflate(R.layout.view_add_apps_app, parent, false);
-                return new AppViewHolder(view);
-            case TYPE_INFO_TEXT:
-                FrameLayout layout = new FrameLayout(parent.getContext());
-                return new InfoTextViewHolder(layout);
-        }
-
-        // it's impossible to reach this point
-        throw new RuntimeException();
+        LayoutInflater inflater = LayoutInflater.from(activity);
+        View view = inflater.inflate(R.layout.view_add_apps_app, parent, false);
+        return new AppViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        int type = getItemViewType(position);
-        switch (type) {
-            case TYPE_APP:
-                AppViewHolder appHolder = (AppViewHolder) holder;
-                int size = (int) Utils.dpToPx(50);
-                Glide.with(holder.itemView.getContext())
-                        .load(displayedApps[position].icon)
-                        .override(size, size)
-                        .into(appHolder.icon);
+        AppViewHolder appHolder = (AppViewHolder) holder;
+        int size = (int) Utils.dpToPx(50);
+        Glide.with(holder.itemView.getContext())
+                .load(displayedApps[position].icon)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .override(size, size)
+                .into(appHolder.icon);
 
-                appHolder.appName.setText(displayedApps[position].label);
-                appHolder.checkBox.setChecked(displayedApps[position].isChecked);
+        appHolder.appName.setText(displayedApps[position].label);
+        appHolder.checkBox.setChecked(displayedApps[position].isChecked);
 
-                appHolder.itemView.setOnClickListener((view) -> {
-                    this.activity.searchInputET.clearFocus();
-                    boolean isChecked = appHolder.checkBox.isChecked();
-                    appHolder.checkBox.setChecked(!isChecked);
-                    if (!isChecked) {
-                        selectedApps.add(displayedApps[position].packageName);
-                    } else {
-                        selectedApps.remove(displayedApps[position].packageName);
-                    }
-                    this.displayedApps[position].isChecked = !isChecked;
-                    activity.setToolbarTitle(activity.getString(R.string.selected_num, selectedApps.size()));
-                });
-        }
-
+        appHolder.itemView.setOnClickListener((view) -> {
+            this.activity.searchInputET.clearFocus();
+            boolean isChecked = appHolder.checkBox.isChecked();
+            appHolder.checkBox.setChecked(!isChecked);
+            if (!isChecked) {
+                selectedApps.add(displayedApps[position].packageName);
+            } else {
+                selectedApps.remove(displayedApps[position].packageName);
+            }
+            this.displayedApps[position].isChecked = !isChecked;
+            activity.setToolbarTitle(activity.getString(R.string.selected_num, selectedApps.size()));
+        });
     }
 
     @Override
     public int getItemCount() {
-        return displayedApps.length == apps.length ? displayedApps.length + 1 : displayedApps.length;
+        return displayedApps.length;
     }
 
     public static class AppViewHolder extends RecyclerView.ViewHolder {
@@ -176,19 +141,6 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             icon = itemView.findViewById(R.id.IV_AppIcon);
             checkBox = itemView.findViewById(R.id.CB_AppCheckBox);
             appName = itemView.findViewById(R.id.TV_AppName);
-        }
-    }
-
-    class InfoTextViewHolder extends RecyclerView.ViewHolder {
-
-        public InfoTextViewHolder(@NonNull FrameLayout itemView) {
-            super(itemView);
-            AdaptiveTextView text = new AdaptiveTextView(itemView.getContext());
-            text.setText(R.string.installer_info);
-            text.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            text.setTextSize(11);
-            text.setPadding(10, 10, 10, 10);
-            itemView.addView(text);
         }
     }
 

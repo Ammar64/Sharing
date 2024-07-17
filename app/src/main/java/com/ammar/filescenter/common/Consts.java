@@ -5,6 +5,7 @@ import android.os.Environment;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public final class Consts {
     public static final String ACTION_TOGGLE_SERVER = "com.ammar.filescenter.services.TOGGLE_SERVER";
@@ -46,6 +47,7 @@ public final class Consts {
     public static final File filesDir = new File(filesCenterDir, "Files");
 
     public static final List<String> langsCode = Arrays.asList("", "ar", "en", "du");
+    public static Locale SystemLocale;
 
     public enum OS {LINUX, WINDOWS, ANDROID, IOS, MAC, UNKNOWN};
     private Consts(){}

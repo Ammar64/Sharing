@@ -50,7 +50,6 @@ public class Request {
             } else {
                 try {
                     clientSocket.setKeepAlive(true);
-                    clientSocket.setSoTimeout(ClientHandler.timeout);
                     Log.d("MYLOG", "Connection will stay alive");
                 } catch (SocketException e) {
                     Utils.showErrorDialog("Request.readSocket(). SocketException:", e.getMessage());

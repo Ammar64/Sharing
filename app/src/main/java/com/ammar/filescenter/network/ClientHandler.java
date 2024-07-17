@@ -47,8 +47,6 @@ public class ClientHandler implements Runnable {
                 response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
                 response.setHeader("Pragma", "no-cache");
                 response.setHeader("Expires", "0");
-                // multiply timeout by 0.001 to convert from milliseconds into seconds
-                response.setHeader("Keep-Alive", request.isKeepAlive() ? String.format(Locale.ENGLISH, "timeout=%d", (int) (timeout * 0.001)) : "close");
 
                 String userAgent = request.getHeader("User-Agent");
                 if (userAgent != null)
@@ -57,7 +55,7 @@ public class ClientHandler implements Runnable {
                     boolean found = false;
                     for (HTTPSession i : HTTPSession.sessions) {
                         found = handleSession(i, request, response);
-                        if(found)break;
+                        if(found) break;
                     }
                     if (!found) handleSession(notFoundSession, request, response);
                 } else  // if user is blocked redirect to blocked page
@@ -117,12 +115,12 @@ public class ClientHandler implements Runnable {
                 } else if ("/favicon.ico".equals(req.getPath())) {
                     res.setHeader("Content-Type", "image/svg+xml");
                     res.sendResponse(Utils.readFileFromWebAssets("icons8-share.svg"));
-                } //else if (!"/blocked".equals(req.getPath())) {
-//                    res.setStatusCode(307);
-//                    res.setHeader("Location", "/blocked");
-//                    res.sendResponse();
-//                }
-                else {
+                } else if (!"/blocked".equals(req.getPath())) {
+                    res.setStatusCode(307);
+                    res.setHeader("Location", "/blocked");
+                    res.sendResponse();
+                    req.getClientSocket().close();
+                } else {
                     res.setStatusCode(401);
                     res.setHeader("Content-Type", "text/html");
                     res.sendResponse(Utils.readFileFromWebAssets("blocked.html"));
