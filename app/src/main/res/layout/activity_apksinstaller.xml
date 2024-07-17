@@ -18,21 +18,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@color/white"
-        app:title="@string/apks_installer" />
+        app:title="APKS Installer (Experimental)" />
 
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+    <LinearLayout
+        android:id="@+id/LL_InstallerFilePick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TB_Toolbar">
-        <LinearLayout
-            android:id="@+id/LL_InstallerLogLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"/>
-    </ScrollView>
+        app:layout_constraintTop_toBottomOf="@+id/TB_Toolbar"
+        android:gravity="center">
 
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/B_InstallerFilePick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pick_apks_file"
+            android:textColor="@color/white"
+            app:backgroundTint="#B6164D"/>
+
+        <com.ammar.filescenter.custom.ui.AdaptiveTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="8dp"
+            android:text="@string/installer_note" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

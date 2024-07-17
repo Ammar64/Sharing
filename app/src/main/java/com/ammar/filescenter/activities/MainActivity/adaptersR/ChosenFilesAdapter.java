@@ -18,11 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.common.Consts;
-import com.ammar.filescenter.services.ServerService;
-import com.ammar.filescenter.network.Server;
-import com.ammar.filescenter.models.Sharable;
 import com.ammar.filescenter.common.Utils;
+import com.ammar.filescenter.models.Sharable;
 import com.ammar.filescenter.models.SharableApp;
+import com.ammar.filescenter.network.Server;
+import com.ammar.filescenter.services.ServerService;
 import com.bumptech.glide.Glide;
 
 import java.util.Map;
