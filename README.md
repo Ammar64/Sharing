@@ -15,7 +15,7 @@ Or download the latest APK from the [Releases Section](https://github.com/Ammar6
 
 -----------------
 
-Copyright (C) 2024 Ammar Ramadan
+Copyright (C) 2024 Sharing authors
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
