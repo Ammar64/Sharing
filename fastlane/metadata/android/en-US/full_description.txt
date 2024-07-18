@@ -1,5 +1,7 @@
-Share files and apps over HTTP. you need the other device to be connected to the same network. just toggle on the server and scan the QR Code on other device and you're good to go.
+Share files and apps using browser. you need the other device to be connected to the same network.
 Files sent from browser to the app can be found in Files-Center/ folder in your internal storage.
-You can always disable uploads in the app settings.
+You will need to send this app to the other device in case you sent an app with split apk files.
+Make sure you use hotspot to get faster speeds transferring files.
 
 All thanks goes to Hamdy El-menshawy for the UI design
+App made by Ammar64

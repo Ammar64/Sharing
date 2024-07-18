@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.ammar.filescenter.models.Sharable;
+import com.ammar.filescenter.services.ServerService;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -19,10 +20,10 @@ public class Server {
 
     public static final LinkedList<Sharable> filesList = new LinkedList<>();
     private boolean running = false;
-    private final Context context;
+    private final ServerService service;
 
-    public Server(Context context) {
-        this.context = context;
+    public Server(ServerService service) {
+        this.service = service;
     }
 
     public void Start() {
@@ -57,7 +58,7 @@ public class Server {
         try {
             while (!serverSocket.isClosed()) {
                 Socket clientSocket = serverSocket.accept();
-                ClientHandler clientHandler = new ClientHandler(context, clientSocket);
+                ClientHandler clientHandler = new ClientHandler(service, clientSocket);
 
                 Thread clientThread = new Thread(clientHandler);
                 clientThread.start();

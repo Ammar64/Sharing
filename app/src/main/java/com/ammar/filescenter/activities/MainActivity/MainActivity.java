@@ -23,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.Window;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
@@ -101,10 +103,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void prepareActivity() {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN);
-
-
         settingsPref = getSharedPreferences(Consts.PREF_SETTINGS, MODE_PRIVATE);
+        darkMode = settingsPref.getBoolean(Consts.PREF_FIELD_IS_DARK, true);
+
+        if (darkMode) {
+            setTheme(R.style.AppThemeDark);
+            getWindow().setBackgroundDrawableResource(R.drawable.gradient_background_dark);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            setTheme(R.style.AppTheme);
+            getWindow().setBackgroundDrawableResource(R.drawable.gradient_background_light);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN);
         // check for first Run
         appInfoPref = getSharedPreferences(Consts.PREF_APP_INFO, MODE_PRIVATE);
         isFirstRun = appInfoPref.getBoolean(Consts.PREF_FIELD_IS_FIRST_RUN, true);
@@ -119,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
             //startActivity(new Intent(this, TutorialActivity.class));
         }
 
-        darkMode = settingsPref.getBoolean(Consts.PREF_FIELD_IS_DARK, true);
         String lang = settingsPref.getString(Consts.PREF_FIELD_LANG, "");
         if (!lang.isEmpty()) {
             Utils.setLocale(this, lang);
@@ -362,9 +372,11 @@ public class MainActivity extends AppCompatActivity {
                 public void onAnimationEnd(Animator animation) {
                     themeChangeIV.setImageDrawable(null);
                     themeChangeIV.setVisibility(View.GONE);
-
-                    if (darkMode) getWindow().setNavigationBarColor(Color.BLACK);
-                    else getWindow().setNavigationBarColor(Color.WHITE);
+                    if (darkMode) {
+                        getWindow().setNavigationBarColor(Color.BLACK);
+                    } else {
+                        getWindow().setNavigationBarColor(Color.WHITE);
+                    }
                 }
             });
             anim.start();
@@ -380,6 +392,7 @@ public class MainActivity extends AppCompatActivity {
     public void syncTheme(boolean dark) {
         int[][] states = new int[][]{new int[]{android.R.attr.state_checked}, new int[]{-android.R.attr.state_checked}};
         final int ColorPrimary = getResources().getColor(R.color.colorPrimary);
+
         if (dark) {
             layout.setBackgroundResource(R.drawable.gradient_background_dark);
             DrawableCompat.setTint(toolbar.getOverflowIcon(), getResources().getColor(R.color.white));

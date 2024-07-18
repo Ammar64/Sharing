@@ -29,6 +29,7 @@
         android:id="@+id/IV_QRCodeImage"
         android:layout_width="200dp"
         android:layout_height="200dp"
+        android:layout_marginTop="12dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"

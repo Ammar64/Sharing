@@ -60,6 +60,8 @@
     <string name="pls_choose_apks">Please choose an apks file</string>
     <string name="pick_apks_file">pick apks file</string>
     <string name="installer_note">After sending an apks file to the other device successfully.\nSend this app to the other remote device and open this page.\nThis will install the apks file.</string>
+    <string name="stop">Stop</string>
+    <string name="you_stopped_sending_to_user">You stopped sending to %1$s</string>
 
     <string-array name="langs">
         <item>@string/system_default_lang</item>

@@ -3,20 +3,24 @@ package com.ammar.filescenter.custom.io;
 import android.os.Bundle;
 
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.services.ServerService;
 import com.ammar.filescenter.models.User;
+import com.ammar.filescenter.services.ServerService;
 
 import java.io.File;
-import java.util.LinkedList;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.ArrayList;
 
 public class ProgressManager {
 
     private final File file;
+    private Socket socket;
     private String displayName = null;
     // The other device receiving or sending
     private final User user;
 
     public enum OP {DOWNLOAD, UPLOAD}
+
     private final OP op;
 
     // if loaded is -1 it's completed.
@@ -31,18 +35,26 @@ public class ProgressManager {
         this.progress_info.putInt("index", index);
     }
 
-    public static LinkedList<ProgressManager> progresses = new LinkedList<>();
+    public int getIndex() { return index; }
+
+    public static ArrayList<ProgressManager> progresses = new ArrayList<>();
 
     public static void removeProgress(int index) {
         for (int i = index + 1; i < progresses.size(); i++) {
             progresses.get(i).setIndex(progresses.get(i).index - 1);
         }
         progresses.remove(index);
+
+        Bundle b = new Bundle();
+        b.putChar("action", 'R');
+        b.putInt("index", index);
+        ServerService.filesSendNotifier.forcePostValue(b);
     }
 
 
-    public ProgressManager(File file, long total, User user, OP opType) {
+    public ProgressManager(File file, Socket socket, long total, User user, OP opType) {
         this.file = file;
+        this.socket = socket;
         this.total = total;
         this.user = user;
         this.op = opType;
@@ -56,7 +68,6 @@ public class ProgressManager {
         info_add.putChar("action", 'A');
         info_add.putInt("index", index);
         ServerService.filesSendNotifier.forcePostValue(info_add);
-
         // set action to P for later use
         progress_info.putChar("action", 'P');
         progress_info.putInt("index", index);
@@ -70,9 +81,11 @@ public class ProgressManager {
     public String getFileName() {
         return file.getName();
     }
+
     public String getDisplayName() {
         return displayName == null ? file.getName() : displayName;
     }
+
     public File getFile() {
         return file;
     }
@@ -88,6 +101,7 @@ public class ProgressManager {
     public long getLoaded() {
         return loaded;
     }
+
     public String getUUID() {
         return uuid;
     }
@@ -95,7 +109,7 @@ public class ProgressManager {
     long transferSpeed = 0;
 
     public long getSpeed() {
-        return (long)(transferSpeed * ( 1000.0f / 300.0f));
+        return (long) (transferSpeed * (1000.0f / 300.0f));
     }
 
     public OP getOperation() {
@@ -110,13 +124,15 @@ public class ProgressManager {
     }
 
     public void accumulateLoaded(int bytesRead) {
-        if( loaded >= 0 )
+        if (loaded >= 0)
             loaded += bytesRead;
         reportProgress();
     }
+
     public void setTotal(long n) {
         total = n;
     }
+
     public void setDisplayName(String name) {
         displayName = name;
     }
@@ -126,7 +142,7 @@ public class ProgressManager {
         return (int) ((float) loaded / (float) total * 100.0f);
     }
 
-    public void setUUID( String uuid ) {
+    public void setUUID(String uuid) {
         this.uuid = uuid;
     }
 
@@ -146,17 +162,28 @@ public class ProgressManager {
 
 
     public static final int COMPLETED = -1;
-    public static final int STOPPED = -2;
+    public static final int STOPPED_BY_REMOTE = -2;
+    public static final int STOPPED_BY_USER = -3; // didn't work properly that's why not used
 
 
     public void reportCompleted() {
         setLoaded(COMPLETED);
-        ServerService.filesSendNotifier.postValue(progress_info);
+        ServerService.filesSendNotifier.forcePostValue(progress_info);
     }
 
     public void reportStopped() {
-        setLoaded(STOPPED);
-        ServerService.filesSendNotifier.postValue(progress_info);
+        setLoaded(STOPPED_BY_REMOTE);
+        ServerService.filesSendNotifier.forcePostValue(progress_info);
+    }
+
+    public void stop() {
+        try {
+            socket.getInputStream().close();
+            socket.getOutputStream().close();
+            socket.close();
+        } catch (IOException ignore) {}
+        setLoaded(STOPPED_BY_REMOTE); // Passing STOPPED_BY_USER doesn't work properly
+        ServerService.filesSendNotifier.forcePostValue(progress_info);
     }
 
 }

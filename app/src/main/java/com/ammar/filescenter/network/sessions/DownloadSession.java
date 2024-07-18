@@ -10,6 +10,7 @@ import com.ammar.filescenter.models.SharableApp;
 import com.ammar.filescenter.network.Request;
 import com.ammar.filescenter.network.Response;
 import com.ammar.filescenter.network.Server;
+import com.ammar.filescenter.network.exceptions.SocketClose;
 import com.ammar.filescenter.network.sessions.base.HTTPSession;
 
 import org.json.JSONArray;
@@ -73,7 +74,10 @@ public class DownloadSession extends HTTPSession {
                     }
                 }
             }
-        } catch (RuntimeException e) {
+        } catch (SocketClose e) {
+            throw e;
+        }
+        catch (RuntimeException e) {
             Log.i("MYLOG", "FileNotHosted");
             if ("FileNotHosted".equals(e.getMessage())) {
                 res.setHeader("Content-Type", "text/html");

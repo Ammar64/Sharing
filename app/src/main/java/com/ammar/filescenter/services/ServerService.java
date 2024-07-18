@@ -22,6 +22,7 @@ import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.MainActivity.MainActivity;
 import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.custom.data.QueueMutableLiveData;
+import com.ammar.filescenter.models.User;
 import com.ammar.filescenter.network.Server;
 import com.ammar.filescenter.models.SharableApp;
 import com.ammar.filescenter.models.Sharable;
@@ -143,6 +144,7 @@ public class ServerService extends Service {
 
     private void toggleServer() {
         if (server.isRunning()) {
+            User.closeAllSockets();
             server.Stop();
         } else {
             server.Start();
@@ -230,4 +232,7 @@ public class ServerService extends Service {
         }
     }
 
+    public Server getServer() {
+        return server;
+    }
 }

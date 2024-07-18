@@ -3,10 +3,12 @@ package com.ammar.filescenter.network;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+
 import com.ammar.filescenter.custom.io.ProgressManager;
 import com.ammar.filescenter.custom.io.ProgressOutputStream;
 import com.ammar.filescenter.models.Sharable;
 import com.ammar.filescenter.models.User;
+import com.ammar.filescenter.network.exceptions.SocketClose;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -20,7 +22,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class Response {
-    private Socket clientSocket;
+    private final Socket clientSocket;
 
     public Response(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -34,8 +36,8 @@ public class Response {
 
     public void sendFileResponse(Sharable file, boolean progress, User user) {
         ProgressManager progressManager = null;
-        if( progress ) {
-            progressManager = new ProgressManager(file.getFile(), file.getSize(), user, ProgressManager.OP.DOWNLOAD);
+        if (progress) {
+            progressManager = new ProgressManager(file.getFile(), clientSocket, file.getSize(), user, ProgressManager.OP.DOWNLOAD);
             progressManager.setDisplayName(file.getName());
             progressManager.setUUID(file.getUUID());
         }
@@ -43,7 +45,7 @@ public class Response {
         try {
             OutputStream out;
 
-            if( progress )
+            if (progress)
                 out = new ProgressOutputStream(clientSocket.getOutputStream(), progressManager);
             else
                 out = clientSocket.getOutputStream();
@@ -64,11 +66,16 @@ public class Response {
                 out.flush();
             }
 
-            if( progress )
+            if (progress)
                 progressManager.reportCompleted();
 
+        } catch (SocketClose e) {
+            if (progress)
+                progressManager.reportStopped();
+            Log.e("MYLOG", "SendFileResponse(). SocketClose: " + e.getMessage());
+            throw new SocketClose();
         } catch (IOException e) {
-            if(progress)
+            if (progress)
                 progressManager.reportStopped();
             Log.e("MYLOG", "SendFileResponse(). Exception: " + e.getMessage());
         }
@@ -85,7 +92,7 @@ public class Response {
         }
         try (FileInputStream input = new FileInputStream(file.getFilePath())) {
             long n = input.skip(start);
-            if( progressManager == null || n != start ) {
+            if (progressManager == null || n != start) {
                 setStatusCode(400);
                 sendResponse();
                 return;
@@ -95,7 +102,7 @@ public class Response {
             setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getFileName()));
             setHeader("Content-Type", file.getMimeType());
             setHeader("Accept-Ranges", "bytes");
-            setHeader("Content-Range", String.format(Locale.ENGLISH, "bytes %d-%d/%d", start, file.getSize()-1, file.getSize()));
+            setHeader("Content-Range", String.format(Locale.ENGLISH, "bytes %d-%d/%d", start, file.getSize() - 1, file.getSize()));
 
 
             OutputStream out = new ProgressOutputStream(clientSocket.getOutputStream(), progressManager);
@@ -109,16 +116,22 @@ public class Response {
             }
             out.flush();
             progressManager.reportCompleted();
-        } catch (IOException e) {
-            if( progressManager != null )
+        } catch (SocketClose e) {
+            if (progressManager != null)
                 progressManager.reportStopped();
+            Log.e("MYLOG", "Response.resumePausedFileResponse. SocketClose: " + e.getMessage());
+            throw new SocketClose();
+        } catch (IOException e) {
+            if (progressManager != null)
+                progressManager.reportStopped();
+
             Log.e("MYLOG", "Response.resumePausedFileResponse. IOException: " + e.getMessage());
         }
 
     }
 
     public void sendZippedFilesResponse(Sharable[] files, User user) {
-        ProgressManager progressManager = new ProgressManager(files[0].getFile(), -1, user, ProgressManager.OP.DOWNLOAD);
+        ProgressManager progressManager = new ProgressManager(files[0].getFile(), clientSocket, -1, user, ProgressManager.OP.DOWNLOAD);
         progressManager.setUUID(files[0].getUUID());
         progressManager.setDisplayName(files[0].getName());
         try {
@@ -166,6 +179,10 @@ public class Response {
 
             progressManager.reportCompleted();
 
+        } catch (SocketClose e) {
+            progressManager.reportStopped();
+            Log.e("MYLOG", "sendZippedFilesResponse(). SocketClose: " + e.getMessage());
+            throw new SocketClose();
         } catch (IOException e) {
             progressManager.reportStopped();
             Log.e("MYLOG", "sendZippedFilesResponse(). Exception: " + e.getMessage());
@@ -202,6 +219,7 @@ public class Response {
         setHeader("Content-Type", "image/png");
         sendResponse(buffer.toByteArray());
     }
+
     public void setHeader(String key, String value) {
         headers.put(key, value);
     }
@@ -243,7 +261,7 @@ public class Response {
         this.statusCode = statusCode;
     }
 
-    private Map<String, String> headers = new TreeMap<>();
+    private final Map<String, String> headers = new TreeMap<>();
 
 
     public void close() throws IOException {

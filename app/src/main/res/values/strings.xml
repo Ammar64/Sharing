@@ -10,14 +10,15 @@
     <string name="users">Users</string>
 
     <string name="sending_to_user">Sending to %1$s</string>
-    <string name="sending_to_user_stopped">%1$s stopped downloading</string>
+    <string name="sending_to_user_stopped">Sending to %1$s stopped</string>
     <string name="sending_to_user_done">Sent to %1$s</string>
     <string name="receiving_from_user">Receiving from %1$s</string>
-    <string name="receiving_from_user_stopped">%1$s stopped sending</string>
+    <string name="receiving_from_user_stopped">Receiving from %1$s stopped</string>
     <string name="receiving_from_user_done">Received from %1$s</string>
 
     <string name="completed">Completed</string>
     <string name="stopped">Stopped</string>
+    <string name="stop">Stop</string>
 
     <!-- dialogs   -->
     <string name="connected_users">Connected users</string>

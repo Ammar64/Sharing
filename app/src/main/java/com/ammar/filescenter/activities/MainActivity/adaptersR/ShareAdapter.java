@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Handler;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -21,9 +20,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.core.content.FileProvider;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,6 +39,8 @@ import com.ammar.filescenter.network.Server;
 import com.ammar.filescenter.models.User;
 
 import java.util.Locale;
+
+import io.reactivex.rxjava3.disposables.Disposable;
 
 
 // this adapter for the recycler view you see when you open the app
@@ -110,6 +112,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         private final ImageView QRImageIV;
         private final AppCompatTextView serverLinkTV;
         private final AdaptiveTextView connectToWifiOrHotspotTV;
+
         public HeaderViewHolder(@NonNull View itemView, ShareFragment fragment) {
             super(itemView);
 
@@ -147,7 +150,8 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             QRCodeB.setOnClickListener(button -> {
                 Window window = QRDialogAD.getWindow();
-                if( window != null ) window.setBackgroundDrawableResource( darkMode ? R.color.dialogColorDark : R.color.dialogColorLight );
+                if (window != null)
+                    window.setBackgroundDrawableResource(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight);
                 QRDialogAD.show();
                 setupQrCode();
             });
@@ -168,7 +172,8 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             showSelected.setOnClickListener(button -> {
                 Window window = chosenFilesAD.getWindow();
-                if( window != null ) window.setBackgroundDrawableResource( darkMode ? R.color.dialogColorDark : R.color.dialogColorLight );
+                if (window != null)
+                    window.setBackgroundDrawableResource(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight);
                 chosenFilesAD.show();
             });
 
@@ -203,9 +208,11 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             usersRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
             showUsersB.setOnClickListener(button -> {
                 Window window = usersDialogAD.getWindow();
-                if( window != null ) window.setBackgroundDrawableResource( darkMode ? R.color.dialogColorDark : R.color.dialogColorLight );
+                if (window != null)
+                    window.setBackgroundDrawableResource(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight);
                 usersDialogAD.show();
             });
+
 
             ServerService.usersListObserver.observe(fragment.getViewLifecycleOwner(), info -> {
                 char action = info.getChar("action");
@@ -213,7 +220,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 int index = info.getInt("index");
                 if ('A' == action) {
                     usersAdapter.notifyItemInserted(index);
-                } else if( 'C' == action ) {
+                } else if ('C' == action) {
                     usersAdapter.notifyItemChanged(index);
                 }
                 if (size == 0) {
@@ -230,7 +237,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         private void setupQrCode() {
             String ip = ServerService.getIpAddress();
-            if( ip != null ) {
+            if (ip != null) {
                 connectToWifiOrHotspotTV.setVisibility(View.GONE);
                 serverLinkTV.setVisibility(View.VISIBLE);
                 QRImageIV.setVisibility(View.VISIBLE);
@@ -252,6 +259,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public static class ProgressViewHolder extends RecyclerView.ViewHolder {
         TextView fileNameTV;
+        AppCompatImageButton stopB;
         TextView operationTV;
         TextView transferInfoTV;
         ProgressBar fileProgressPB;
@@ -260,6 +268,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public ProgressViewHolder(@NonNull View itemView) {
             super(itemView);
             fileNameTV = itemView.findViewById(R.id.TV_SharedFileName);
+            stopB = itemView.findViewById(R.id.B_StopSharing);
             operationTV = itemView.findViewById(R.id.TV_OperationType);
             transferInfoTV = itemView.findViewById(R.id.TV_FileTransferInfo);
             fileProgressPB = itemView.findViewById(R.id.PB_SharedFileProgress);
@@ -273,7 +282,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             setFileTransferInfo(manager);
             handler.post(() -> setProgress(manager));
             setOperationText(manager);
-            setClickListener(manager);
+            setClickListeners(manager);
         }
 
         private void setOperationText(ProgressManager manager) {
@@ -286,7 +295,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 case DOWNLOAD:
                     if (manager.getLoaded() == ProgressManager.COMPLETED)
                         operationText = ctx.getString(R.string.sending_to_user_done, username);
-                    else if (manager.getLoaded() == ProgressManager.STOPPED)
+                    else if (manager.getLoaded() == ProgressManager.STOPPED_BY_REMOTE)
                         operationText = ctx.getString(R.string.sending_to_user_stopped, username);
                     else
                         operationText = ctx.getString(R.string.sending_to_user, username);
@@ -294,7 +303,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 case UPLOAD:
                     if (manager.getLoaded() == ProgressManager.COMPLETED)
                         operationText = ctx.getString(R.string.receiving_from_user_done, username);
-                    else if (manager.getLoaded() == ProgressManager.STOPPED)
+                    else if (manager.getLoaded() == ProgressManager.STOPPED_BY_REMOTE)
                         operationText = ctx.getString(R.string.receiving_from_user_stopped, username);
                     else
                         operationText = ctx.getString(R.string.receiving_from_user, username);
@@ -314,11 +323,9 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 case ProgressManager.COMPLETED:
                     transferInfoTV.setText(R.string.completed);
                     return;
-                case ProgressManager.STOPPED:
+                case ProgressManager.STOPPED_BY_REMOTE:
                     transferInfoTV.setText(R.string.stopped);
                     return;
-
-
             }
 
             String loaded = Utils.getFormattedSize(manager.getLoaded());
@@ -333,6 +340,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         private void setProgress(ProgressManager manager) {
             if (manager.getLoaded() < 0) {
+                stopB.setImageResource(R.drawable.icon_trash);
                 fileProgressTV.setText("");
                 fileProgressTV.setVisibility(View.INVISIBLE);
 
@@ -345,15 +353,18 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     case ProgressManager.COMPLETED:
                         c = Color.GREEN;
                         break;
-                    case ProgressManager.STOPPED:
+                    case ProgressManager.STOPPED_BY_REMOTE:
                         c = Color.YELLOW;
+                        break;
+                    case ProgressManager.STOPPED_BY_USER:
+                        c = Color.RED;
                         break;
                     default:
                         throw new RuntimeException("Invalid progress status. progress is " + manager.getLoaded());
                 }
                 DrawableCompat.setTint(fileProgressPB.getProgressDrawable(), c);
                 return;
-            }
+            } else stopB.setImageResource(R.drawable.icon_x);
 
             if (manager.getTotal() != -1) {
                 int progress = manager.getPercentage();
@@ -381,36 +392,48 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         }
 
-        private void setClickListener(ProgressManager manager) {
-            if (manager.getOperation() == ProgressManager.OP.UPLOAD) {
+        private void setClickListeners(ProgressManager manager) {
 
-                itemView.setOnClickListener((view) -> {
-                    String type = manager.getFileType();
-                    Intent intent = new Intent();
+//            if (manager.getOperation() == ProgressManager.OP.UPLOAD) {
+//
+//                itemView.setOnClickListener((view) -> {
+//                    String type = manager.getFileType();
+//                    Intent intent = new Intent();
+//
+//                    if (type.startsWith("image/")
+//                            || type.startsWith("audio/")
+//                            || type.startsWith("video")
+//                            || type.equals("application/vnd.android.package-archive")
+//                            || Utils.isDocumentType(type)) {
+//                        intent.setAction(Intent.ACTION_VIEW);
+//                        Uri uri = FileProvider.getUriForFile(
+//                                itemView.getContext(),
+//                                itemView.getContext().getApplicationContext().getPackageName() + ".provider",
+//                                manager.getFile());
+//                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                        intent.setDataAndType(uri, type);
+//                        itemView.getContext().startActivity(intent);
+//                    } else {
+//                        intent.setAction(Intent.ACTION_GET_CONTENT);
+//                        Uri uri = Uri.parse(manager.getFile().getParent()); // a directory
+//                        intent.setDataAndType(uri, "*/*");
+//                        itemView.getContext().startActivity(Intent.createChooser(intent, "Open folder"));
+//                    }
+//                });
+//
+//
+//
+//            } else {
+//                itemView.setOnClickListener(null);
+//            }
 
-                    if (type.startsWith("image/")
-                            || type.startsWith("audio/")
-                            || type.startsWith("video")
-                            || type.equals("application/vnd.android.package-archive")
-                            || Utils.isDocumentType(type)) {
-                        intent.setAction(Intent.ACTION_VIEW);
-                        Uri uri = FileProvider.getUriForFile(
-                                itemView.getContext(),
-                                itemView.getContext().getApplicationContext().getPackageName() + ".provider",
-                                manager.getFile());
-                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        intent.setDataAndType(uri, type);
-                        itemView.getContext().startActivity(intent);
-                    } else {
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        Uri uri = Uri.parse(manager.getFile().getParent()); // a directory
-                        intent.setDataAndType(uri, "*/*");
-                        itemView.getContext().startActivity(Intent.createChooser(intent, "Open folder"));
-                    }
-                });
-            } else {
-                itemView.setOnClickListener(null);
-            }
+            stopB.setOnClickListener((view) -> {
+                if( manager.getLoaded() >= 0 ) {
+                    manager.stop();
+                }
+                else
+                    ProgressManager.removeProgress(manager.getIndex());
+            });
         }
     }
 

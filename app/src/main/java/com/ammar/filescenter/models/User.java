@@ -8,12 +8,18 @@ import androidx.annotation.Nullable;
 import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.services.ServerService;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class User {
     public static final ArrayList<User> users = new ArrayList<>();
+
     private final int id;
+    public final LinkedList<Socket> sockets = new LinkedList<>();
     private final SocketAddress address;
     private boolean _isBlocked = false;
 
@@ -22,8 +28,10 @@ public class User {
 
     private static int numUsers = 0;
 
-    private User(SocketAddress address, String userAgent) {
-        this.address = address;
+    private User(Socket socket, String userAgent) {
+        this.address = socket.getRemoteSocketAddress();
+        this.sockets.add(socket);
+
         this.id = numUsers++;
         this.name = "User-" + getId();
 
@@ -36,12 +44,15 @@ public class User {
         } else this.OS = Consts.OS.UNKNOWN;
     }
     // make new user if user exist return it.
-    public static User RegisterUser(SharedPreferences prefs, SocketAddress address, String agent) {
-        User registered_user = getUserBySockAddr(address);
-        if( registered_user != null )
+    public static User RegisterUser(SharedPreferences prefs, Socket socket, String agent) {
+        User registered_user = getUserBySockAddr(socket.getRemoteSocketAddress());
+        if( registered_user != null ) {
+            if( !registered_user.socketExists(socket) )
+                registered_user.addSocket(socket);
             return registered_user;
+        }
         else {
-            User new_user = new User(address, agent);
+            User new_user = new User(socket, agent);
             User.users.add(new_user);
             // block or not
             new_user.block( prefs.getBoolean(Consts.PREF_FIELD_ARE_USER_BLOCKED, false) );
@@ -54,6 +65,11 @@ public class User {
             return new_user;
         }
     }
+
+    private boolean socketExists(Socket s) {
+        return sockets.contains(s);
+    }
+
     @Nullable
     public static User getUserBySockAddr(SocketAddress targetAddr) {
         String targetIp = targetAddr.toString();
@@ -68,6 +84,28 @@ public class User {
         return null;
     }
 
+    public static void closeAllSockets() {
+        try {
+            for (User user : users) {
+                Iterator<Socket> iterator = user.sockets.iterator();
+                while ( iterator.hasNext() ) {
+                    Socket i = iterator.next();
+                    i.getInputStream().close();
+                    i.getOutputStream().close();
+                    i.close();
+                    iterator.remove();
+                }
+            }
+        } catch (IOException ignore) {}
+
+    }
+
+    public void addSocket(Socket s) {
+        sockets.add(s);
+    }
+    public void removeSocket(Socket clientSocket) {
+        sockets.remove(clientSocket);
+    }
     public void setName(String name) {
         this.name = name;
 
@@ -92,7 +130,7 @@ public class User {
         String ip = address.toString();
         return ip.substring(1, ip.lastIndexOf(":"));
     }
-    private Consts.OS OS;
+    private final Consts.OS OS;
     public Consts.OS getOS() {
         return OS;
     }
@@ -102,4 +140,6 @@ public class User {
     public String getName() {
         return name;
     }
+
+
 }

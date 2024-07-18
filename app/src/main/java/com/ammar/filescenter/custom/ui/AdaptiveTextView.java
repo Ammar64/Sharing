@@ -5,6 +5,7 @@ import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMod
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
@@ -57,5 +58,12 @@ public class AdaptiveTextView extends androidx.appcompat.widget.AppCompatTextVie
 
     public void setDark(boolean dark) {
         setTextColor( dark ? darkModeColor : lightModeColor );
+
+        // for now we're only interested in the drawableStart
+        Drawable drawable = getCompoundDrawablesRelative()[0];
+        if( drawable != null ) {
+            drawable.mutate()
+                    .setTint(dark ? darkModeColor : lightModeColor);
+        }
     }
 }

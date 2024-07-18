@@ -50,6 +50,8 @@ public class AddAppsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_apps);
         appBar = findViewById(R.id.TB_Toolbar);
         setSupportActionBar(appBar);
+        appBar.setNavigationIcon(R.drawable.icon_back);
+
         appsRecycler = findViewById(R.id.RV_AppsRecycler);
         setTitle(R.string.select_apps);
 
@@ -101,6 +103,11 @@ public class AddAppsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+        if( id == android.R.id.home ) {
+            setResult(RESULT_CANCELED);
+            finish();
+            return true;
+        }
         if (id == R.id.MI_AddFilesDone) {
             if (selectedApps.isEmpty()) {
                 setResult(RESULT_CANCELED);

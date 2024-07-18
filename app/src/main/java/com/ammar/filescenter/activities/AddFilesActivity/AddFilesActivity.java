@@ -24,15 +24,16 @@ import com.ammar.filescenter.common.Consts;
 import java.util.ArrayList;
 
 public class AddFilesActivity extends AppCompatActivity {
-    private Toolbar appBar;
+    public Toolbar appBar;
     public final ArrayList<String> selectedFilesPath = new ArrayList<>();
     public RecyclerView recyclerView;
     private StorageAdapter storageAdapter;
     public AppCompatTextView folderEmptyTV;
     public AppCompatEditText searchInputET;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if( darkMode ) {
+        if (darkMode) {
             setTheme(R.style.AppThemeDark);
             getWindow().setBackgroundDrawableResource(R.drawable.gradient_background_dark);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -50,6 +51,8 @@ public class AddFilesActivity extends AppCompatActivity {
 
     private void initItems() {
         appBar = findViewById(R.id.TB_Toolbar);
+        appBar.setNavigationIcon(R.drawable.icon_back);
+
         setSupportActionBar(appBar);
         setTitle(R.string.select_files);
         searchInputET = findViewById(R.id.ET_SearchFilesInput);
@@ -66,6 +69,7 @@ public class AddFilesActivity extends AppCompatActivity {
 
     private void setListeners() {
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_done, menu);
@@ -75,6 +79,11 @@ public class AddFilesActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            storageAdapter.goBack();
+            return true;
+        }
         if (id == R.id.MI_AddFilesDone) {
             if (selectedFilesPath.isEmpty()) {
                 setResult(RESULT_CANCELED);

@@ -44,7 +44,7 @@ public class UploadSession extends HTTPSession {
                         long content_length = Long.parseLong(req.getHeader("Content-Length"));
                         int status_code;
                         if (req.getHeader("Content-Range") == null)
-                            status_code = StoreFile(req.getClientInput(), fileName, content_length);
+                            status_code = StoreFile(req, fileName, content_length);
                         else status_code = 501; // not implemented
                         res.setStatusCode(status_code);
                     }
@@ -68,13 +68,14 @@ public class UploadSession extends HTTPSession {
         } catch (IOException ignore) {
         }
     }
-    private int StoreFile(InputStream in, String fullFileName, long size) {
+    private int StoreFile(Request request, String fullFileName, long size) {
+        InputStream in = request.getClientInput();
         File upload_dir = Utils.getUploadDir(fullFileName);
         if (!upload_dir.exists()) {
             Utils.createAppDirs();
         }
         File upload_file = Utils.createNewFile(upload_dir, fullFileName);
-        ProgressManager progressManager = new ProgressManager(upload_file, size, user, ProgressManager.OP.UPLOAD);
+        ProgressManager progressManager = new ProgressManager(upload_file, request.getClientSocket(),size, user, ProgressManager.OP.UPLOAD);
         progressManager.setDisplayName(upload_file.getName());
         try {
             FileOutputStream out = new FileOutputStream(upload_file);

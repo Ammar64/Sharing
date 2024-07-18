@@ -53,12 +53,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         act.getOnBackPressedDispatcher().addCallback(act, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (currentDir.compareTo(internalStorage) != 0) {
-                    viewDirectory(currentDir.getParentFile(), true);
-                } else {
-                    act.setResult(Activity.RESULT_CANCELED);
-                    act.finish();
-                }
+                goBack();
             }
         });
 
@@ -187,12 +182,21 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         viewDirectory(dir, false);
     }
 
+
+    public void goBack() {
+        if (currentDir.compareTo(internalStorage) != 0) {
+            viewDirectory(currentDir.getParentFile(), true);
+        } else {
+            act.setResult(Activity.RESULT_CANCELED);
+            act.finish();
+        }
+    }
     // sort files but put directories first
     private void sortFiles(File[] files) {
         Arrays.sort(files, (l, r) -> {
             if (l.isDirectory() && r.isFile()) return -1;
             if (l.isFile() && r.isDirectory()) return 1;
-            else return Long.compare(r.lastModified(), l.lastModified());
+            else return l.compareTo(r);
         });
     }
 

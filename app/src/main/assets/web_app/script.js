@@ -32,6 +32,8 @@ sendBtn.onclick = function () {
             uploadLabel.click();
         else
             openBubble(alertDialog);
+    }).catch(function (err) {
+        alert("remote device disconnected");
     });
 }
 

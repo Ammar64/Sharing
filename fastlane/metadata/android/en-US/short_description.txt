@@ -1,1 +1,1 @@
-Share files and apps over HTTP
+Share files and apps using browser

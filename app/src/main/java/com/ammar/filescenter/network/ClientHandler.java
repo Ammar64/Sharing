@@ -3,11 +3,12 @@ package com.ammar.filescenter.network;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
 import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.models.User;
+import com.ammar.filescenter.network.exceptions.SocketClose;
 import com.ammar.filescenter.network.sessions.base.HTTPSession;
+import com.ammar.filescenter.services.ServerService;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -21,15 +22,15 @@ public class ClientHandler implements Runnable {
     public static final int timeout = 5000;
     private final Socket clientSocket;
 
-    private final Context context;
+    private final ServerService service;
     private final SharedPreferences settings;
 
     private User user = null;
 
-    public ClientHandler(Context context, Socket clientSocket) {
+    public ClientHandler(ServerService service, Socket clientSocket) {
         this.clientSocket = clientSocket;
-        this.context = context;
-        this.settings = this.context.getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
+        this.service = service;
+        this.settings = this.service.getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
     }
 
     private final BlockedSession blockedSession = new BlockedSession();
@@ -39,8 +40,8 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
 
+        Request request = new Request(clientSocket);
         try {
-            Request request = new Request(clientSocket);
             while (request.readSocket()) {
 
                 Response response = new Response(clientSocket);
@@ -48,14 +49,17 @@ public class ClientHandler implements Runnable {
                 response.setHeader("Pragma", "no-cache");
                 response.setHeader("Expires", "0");
 
+                // multiply timeout by 0.001 to convert from milliseconds into seconds
+                response.setHeader("Keep-Alive", request.isKeepAlive() ? String.format(Locale.ENGLISH, "timeout=%d", (int) (timeout * 0.001)) : "close");
+
                 String userAgent = request.getHeader("User-Agent");
                 if (userAgent != null)
-                    user = User.RegisterUser(settings, clientSocket.getRemoteSocketAddress(), userAgent);
+                    user = User.RegisterUser(settings, clientSocket, userAgent);
                 if (user != null && !user.isBlocked()) {
                     boolean found = false;
                     for (HTTPSession i : HTTPSession.sessions) {
                         found = handleSession(i, request, response);
-                        if(found) break;
+                        if (found) break;
                     }
                     if (!found) handleSession(notFoundSession, request, response);
                 } else  // if user is blocked redirect to blocked page

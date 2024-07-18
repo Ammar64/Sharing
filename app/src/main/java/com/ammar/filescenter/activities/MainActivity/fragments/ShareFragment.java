@@ -65,7 +65,7 @@ public class ShareFragment extends Fragment {
         ServerService.filesSendNotifier.observe( requireActivity(), info -> {
             char action = info.getChar("action");
             int index = info.getInt("index");
-            index += 1;
+            index += 1; // I don't remember why I increment 1 but it works like that :)
             switch (action) {
                 case 'P':
                     adapter.notifyItemChanged(index);

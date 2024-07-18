@@ -38,13 +38,24 @@
             android:textAlignment="viewStart"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintEnd_toStartOf="@id/B_StopSharing"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:lightModeColor="#bbb"
             tools:text="file.png" />
 
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/B_StopSharing"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:layout_constraintEnd_toEndOf="@id/TV_SharedFileProgress"
+            app:layout_constraintTop_toTopOf="@id/TV_SharedFileName"
+            app:layout_constraintBottom_toBottomOf="@id/TV_SharedFileName"
+            android:layout_marginBottom="5dp"
+            app:backgroundTint="@android:color/transparent"
+            app:srcCompat="@drawable/icon_x"
+            app:tint="@color/white"
+            android:contentDescription="@string/stop"/>
 
         <com.ammar.filescenter.custom.ui.AdaptiveTextView
             android:id="@+id/TV_SharedFileProgress"

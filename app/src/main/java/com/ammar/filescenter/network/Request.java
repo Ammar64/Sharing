@@ -10,11 +10,9 @@ import com.ammar.filescenter.network.exceptions.NotImplementedException;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -37,11 +35,11 @@ public class Request {
         this.headers = new HashMap<>();
     }
 
-    public boolean readSocket() {
+    public boolean readSocket()  {
         if (_connClose) return false;
         try {
             params = new TreeMap<>();
-            parseHTTPHeader(clientInput);
+            parseHTTPHeader();
 
             String connection = headers.get("Connection");
             if (connection == null || !connection.contains("keep-alive")) {
@@ -50,14 +48,13 @@ public class Request {
             } else {
                 try {
                     clientSocket.setKeepAlive(true);
+                    clientSocket.setSoTimeout(ClientHandler.timeout);
                     Log.d("MYLOG", "Connection will stay alive");
                 } catch (SocketException e) {
                     Utils.showErrorDialog("Request.readSocket(). SocketException:", e.getMessage());
                 }
             }
             return true;
-        } catch (SocketTimeoutException e) {
-            return false;
         } catch (NullPointerException e) {
             Utils.showErrorDialog("Request.readSocket(). NullPointerException:", e.getMessage());
             return false;
@@ -70,7 +67,7 @@ public class Request {
         }
     }
 
-    private void parseHTTPHeader(InputStream in) throws IOException, BadRequestException, NotImplementedException {
+    private void parseHTTPHeader() throws IOException, BadRequestException, NotImplementedException {
 
         String line = readLineUTF8(clientInput);
         StringTokenizer st = new StringTokenizer(line);

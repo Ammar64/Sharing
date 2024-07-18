@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -18,9 +19,11 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.common.Consts;
@@ -51,11 +54,27 @@ public class ApksInstallerActivity extends AppCompatActivity {
 
 
     private void initItems() {
+        Toolbar appBar = findViewById(R.id.TB_Toolbar);
+        setSupportActionBar(appBar);
+        appBar.setNavigationIcon(R.drawable.icon_back);
+
         pickFileB = findViewById(R.id.B_InstallerFilePick);
     }
 
+
     private void setListeners() {
         pickFileB.setOnClickListener((view) -> mGetContent.launch("*/*"));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if( id == android.R.id.home ) {
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), (result) -> {

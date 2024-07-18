@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -22,109 +21,143 @@
             android:orientation="vertical">
 
 
-            <RelativeLayout
-                android:id="@+id/RL_UploadDisable"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/CV_UploadDisable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
+                android:layout_margin="8dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:paddingVertical="8dp"
-                android:paddingStart="14dp">
+                app:cardBackgroundColor="#66555555"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
-                    android:id="@+id/TV_SettingsUploadAllow"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/RL_UploadDisable"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:lightModeColor="#fff"
-                    android:text="@string/disable_browser_upload"
-                    android:textSize="@dimen/settings_big_text" />
+                    android:background="@drawable/ripple_item"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp">
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
-                    android:id="@+id/TV_SettingsUploadAllowSub"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:lightModeColor="#fff"
-                    android:layout_below="@id/TV_SettingsUploadAllow"
-                    android:text="@string/disable_browser_upload_desc"
-                    android:textSize="@dimen/small_text" />
+                    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                        android:id="@+id/TV_SettingsUploadAllow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/disable_browser_upload"
+                        android:textSize="@dimen/settings_big_text"
+                        app:lightModeColor="#fff" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/SC_UploadAllowToggle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp"
-                    android:clickable="false"
-                    android:focusable="false" />
-            </RelativeLayout>
+                    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                        android:id="@+id/TV_SettingsUploadAllowSub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/TV_SettingsUploadAllow"
+                        android:text="@string/disable_browser_upload_desc"
+                        android:textSize="@dimen/small_text"
+                        app:lightModeColor="#fff" />
 
-            <RelativeLayout
-                android:id="@+id/RL_UserBlock"
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/SC_UploadAllowToggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:background="@android:color/transparent"
+                        app:sb_show_indicator="false"
+                        app:sb_background="#aaa"
+                        android:contentDescription="@string/disable_browser_upload"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/CV_UserBlock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
+                android:layout_margin="8dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:paddingVertical="8dp"
-                android:paddingStart="14dp">
+                app:cardBackgroundColor="#66555555"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
-                    android:id="@+id/TV_SettingsUserBlock"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/RL_UserBlock"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:lightModeColor="#fff"
-                    android:text="@string/block_users"
-                    android:textSize="@dimen/settings_big_text" />
+                    android:background="?attr/selectableItemBackground"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp">
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
-                    android:id="@+id/TV_SettingsUserBlockSub"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:lightModeColor="#fff"
-                    android:layout_below="@id/TV_SettingsUserBlock"
-                    android:text="@string/block_users_desc"
-                    android:textSize="@dimen/small_text" />
+                    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                        android:id="@+id/TV_SettingsUserBlock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/block_users"
+                        android:textSize="@dimen/settings_big_text"
+                        app:lightModeColor="#fff" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/SC_UsersBlockToggle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp"
-                    android:clickable="false"
-                    android:focusable="false" />
-            </RelativeLayout>
+                    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                        android:id="@+id/TV_SettingsUserBlockSub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/TV_SettingsUserBlock"
+                        android:text="@string/block_users_desc"
+                        android:textSize="@dimen/small_text"
+                        app:lightModeColor="#fff" />
+
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/SC_UsersBlockToggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:background="@android:color/transparent"
+                        app:sb_show_indicator="false"
+                        app:sb_background="#aaa"
+                        android:contentDescription="@string/block_users"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
 
 
-            <RelativeLayout
-                android:id="@+id/RL_SettingsLanguage"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/CV_SettingsLanguage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:paddingVertical="8dp"
-                android:paddingStart="14dp">
+                android:layout_margin="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="#66555555"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
-                    android:id="@+id/TV_SettingsLanguage"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/RL_SettingsLanguage"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:lightModeColor="#fff"
-                    android:text="@string/language"
-                    android:textSize="@dimen/settings_big_text" />
+                    android:background="?attr/selectableItemBackground"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp">
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
-                    android:id="@+id/TV_SettingsLanguageSub"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:lightModeColor="#fff"
-                    android:layout_below="@id/TV_SettingsLanguage"
-                    android:text="@string/languages_desc"
-                    android:textSize="@dimen/small_text" />
-            </RelativeLayout>
+                    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                        android:id="@+id/TV_SettingsLanguage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/language"
+                        android:textSize="@dimen/settings_big_text"
+                        app:lightModeColor="#fff" />
 
+                    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                        android:id="@+id/TV_SettingsLanguageSub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/TV_SettingsLanguage"
+                        android:text="@string/languages_desc"
+                        android:textSize="@dimen/small_text"
+                        app:lightModeColor="#fff" />
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
 
     </ScrollView>
