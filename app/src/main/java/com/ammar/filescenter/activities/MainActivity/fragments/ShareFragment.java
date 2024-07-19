@@ -17,6 +17,7 @@ import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity.AddAppsActivity;
 import com.ammar.filescenter.activities.MainActivity.adaptersR.ShareAdapter;
 import com.ammar.filescenter.common.Consts;
+import com.ammar.filescenter.common.Data;
 import com.ammar.filescenter.services.ServerService;
 
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class ShareFragment extends Fragment {
 
     private void initObservers() {
 
-        ServerService.filesSendNotifier.observe( requireActivity(), info -> {
+        Data.filesSendNotifier.observe( requireActivity(), info -> {
             char action = info.getChar("action");
             int index = info.getInt("index");
             index += 1; // I don't remember why I increment 1 but it works like that :)

@@ -2,9 +2,9 @@ package com.ammar.filescenter.custom.io;
 
 import android.os.Bundle;
 
+import com.ammar.filescenter.common.Data;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.models.User;
-import com.ammar.filescenter.services.ServerService;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +48,7 @@ public class ProgressManager {
         Bundle b = new Bundle();
         b.putChar("action", 'R');
         b.putInt("index", index);
-        ServerService.filesSendNotifier.forcePostValue(b);
+        Data.filesSendNotifier.forcePostValue(b);
     }
 
 
@@ -67,7 +67,7 @@ public class ProgressManager {
         Bundle info_add = new Bundle();
         info_add.putChar("action", 'A');
         info_add.putInt("index", index);
-        ServerService.filesSendNotifier.forcePostValue(info_add);
+        Data.filesSendNotifier.forcePostValue(info_add);
         // set action to P for later use
         progress_info.putChar("action", 'P');
         progress_info.putInt("index", index);
@@ -153,7 +153,7 @@ public class ProgressManager {
 
     public void reportProgress() {
         if (System.currentTimeMillis() - lastTime >= 300) {
-            ServerService.filesSendNotifier.postValue(progress_info); // notify the UI of changes
+            Data.filesSendNotifier.postValue(progress_info); // notify the UI of changes
             transferSpeed = getLoaded() - previouslyLoaded;
             previouslyLoaded = getLoaded();
             lastTime = System.currentTimeMillis();
@@ -168,12 +168,12 @@ public class ProgressManager {
 
     public void reportCompleted() {
         setLoaded(COMPLETED);
-        ServerService.filesSendNotifier.forcePostValue(progress_info);
+        Data.filesSendNotifier.forcePostValue(progress_info);
     }
 
     public void reportStopped() {
         setLoaded(STOPPED_BY_REMOTE);
-        ServerService.filesSendNotifier.forcePostValue(progress_info);
+        Data.filesSendNotifier.forcePostValue(progress_info);
     }
 
     public void stop() {
@@ -183,7 +183,7 @@ public class ProgressManager {
             socket.close();
         } catch (IOException ignore) {}
         setLoaded(STOPPED_BY_REMOTE); // Passing STOPPED_BY_USER doesn't work properly
-        ServerService.filesSendNotifier.forcePostValue(progress_info);
+        Data.filesSendNotifier.forcePostValue(progress_info);
     }
 
 }

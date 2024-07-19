@@ -83,7 +83,8 @@
     <string name="dark_mode">Dark mode</string>
     <string name="light_mode">Light mode</string>
 
-    <string name="svr_notification_message">Server is up on address %1$s:%2$s</string>
+    <string name="svr_running">Server is running</string>
+    <string name="svr_notification_message">Server is up on address %1$s:%2$s and accepts new requests</string>
     <string name="app_icon_acc_desc">App icon</string>
     <string name="tutorial">Tutorial</string>
     <string name="connect_to_wifi_or_hotspot">Please activate wifi or hotspot to start sharing</string>

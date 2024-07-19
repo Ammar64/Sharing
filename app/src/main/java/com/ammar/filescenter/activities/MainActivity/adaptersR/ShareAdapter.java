@@ -23,7 +23,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,6 +30,7 @@ import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity.AddAppsActivity;
 import com.ammar.filescenter.activities.AddFilesActivity.AddFilesActivity;
 import com.ammar.filescenter.activities.MainActivity.fragments.ShareFragment;
+import com.ammar.filescenter.common.Data;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.custom.io.ProgressManager;
 import com.ammar.filescenter.custom.ui.AdaptiveTextView;
@@ -39,9 +39,6 @@ import com.ammar.filescenter.network.Server;
 import com.ammar.filescenter.models.User;
 
 import java.util.Locale;
-
-import io.reactivex.rxjava3.disposables.Disposable;
-
 
 // this adapter for the recycler view you see when you open the app
 // it takes the entire screen except for the top and bottom bars
@@ -177,7 +174,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 chosenFilesAD.show();
             });
 
-            ServerService.filesListNotifier.observe(fragment.getViewLifecycleOwner(), info -> {
+            Data.filesListNotifier.observe(fragment.getViewLifecycleOwner(), info -> {
                 char action = info.getChar("action");
                 int size = Server.filesList.size();
                 if ('R' == action) {
@@ -214,7 +211,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
 
 
-            ServerService.usersListObserver.observe(fragment.getViewLifecycleOwner(), info -> {
+            Data.usersListObserver.observe(fragment.getViewLifecycleOwner(), info -> {
                 char action = info.getChar("action");
                 int size = User.users.size();
                 int index = info.getInt("index");

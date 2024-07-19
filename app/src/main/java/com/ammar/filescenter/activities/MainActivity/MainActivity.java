@@ -23,7 +23,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.Window;
-import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -52,9 +51,9 @@ import com.ammar.filescenter.activities.ApksInstallerActivity.ApksInstallerActiv
 import com.ammar.filescenter.activities.MainActivity.color.ColorsDark;
 import com.ammar.filescenter.activities.MainActivity.color.ColorsLight;
 import com.ammar.filescenter.application.FilesCenterApp;
+import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.common.Data;
 import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.custom.ui.AdaptiveTextView;
 import com.ammar.filescenter.services.ServerService;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -296,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void observeStates() {
-        ServerService.serverStatusObserver.observe(this, running -> {
+        Data.serverStatusObserver.observe(this, running -> {
             if (running) {
                 ImageViewCompat.setImageTintList(serverButton, ColorStateList.valueOf(getResources().getColor(R.color.status_on)));
             } else {

@@ -16,12 +16,11 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.lifecycle.MutableLiveData;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.MainActivity.MainActivity;
 import com.ammar.filescenter.common.Consts;
-import com.ammar.filescenter.custom.data.QueueMutableLiveData;
+import com.ammar.filescenter.common.Data;
 import com.ammar.filescenter.models.User;
 import com.ammar.filescenter.network.Server;
 import com.ammar.filescenter.models.SharableApp;
@@ -40,15 +39,6 @@ import java.util.Locale;
  */
 public class ServerService extends Service {
 
-
-    // observers
-    public static final MutableLiveData<Boolean> serverStatusObserver = new MutableLiveData<>();
-    public static final MutableLiveData<Bundle> downloadsListObserver = new MutableLiveData<>();
-    public static final MutableLiveData<Bundle> filesListNotifier = new QueueMutableLiveData<>();
-    public static final String DATA_DOWNLOADS_LIST = "DATA_DOWNLOADS_LIST";
-    public static final String VALUE_MODIFY_DELETE = "com.ammar.filescenter.services.VALUE_MODIFY_DELETE";
-    public static final QueueMutableLiveData<Bundle> filesSendNotifier = new QueueMutableLiveData<>();
-    public static final MutableLiveData<Bundle> usersListObserver = new QueueMutableLiveData<>();
 
     private final int FOREGROUND_NOTIFICATION_ID = 1;
     public static final int PORT_NUMBER = 2999;
@@ -96,7 +86,7 @@ public class ServerService extends Service {
                 }
                 Bundle fb = new Bundle();
                 fb.putChar("action", 'A');
-                ServerService.filesListNotifier.postValue(fb);
+                Data.filesListNotifier.postValue(fb);
                 break;
             case Consts.ACTION_ADD_APPS_DOWNLOADS:
                 ArrayList<String> packages_name = intent.getStringArrayListExtra(Consts.EXTRA_APPS_NAMES);
@@ -111,7 +101,7 @@ public class ServerService extends Service {
                 }
                 Bundle ab = new Bundle();
                 ab.putChar("action", 'A');
-                ServerService.filesListNotifier.postValue(ab);
+                Data.filesListNotifier.postValue(ab);
                 break;
             case Consts.ACTION_REMOVE_DOWNLOAD:
                 String uuid = intent.getStringExtra(Consts.EXTRA_DOWNLOAD_UUID);
@@ -127,7 +117,7 @@ public class ServerService extends Service {
                 Bundle remove_info = new Bundle();
                 remove_info.putChar("action", 'R');
                 remove_info.putInt("index", index);
-                ServerService.filesListNotifier.postValue(remove_info);
+                Data.filesListNotifier.forcePostValue(remove_info);
                 break;
             case Consts.ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN:
                 if( !server.isRunning() ) {
@@ -166,7 +156,7 @@ public class ServerService extends Service {
         }
 
         // notify observer.
-        serverStatusObserver.postValue(isServerRunning);
+        Data.serverStatusObserver.postValue(isServerRunning);
     }
 
     public Notification buildNotification(Context context) {
@@ -193,9 +183,9 @@ public class ServerService extends Service {
         }
 
         String address = ServerService.getIpAddress();
-        if (address == null) address = "127.0.0.1";
+        if (address == null) address = "localhost";
         // Build the notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId).setContentTitle("Server is running").setSmallIcon(android.R.drawable.ic_dialog_info);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId).setContentTitle(getResources().getString(R.string.svr_running)).setSmallIcon(android.R.drawable.ic_dialog_info);
 
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_IMMUTABLE);

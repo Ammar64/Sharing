@@ -6,7 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 
 import com.ammar.filescenter.common.Consts;
-import com.ammar.filescenter.services.ServerService;
+import com.ammar.filescenter.common.Data;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -61,7 +61,7 @@ public class User {
             Bundle bundle = new Bundle();
             bundle.putChar("action", 'A');
             bundle.putInt("index", new_user.getId());
-            ServerService.usersListObserver.postValue(bundle);
+            Data.usersListObserver.forcePostValue(bundle);
             return new_user;
         }
     }
@@ -112,7 +112,7 @@ public class User {
         Bundle bundle = new Bundle();
         bundle.putChar("action", 'C');
         bundle.putInt("index", getId());
-        ServerService.usersListObserver.postValue(bundle);
+        Data.usersListObserver.forcePostValue(bundle);
     }
     public void block(boolean b) {
         this._isBlocked = b;
