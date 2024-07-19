@@ -54,8 +54,6 @@ dependencies {
     implementation libs.material
     implementation libs.glide
 
-    // I don't like the new library catalog declaration it makes you do more stuff :)
+    // I don't like the new library catalog declaration it makes you write more stuff :)
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
-    implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
-    implementation 'io.reactivex.rxjava3:rxjava:3.1.8'
 }

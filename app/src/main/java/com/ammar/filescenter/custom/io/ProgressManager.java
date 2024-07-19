@@ -153,7 +153,7 @@ public class ProgressManager {
 
     public void reportProgress() {
         if (System.currentTimeMillis() - lastTime >= 300) {
-            ServerService.filesSendNotifier.postValue(progress_info);
+            ServerService.filesSendNotifier.postValue(progress_info); // notify the UI of changes
             transferSpeed = getLoaded() - previouslyLoaded;
             previouslyLoaded = getLoaded();
             lastTime = System.currentTimeMillis();
