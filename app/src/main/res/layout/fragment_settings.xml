@@ -1,166 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/CV_UploadDisable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_margin="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="#66555555"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp">
 
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/CV_UploadDisable"
+            <RelativeLayout
+                android:id="@+id/RL_UploadDisable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="#66555555"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="0dp">
+                android:background="@drawable/ripple_item"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp">
 
-                <RelativeLayout
-                    android:id="@+id/RL_UploadDisable"
-                    android:layout_width="match_parent"
+                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                    android:id="@+id/TV_SettingsUploadAllow"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ripple_item"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="8dp">
+                    android:text="@string/disable_browser_upload"
+                    android:textSize="@dimen/settings_big_text"
+                    app:lightModeColor="#fff" />
 
-                    <com.ammar.filescenter.custom.ui.AdaptiveTextView
-                        android:id="@+id/TV_SettingsUploadAllow"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/disable_browser_upload"
-                        android:textSize="@dimen/settings_big_text"
-                        app:lightModeColor="#fff" />
+                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                    android:id="@+id/TV_SettingsUploadAllowSub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/TV_SettingsUploadAllow"
+                    android:text="@string/disable_browser_upload_desc"
+                    android:textSize="@dimen/small_text"
+                    app:lightModeColor="#fff" />
 
-                    <com.ammar.filescenter.custom.ui.AdaptiveTextView
-                        android:id="@+id/TV_SettingsUploadAllowSub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/TV_SettingsUploadAllow"
-                        android:text="@string/disable_browser_upload_desc"
-                        android:textSize="@dimen/small_text"
-                        app:lightModeColor="#fff" />
-
-                    <com.suke.widget.SwitchButton
-                        android:id="@+id/SC_UploadAllowToggle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:background="@android:color/transparent"
-                        app:sb_show_indicator="false"
-                        app:sb_background="#aaa"
-                        android:contentDescription="@string/disable_browser_upload"/>
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
+                <com.suke.widget.SwitchButton
+                    android:id="@+id/SC_UploadAllowToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/disable_browser_upload"
+                    app:sb_background="#aaa"
+                    app:sb_show_indicator="false" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
 
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/CV_UserBlock"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/CV_UserBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="#66555555"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:id="@+id/RL_UserBlock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="#66555555"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="0dp">
+                android:background="?attr/selectableItemBackground"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp">
 
-                <RelativeLayout
-                    android:id="@+id/RL_UserBlock"
-                    android:layout_width="match_parent"
+                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                    android:id="@+id/TV_SettingsUserBlock"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="8dp">
+                    android:text="@string/block_users"
+                    android:textSize="@dimen/settings_big_text"
+                    app:lightModeColor="#fff" />
 
-                    <com.ammar.filescenter.custom.ui.AdaptiveTextView
-                        android:id="@+id/TV_SettingsUserBlock"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/block_users"
-                        android:textSize="@dimen/settings_big_text"
-                        app:lightModeColor="#fff" />
+                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                    android:id="@+id/TV_SettingsUserBlockSub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/TV_SettingsUserBlock"
+                    android:text="@string/block_users_desc"
+                    android:textSize="@dimen/small_text"
+                    app:lightModeColor="#fff" />
 
-                    <com.ammar.filescenter.custom.ui.AdaptiveTextView
-                        android:id="@+id/TV_SettingsUserBlockSub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/TV_SettingsUserBlock"
-                        android:text="@string/block_users_desc"
-                        android:textSize="@dimen/small_text"
-                        app:lightModeColor="#fff" />
-
-                    <com.suke.widget.SwitchButton
-                        android:id="@+id/SC_UsersBlockToggle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:background="@android:color/transparent"
-                        app:sb_show_indicator="false"
-                        app:sb_background="#aaa"
-                        android:contentDescription="@string/block_users"/>
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
+                <com.suke.widget.SwitchButton
+                    android:id="@+id/SC_UsersBlockToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/block_users"
+                    app:sb_background="#aaa"
+                    app:sb_show_indicator="false" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
 
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/CV_SettingsLanguage"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/CV_SettingsLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="#66555555"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp">
+
+            <RelativeLayout
+                android:id="@+id/RL_SettingsLanguage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="#66555555"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="0dp">
+                android:background="?attr/selectableItemBackground"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp">
 
-                <RelativeLayout
-                    android:id="@+id/RL_SettingsLanguage"
-                    android:layout_width="match_parent"
+                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                    android:id="@+id/TV_SettingsLanguage"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="8dp">
+                    android:text="@string/language"
+                    android:textSize="@dimen/settings_big_text"
+                    app:lightModeColor="#fff" />
 
-                    <com.ammar.filescenter.custom.ui.AdaptiveTextView
-                        android:id="@+id/TV_SettingsLanguage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/language"
-                        android:textSize="@dimen/settings_big_text"
-                        app:lightModeColor="#fff" />
+                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                    android:id="@+id/TV_SettingsLanguageSub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/TV_SettingsLanguage"
+                    android:text="@string/languages_desc"
+                    android:textSize="@dimen/small_text"
+                    app:lightModeColor="#fff" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
 
-                    <com.ammar.filescenter.custom.ui.AdaptiveTextView
-                        android:id="@+id/TV_SettingsLanguageSub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/TV_SettingsLanguage"
-                        android:text="@string/languages_desc"
-                        android:textSize="@dimen/small_text"
-                        app:lightModeColor="#fff" />
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="90dp"/>
+    </LinearLayout>
 
-    </ScrollView>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

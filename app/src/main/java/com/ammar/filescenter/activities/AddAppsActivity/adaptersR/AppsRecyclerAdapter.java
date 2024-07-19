@@ -25,6 +25,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.LinkedList;
 
 public class AppsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -54,6 +56,7 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 this.apps[i].icon = Utils.drawableToBitmap(appsInfo.get(i).loadIcon(pm));
             }
         }
+        Arrays.sort(this.apps, (o1, o2) -> o1.label.compareTo(o2.label));
         this.displayedApps = this.apps;
         this.activity.searchInputET.addTextChangedListener(new TextWatcher() {
             @Override
