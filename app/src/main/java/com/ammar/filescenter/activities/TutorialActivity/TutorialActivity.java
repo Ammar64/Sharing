@@ -55,7 +55,7 @@ public class TutorialActivity extends AppCompatActivity {
         );
         holders.add(
                 new FragmentHolder(
-                        R.drawable.info_icon,
+                        R.drawable.icon_link,
                         R.drawable.icon_file_red,
                         R.string.completed,
                         R.string.receiving_from_user_stopped

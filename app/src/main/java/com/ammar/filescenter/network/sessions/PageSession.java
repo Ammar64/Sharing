@@ -35,10 +35,6 @@ public class PageSession extends HTTPSession {
                     file = "script.js";
                     content_type = "text/javascript";
                     break;
-                case "/dv.png":
-                    file = "dv.png";
-                    content_type = "image/png";
-                    break;
                 case "/favicon.ico":
                     file = "icons8-share.svg";
                     content_type = "image/svg+xml";
@@ -53,11 +49,7 @@ public class PageSession extends HTTPSession {
 
             if( file != null ) {
                 res.setHeader("Content-Type", content_type);
-                if( file.equals("dv.png") ) {
-                    res.sendResponse(Utils.readRawRes(R.raw.dv));
-                } else {
-                    res.sendResponse(Utils.readFileFromWebAssets(file));
-                }
+                res.sendResponse(Utils.readFileFromWebAssets(file));
             } else {
                 res.setStatusCode(400);
                 res.sendResponse();

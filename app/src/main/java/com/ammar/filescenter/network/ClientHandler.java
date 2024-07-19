@@ -112,10 +112,7 @@ public class ClientHandler implements Runnable {
         @Override
         public void GET(Request req, Response res) {
             try {
-                if ("/dv.png".equals(req.getPath())) {
-                    res.setHeader("Content-Type", "image/png");
-                    res.sendResponse(Utils.readFileFromWebAssets("dv.png"));
-                } else if ("/favicon.ico".equals(req.getPath())) {
+                if ("/favicon.ico".equals(req.getPath())) {
                     res.setHeader("Content-Type", "image/svg+xml");
                     res.sendResponse(Utils.readFileFromWebAssets("icons8-share.svg"));
                 } else if (!"/blocked".equals(req.getPath())) {

@@ -14,7 +14,7 @@
 
     <item
         android:id="@+id/B_Settings"
-        android:icon="@drawable/baseline_settings_24"
+        android:icon="@drawable/icon_settings"
         android:title="@string/settings" />
 
 </menu>
