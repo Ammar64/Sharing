@@ -2,7 +2,6 @@ package com.ammar.filescenter.activities.AddAppsActivity;
 
 import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMode;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -10,8 +9,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.JavascriptInterface;
-import android.webkit.WebView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 

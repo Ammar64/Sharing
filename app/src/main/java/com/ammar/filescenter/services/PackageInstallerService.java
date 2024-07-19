@@ -4,10 +4,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInstaller;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.Toast;
@@ -17,12 +14,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.common.Consts;
-import com.ammar.filescenter.common.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 

@@ -1,7 +1,5 @@
 package com.ammar.filescenter.network.sessions;
 
-import android.os.Build;
-
 import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.custom.io.ProgressManager;
@@ -12,7 +10,6 @@ import com.ammar.filescenter.network.sessions.base.HTTPSession;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

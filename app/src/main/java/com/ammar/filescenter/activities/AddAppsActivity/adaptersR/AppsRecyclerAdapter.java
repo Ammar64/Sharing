@@ -26,7 +26,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.LinkedList;
 
 public class AppsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

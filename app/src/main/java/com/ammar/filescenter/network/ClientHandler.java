@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.models.User;
-import com.ammar.filescenter.network.exceptions.SocketClose;
 import com.ammar.filescenter.network.sessions.base.HTTPSession;
 import com.ammar.filescenter.services.ServerService;
 

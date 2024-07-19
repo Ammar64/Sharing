@@ -8,7 +8,6 @@ import com.ammar.filescenter.custom.io.ProgressManager;
 import com.ammar.filescenter.custom.io.ProgressOutputStream;
 import com.ammar.filescenter.models.Sharable;
 import com.ammar.filescenter.models.User;
-import com.ammar.filescenter.network.exceptions.SocketClose;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -69,11 +68,6 @@ public class Response {
             if (progress)
                 progressManager.reportCompleted();
 
-        } catch (SocketClose e) {
-            if (progress)
-                progressManager.reportStopped();
-            Log.e("MYLOG", "SendFileResponse(). SocketClose: " + e.getMessage());
-            throw new SocketClose();
         } catch (IOException e) {
             if (progress)
                 progressManager.reportStopped();
@@ -116,11 +110,6 @@ public class Response {
             }
             out.flush();
             progressManager.reportCompleted();
-        } catch (SocketClose e) {
-            if (progressManager != null)
-                progressManager.reportStopped();
-            Log.e("MYLOG", "Response.resumePausedFileResponse. SocketClose: " + e.getMessage());
-            throw new SocketClose();
         } catch (IOException e) {
             if (progressManager != null)
                 progressManager.reportStopped();
@@ -179,10 +168,6 @@ public class Response {
 
             progressManager.reportCompleted();
 
-        } catch (SocketClose e) {
-            progressManager.reportStopped();
-            Log.e("MYLOG", "sendZippedFilesResponse(). SocketClose: " + e.getMessage());
-            throw new SocketClose();
         } catch (IOException e) {
             progressManager.reportStopped();
             Log.e("MYLOG", "sendZippedFilesResponse(). Exception: " + e.getMessage());
