@@ -23,7 +23,7 @@ public class PageSession extends HTTPSession {
 
             switch (path) {
                 case "/":
-                case "index.html":
+                case "/index.html":
                     file = "index.html";
                     content_type = "text/html";
                     break;
@@ -34,6 +34,10 @@ public class PageSession extends HTTPSession {
                 case "/script.js":
                     file = "script.js";
                     content_type = "text/javascript";
+                    break;
+                case "/cairo.ttf":
+                    file = "cairo.ttf";
+                    content_type = "font/ttf";
                     break;
                 case "/favicon.ico":
                     file = "icons8-share.svg";
@@ -47,15 +51,20 @@ public class PageSession extends HTTPSession {
                     return;
             }
 
-            if( file != null ) {
+            if (file != null) {
                 res.setHeader("Content-Type", content_type);
-                res.sendResponse(Utils.readFileFromWebAssets(file));
+                if ("index.html".equals(file))
+                    res.sendResponse(Utils.readRawRes(R.raw.index));
+                else if("cairo.ttf".equals(file))
+                    res.sendResponse(Utils.readRawRes(R.raw.cairo));
+                else
+                    res.sendResponse(Utils.readFileFromWebAssets(file));
             } else {
                 res.setStatusCode(400);
                 res.sendResponse();
             }
         } catch (IOException e) {
-            Utils.showErrorDialog( "IOException", "PageSession.GET(): " + e.getMessage() );
+            Utils.showErrorDialog("IOException", "PageSession.GET(): " + e.getMessage());
         }
     }
 }

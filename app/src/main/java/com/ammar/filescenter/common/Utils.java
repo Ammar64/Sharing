@@ -398,10 +398,17 @@ public class Utils {
             locale = new Locale(languageCode);
         }
         Locale.setDefault(locale);
-        Resources resources = context.getResources();
-        Configuration config = resources.getConfiguration();
-        config.setLocale(locale);
-        resources.updateConfiguration(config, resources.getDisplayMetrics());
+        Resources appRes = context.getApplicationContext().getResources();
+        Resources actRes = context.getResources();
+
+        Configuration appConfig = appRes.getConfiguration();
+        appConfig.setLocale(locale);
+        appRes.updateConfiguration(appConfig, appRes.getDisplayMetrics());
+
+        Configuration actConfig = actRes.getConfiguration();
+        actConfig.setLocale(locale);
+        actRes.updateConfiguration(actConfig, actRes.getDisplayMetrics());
+
     }
 
     public static void setProgressColor(ProgressBar progressBar, int color ) {

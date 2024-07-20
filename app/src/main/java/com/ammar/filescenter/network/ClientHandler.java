@@ -21,15 +21,13 @@ public class ClientHandler implements Runnable {
     public static final int timeout = 5000;
     private final Socket clientSocket;
 
-    private final ServerService service;
     private final SharedPreferences settings;
 
     private User user = null;
 
     public ClientHandler(ServerService service, Socket clientSocket) {
         this.clientSocket = clientSocket;
-        this.service = service;
-        this.settings = this.service.getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
+        this.settings = service.getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
     }
 
     private final BlockedSession blockedSession = new BlockedSession();

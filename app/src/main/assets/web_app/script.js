@@ -6,18 +6,19 @@ const recieveBtn = document.getElementById("recieveBtn");
 const downloadBubble = document.getElementById("downloadBubble");
 const noDownloadsText = document.getElementById("no-downloads-text");
 const loginBubble = document.getElementById("loginBubble");
-const alertDialog = document.getElementById("alertDialog")
+const uploadDisabledDialog = document.getElementById("uploadDisabledDialog")
 const overlay = document.getElementById('overlay');
 const downloadsBubbleOkButton = document.getElementById('okButton');
-const alertDialogOkButton = document.getElementById("alertDialogOkBtn")
+const uploadDisabledDialogOkButton = document.getElementById("uploadDisabledDialogOkBtn")
 const updateBtn = document.getElementById('update');
 const loginBtn = document.getElementById('loginBtn');
 const downloads = document.getElementById("downloads");
 const uploadInput = document.getElementById('uploadInput');
-
 const download_item = document.createElement("li");
 download_item.className = "download-item";
 
+
+const currentUsernameText = document.getElementById('current-user-text').textContent;
 let userId = -1;
 
 sendBtn.onclick = function () {
@@ -31,7 +32,7 @@ sendBtn.onclick = function () {
         if (res.allowed)
             uploadLabel.click();
         else
-            openBubble(alertDialog);
+            openBubble(uploadDisabledDialog);
     }).catch(function (err) {
         alert("remote device disconnected");
     });
@@ -50,23 +51,22 @@ downloadsBubbleOkButton.onclick = () => {
     closeBubbles(downloadBubble);
 };
 
-alertDialogOkButton.onclick = () => {
-    closeBubbles(alertDialog);
+uploadDisabledDialogOkButton.onclick = () => {
+    closeBubbles(uploadDisabledDialog);
 }
 
 overlay.onclick = () => {
-    closeBubbles([downloadBubble, alertDialog, loginBubble]);
+    closeBubbles([downloadBubble, uploadDisabledDialog, loginBubble]);
 }
 
 loginBtn.onclick = () => {
     openBubble(loginBubble);
 };
 
-function openBubble(bublle) {
-    bublle.style.display = 'block';
+function openBubble(bubble) {
+    bubble.style.display = 'block';
     overlay.style.display = 'block';
 }
-
 
 function closeBubbles(bubbles) {
     // Ensure bubbles is always treated as an array
@@ -353,7 +353,7 @@ usernameForm.addEventListener('submit', function (event) {
         storedUsername = usernameInput; // Update storedUsername variable
         
         // Update display of current username
-        document.querySelector('.current-username p').textContent = `Current username: ${storedUsername}`;
+        document.querySelector('.current-username p').textContent = `${currentUsernameText} ${storedUsername}`;
     }
 
 });
@@ -393,7 +393,7 @@ function updateStoredUsername(username) {
     localStorage.setItem("username", username);
     storedUsername = username;
     // Update the display of current username
-    document.querySelector('.current-username p').textContent = `Current username: ${storedUsername}`;
+    document.querySelector('.current-username p').textContent = `${currentUsernameText} ${storedUsername}`;
 }
 /*  */
 function setVhProperty() {

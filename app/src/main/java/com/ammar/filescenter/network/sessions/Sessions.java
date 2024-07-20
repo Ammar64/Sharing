@@ -5,12 +5,12 @@ public class Sessions {
         // main page
 
         new PageSession(new String[]{
-                "/", "/index.html", "/style.css", "/script.js", "/dv.png", "/favicon.ico", "/blocked"
+                "/", "/index.html", "/style.css", "/script.js", "/dv.png", "/cairo.ttf", "/favicon.ico", "/blocked"
         });
 
 
         new DownloadSession(new String[]{
-           "/download/", "/available-downloads" ,"/get-icon"
+                "/download/", "/available-downloads", "/get-icon"
         });
 
         new UploadSession(new String[]{
@@ -18,7 +18,7 @@ public class Sessions {
         });
 
         new UserSession(new String[]{
-            "/get-user-info", "/update-user-name"
+                "/get-user-info", "/update-user-name"
         });
     }
 
