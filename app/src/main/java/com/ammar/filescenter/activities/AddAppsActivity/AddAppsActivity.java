@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddAppsActivity.adaptersR.AppsRecyclerAdapter;
+import com.ammar.filescenter.common.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -74,7 +75,9 @@ public class AddAppsActivity extends AppCompatActivity {
             }
             AppsRecyclerAdapter appsAdapter = new AppsRecyclerAdapter(this, userApps, selectedApps);
             runOnUiThread(() -> {
-                appsRecycler.setLayoutManager(new GridLayoutManager(this, 3) {
+
+                int spanCount = (int) Math.ceil(getWindow().getDecorView().getMeasuredWidth() / Utils.dpToPx(130));
+                appsRecycler.setLayoutManager(new GridLayoutManager(this, spanCount) {
 
                     @Override
                     public void onLayoutCompleted(RecyclerView.State state) {
