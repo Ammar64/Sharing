@@ -149,6 +149,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 Window window = QRDialogAD.getWindow();
                 if (window != null)
                     window.setBackgroundDrawableResource(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight);
+
                 QRDialogAD.show();
                 setupQrCode();
             });
