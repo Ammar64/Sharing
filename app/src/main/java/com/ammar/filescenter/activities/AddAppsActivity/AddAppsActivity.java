@@ -5,6 +5,7 @@ import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMod
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -93,7 +94,6 @@ public class AddAppsActivity extends AppCompatActivity {
     public void setToolbarTitle(String title) {
         setTitle(title);
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_done, menu);

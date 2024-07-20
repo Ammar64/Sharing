@@ -371,11 +371,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onAnimationEnd(Animator animation) {
                     themeChangeIV.setImageDrawable(null);
                     themeChangeIV.setVisibility(View.GONE);
-                    if (darkMode) {
-                        getWindow().setNavigationBarColor(Color.BLACK);
-                    } else {
-                        getWindow().setNavigationBarColor(Color.WHITE);
-                    }
+                    setNavbarTheme(darkMode);
                 }
             });
             anim.start();
@@ -387,6 +383,16 @@ public class MainActivity extends AppCompatActivity {
         settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_DARK, darkMode).apply();
         super.onPause();
     }
+
+
+    public void setNavbarTheme(boolean dark) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
+            View view = getWindow().getDecorView();
+            getWindow().setNavigationBarColor( dark ? Color.BLACK : Color.WHITE );
+            view.setSystemUiVisibility( dark ? View.SYSTEM_UI_FLAG_LAYOUT_STABLE : View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        }
+    }
+
 
     public void syncTheme(boolean dark) {
         int[][] states = new int[][]{new int[]{android.R.attr.state_checked}, new int[]{-android.R.attr.state_checked}};
@@ -418,6 +424,7 @@ public class MainActivity extends AppCompatActivity {
             toolbar.getMenu().getItem(0).setIcon(R.drawable.icon_moon);
 
         }
+
 
         for (WeakReference<AdaptiveTextView> i : AdaptiveTextView.textViews) {
             AdaptiveTextView textViewRef = i.get();
