@@ -37,13 +37,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
+        <com.ammar.filescenter.custom.ui.AdaptiveTextView
             android:id="@+id/TV_FileTypeName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="@id/IV_FileImage"
             app:layout_constraintStart_toStartOf="@id/IV_FileImage"
             android:layout_marginStart="4dp"
+            app:lightModeColor="#FFF"
             tools:text="Zip file" />
 
         <LinearLayout
@@ -70,9 +71,10 @@
                 android:ellipsize="end"
                 android:textSize="18sp"
                 android:layout_marginTop="-4dp"
+                app:lightModeColor="#FFF"
                 tools:text="Filename.txt"/>
 
-            <TextView
+            <com.ammar.filescenter.custom.ui.AdaptiveTextView
                 android:id="@+id/TV_FileSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,6 +83,7 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textColor="#AAFFFFFF"
+                app:lightModeColor="#FFF"
                 tools:text="10MB"/>
         </LinearLayout>
 

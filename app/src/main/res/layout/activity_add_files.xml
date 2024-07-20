@@ -25,6 +25,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:hint="@string/search"
+            android:textColorHint="#ccc"
             android:drawableStart="@drawable/icon_search"
             android:drawablePadding="6dp"
             android:paddingHorizontal="8dp"/>
