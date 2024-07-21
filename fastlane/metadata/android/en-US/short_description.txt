@@ -1,1 +1,1 @@
-Share files and apps using browser
+Share files and apps using browser with a solution to apps with multiple apk files
