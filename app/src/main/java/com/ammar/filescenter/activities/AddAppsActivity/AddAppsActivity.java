@@ -5,7 +5,6 @@ import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMod
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,7 +33,6 @@ public class AddAppsActivity extends AppCompatActivity {
     public static final String ACTION_ADD_APPS = "ACTION_ADD_APPS";
     private RecyclerView appsRecycler;
     private Toolbar appBar;
-    public AppCompatEditText searchInputET;
     LinkedList<String> selectedApps = new LinkedList<>();
 
     @Override
@@ -59,7 +56,6 @@ public class AddAppsActivity extends AppCompatActivity {
 
         TextView loadingTV = findViewById(R.id.TV_AppsLoading);
         ProgressBar loadingPB = findViewById(R.id.PB_AppsLoading);
-        searchInputET = findViewById(R.id.ET_SearchAppsInput);
         new Thread(() -> {
             ArrayList<ApplicationInfo> userApps = new ArrayList<>(30);
             int flags = PackageManager.GET_META_DATA |
@@ -75,19 +71,25 @@ public class AddAppsActivity extends AppCompatActivity {
             }
             AppsRecyclerAdapter appsAdapter = new AppsRecyclerAdapter(this, userApps, selectedApps);
             runOnUiThread(() -> {
-
                 int spanCount = (int) Math.ceil(getWindow().getDecorView().getMeasuredWidth() / Utils.dpToPx(130));
-                appsRecycler.setLayoutManager(new GridLayoutManager(this, spanCount) {
+                GridLayoutManager layoutManager = new GridLayoutManager(this, spanCount) {
 
                     @Override
                     public void onLayoutCompleted(RecyclerView.State state) {
                         super.onLayoutCompleted(state);
                         loadingTV.setVisibility(View.GONE);
                         loadingPB.setVisibility(View.GONE);
-                        findViewById(R.id.CV_SearchAppsWrapper).setVisibility(View.VISIBLE);
                         findViewById(R.id.V_Border).setVisibility(View.VISIBLE);
                     }
+                };
+                // to make sure search bar take the whole width
+                layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                    @Override
+                    public int getSpanSize(int position) {
+                        return position == 0 ? spanCount : 1;
+                    }
                 });
+                appsRecycler.setLayoutManager(layoutManager);
                 appsRecycler.setAdapter(appsAdapter);
                 appsRecycler.setHasFixedSize(true);
             });

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +34,9 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private App[] displayedApps;
     private final AddAppsActivity activity;
     LinkedList<String> selectedApps;
+
+    private static final int TYPE_SEARCH_BAR = 0;
+    private static final int TYPE_APP = 1;
 
     public AppsRecyclerAdapter(AddAppsActivity activity, ArrayList<ApplicationInfo> appsInfo, LinkedList<String> selectedApps) {
         this.activity = activity;
@@ -57,22 +61,7 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         Arrays.sort(this.apps, (o1, o2) -> o1.label.compareTo(o2.label));
         this.displayedApps = this.apps;
-        this.activity.searchInputET.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                searchApps(s.toString().toLowerCase());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
     }
 
     private void searchApps(String searchInput) {
@@ -93,45 +82,88 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyDataSetChanged();
     }
 
+
+    @Override
+    public int getItemViewType(int position) {
+        return position == 0 ? TYPE_SEARCH_BAR : TYPE_APP;
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(activity);
-        View view = inflater.inflate(R.layout.view_add_apps_app, parent, false);
-        return new AppViewHolder(view);
+        View view;
+        switch (viewType) {
+            case TYPE_SEARCH_BAR:
+                view = inflater.inflate(R.layout.view_search, parent, false);
+                return new SearchBarHolder(view, this);
+            case TYPE_APP:
+                view = inflater.inflate(R.layout.view_add_apps_app, parent, false);
+                return new AppViewHolder(view);
+        }
+
+        // It's impossible to reach this
+        throw new RuntimeException("");
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        AppViewHolder appHolder = (AppViewHolder) holder;
-        int size = (int) Utils.dpToPx(50);
-        Glide.with(holder.itemView.getContext())
-                .load(displayedApps[position].icon)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .override(size, size)
-                .into(appHolder.icon);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int positionR) {
+        int type = getItemViewType(positionR);
+        if (type == TYPE_APP) {
+            int position = positionR - 1;
+            AppViewHolder appHolder = (AppViewHolder) holder;
+            int size = (int) Utils.dpToPx(50);
+            Glide.with(holder.itemView.getContext())
+                    .load(displayedApps[position].icon)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .override(size, size)
+                    .into(appHolder.icon);
 
-        appHolder.appName.setText(displayedApps[position].label);
-        appHolder.checkBox.setChecked(displayedApps[position].isChecked);
+            appHolder.appName.setText(displayedApps[position].label);
+            appHolder.checkBox.setChecked(displayedApps[position].isChecked);
 
-        appHolder.itemView.setOnClickListener((view) -> {
-            this.activity.searchInputET.clearFocus();
-            boolean isChecked = appHolder.checkBox.isChecked();
-            appHolder.checkBox.setChecked(!isChecked);
-            if (!isChecked) {
-                selectedApps.add(displayedApps[position].packageName);
-            } else {
-                selectedApps.remove(displayedApps[position].packageName);
-            }
-            this.displayedApps[position].isChecked = !isChecked;
-            activity.setToolbarTitle(activity.getString(R.string.selected_num, selectedApps.size()));
-        });
+            appHolder.itemView.setOnClickListener((view) -> {
+                boolean isChecked = appHolder.checkBox.isChecked();
+                appHolder.checkBox.setChecked(!isChecked);
+                if (!isChecked) {
+                    selectedApps.add(displayedApps[position].packageName);
+                } else {
+                    selectedApps.remove(displayedApps[position].packageName);
+                }
+                this.displayedApps[position].isChecked = !isChecked;
+                activity.setToolbarTitle(activity.getString(R.string.selected_num, selectedApps.size()));
+            });
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return displayedApps.length;
+        return displayedApps.length + 1;
     }
+
+    public static class SearchBarHolder extends RecyclerView.ViewHolder {
+
+        public SearchBarHolder(@NonNull View itemView, AppsRecyclerAdapter adapter) {
+            super(itemView);
+            AppCompatEditText searchInput = itemView.findViewById(R.id.ET_SearchInput);
+            searchInput.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    adapter.searchApps(s.toString().toLowerCase());
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            });
+        }
+    }
+
 
     public static class AppViewHolder extends RecyclerView.ViewHolder {
         public ImageView icon;

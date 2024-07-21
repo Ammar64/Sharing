@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -29,7 +28,6 @@ public class AddFilesActivity extends AppCompatActivity {
     public RecyclerView recyclerView;
     private StorageAdapter storageAdapter;
     public AppCompatTextView folderEmptyTV;
-    public AppCompatEditText searchInputET;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,13 +53,19 @@ public class AddFilesActivity extends AppCompatActivity {
 
         setSupportActionBar(appBar);
         setTitle(R.string.select_files);
-        searchInputET = findViewById(R.id.ET_SearchFilesInput);
 
         // this line must be before initializing the adapter
         folderEmptyTV = findViewById(R.id.TV_FolderEmpty);
 
         recyclerView = findViewById(R.id.RV_FilesRecycler);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return position == 0 ? 2 : 1;
+            }
+        });
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
         storageAdapter = new StorageAdapter(this);
         recyclerView.setAdapter(storageAdapter);

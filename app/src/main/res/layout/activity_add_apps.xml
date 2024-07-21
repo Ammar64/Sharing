@@ -7,39 +7,13 @@
 
     <include layout="@layout/toolbar"/>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/CV_SearchAppsWrapper"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="#44000000"
-        android:layout_marginHorizontal="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/TB_Toolbar"
-        app:cardCornerRadius="15dp"
-        app:cardElevation="0dp"
-        android:visibility="invisible">
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/ET_SearchAppsInput"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:hint="@string/search"
-            android:textColorHint="#ccc"
-            android:drawableStart="@drawable/icon_search"
-            android:drawablePadding="6dp"
-            android:paddingHorizontal="8dp"/>
-
-    </androidx.cardview.widget.CardView>
-
     <View
         android:id="@+id/V_Border"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginHorizontal="8dp"
         android:background="@color/toolbar_bottom_color"
-        app:layout_constraintTop_toBottomOf="@id/CV_SearchAppsWrapper"
+        app:layout_constraintTop_toBottomOf="@id/TB_Toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="4dp"
