@@ -324,11 +324,9 @@ if (!storedUsername) {
         else throw "ERROR GETTING USER INFO";
     }).then(function (res) {
         userId = res.id;
-        updateStoredUsername(res.username);
-
-
+        document.querySelector('.current-username p').textContent = `${currentUsernameText} ${res.username}`;
     }).catch(function (err) {
-        console.error(err.message);
+        alert("Error getting username");
     })
 } else { // else tell the server about the stored name
     updateUsername(storedUsername);
@@ -385,7 +383,7 @@ function updateUsername(username) {
         .catch(error => {
             console.error('Error updating username:', error);
             // Handle error scenarios
-            closeBubbles([loginBubble]);
+            alert('Failed to update username');
         });
 }
 
@@ -393,7 +391,7 @@ function updateStoredUsername(username) {
     localStorage.setItem("username", username);
     storedUsername = username;
     // Update the display of current username
-    document.querySelector('.current-username p').textContent = `${currentUsernameText} ${storedUsername}`;
+    document.querySelector('.current-username p').textContent = `${currentUsernameText} ${username}`;    
 }
 /*  */
 function setVhProperty() {
