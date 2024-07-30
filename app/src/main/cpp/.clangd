@@ -1,0 +1,4 @@
+CompileFlags:
+    Add:
+        - -IC:\Users\ammar\AppData\Local\Android\Sdk\ndk\25.1.8937393\toolchains\llvm\prebuilt\windows-x86_64\sysroot\usr\include
+        - -Ilibs/qrcodegen
