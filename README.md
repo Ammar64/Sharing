@@ -13,9 +13,22 @@ You can always disable uploads in the app settings.
 
 Or download the latest APK from the [Releases Section](https://github.com/Ammar64/Files-Center/releases/latest).
 
+
+Screen shots
 -----------------
 
-Copyright (C) 2024 Sharing authors
+<p align="center" class="scroll" >
+     <img width="200px" src="https://github.com/Ammar64/Files-Center/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/0.jpg">
+     &nbsp;&nbsp;&nbsp;
+     <img width="200px" src="https://github.com/Ammar64/Files-Center/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg">
+     &nbsp;&nbsp;&nbsp;
+     <img width="200px" src="https://github.com/Ammar64/Files-Center/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg">
+</p>
+
+
+License
+-------------
+Copyright &copy; 2024 Sharing authors
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
