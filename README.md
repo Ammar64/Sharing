@@ -22,11 +22,17 @@ Screen shots
 -----------------
 
 <p align="center" class="scroll" >
-     <img width="200px" src="https://github.com/Ammar64/Files-Center/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/0.jpg">
+     <img width="200px" src="https://github.com/Ammar64/Files-Center/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/0.jpg" alt="App screen shot">
      &nbsp;&nbsp;&nbsp;
-     <img width="200px" src="https://github.com/Ammar64/Files-Center/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg">
+     <img width="200px" src="https://github.com/Ammar64/Files-Center/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg" alt="App screen shot">
      &nbsp;&nbsp;&nbsp;
-     <img width="200px" src="https://github.com/Ammar64/Files-Center/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg">
+     <img width="200px" src="https://github.com/Ammar64/Files-Center/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg" alt="App screen shot">
+     &nbsp;&nbsp;&nbsp;
+     <img width="200px" src="https://github.com/Ammar64/Files-Center/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpg" alt="App screen shot">
+     &nbsp;&nbsp;&nbsp;
+     <img width="200px" src="https://github.com/Ammar64/Files-Center/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/4.jpg" alt="App screen shot">
+     &nbsp;&nbsp;&nbsp;
+     <img width="200px" src="https://github.com/Ammar64/Files-Center/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/5.jpg" alt="App screen shot">
 </p>
 
 
