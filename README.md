@@ -13,6 +13,10 @@ You can always disable uploads in the app settings.
 
 Or download the latest APK from the [Releases Section](https://github.com/Ammar64/Files-Center/releases/latest).
 
+Note
+----------------
+Tutorial is available at https://ammar64.github.io/Files-Center/ <br>
+Feel free to contribute to it in the [tutorial](https://github.com/Ammar64/Files-Center/tree/tutorial) branch<br>
 
 Screen shots
 -----------------
