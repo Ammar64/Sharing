@@ -13,11 +13,6 @@ You can always disable uploads in the app settings.
 
 Or download the latest APK from the [Releases Section](https://github.com/Ammar64/Files-Center/releases/latest).
 
-Note
-----------------
-Tutorial is available at https://ammar64.github.io/Files-Center/ <br>
-Feel free to contribute to it in the [tutorial](https://github.com/Ammar64/Files-Center/tree/tutorial) branch<br>
-
 Screen shots
 -----------------
 
@@ -29,6 +24,12 @@ Screen shots
      <img width="200px" src="https://github.com/Ammar64/Files-Center/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg">
 </p>
 
+
+Note
+----------------
+Tutorial is available at https://ammar64.github.io/Files-Center/ <br>
+Clicking the tutorial button in the app will open the previous link in a web browser in version 1.3 and up<br>
+Feel free to contribute to it in the [tutorial](https://github.com/Ammar64/Files-Center/tree/tutorial) branch<br>
 
 License
 -------------
