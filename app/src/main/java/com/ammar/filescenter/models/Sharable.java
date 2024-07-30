@@ -1,5 +1,7 @@
 package com.ammar.filescenter.models;
 
+import android.net.Uri;
+
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.network.Server;
 
@@ -13,7 +15,6 @@ public class Sharable {
 
     protected String uuid;
     protected File file;
-
     public Sharable(String path) {
         this.file = new File(path);
         this.uuid = UUID.randomUUID().toString();

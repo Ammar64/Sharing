@@ -63,6 +63,9 @@
     <string name="file_type">ملف %1$s</string>
     <string name="permission_denied">الوصول مرفوض</string>
     <string name="search">بحث</string>
+    <string name="images">صور</string>
+    <string name="videos">مقاطع</string>
+    <string name="audio">صوتيات</string>
 
     <!-- Activity Apks Installer -->
     <string name="apks_installer_experimental">مثبت apks (تجريبيى)</string>
@@ -90,4 +93,9 @@
     <string name="svr_notification_message">الخادم يعمل على العنوان %1$s:%2$s و يستقبل الطلبات الجديدة</string>
     <string name="app_icon_acc_desc">أيقونة التطبيق</string>
     <string name="tutorial">التعليمات</string>
+
+    <string name="select">اختيار</string>
+    <string name="sort_by">ترتيب حسب…</string>
+    <string name="show_drop_down">أظهر النافذة المنبثقة</string>
+    <string name="back">Back</string>
 </resources>

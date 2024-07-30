@@ -1,43 +1,56 @@
 package com.ammar.filescenter.activities.AddFilesActivity.adaptersR;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
-import com.ammar.filescenter.activities.AddAppsActivity.adaptersR.AppsRecyclerAdapter;
 import com.ammar.filescenter.activities.AddFilesActivity.AddFilesActivity;
 import com.ammar.filescenter.common.FileUtils;
 import com.ammar.filescenter.common.Utils;
+import com.ammar.filescenter.custom.ui.AdaptiveTextView;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.Stack;
 
 public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_SEARCH = 0;
-    private static final int TYPE_DIR = 1;
-    private static final int TYPE_FILE = 2;
-    private static final int TYPE_SPACE = 3;
+    private static final int TYPE_FILE_TYPES = 1;
+    private static final int TYPE_DIR = 2;
+    private static final int TYPE_FILE = 3;
+    private static final int TYPE_SPACE = 4;
+
+    private static final int SORT_NAME = 0;
+    private static final int SORT_LAST_MODIFIED = 1;
 
     private final File internalStorage = Environment.getExternalStorageDirectory();
     private File currentDir = internalStorage;
@@ -63,8 +76,9 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        if(position == 0) return TYPE_SEARCH;
-        position--;
+        if (position == 0) return TYPE_SEARCH;
+        if (position == 1) return TYPE_FILE_TYPES;
+        position -= 2;
         boolean hasSpaceView = (lastDirIndex & 1) == 0;
         if ((position - 1 == lastDirIndex) && hasSpaceView) {
             return TYPE_SPACE;
@@ -75,12 +89,19 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @NonNull
     @Override
+    @SuppressLint("ClickableViewAccessibility")
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         switch (viewType) {
             case TYPE_SEARCH:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_search, parent, false);
                 return new SearchBarHolder(view, this);
+            case TYPE_FILE_TYPES:
+                ScrollView scrollView = new ScrollView(parent.getContext());
+                scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                scrollView.setNestedScrollingEnabled(true);
+                scrollView.setPadding(0, 24, 0, 24);
+                return new FileTypesHolder(scrollView);
             case TYPE_DIR:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_directory, parent, false);
                 return new DirectoryViewHolder(view);
@@ -100,23 +121,26 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int positionR) {
         int type = getItemViewType(positionR);
-        int position = positionR - 1;
+        int position = positionR - 2;
+        boolean animate = false;
         switch (type) {
             case TYPE_DIR:
                 DirectoryViewHolder dirHolder = (DirectoryViewHolder) holder;
                 dirHolder.setup(displayedFiles[position], (view) -> viewDirectory(displayedFiles[position]));
+                animate = true;
                 break;
             case TYPE_FILE:
                 // we might have added an empty space
                 int filePos = (lastDirIndex & 1) == 0 ? position - 1 : position;
                 FileViewHolder fileHolder = (FileViewHolder) holder;
                 fileHolder.setup(this, filePos);
+                animate = true;
                 break;
             default:
                 break;
         }
         // animate when scroll down only
-        if (position > lastPosition) {
+        if (animate && position > lastPosition) {
             holder.itemView.startAnimation(AnimationUtils.loadAnimation(act, R.anim.appear));
             lastPosition = holder.getBindingAdapterPosition();
         }
@@ -127,7 +151,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemCount() {
         // if the last directory index is even add 1 to item count to put empty space in it
         // if no directories present then lastDirIndex will be -1 and (-1 & 1) is 1
-        return ((lastDirIndex & 1) == 1 ? displayedFiles.length : displayedFiles.length + 1) + 1;
+        return ((lastDirIndex & 1) == 1 ? displayedFiles.length : displayedFiles.length + 1) + 2;
     }
 
     private void viewDirectory(File dir, boolean pop) {
@@ -145,7 +169,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         else
             act.recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewStates.pop());
 
-        sortFiles(this.files);
+        sortFiles(this.files, SORT_NAME);
         lastDirIndex = getLastDirectoryIndex();
 
         if (this.displayedFiles.length == 0) {
@@ -161,8 +185,27 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else {
             act.setTitle(dir.getName());
         }
-//        act.recyclerView.startLayoutAnimation();
+        //act.recyclerView.startLayoutAnimation();
+    }
 
+    private void viewImages() {
+        final int maxDepth = 2;
+        LinkedList<File> images = new LinkedList<>();
+        int depth = 0;
+
+    }
+
+    private LinkedList<File> getImagesFromDir(File dir) {
+        if( !dir.isDirectory() ) throw new IllegalArgumentException();
+        LinkedList<File> images = new LinkedList<>();
+        File[] files = dir.listFiles();
+        if( files == null ) return images; // images is empty
+        for( File i : files ) {
+            if( i.isFile() && Utils.getMimeType(i.getName()).startsWith("image/") ) {
+                images.add(i);
+            }
+        }
+        return images;
     }
 
     private void viewDirectory(File dir) {
@@ -178,12 +221,21 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             act.finish();
         }
     }
+
     // sort files but put directories first
-    private void sortFiles(File[] files) {
+    private void sortFiles(File[] files, int sortType) {
         Arrays.sort(files, (l, r) -> {
             if (l.isDirectory() && r.isFile()) return -1;
             if (l.isFile() && r.isDirectory()) return 1;
-            else return l.compareTo(r);
+            else {
+                switch (sortType) {
+                    case SORT_NAME:
+                        return l.compareTo(r);
+                    case SORT_LAST_MODIFIED:
+                        return Long.compare(r.lastModified(), l.lastModified());
+                }
+            }
+            throw new IllegalArgumentException();
         });
     }
 
@@ -228,7 +280,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     // use lowercase only
     public void searchDirectory(String searchInput) {
-        if(searchInput.isEmpty()) {
+        if (searchInput.isEmpty()) {
             this.displayedFiles = this.files;
             lastDirIndex = getLastDirectoryIndex();
             notifyDataSetChanged();
@@ -236,8 +288,8 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         ArrayList<File> searchedFiles = new ArrayList<>(10);
-        for( File i : this.files ) {
-            if( i.getName().toLowerCase().contains(searchInput) ) {
+        for (File i : this.files) {
+            if (i.getName().toLowerCase().contains(searchInput)) {
                 searchedFiles.add(i);
             }
         }
@@ -268,6 +320,53 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
         }
     }
+
+    private static class FileTypesHolder extends RecyclerView.ViewHolder {
+        public FileTypesHolder(@NonNull ScrollView itemView) {
+            super(itemView);
+            LinearLayout layout = new LinearLayout(itemView.getContext());
+            layout.setOrientation(LinearLayout.HORIZONTAL);
+            itemView.addView(layout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            List<FileType> types = Arrays.asList(
+                    new FileType(R.string.images, R.drawable.icon_image, (view) -> {
+
+                    }),
+                    new FileType(R.string.videos, R.drawable.icon_video, (view) -> {
+
+                    }),
+                    new FileType(R.string.audio, R.drawable.icon_audio, (view) -> {
+
+                    })
+            );
+
+            LayoutInflater inflater = LayoutInflater.from(itemView.getContext());
+            for (FileType i : types) {
+                View view = inflater.inflate(R.layout.card_file_type, layout, false);
+                AdaptiveTextView text = view.findViewById(R.id.TV_FileTypeText);
+                text.setCompoundDrawablesRelativeWithIntrinsicBounds(i.icon, 0, 0, 0);
+                text.setText(i.text);
+                layout.addView(view);
+            }
+        }
+
+        private static class FileType {
+            @StringRes
+            public int text;
+
+            @DrawableRes
+            public int icon;
+
+            public View.OnClickListener onClick;
+
+            public FileType(int text, int icon, View.OnClickListener onClick) {
+                this.text = text;
+                this.icon = icon;
+                this.onClick = onClick;
+            }
+        }
+    }
+
     private static class DirectoryViewHolder extends RecyclerView.ViewHolder {
         private final TextView dirNameTV;
 
@@ -307,7 +406,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             File file = adapter.displayedFiles[pos];
 
-            if(FileUtils.setFileIcon(fileImageIV, file)) {
+            if (FileUtils.setFileIcon(fileImageIV, file)) {
                 lineV.setVisibility(View.INVISIBLE);
             } else {
                 lineV.setVisibility(View.VISIBLE);

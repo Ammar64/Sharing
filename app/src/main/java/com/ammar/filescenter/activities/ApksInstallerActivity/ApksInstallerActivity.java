@@ -27,6 +27,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.common.Consts;
+import com.ammar.filescenter.common.FileUtils;
 import com.ammar.filescenter.custom.ui.AdaptiveTextView;
 import com.ammar.filescenter.services.PackageInstallerService;
 
@@ -80,7 +81,7 @@ public class ApksInstallerActivity extends AppCompatActivity {
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), (result) -> {
         if( result == null ) return;
 
-        if (!getFileName(result).endsWith(".apks")) {
+        if (!FileUtils.getFileName(getContentResolver() ,result).endsWith(".apks")) {
             Toast.makeText(this, R.string.pls_choose_apks, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -143,28 +144,5 @@ public class ApksInstallerActivity extends AppCompatActivity {
             }
         });
     });
-
-
-    public String getFileName(Uri uri) {
-        String result = null;
-        if ("content".equals(uri.getScheme())) {
-            Cursor cursor = getContentResolver().query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null);
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                }
-            } finally {
-                cursor.close();
-            }
-        }
-        if (result == null) {
-            result = uri.getPath();
-            int cut = result.lastIndexOf('/');
-            if (cut != -1) {
-                result = result.substring(cut + 1);
-            }
-        }
-        return result;
-    }
 
 }

@@ -1,12 +1,16 @@
 package com.ammar.filescenter.common;
 
 
+import android.content.ContentResolver;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.provider.OpenableColumns;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
@@ -25,8 +29,6 @@ import java.io.File;
 public class FileUtils {
     private FileUtils() {
     }
-
-    ;
 
     public static String getFileTypeName(String filename) {
         String ext = filename.substring(filename.lastIndexOf(".") + 1);
@@ -141,6 +143,25 @@ public class FileUtils {
         }
 
         return inSampleSize;
+    }
+
+    public static String getFileName(ContentResolver resolver, Uri uri) {
+        String result = null;
+        if ("content".equals(uri.getScheme())) {
+            try (Cursor cursor = resolver.query(uri, new String[]{OpenableColumns.DISPLAY_NAME}, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                }
+            }
+        }
+        if (result == null) {
+            result = uri.getPath();
+            int cut = result.lastIndexOf('/');
+            if (cut != -1) {
+                result = result.substring(cut + 1);
+            }
+        }
+        return result;
     }
 
 }

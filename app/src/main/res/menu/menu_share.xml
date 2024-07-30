@@ -9,7 +9,7 @@
 
     <item
         android:id="@+id/MI_PopupMenu"
-        android:title="@android:string/untitled"
+        android:title="@string/show_drop_down"
         android:icon="@drawable/icon_three_dots"
         app:showAsAction="always"/>
 

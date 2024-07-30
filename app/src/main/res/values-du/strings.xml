@@ -41,6 +41,11 @@
     <string name="languages_desc">System, العربية, Englisch, Deutsch</string>
     <string name="system_default_lang">Systemstandard</string>
 
+    <!-- Activity Add Files   -->
+    <string name="images">Images</string>
+    <string name="videos">Videos</string>
+    <string name="audio">Audio</string>
+
     <!-- Activity Add Apps   -->
     <string name="loading_apps">Apps werden geladen…</string>
     <string name="select_apps">Apps auswählen</string>
@@ -61,6 +66,9 @@
     <string name="pick_apks_file">pick apks file</string>
     <string name="installer_note">After sending an apks file to the other device successfully.\nSend this app to the other remote device and open this page.\nThis will install the apks file.</string>
     <string name="stop">Stop</string>
+    <string name="sort_by">Sort by…</string>
+    <string name="show_drop_down">Show drop down</string>
+    <string name="back">Back</string>
 
     <string-array name="langs">
         <item>@string/system_default_lang</item>

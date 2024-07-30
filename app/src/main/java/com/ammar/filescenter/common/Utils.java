@@ -21,24 +21,23 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.util.TypedValue;
 import android.webkit.MimeTypeMap;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RawRes;
 
 import com.ammar.filescenter.activities.MainActivity.MainActivity;
-import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class Utils {
 
     static {
-        System.loadLibrary("NativeQRCodeGen");
+        System.loadLibrary("nativeutils");
     }
 
     public static String getFormattedSize(long size) {
@@ -96,6 +95,8 @@ public class Utils {
     }
 
 
+    // unreliable function
+    // this function caused 1.0 to crash when adding files
     public static String getPathFromUri(final Context context, final Uri uri) {
 
         // final boolean isKitKat = true;
@@ -220,6 +221,7 @@ public class Utils {
 
 
     public static native byte[] encodeTextToQR(String text);
+    public static native void findImagesRecursively(String root, ArrayList<File> files);
 
     public static Bitmap QrCodeArrayToBitmap(byte[] qrCodeBytes) {
         int qrColor;
@@ -411,12 +413,6 @@ public class Utils {
 
     }
 
-    public static void setProgressColor(ProgressBar progressBar, int color ) {
-        Drawable progressDrawable = progressBar.getProgressDrawable().mutate();
-        progressDrawable.setColorFilter( color, android.graphics.PorterDuff.Mode.SRC_IN );
-        progressBar.setProgressDrawable(progressDrawable);
-    }
-
     public static Bitmap drawableToBitmap (Drawable drawable) {
         Bitmap bitmap = null;
 
@@ -487,5 +483,4 @@ public class Utils {
             return Consts.filesDir;
         }
     }
-
 }

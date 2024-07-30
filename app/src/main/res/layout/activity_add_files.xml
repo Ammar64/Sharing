@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <include layout="@layout/toolbar" />
+
     <View
         android:id="@+id/V_Border"
         android:layout_width="match_parent"
@@ -27,7 +28,6 @@
         app:layout_constraintTop_toBottomOf="@+id/V_Border"
         tools:itemCount="0"
         tools:listitem="@layout/row_file" />
-
 
     <com.ammar.filescenter.custom.ui.AdaptiveTextView
         android:id="@+id/TV_FolderEmpty"

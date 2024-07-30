@@ -48,12 +48,11 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.ApksInstallerActivity.ApksInstallerActivity;
-import com.ammar.filescenter.activities.MainActivity.color.ColorsDark;
-import com.ammar.filescenter.activities.MainActivity.color.ColorsLight;
 import com.ammar.filescenter.application.FilesCenterApp;
 import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.common.Data;
 import com.ammar.filescenter.common.Utils;
+import com.ammar.filescenter.custom.ui.AdaptiveDropDown;
 import com.ammar.filescenter.custom.ui.AdaptiveTextView;
 import com.ammar.filescenter.services.ServerService;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -143,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(0, paddings.top, 0, 0);
             return insets;
         });
+
         themeChangeIV = findViewById(R.id.IV_ThemeChange);
         toolbar = findViewById(R.id.TB_Toolbar);
         changeThemeMI = findViewById(R.id.MI_ThemeToggle);
@@ -401,7 +401,7 @@ public class MainActivity extends AppCompatActivity {
         if (dark) {
             layout.setBackgroundResource(R.drawable.gradient_background_dark);
             DrawableCompat.setTint(toolbar.getOverflowIcon(), getResources().getColor(R.color.white));
-            threeDotsPW.setBackgroundDrawable(new ColorDrawable(getResources().getColor(ColorsDark.popupBG)));
+            threeDotsPW.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.popupDarkBG)));
             bottomAppBar.setBackgroundTint(ColorStateList.valueOf(getResources().getColor(R.color.bottomBarColorDark)));
 
             ColorStateList stateList = new ColorStateList(states, new int[]{ColorPrimary, getResources().getColor(R.color.text_color_light)});
@@ -413,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             layout.setBackgroundResource(R.drawable.gradient_background_light);
             DrawableCompat.setTint(toolbar.getOverflowIcon(), getResources().getColor(R.color.black));
-            threeDotsPW.setBackgroundDrawable(new ColorDrawable(getResources().getColor(ColorsLight.popupBG)));
+            threeDotsPW.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.popupLightBG)));
 
             bottomAppBar.setBackgroundTint(ColorStateList.valueOf(getResources().getColor(R.color.bottomBarColorLight)));
 
@@ -433,5 +433,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        AdaptiveDropDown.setDarkAll(dark);
     }
 }

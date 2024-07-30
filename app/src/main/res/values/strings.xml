@@ -61,6 +61,9 @@
     <string name="file_type">%1$s file</string>
     <string name="permission_denied">Permission denied</string>
     <string name="search">Search</string>
+    <string name="images">Images</string>
+    <string name="videos">Videos</string>
+    <string name="audio">Audio</string>
 
     <!-- Activity Apks Installer -->
     <string name="apks_installer_experimental">APKS Installer (Experimental)</string>
@@ -89,6 +92,10 @@
     <string name="tutorial">Tutorial</string>
     <string name="connect_to_wifi_or_hotspot">Please activate wifi or hotspot to start sharing</string>
 
+    <string name="select">Select</string>
+    <string name="sort_by">Sort by…</string>
+    <string name="show_drop_down">Show drop down</string>
+    <string name="back">Back</string>
     <string-array name="langs">
         <item>@string/system_default_lang</item>
         <item>العربية</item>
