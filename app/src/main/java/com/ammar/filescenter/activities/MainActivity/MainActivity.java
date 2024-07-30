@@ -271,8 +271,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         tutorialTV.setOnClickListener((view) -> {
-            //startActivity(new Intent(this, TutorialActivity.class));
-            Toast.makeText(this, "Soon", Toast.LENGTH_SHORT).show();
+            Uri tutorialWebsite = Uri.parse("https://ammar64.github.io/Files-Center/");
+            Intent tutorialIntent = new Intent(Intent.ACTION_VIEW, tutorialWebsite);
+            if( tutorialIntent.resolveActivity(getPackageManager()) != null ) {
+                startActivity(tutorialIntent);
+            } else {
+                Toast.makeText(this, R.string.no_web_browser_found, Toast.LENGTH_SHORT);
+            }
         });
 
         apksInstallerTV.setOnClickListener((view) -> {

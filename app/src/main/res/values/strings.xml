@@ -61,9 +61,11 @@
     <string name="file_type">%1$s file</string>
     <string name="permission_denied">Permission denied</string>
     <string name="search">Search</string>
+    <string name="recent">recent</string>
     <string name="images">Images</string>
     <string name="videos">Videos</string>
     <string name="audio">Audio</string>
+    <string name="documents">documents</string>
 
     <!-- Activity Apks Installer -->
     <string name="apks_installer_experimental">APKS Installer (Experimental)</string>
@@ -96,6 +98,8 @@
     <string name="sort_by">Sort by…</string>
     <string name="show_drop_down">Show drop down</string>
     <string name="back">Back</string>
+    <string name="no_web_browser_found">No web browser found</string>
+
     <string-array name="langs">
         <item>@string/system_default_lang</item>
         <item>العربية</item>

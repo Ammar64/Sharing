@@ -7,14 +7,13 @@ import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +23,6 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.AppCompatEditText;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
@@ -97,10 +95,11 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_search, parent, false);
                 return new SearchBarHolder(view, this);
             case TYPE_FILE_TYPES:
-                ScrollView scrollView = new ScrollView(parent.getContext());
+                HorizontalScrollView scrollView = new HorizontalScrollView(parent.getContext());
                 scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                scrollView.setNestedScrollingEnabled(true);
                 scrollView.setPadding(0, 24, 0, 24);
+
+
                 return new FileTypesHolder(scrollView);
             case TYPE_DIR:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_directory, parent, false);
@@ -178,7 +177,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else act.folderEmptyTV.setVisibility(View.GONE);
 
 
-        notifyDataSetChanged();
+        filesChanged();
         lastPosition = -1; // to animate all
         if (internalStorage.compareTo(dir) == 0) {
             act.setTitle(R.string.internal_storage);
@@ -195,18 +194,6 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     }
 
-    private LinkedList<File> getImagesFromDir(File dir) {
-        if( !dir.isDirectory() ) throw new IllegalArgumentException();
-        LinkedList<File> images = new LinkedList<>();
-        File[] files = dir.listFiles();
-        if( files == null ) return images; // images is empty
-        for( File i : files ) {
-            if( i.isFile() && Utils.getMimeType(i.getName()).startsWith("image/") ) {
-                images.add(i);
-            }
-        }
-        return images;
-    }
 
     private void viewDirectory(File dir) {
         viewDirectory(dir, false);
@@ -283,7 +270,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (searchInput.isEmpty()) {
             this.displayedFiles = this.files;
             lastDirIndex = getLastDirectoryIndex();
-            notifyDataSetChanged();
+            filesChanged();
             return;
         }
 
@@ -296,9 +283,12 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.displayedFiles = new File[searchedFiles.size()];
         searchedFiles.toArray(this.displayedFiles);
         lastDirIndex = getLastDirectoryIndex();
-        notifyDataSetChanged();
+        filesChanged();
     }
 
+    private void filesChanged() {
+        notifyDataSetChanged();
+    }
     public static class SearchBarHolder extends RecyclerView.ViewHolder {
 
         public SearchBarHolder(@NonNull View itemView, StorageAdapter adapter) {
@@ -322,13 +312,18 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private static class FileTypesHolder extends RecyclerView.ViewHolder {
-        public FileTypesHolder(@NonNull ScrollView itemView) {
+        public FileTypesHolder(@NonNull HorizontalScrollView itemView) {
             super(itemView);
             LinearLayout layout = new LinearLayout(itemView.getContext());
             layout.setOrientation(LinearLayout.HORIZONTAL);
-            itemView.addView(layout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
+            itemView.addView(layout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            int padding = Math.round(Utils.dpToPx(8));
+            layout.setPadding(padding, 0, padding, 0);
             List<FileType> types = Arrays.asList(
+                    new FileType(R.string.recent, R.drawable.icon_recent, (view) -> {
+
+                    }),
                     new FileType(R.string.images, R.drawable.icon_image, (view) -> {
 
                     }),
@@ -337,16 +332,17 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }),
                     new FileType(R.string.audio, R.drawable.icon_audio, (view) -> {
 
+                    }),
+                    new FileType(R.string.documents, R.drawable.icon_document, (view) -> {
+
                     })
             );
 
             LayoutInflater inflater = LayoutInflater.from(itemView.getContext());
-            for (FileType i : types) {
-                View view = inflater.inflate(R.layout.card_file_type, layout, false);
-                AdaptiveTextView text = view.findViewById(R.id.TV_FileTypeText);
-                text.setCompoundDrawablesRelativeWithIntrinsicBounds(i.icon, 0, 0, 0);
-                text.setText(i.text);
-                layout.addView(view);
+            ListIterator<FileType> iterator = types.listIterator();
+
+            while (iterator.hasNext()) {
+                iterator.next().setupView(inflater, layout, iterator.hasNext());
             }
         }
 
@@ -363,6 +359,20 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 this.text = text;
                 this.icon = icon;
                 this.onClick = onClick;
+            }
+
+            public void setupView(LayoutInflater inflater, ViewGroup layout, boolean withMarginEnd) {
+                View view = inflater.inflate(R.layout.card_file_type, layout, false);
+                AdaptiveTextView textView = view.findViewById(R.id.TV_FileTypeText);
+                textView.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, 0, 0, 0);
+                textView.setText(text);
+                if( withMarginEnd ){ // is not last element
+                    ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(view.getLayoutParams());
+                    layoutParams.setMarginEnd(Math.round(Utils.dpToPx(8)));
+                    view.setLayoutParams(layoutParams);
+                }
+                view.setOnClickListener(onClick);
+                layout.addView(view);
             }
         }
     }

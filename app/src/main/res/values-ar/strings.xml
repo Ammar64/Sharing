@@ -63,9 +63,11 @@
     <string name="file_type">ملف %1$s</string>
     <string name="permission_denied">الوصول مرفوض</string>
     <string name="search">بحث</string>
+    <string name="recent">مؤخرا</string>
     <string name="images">صور</string>
     <string name="videos">مقاطع</string>
     <string name="audio">صوتيات</string>
+    <string name="documents">مستندات</string>
 
     <!-- Activity Apks Installer -->
     <string name="apks_installer_experimental">مثبت apks (تجريبيى)</string>
@@ -98,4 +100,5 @@
     <string name="sort_by">ترتيب حسب…</string>
     <string name="show_drop_down">أظهر النافذة المنبثقة</string>
     <string name="back">Back</string>
+    <string name="no_web_browser_found">لم يتم العثور على متصفح</string>
 </resources>

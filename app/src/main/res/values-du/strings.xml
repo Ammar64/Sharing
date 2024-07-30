@@ -69,6 +69,9 @@
     <string name="sort_by">Sort by…</string>
     <string name="show_drop_down">Show drop down</string>
     <string name="back">Back</string>
+    <string name="no_web_browser_found">No web browser found</string>
+    <string name="recent">recent</string>
+    <string name="documents">documents</string>
 
     <string-array name="langs">
         <item>@string/system_default_lang</item>
