@@ -32,4 +32,5 @@
 
     <color name="text_color_dark">#111</color>
     <color name="text_color_light">#aaa</color>
+    <color name="checked_card">#771B5C78</color>
 </resources>

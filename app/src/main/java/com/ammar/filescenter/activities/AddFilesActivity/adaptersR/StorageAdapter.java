@@ -2,6 +2,8 @@ package com.ammar.filescenter.activities.AddFilesActivity.adaptersR;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.text.Editable;
@@ -23,6 +25,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
@@ -56,8 +59,9 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private int lastDirIndex = -1;
     private final AddFilesActivity act;
-
     private final Stack<Parcelable> recyclerViewStates = new Stack<>();
+
+    private Runnable onGoBack = null;
 
     public StorageAdapter(AddFilesActivity act) {
         this.act = act;
@@ -202,6 +206,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public void goBack() {
+        if( onGoBack != null ) onGoBack.run();
         if( currentDir == null ) {
             viewDirectory(internalStorage);
         } else if (currentDir.compareTo(internalStorage) != 0) {
@@ -313,6 +318,9 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
         }
     }
+    public void setOnGoBack(Runnable onGoBack) {
+        this.onGoBack = onGoBack;
+    }
 
     private static class FileTypesHolder extends RecyclerView.ViewHolder {
         public FileTypesHolder(@NonNull HorizontalScrollView itemView, StorageAdapter adapter) {
@@ -323,26 +331,74 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             itemView.addView(layout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             int padding = Math.round(Utils.dpToPx(8));
             layout.setPadding(padding, 0, padding, 0);
-            List<FileType> types = Arrays.asList(
-                    new FileType(R.string.recent, R.drawable.icon_recent, (view) -> {
 
-                    }),
-                    new FileType(R.string.images, R.drawable.icon_image, (view) -> {
-                        adapter.viewFileType(Utils.FILE_TYPE_IMAGE);
-                        adapter.act.appBar.setTitle(R.string.images);
-                    }),
-                    new FileType(R.string.videos, R.drawable.icon_video, (view) -> {
-                        adapter.viewFileType(Utils.FILE_TYPE_VIDEO);
-                        adapter.act.appBar.setTitle(R.string.videos);
-                    }),
-                    new FileType(R.string.audio, R.drawable.icon_audio, (view) -> {
-                        adapter.viewFileType(Utils.FILE_TYPE_AUDIO);
-                        adapter.act.appBar.setTitle(R.string.audio);
-                    }),
-                    new FileType(R.string.documents, R.drawable.icon_document, (view) -> {
-                        adapter.viewFileType(Utils.FILE_TYPE_DOCUMENT);
-                        adapter.act.appBar.setTitle(R.string.documents);
-                    })
+            FileType recent = new FileType(R.string.recent, R.drawable.icon_recent);
+            FileType images = new FileType(R.string.images, R.drawable.icon_image);
+            FileType videos = new FileType(R.string.videos, R.drawable.icon_video);
+            FileType audio = new FileType(R.string.audio, R.drawable.icon_audio);
+            FileType docs = new FileType(R.string.documents, R.drawable.icon_document);
+
+            recent.setOnClick((view) -> {
+                recent.setSelected(true);
+                images.setSelected(false);
+                videos.setSelected(false);
+                audio.setSelected(false);
+                docs.setSelected(false);
+            });
+            images.setOnClick((view) -> {
+                recent.setSelected(false);
+                images.setSelected(true);
+                videos.setSelected(false);
+                audio.setSelected(false);
+                docs.setSelected(false);
+
+                adapter.act.appBar.setTitle(R.string.images);
+                adapter.viewFileType(Utils.FILE_TYPE_IMAGE);
+            });
+            videos.setOnClick((view) -> {
+                recent.setSelected(false);
+                images.setSelected(false);
+                videos.setSelected(true);
+                audio.setSelected(false);
+                docs.setSelected(false);
+
+                adapter.act.appBar.setTitle(R.string.videos);
+                adapter.viewFileType(Utils.FILE_TYPE_VIDEO);
+            });
+            audio.setOnClick((view) -> {
+                recent.setSelected(false);
+                images.setSelected(false);
+                videos.setSelected(false);
+                audio.setSelected(true);
+                docs.setSelected(false);
+
+                adapter.act.appBar.setTitle(R.string.audio);
+                adapter.viewFileType(Utils.FILE_TYPE_AUDIO);
+            });
+            docs.setOnClick((view) -> {
+                recent.setSelected(false);
+                images.setSelected(false);
+                videos.setSelected(false);
+                audio.setSelected(false);
+                docs.setSelected(true);
+
+                adapter.act.appBar.setTitle(R.string.documents);
+                adapter.viewFileType(Utils.FILE_TYPE_DOCUMENT);
+            });
+
+            adapter.setOnGoBack(() -> {
+                recent.setSelected(false);
+                images.setSelected(false);
+                videos.setSelected(false);
+                audio.setSelected(false);
+                docs.setSelected(false);
+            });
+            List<FileType> types = Arrays.asList(
+                    recent,
+                    images,
+                    videos,
+                    audio,
+                    docs
             );
 
             LayoutInflater inflater = LayoutInflater.from(itemView.getContext());
@@ -362,14 +418,18 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             public View.OnClickListener onClick;
 
-            public FileType(int text, int icon, View.OnClickListener onClick) {
+            public FileType(int text, int icon) {
                 this.text = text;
                 this.icon = icon;
+            }
+
+            public void setOnClick(View.OnClickListener onClick) {
                 this.onClick = onClick;
             }
 
+            private CardView view;
             public void setupView(LayoutInflater inflater, ViewGroup layout, boolean withMarginEnd) {
-                View view = inflater.inflate(R.layout.card_file_type, layout, false);
+                view = (CardView) inflater.inflate(R.layout.card_file_type, layout, false);
                 AdaptiveTextView textView = view.findViewById(R.id.TV_FileTypeText);
                 textView.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, 0, 0, 0);
                 textView.setText(text);
@@ -380,6 +440,14 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
                 view.setOnClickListener(onClick);
                 layout.addView(view);
+            }
+
+            public void setSelected(boolean selected) {
+                if( selected ) {
+                    view.setCardBackgroundColor(view.getContext().getResources().getColor(R.color.checked_card));
+                } else {
+                    view.setCardBackgroundColor(0x77000000);
+                }
             }
         }
     }
