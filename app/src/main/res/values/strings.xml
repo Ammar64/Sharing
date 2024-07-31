@@ -99,6 +99,8 @@
     <string name="show_drop_down">Show drop down</string>
     <string name="back">Back</string>
     <string name="no_web_browser_found">No web browser found</string>
+    <string name="remove">Remove</string>
+    <string name="fast_share">Fast share</string>
 
     <string-array name="langs">
         <item>@string/system_default_lang</item>

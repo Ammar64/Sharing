@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
             if( tutorialIntent.resolveActivity(getPackageManager()) != null ) {
                 startActivity(tutorialIntent);
             } else {
-                Toast.makeText(this, R.string.no_web_browser_found, Toast.LENGTH_SHORT);
+                Toast.makeText(this, R.string.no_web_browser_found, Toast.LENGTH_SHORT).show();
             }
         });
 

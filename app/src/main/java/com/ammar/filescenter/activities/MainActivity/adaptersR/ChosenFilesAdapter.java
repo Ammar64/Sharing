@@ -1,6 +1,7 @@
 package com.ammar.filescenter.activities.MainActivity.adaptersR;
 
 
+import android.app.Application;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -11,14 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.common.Utils;
+import com.ammar.filescenter.custom.ui.AdaptiveDropDown;
 import com.ammar.filescenter.models.Sharable;
 import com.ammar.filescenter.models.SharableApp;
 import com.ammar.filescenter.network.Server;
@@ -51,17 +55,24 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView fileIconIV;
-        TextView fileNameTV;
-        TextView fileSizeTV;
-        AppCompatImageButton removeFileB;
+        final ImageView fileIconIV;
+        final TextView fileNameTV;
+        final TextView fileSizeTV;
+        final AppCompatImageButton showOptions;
+        final AdaptiveDropDown adaptiveDropDown;
 
+        final View removeB;
+        final View fastShareB;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             fileIconIV = itemView.findViewById(R.id.IV_FileChosenIcon);
             fileNameTV = itemView.findViewById(R.id.TV_FileChosenName);
             fileSizeTV = itemView.findViewById(R.id.TV_FileChosenSize);
-            removeFileB = itemView.findViewById(R.id.B_RemoveChosenFile);
+            showOptions = itemView.findViewById(R.id.B_ShowSelectedFileOptions);
+            adaptiveDropDown = new AdaptiveDropDown(itemView.getContext().getApplicationContext());
+
+            removeB = adaptiveDropDown.addItem(R.string.remove, R.drawable.icon_trash);
+            fastShareB = adaptiveDropDown.addItem(R.string.fast_share, R.drawable.share_icon);
         }
 
         public void setup(int pos) {
@@ -73,11 +84,18 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         }
 
         public void setFileListener(String uuid) {
-            removeFileB.setOnClickListener(button -> {
+            adaptiveDropDown.setAnchorView(showOptions);
+            removeB.setOnClickListener(v -> {
                 Intent serviceIntent = new Intent(itemView.getContext(), ServerService.class);
                 serviceIntent.setAction(Consts.ACTION_REMOVE_DOWNLOAD);
                 serviceIntent.putExtra(Consts.EXTRA_DOWNLOAD_UUID, uuid);
                 itemView.getContext().startService(serviceIntent);
+                adaptiveDropDown.dismiss();
+            });
+
+            fastShareB.setOnClickListener(v -> {
+                Toast.makeText(itemView.getContext(), "TODO", Toast.LENGTH_SHORT).show();
+                adaptiveDropDown.dismiss();
             });
         }
 

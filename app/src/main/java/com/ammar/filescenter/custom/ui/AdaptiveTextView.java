@@ -47,23 +47,36 @@ public class AdaptiveTextView extends androidx.appcompat.widget.AppCompatTextVie
     }
 
 
-    int darkModeColor;
-    int lightModeColor;
+    private int darkModeColor;
+    private int lightModeColor;
+    private boolean modifyDrawableColor;
+
     private void init(@Nullable AttributeSet attrs) {
         TypedArray arr = getContext().obtainStyledAttributes(attrs, R.styleable.AdaptiveTextView);
         darkModeColor = arr.getColor(R.styleable.AdaptiveTextView_darkModeColor, Color.rgb(220, 220, 220));
         lightModeColor = arr.getColor(R.styleable.AdaptiveTextView_lightModeColor, Color.rgb(1, 1, 1));
+        modifyDrawableColor = arr.getBoolean(R.styleable.AdaptiveTextView_modifyDrawableColors, false);
         arr.recycle();
+    }
+
+    public void setModifyDrawableColor(boolean modify) {
+        modifyDrawableColor = modify;
     }
 
     public void setDark(boolean dark) {
         setTextColor( dark ? darkModeColor : lightModeColor );
+        changeDrawableColor(dark);
+    }
 
+    private void changeDrawableColor(boolean dark) {
+        if(!modifyDrawableColor) return;
         // for now we're only interested in the drawableStart
-        Drawable drawable = getCompoundDrawablesRelative()[0];
-        if( drawable != null ) {
-            drawable.mutate()
-                    .setTint(dark ? darkModeColor : lightModeColor);
+        Drawable[] drawables = getCompoundDrawablesRelative();
+        for( Drawable i : drawables ) {
+            if (i != null) {
+                i.mutate()
+                        .setTint(dark ? darkModeColor : lightModeColor);
+            }
         }
     }
 }

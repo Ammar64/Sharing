@@ -3,5 +3,6 @@
     <declare-styleable name="AdaptiveTextView">
         <attr name="darkModeColor" format="color" />
         <attr name="lightModeColor" format="color" />
+        <attr name="modifyDrawableColors" format="boolean" />
     </declare-styleable>
 </resources>

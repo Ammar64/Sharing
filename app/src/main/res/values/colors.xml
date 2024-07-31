@@ -24,6 +24,8 @@
 
     <color name="popupLightBG">#EFEFEF</color>
     <color name="popupDarkBG">#1C1C1C</color>
+    <color name="popupDarkerBG">#101010</color>
+
 
     <color name="dialogColorLight">#EFEFEF</color>
     <color name="dialogColorDark">#1C1C1C</color>

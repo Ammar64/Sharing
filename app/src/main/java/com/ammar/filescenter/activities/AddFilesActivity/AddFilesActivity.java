@@ -5,6 +5,7 @@ import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMod
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -53,8 +54,6 @@ public class AddFilesActivity extends AppCompatActivity {
     }
 
     private void initItems() {
-        ArrayList<File> filesList = new ArrayList<>();
-        Utils.findImagesRecursively(Environment.getExternalStorageDirectory().getAbsolutePath(), filesList);
 
         appBar = findViewById(R.id.TB_Toolbar);
         appBar.setNavigationIcon(R.drawable.icon_back);

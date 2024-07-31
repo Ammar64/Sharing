@@ -6,13 +6,14 @@
 #include <string.h>
 
 #define encodeTextToQR Java_com_ammar_filescenter_common_Utils_encodeTextToQR
-#define findImagesRecursively Java_com_ammar_filescenter_common_Utils_findImagesRecursively
+#define findFileTypeRecursively Java_com_ammar_filescenter_common_Utils_findFileTypeRecursively
 
 #define numelemnts(arr) sizeof(arr)/sizeof(arr[0])
 
-void findImagesRecursively_REAL(JNIEnv *env, const char* path, jobject filesArrayList, jclass FileClass, int depth);
+#include "files_exts.h"
+
+void findFileTypeRecursively_REAL(JNIEnv *env, const char* path, jobject filesArrayList, jclass FileClass, jint type, int depth);
 char *join_path(const char *path1, const char *path2);
-bool isFileExtinArray(const char *filename, const char **exts, int exts_len);
 
 jmethodID FileConstructor;
 jmethodID ArrayListAdd;
@@ -53,10 +54,15 @@ JNIEXPORT jbyteArray JNICALL encodeTextToQR(JNIEnv *env, jobject thiz, jstring j
 }
 
 
-JNIEXPORT void JNICALL findImagesRecursively(JNIEnv *env, jobject thiz, jstring root, jobject filesArrayList) {
+JNIEXPORT void JNICALL findFileTypeRecursively(JNIEnv *env, jobject thiz, jstring root, jobject filesArrayList, jint type) {
     const char *path = (*env)->GetStringUTFChars(env, root, JNI_FALSE);
     jclass FileClass = (*env)->FindClass(env, "java/io/File");
-    findImagesRecursively_REAL(env, path, filesArrayList, FileClass, 0);
+    jclass ArrayList = (*env)->FindClass(env, "java/util/ArrayList");
+    
+    FileConstructor = (*env)->GetMethodID(env, FileClass, "<init>", "(Ljava/lang/String;)V");
+    ArrayListAdd = (*env)->GetMethodID(env, ArrayList, "add", "(Ljava/lang/Object;)Z");
+
+    findFileTypeRecursively_REAL(env, path, filesArrayList, FileClass, type, 0);
 }
 
 
@@ -64,20 +70,7 @@ int filter( const struct dirent *e ) {
     return strcmp(e->d_name, ".") && strcmp(e->d_name, "..");
 }
 
-void findImagesRecursively_REAL(JNIEnv *env, const char* path, jobject filesArrayList, jclass FileClass, int depth) {
-    const char *image_exts[] = {
-        "png",
-        "jpg",
-        "jpeg",
-        "webp",
-        "gif",
-        "bmp",
-        "apng",
-        "avif",
-        "tiff",
-        "ico",
-        "cfg"
-    };
+void findFileTypeRecursively_REAL(JNIEnv *env, const char* path, jobject filesArrayList, jclass FileClass, jint type, int depth) {
 
     struct dirent **files_list;
     int size = scandir(path, &files_list, filter, alphasort);
@@ -85,25 +78,31 @@ void findImagesRecursively_REAL(JNIEnv *env, const char* path, jobject filesArra
     
     for( int i = 0 ; i < size ; i++ ) {
         struct dirent *file = files_list[i];
-        __android_log_print(ANDROID_LOG_DEBUG, "DIRLOG", "DIR: %s\n", file->d_name);
         switch (file->d_type) {
             case DT_DIR: {
                 char *full_dir_path = join_path(path, file->d_name);
+                if( full_dir_path == NULL ) return;
+
                 if( depth < 3 ) {
-                    findImagesRecursively_REAL(env, full_dir_path, filesArrayList, FileClass, depth+1);
+                    findFileTypeRecursively_REAL(env, full_dir_path, filesArrayList, FileClass, type, depth+1);
                 }
                 free(full_dir_path); // join_path uses malloc so we have to free
             }
                 break;
-            case DT_REG:
-                if( isFileExtinArray(file->d_name, image_exts, numelemnts(image_exts)) ) {
+            case DT_REG: {
+                int size;
+                char **file_exts = getFileExtsForType(type, &size);
+
+                if( isFileExtinArray(file->d_name, file_exts, size ) ) {
                     char *full_img_path = join_path(path, file->d_name);
-                    
+                    if( full_img_path == NULL ) return;
+
                     jobject fileObject = (*env)->NewObject(env, FileClass, FileConstructor, (*env)->NewStringUTF(env, full_img_path));
                     (*env)->CallBooleanMethod(env, filesArrayList, ArrayListAdd, fileObject);
 
                     free(full_img_path); // join_path uses malloc so we have to free
                 }
+            }
                 break;
             default:
                 break;
@@ -119,34 +118,16 @@ char *join_path(const char *path1, const char *path2) {
     int path1_len = strlen(path1);
     int path2_len = strnlen(path2, 256);
     char *full_dir_path = malloc(sizeof(char) * (path1_len + path2_len + 2));
+    if( full_dir_path == NULL ) return NULL;
+
     memcpy(full_dir_path, path1, path1_len + 1);
 
     if( full_dir_path[path1_len-1] != '/' ) {
         strcat(full_dir_path, "/");
         full_dir_path = realloc(full_dir_path, sizeof(char) * (path1_len + path2_len + 1));
+        if( full_dir_path == NULL ) return NULL;
     }
 
     strcat(full_dir_path, path2);
     return full_dir_path;
-}
-
-bool isFileExtinArray(const char *filename, const char **exts, int exts_len) {
-    int dotIndex = -1;
-    const char *s;
-    for (s = filename; *s; ++s){
-        if( *s == '.' ) {
-            dotIndex = s - filename + 1;
-        }
-    }
-    int size = (s - filename);
-
-    if( dotIndex == size ||
-        dotIndex == -1  ) return false; // safety first
-
-    const char *ext = filename + dotIndex;
-
-    for(int i = 0; i < exts_len ; i++) {
-        if( !strcmp(ext, exts[i]) ) return true;
-    }
-    return false;
 }

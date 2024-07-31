@@ -221,7 +221,13 @@ public class Utils {
 
 
     public static native byte[] encodeTextToQR(String text);
-    public static native void findImagesRecursively(String root, ArrayList<File> files);
+
+
+    public static final int FILE_TYPE_IMAGE = 0;
+    public static final int FILE_TYPE_VIDEO = 1;
+    public static final int FILE_TYPE_AUDIO = 2;
+    public static final int FILE_TYPE_DOCUMENT = 3;
+    public static native void findFileTypeRecursively(String root, ArrayList<File> files, int type);
 
     public static Bitmap QrCodeArrayToBitmap(byte[] qrCodeBytes) {
         int qrColor;

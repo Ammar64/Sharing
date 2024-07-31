@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.21)
 
 # We're use C not C++
 # set(CMAKE_CXX_STANDARD 11)
@@ -10,6 +10,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/qrcodegen)
 project("filescenter")
 
 add_library(nativeutils SHARED 
-    utils.c)
+    utils.c
+    files_exts.c)
 
 target_link_libraries(nativeutils PRIVATE qrcodegen log)

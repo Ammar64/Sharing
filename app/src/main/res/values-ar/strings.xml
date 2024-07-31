@@ -101,4 +101,6 @@
     <string name="show_drop_down">أظهر النافذة المنبثقة</string>
     <string name="back">Back</string>
     <string name="no_web_browser_found">لم يتم العثور على متصفح</string>
+    <string name="remove">Remove</string>
+    <string name="fast_share" />
 </resources>

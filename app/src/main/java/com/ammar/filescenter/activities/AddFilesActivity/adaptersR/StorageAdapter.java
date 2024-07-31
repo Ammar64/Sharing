@@ -35,7 +35,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Stack;
@@ -100,7 +99,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 scrollView.setPadding(0, 24, 0, 24);
 
 
-                return new FileTypesHolder(scrollView);
+                return new FileTypesHolder(scrollView, this);
             case TYPE_DIR:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_directory, parent, false);
                 return new DirectoryViewHolder(view);
@@ -184,14 +183,17 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else {
             act.setTitle(dir.getName());
         }
+
         //act.recyclerView.startLayoutAnimation();
     }
 
-    private void viewImages() {
-        final int maxDepth = 2;
-        LinkedList<File> images = new LinkedList<>();
-        int depth = 0;
-
+    private void viewFileType(int fileType) {
+        ArrayList<File> filesList = new ArrayList<>();
+        Utils.findFileTypeRecursively(Environment.getExternalStorageDirectory().getAbsolutePath(), filesList, fileType);
+        currentDir = null;
+        displayedFiles = filesList.toArray(new File[0]);
+        lastDirIndex = -1;
+        filesChanged();
     }
 
 
@@ -201,7 +203,9 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
     public void goBack() {
-        if (currentDir.compareTo(internalStorage) != 0) {
+        if( currentDir == null ) {
+            viewDirectory(internalStorage);
+        } else if (currentDir.compareTo(internalStorage) != 0) {
             viewDirectory(currentDir.getParentFile(), true);
         } else {
             act.setResult(Activity.RESULT_CANCELED);
@@ -312,7 +316,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private static class FileTypesHolder extends RecyclerView.ViewHolder {
-        public FileTypesHolder(@NonNull HorizontalScrollView itemView) {
+        public FileTypesHolder(@NonNull HorizontalScrollView itemView, StorageAdapter adapter) {
             super(itemView);
             LinearLayout layout = new LinearLayout(itemView.getContext());
             layout.setOrientation(LinearLayout.HORIZONTAL);
@@ -325,16 +329,20 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                     }),
                     new FileType(R.string.images, R.drawable.icon_image, (view) -> {
-
+                        adapter.viewFileType(Utils.FILE_TYPE_IMAGE);
+                        adapter.act.appBar.setTitle(R.string.images);
                     }),
                     new FileType(R.string.videos, R.drawable.icon_video, (view) -> {
-
+                        adapter.viewFileType(Utils.FILE_TYPE_VIDEO);
+                        adapter.act.appBar.setTitle(R.string.videos);
                     }),
                     new FileType(R.string.audio, R.drawable.icon_audio, (view) -> {
-
+                        adapter.viewFileType(Utils.FILE_TYPE_AUDIO);
+                        adapter.act.appBar.setTitle(R.string.audio);
                     }),
                     new FileType(R.string.documents, R.drawable.icon_document, (view) -> {
-
+                        adapter.viewFileType(Utils.FILE_TYPE_DOCUMENT);
+                        adapter.act.appBar.setTitle(R.string.documents);
                     })
             );
 
