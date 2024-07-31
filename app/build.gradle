@@ -10,8 +10,8 @@ android {
         applicationId "com.ammar.filescenter"
         minSdk 21
         targetSdk 34
-        versionCode 3
-        versionName "1.2"
+        versionCode 13
+        versionName "1.3-alpha1"
 
         vectorDrawables.useSupportLibrary = true
         externalNativeBuild {
