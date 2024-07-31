@@ -195,7 +195,8 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         ArrayList<File> filesList = new ArrayList<>();
         Utils.findFileTypeRecursively(Environment.getExternalStorageDirectory().getAbsolutePath(), filesList, fileType);
         currentDir = null;
-        displayedFiles = filesList.toArray(new File[0]);
+        this.files = filesList.toArray(new File[0]);
+        this.displayedFiles = files;
         lastDirIndex = -1;
         filesChanged();
     }
