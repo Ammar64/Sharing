@@ -97,8 +97,8 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 HorizontalScrollView scrollView = new HorizontalScrollView(parent.getContext());
                 scrollView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 scrollView.setPadding(0, 24, 0, 24);
-
-
+                scrollView.setVerticalScrollBarEnabled(false);
+                scrollView.setHorizontalScrollBarEnabled(false);
                 return new FileTypesHolder(scrollView, this);
             case TYPE_DIR:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_directory, parent, false);
@@ -179,9 +179,9 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         filesChanged();
         lastPosition = -1; // to animate all
         if (internalStorage.compareTo(dir) == 0) {
-            act.setTitle(R.string.internal_storage);
+            act.appBar.setTitle(R.string.internal_storage);
         } else {
-            act.setTitle(dir.getName());
+            act.appBar.setTitle(dir.getName());
         }
 
         //act.recyclerView.startLayoutAnimation();
@@ -200,7 +200,6 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private void viewDirectory(File dir) {
         viewDirectory(dir, false);
     }
-
 
     public void goBack() {
         if( currentDir == null ) {

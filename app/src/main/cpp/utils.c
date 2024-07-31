@@ -1,10 +1,13 @@
-#include <jni.h>
 #include <qrcode.h>
-#include <android/log.h>
+
 #include <dirent.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include <jni.h>
+#include <android/log.h>
 #define encodeTextToQR Java_com_ammar_filescenter_common_Utils_encodeTextToQR
 #define findFileTypeRecursively Java_com_ammar_filescenter_common_Utils_findFileTypeRecursively
 
@@ -66,14 +69,31 @@ JNIEXPORT void JNICALL findFileTypeRecursively(JNIEnv *env, jobject thiz, jstrin
 }
 
 
+
+
 int filter( const struct dirent *e ) {
     return strcmp(e->d_name, ".") && strcmp(e->d_name, "..");
 }
 
-void findFileTypeRecursively_REAL(JNIEnv *env, const char* path, jobject filesArrayList, jclass FileClass, jint type, int depth) {
+int sortBylastModified(const struct dirent **a, const struct dirent **b) {
+    int rvalue;
+    struct stat a_stat, b_stat;
+    rvalue = stat((*a)->d_name, &a_stat);
+    if( rvalue ) {
+        return 0; // error
+    }
+    rvalue = stat((*b)->d_name, &b_stat);
+    if( rvalue ) {
+        return 0; // error
+    }
 
+    return a_stat.st_mtime - b_stat.st_mtime;
+}
+
+void findFileTypeRecursively_REAL(JNIEnv *env, const char* path, jobject filesArrayList, jclass FileClass, jint type, int depth) {
+    chdir(path);
     struct dirent **files_list;
-    int size = scandir(path, &files_list, filter, alphasort);
+    int size = scandir(path, &files_list, filter, sortBylastModified);
     if( size < 0 ) return;
     
     for( int i = 0 ; i < size ; i++ ) {
