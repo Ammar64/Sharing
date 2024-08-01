@@ -25,6 +25,10 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class FileUtils {
     private FileUtils() {
@@ -162,6 +166,22 @@ public class FileUtils {
             }
         }
         return result;
+    }
+
+    public static byte[] readWholeFile(File file) throws IOException {
+        long size = file.length();
+        try( FileInputStream in = new FileInputStream(file)) {
+            byte[] data = new byte[(int) size];
+            in.read(data);
+            return data;
+        }
+    }
+
+    public static void overwriteFile(File file, byte[] data) throws IOException {
+        file.createNewFile();
+        try(FileOutputStream out = new FileOutputStream(file)) {
+            out.write(data);
+        }
     }
 
 }

@@ -4,7 +4,6 @@ import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMod
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 
@@ -19,11 +18,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddFilesActivity.adaptersR.StorageAdapter;
 import com.ammar.filescenter.common.Consts;
+import com.ammar.filescenter.common.FileUtils;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.custom.ui.AdaptiveDropDown;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AddFilesActivity extends AppCompatActivity {
     public Toolbar appBar;
@@ -34,6 +41,9 @@ public class AddFilesActivity extends AppCompatActivity {
     private StorageAdapter storageAdapter;
     public AppCompatTextView folderEmptyTV;
     private AdaptiveDropDown dropDownMenu;
+
+    // file where we store recently selected files
+    private File recentsFile;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +64,7 @@ public class AddFilesActivity extends AppCompatActivity {
     }
 
     private void initItems() {
+        recentsFile = new File(getFilesDir(), "recent_files.json");
 
         appBar = findViewById(R.id.TB_Toolbar);
         appBar.setNavigationIcon(R.drawable.icon_back);
@@ -81,6 +92,7 @@ public class AddFilesActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         storageAdapter = new StorageAdapter(this);
         recyclerView.setAdapter(storageAdapter);
+
     }
 
     private void setListeners() {
@@ -89,7 +101,11 @@ public class AddFilesActivity extends AppCompatActivity {
             if (selectedFilesPath.isEmpty()) {
                 setResult(RESULT_CANCELED);
                 finish();
+                return;
             }
+
+            new Thread(() -> saveFilesToRecent( selectedFilesPath.toArray(new String[0]) )).start();
+
             Intent intent = new Intent(Consts.ACTION_ADD_FILES);
             intent.putStringArrayListExtra(Consts.EXTRA_FILES_PATH, selectedFilesPath);
             setResult(RESULT_OK, intent);
@@ -100,5 +116,55 @@ public class AddFilesActivity extends AppCompatActivity {
         });
 
     }
+
+    public File getRecentsFile() {
+        return recentsFile;
+    }
+    private void saveFilesToRecent(String[] newRecentFiles) {
+        try {
+            JSONArray selectedFilesJson;
+            // check if the file exists then read already stored recent files info
+            if( recentsFile.exists() ) {
+                byte[] data = FileUtils.readWholeFile(recentsFile);
+                selectedFilesJson = new JSONArray(new String(data));
+
+                // remove files paths that already exists
+                for( int i = 0 ; i < selectedFilesJson.length() ; i++ ) {
+                    JSONObject fileObject = selectedFilesJson.getJSONObject(i);
+                    if( fileObject.isNull("path") ) continue;
+                    String path = fileObject.getString("path");
+                    for( int j = 0 ; j < newRecentFiles.length; j++ ) {
+                        if( path.equals(newRecentFiles[j]) ) {
+                            newRecentFiles[j] = null;
+                            fileObject.put("lastSelectedTime", System.currentTimeMillis());
+                        }
+                    }
+                }
+            } else {
+                selectedFilesJson = new JSONArray();
+            }
+
+
+            for (String i : newRecentFiles) {
+                if( i != null ) {
+                    JSONObject selectedFileJson = new JSONObject();
+                    selectedFileJson.put("path", i);
+                    selectedFileJson.put("lastSelectedTime", System.currentTimeMillis());
+                    selectedFilesJson.put(selectedFileJson);
+                }
+            }
+
+            String logJ = selectedFilesJson.toString();
+            byte[] recentFilesJsonBytes = logJ.getBytes(StandardCharsets.UTF_8);
+
+            FileUtils.overwriteFile(recentsFile, recentFilesJsonBytes);
+        } catch (JSONException e) {
+            Utils.showErrorDialog("saveFilesToRecent(). JSONException:", e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }

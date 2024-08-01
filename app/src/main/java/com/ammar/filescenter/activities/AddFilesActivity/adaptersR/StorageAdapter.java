@@ -11,7 +11,10 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
+import android.view.animation.TranslateAnimation;
 import android.widget.CheckBox;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -34,7 +37,12 @@ import com.ammar.filescenter.common.FileUtils;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.custom.ui.AdaptiveTextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -118,33 +126,23 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         throw new RuntimeException("No such view type");
     }
 
-    private int lastPosition = -1;
-
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int positionR) {
         int type = getItemViewType(positionR);
         int position = positionR - 2;
-        boolean animate = false;
         switch (type) {
             case TYPE_DIR:
                 DirectoryViewHolder dirHolder = (DirectoryViewHolder) holder;
                 dirHolder.setup(displayedFiles[position], (view) -> viewDirectory(displayedFiles[position]));
-                animate = true;
                 break;
             case TYPE_FILE:
                 // we might have added an empty space
                 int filePos = (lastDirIndex & 1) == 0 ? position - 1 : position;
                 FileViewHolder fileHolder = (FileViewHolder) holder;
                 fileHolder.setup(this, filePos);
-                animate = true;
                 break;
             default:
                 break;
-        }
-        // animate when scroll down only
-        if (animate && position > lastPosition) {
-            holder.itemView.startAnimation(AnimationUtils.loadAnimation(act, R.anim.appear));
-            lastPosition = holder.getBindingAdapterPosition();
         }
     }
 
@@ -166,10 +164,14 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.files = listedFiles;
         this.displayedFiles = files;
 
-        if (!pop)
+        Animation anim;
+        if (!pop) {
             recyclerViewStates.push(act.recyclerView.getLayoutManager().onSaveInstanceState());
-        else
+            anim = AnimationUtils.loadAnimation(act, R.anim.to_up);
+        } else {
             act.recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewStates.pop());
+            anim = AnimationUtils.loadAnimation(act, R.anim.to_down);
+        }
 
         sortFiles(this.files, SORT_NAME);
         lastDirIndex = getLastDirectoryIndex();
@@ -181,14 +183,13 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
         filesChanged();
-        lastPosition = -1; // to animate all
         if (internalStorage.compareTo(dir) == 0) {
             act.appBar.setTitle(R.string.internal_storage);
         } else {
             act.appBar.setTitle(dir.getName());
         }
 
-        //act.recyclerView.startLayoutAnimation();
+        act.recyclerView.startAnimation(anim);
     }
 
     private void viewFileType(int fileType) {
@@ -201,6 +202,48 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         filesChanged();
     }
 
+    private void viewRecentFiles() {
+        class RecentFile {
+            final File file;
+            final long lastSelected;
+
+            public RecentFile(File file, long lastSelected) {
+                this.file = file;
+                this.lastSelected = lastSelected;
+            }
+        }
+
+        new Thread(() -> {
+            try {
+                JSONArray jsonArray = new JSONArray(new String(FileUtils.readWholeFile(act.getRecentsFile())));
+
+                RecentFile[] recentFiles = new RecentFile[jsonArray.length()];
+                for( int i = 0 ; i < jsonArray.length() ; i++ ) {
+                    JSONObject fileObject = jsonArray.getJSONObject(i);
+                    recentFiles[i] = new RecentFile(
+                            new File(fileObject.getString("path")),
+                            fileObject.getLong("lastSelectedTime")
+                    );
+                }
+                Arrays.sort(recentFiles, (l, r) -> Long.compare(r.lastSelected, l.lastSelected));
+
+                this.files = new File[recentFiles.length];
+                for( int i = 0 ; i < recentFiles.length ; i++ ) {
+                    this.files[i] = recentFiles[i].file;
+                }
+                this.displayedFiles = files;
+
+                currentDir = null;
+                lastDirIndex = -1;
+
+                act.runOnUiThread(this::filesChanged);
+            } catch (JSONException e) {
+                Utils.showErrorDialog("StorageAdapter.viewRecentFiles(). JSONException:", e.getMessage());
+            } catch (IOException e) {
+                Utils.showErrorDialog("StorageAdapter.viewRecentFiles(). IOException:", e.getMessage());
+            }
+        }).start();
+    }
 
     private void viewDirectory(File dir) {
         viewDirectory(dir, false);
@@ -345,6 +388,9 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 videos.setSelected(false);
                 audio.setSelected(false);
                 docs.setSelected(false);
+
+                adapter.act.appBar.setTitle(R.string.recent);
+                adapter.viewRecentFiles();
             });
             images.setOnClick((view) -> {
                 recent.setSelected(false);
