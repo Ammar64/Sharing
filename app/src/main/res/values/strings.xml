@@ -49,6 +49,9 @@
     <string name="languages_desc">System, العربية, English, German</string>
     <string name="system_default_lang">System default</string>
 
+    <string name="debug_mode">Debug Mode</string>
+    <string name="debug_mode_desc">displays some errors it when occurs</string>
+
     <!-- Activity Add Apps   -->
     <string name="loading_apps">Loading Apps…</string>
     <string name="select_apps">Select Apps</string>

@@ -51,6 +51,9 @@
     <string name="languages_desc">النظام, العربية, English, German</string>
     <string name="system_default_lang">لغة النظام</string>
 
+    <string name="debug_mode">وضع تصحيح الأخطاء</string>
+    <string name="debug_mode_desc">اعرض بعض الأخطاء عند حدثها</string>
+
     <!-- Activity Add Apps   -->
     <string name="loading_apps">جار تحميل التطبيقات…</string>
     <string name="select_apps">حدد تطبيقات</string>

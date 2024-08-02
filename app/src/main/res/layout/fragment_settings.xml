@@ -182,7 +182,7 @@
                     android:id="@+id/TV_SettingsDebugMode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DebugMode"
+                    android:text="@string/debug_mode"
                     android:textSize="@dimen/settings_big_text"
                     app:lightModeColor="#fff" />
 
@@ -191,7 +191,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/TV_SettingsDebugMode"
-                    android:text="displays errors when happen"
+                    android:text="@string/debug_mode_desc"
                     android:textSize="@dimen/small_text"
                     app:lightModeColor="#fff" />
 
