@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if (FilesCenterApp.isDebuggable())
+        if (settingsPref.getBoolean(Consts.PREF_FIELD_DEBUG_MODE, false))
             Data.alertNotifier.observe(this, info -> {
                 errorDialogAD.setTitle(info.getString("title"));
                 errorDialogAD.setMessage(info.getString("message"));

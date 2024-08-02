@@ -37,6 +37,7 @@ public final class Consts {
     public static final String PREF_FIELD_IS_UPLOAD_DISABLED = "UPLOAD_DISABLE";
     public static final String PREF_FIELD_ARE_USER_BLOCKED = "USERS_BLOCK";
     public static final String PREF_FIELD_LANG = "LANGUAGE";
+    public static final String PREF_FIELD_DEBUG_MODE = "DEBUG_MODE";
 
     public static final File filesCenterDir = new File(Environment.getExternalStorageDirectory(), "Files-Center");
     public static final File appsDir = new File(filesCenterDir, "Apps");

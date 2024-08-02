@@ -388,14 +388,17 @@ public class Utils {
                 || mimeType.equals("application/vnd.ms-acces");
     }
 
-    public static void createAppDirs() {
-        assert Consts.filesCenterDir.mkdirs();
-        assert Consts.appsDir.mkdir();
-        assert Consts.imagesDir.mkdir();
-        assert Consts.audioDir.mkdir();
-        assert Consts.filesDir.mkdir();
-        assert Consts.videosDir.mkdir();
-        assert Consts.documentsDir.mkdir();
+    public static void createAppDirs() throws IOException {
+        boolean dirsMade = true;
+        dirsMade &= Consts.filesCenterDir.mkdirs();
+        dirsMade &= Consts.appsDir.mkdir();
+        dirsMade &= Consts.imagesDir.mkdir();
+        dirsMade &= Consts.audioDir.mkdir();
+        dirsMade &= Consts.filesDir.mkdir();
+        dirsMade &= Consts.videosDir.mkdir();
+        dirsMade &= Consts.documentsDir.mkdir();
+
+        if(!dirsMade) throw new IOException("Failed to make app directories");
     }
 
     public static void setLocale(Context context, String languageCode) {

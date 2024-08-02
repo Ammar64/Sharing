@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,8 +27,10 @@ public class SettingsFragment extends Fragment {
 
     private CardView uploadDisableCV;
     private CardView usersBlockCV;
+    private CardView debugModeCV;
     private SwitchButton uploadDisableS;
     private SwitchButton usersBlockS;
+    private SwitchButton debugModeS;
 
     private RelativeLayout languageRL;
     private AlertDialog languageAD;
@@ -47,12 +50,15 @@ public class SettingsFragment extends Fragment {
 
         uploadDisableCV = v.findViewById(R.id.CV_UploadDisable);
         usersBlockCV = v.findViewById(R.id.CV_UserBlock);
+        debugModeCV = v.findViewById(R.id.CV_DebugMode);
 
         uploadDisableS = v.findViewById(R.id.SC_UploadAllowToggle);
         uploadDisableS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_IS_UPLOAD_DISABLED, false));
-
         usersBlockS = v.findViewById(R.id.SC_UsersBlockToggle);
         usersBlockS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_ARE_USER_BLOCKED, false));
+
+        debugModeS = v.findViewById(R.id.SC_DebugModeToggle);
+        debugModeS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_DEBUG_MODE, false));
 
         languageRL = v.findViewById(R.id.RL_SettingsLanguage);
 
@@ -86,6 +92,7 @@ public class SettingsFragment extends Fragment {
         uploadDisableS.setOnCheckedChangeListener(((view, isChecked) -> {
             if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_UPLOAD_DISABLED, isChecked).commit()) {
                 Log.e("MYLOG", "Failed to change dark mode");
+                uploadDisableS.setChecked(!isChecked);
             }
         }));
 
@@ -96,9 +103,21 @@ public class SettingsFragment extends Fragment {
         usersBlockS.setOnCheckedChangeListener(((view, isChecked) -> {
             if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_ARE_USER_BLOCKED, isChecked).commit()) {
                 Log.e("MYLOG", "Failed to change dark mode");
+                usersBlockS.setChecked(!isChecked);
             }
         }));
 
+        debugModeCV.setOnClickListener((view) -> {
+            debugModeS.toggle();
+        });
+
+        debugModeS.setOnCheckedChangeListener((view, isChecked) -> {
+            if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_DEBUG_MODE, isChecked).commit()) {
+                Toast.makeText(requireContext(), "Debug mode failed to toggle", Toast.LENGTH_SHORT).show();
+                debugModeS.setChecked(!isChecked);
+            }
+            requireActivity().recreate();
+        });
         languageRL.setOnClickListener(view -> {
             // Dialog is dark but text is also dark that's the problem
 //            Window window = languageAD.getWindow();

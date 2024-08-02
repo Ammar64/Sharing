@@ -16,6 +16,7 @@ import java.net.SocketException;
 import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -59,10 +60,10 @@ public class Request {
             Utils.showErrorDialog("Request.readSocket(). NullPointerException:", e.getMessage());
             return false;
         } catch (BadRequestException e) {
-            Utils.showErrorDialog("Request.readSocket. BadRequestException:", e.getMessage());
+            //Utils.showErrorDialog("Request.readSocket. BadRequestException:", e.getMessage());
             return false;
         } catch (Exception e) {
-            Utils.showErrorDialog("Request.readSocket. Exception:", e.getMessage());
+            //Utils.showErrorDialog("Request.readSocket. Exception:", e.getMessage());
             return false;
         }
     }
@@ -80,7 +81,7 @@ public class Request {
         }
 
         this.method = st.nextToken();
-        if(!Arrays.asList("GET", "POST").contains( this.method ) ) throw new BadRequestException("Method not supported");
+        if(!Arrays.asList("GET", "POST").contains( this.method ) ) throw new BadRequestException("Method not supported\n Method requested: " + this.method);
         if (!st.hasMoreTokens()) {
             throw new RuntimeException("BAD REQUEST: Missing URI. Usage: GET /example/file.html");
         }

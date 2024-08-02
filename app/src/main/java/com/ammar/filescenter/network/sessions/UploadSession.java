@@ -62,18 +62,20 @@ public class UploadSession extends HTTPSession {
             Utils.showErrorDialog("UploadSession.POST(). UnsupportedEncodingException", e.getMessage());
             res.setStatusCode(400);
             res.sendResponse();
-        } catch (IOException ignore) {
+        } catch (IOException e) {
+            Utils.showErrorDialog("ClientHandler.POST. IOException: ", e.getMessage());
         }
     }
-    private int StoreFile(Request request, String fullFileName, long size) {
+
+    private int StoreFile(Request request, String fullFileName, long size) throws IOException {
         InputStream in = request.getClientInput();
         File upload_dir = Utils.getUploadDir(fullFileName);
-        if (!upload_dir.exists()) {
-            Utils.createAppDirs();
-        }
-        File upload_file = Utils.createNewFile(upload_dir, fullFileName);
-        ProgressManager progressManager = new ProgressManager(upload_file, request.getClientSocket(),size, user, ProgressManager.OP.UPLOAD);
-        progressManager.setDisplayName(upload_file.getName());
+            if (!upload_dir.exists()) {
+                Utils.createAppDirs();
+            }
+            File upload_file = Utils.createNewFile(upload_dir, fullFileName);
+            ProgressManager progressManager = new ProgressManager(upload_file, request.getClientSocket(), size, user, ProgressManager.OP.UPLOAD);
+            progressManager.setDisplayName(upload_file.getName());
         try {
             FileOutputStream out = new FileOutputStream(upload_file);
             long totalBytesRead = 0;
@@ -93,6 +95,11 @@ public class UploadSession extends HTTPSession {
         } catch (IOException e) {
             Utils.showErrorDialog("ClientHandler.StoreFile. IOException: ", e.getMessage());
             progressManager.reportStopped();
+            try {
+                request.getClientSocket().close();
+            } catch (IOException ex) {
+                Utils.showErrorDialog("ClientHandler.StoreFile. IOException thrown by socket close: ", ex.getMessage());
+            }
             return 500;
         }
     }
