@@ -49,14 +49,13 @@ public class AdaptiveDropDown extends PopupWindow {
 
     public AdaptiveDropDown(Context act) {
         this.context = act;
-        // default width/height
-        setWidth((int) Utils.dpToPx(170));
+        setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         setOutsideTouchable(true);
 
         layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setLayoutParams(new LinearLayout.LayoutParams((int) Utils.dpToPx(170), ViewGroup.LayoutParams.WRAP_CONTENT));
+        layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(darkMode ? R.color.popupDarkerBG : R.color.popupLightBG)));
         setElevation(24);
         setContentView(layout);
@@ -87,6 +86,8 @@ public class AdaptiveDropDown extends PopupWindow {
 
     public View addItem(String text, Drawable icon) {
         AdaptiveTextView view = buildItem(text);
+        int size = (int) Utils.dpToPx(30);
+        icon.setBounds(0, 0, size, size);
         view.setCompoundDrawablesRelative(icon, null, null, null);
         view.setDark(darkMode);
         layout.addView(view);
@@ -105,7 +106,7 @@ public class AdaptiveDropDown extends PopupWindow {
         textView.setPadding(paddingH, paddingV, paddingH, paddingV);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
         textView.setText(text);
-        textView.setCompoundDrawablePadding((int) Utils.dpToPx(12)); // in case we wanted padding
+        textView.setCompoundDrawablePadding((int) Utils.dpToPx(18)); // in case we wanted padding
         textView.setModifyDrawableColor(true);
         return textView;
     }

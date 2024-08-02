@@ -1,7 +1,6 @@
 package com.ammar.filescenter.activities.MainActivity.adaptersR;
 
 
-import android.app.Application;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
@@ -69,7 +67,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
             fileNameTV = itemView.findViewById(R.id.TV_FileChosenName);
             fileSizeTV = itemView.findViewById(R.id.TV_FileChosenSize);
             showOptions = itemView.findViewById(R.id.B_ShowSelectedFileOptions);
-            adaptiveDropDown = new AdaptiveDropDown(itemView.getContext().getApplicationContext());
+            adaptiveDropDown = new AdaptiveDropDown(itemView.getContext());
 
             removeB = adaptiveDropDown.addItem(R.string.remove, R.drawable.icon_trash);
             fastShareB = adaptiveDropDown.addItem(R.string.fast_share, R.drawable.share_icon);

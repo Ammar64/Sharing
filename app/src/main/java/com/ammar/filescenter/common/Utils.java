@@ -389,7 +389,7 @@ public class Utils {
     }
 
     public static void createAppDirs() {
-        assert Consts.filesCenterDir.mkdir();
+        assert Consts.filesCenterDir.mkdirs();
         assert Consts.appsDir.mkdir();
         assert Consts.imagesDir.mkdir();
         assert Consts.audioDir.mkdir();

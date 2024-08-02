@@ -48,6 +48,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.ApksInstallerActivity.ApksInstallerActivity;
+import com.ammar.filescenter.activities.TutorialActivity.TutorialActivity;
 import com.ammar.filescenter.application.FilesCenterApp;
 import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.common.Data;
@@ -69,10 +70,9 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private View changeThemeMI;
     private View threeDotsMI;
-    private PopupWindow threeDotsPW;
     private View threeDotsMenuLayout;
-    private TextView tutorialTV;
-    private TextView apksInstallerTV;
+    private View tutorialTV;
+    private View apksInstallerTV;
     private FloatingActionButton serverButton;
     private ViewPager2 viewPager;
     private BottomAppBar bottomAppBar;
@@ -149,16 +149,11 @@ public class MainActivity extends AppCompatActivity {
         threeDotsMI = findViewById(R.id.MI_PopupMenu);
 
         // setup popup window
-        threeDotsPW = new PopupWindow(this);
-        threeDotsMenuLayout = LayoutInflater.from(this).inflate(R.layout.menu_main, null);
-        threeDotsPW.setContentView(threeDotsMenuLayout);
-        threeDotsPW.setWidth((int) Utils.dpToPx(170));
-        threeDotsPW.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-        threeDotsPW.setOutsideTouchable(true);
+        AdaptiveDropDown dropDown = new AdaptiveDropDown(this);
+        dropDown.setAnchorView(threeDotsMI);
 
-        tutorialTV = threeDotsMenuLayout.findViewById(R.id.TV_MenuMainTutorial);
-        apksInstallerTV = threeDotsMenuLayout.findViewById(R.id.TV_MainMenuApksInstaller);
-
+        tutorialTV = dropDown.addItem(R.string.tutorial, R.drawable.icon_tutorial);
+        apksInstallerTV = dropDown.addItem(R.string.apks_installer, R.drawable.icon_download);
 
         bottomAppBar = findViewById(R.id.BAB_BottomAppBar);
         bottomNavigationView = findViewById(R.id.BottomNavView);
@@ -216,11 +211,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        threeDotsMI.setOnClickListener((view) -> {
-            Log.d("MYLOG", "Popup window shown");
-            threeDotsPW.showAsDropDown(view);
-        });
-
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             private MenuItem prevMenuItem;
 
@@ -271,13 +261,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         tutorialTV.setOnClickListener((view) -> {
-            Uri tutorialWebsite = Uri.parse("https://ammar64.github.io/Files-Center/");
-            Intent tutorialIntent = new Intent(Intent.ACTION_VIEW, tutorialWebsite);
-            if( tutorialIntent.resolveActivity(getPackageManager()) != null ) {
-                startActivity(tutorialIntent);
-            } else {
-                Toast.makeText(this, R.string.no_web_browser_found, Toast.LENGTH_SHORT).show();
-            }
+            startActivity(new Intent(this, TutorialActivity.class));
         });
 
         apksInstallerTV.setOnClickListener((view) -> {
@@ -406,7 +390,6 @@ public class MainActivity extends AppCompatActivity {
         if (dark) {
             layout.setBackgroundResource(R.drawable.gradient_background_dark);
             DrawableCompat.setTint(toolbar.getOverflowIcon(), getResources().getColor(R.color.white));
-            threeDotsPW.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.popupDarkBG)));
             bottomAppBar.setBackgroundTint(ColorStateList.valueOf(getResources().getColor(R.color.bottomBarColorDark)));
 
             ColorStateList stateList = new ColorStateList(states, new int[]{ColorPrimary, getResources().getColor(R.color.text_color_light)});
@@ -418,7 +401,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             layout.setBackgroundResource(R.drawable.gradient_background_light);
             DrawableCompat.setTint(toolbar.getOverflowIcon(), getResources().getColor(R.color.black));
-            threeDotsPW.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.popupLightBG)));
 
             bottomAppBar.setBackgroundTint(ColorStateList.valueOf(getResources().getColor(R.color.bottomBarColorLight)));
 

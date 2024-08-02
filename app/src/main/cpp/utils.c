@@ -59,7 +59,7 @@ JNIEXPORT jbyteArray JNICALL encodeTextToQR(JNIEnv *env, jobject thiz, jstring j
 
 JNIEXPORT void JNICALL findFileTypeRecursively(JNIEnv *env, jobject thiz, jstring root, jobject filesArrayList, jint type) {
     const char *path = (*env)->GetStringUTFChars(env, root, JNI_FALSE);
-    jclass FileClass = (*env)->FindClass(env, "java/io/File");
+    jclass FileClass = (*env)->FindClass(env, "java/io/File"); // We pass this to findFileTypeRecursively_REAL as an arg because we can't rely on storing the class in a global variable
     jclass ArrayList = (*env)->FindClass(env, "java/util/ArrayList");
     
     FileConstructor = (*env)->GetMethodID(env, FileClass, "<init>", "(Ljava/lang/String;)V");
@@ -93,7 +93,7 @@ int sortBylastModified(const struct dirent **a, const struct dirent **b) {
 void findFileTypeRecursively_REAL(JNIEnv *env, const char* path, jobject filesArrayList, jclass FileClass, jint type, int depth) {
     chdir(path);
     struct dirent **files_list;
-    int size = scandir(path, &files_list, filter, sortBylastModified);
+    int size = scandir(path, &files_list, filter, NULL);
     if( size < 0 ) return;
     
     for( int i = 0 ; i < size ; i++ ) {

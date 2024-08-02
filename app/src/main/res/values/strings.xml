@@ -35,6 +35,7 @@
     <string name="warning_details">This app doesn\'t use https to transfer your files which make it vulnerable to man in the middle attacks.\nTo be safer for now I recommend activating a secured hotspot on this device and make sure the other wanted devices are the only devices connected to it.</string>
     <string name="dont_show_again">Don\'t show this message again</string>
 
+    <string name="fast_share">Fast share</string>
     <!-- Fragment Settings   -->
     <string name="toggle_dark_mode">Toggle dark mode</string>
 
@@ -100,7 +101,6 @@
     <string name="back">Back</string>
     <string name="no_web_browser_found">No web browser found</string>
     <string name="remove">Remove</string>
-    <string name="fast_share">Fast share</string>
 
     <string-array name="langs">
         <item>@string/system_default_lang</item>

@@ -36,6 +36,7 @@
     <string name="dont_show_again">لا تظهر هذه الرسالة مرة أخرى</string>
 
     <string name="connect_to_wifi_or_hotspot">الرجاء تفعيل نقطة اتصال أو الاتصال بشبكة واى-فاى</string>
+    <string name="fast_share">المشاركة السريعة</string>
 
     <!-- Fragment Settings   -->
     <string name="toggle_dark_mode">تشغيل الوضع الداكن</string>
@@ -101,6 +102,5 @@
     <string name="show_drop_down">أظهر النافذة المنبثقة</string>
     <string name="back">Back</string>
     <string name="no_web_browser_found">لم يتم العثور على متصفح</string>
-    <string name="remove">Remove</string>
-    <string name="fast_share" />
+    <string name="remove">إزالة</string>
 </resources>
