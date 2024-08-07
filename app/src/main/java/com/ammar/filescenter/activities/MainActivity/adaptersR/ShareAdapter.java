@@ -36,9 +36,9 @@ import com.ammar.filescenter.common.Data;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.custom.io.ProgressManager;
 import com.ammar.filescenter.custom.ui.AdaptiveTextView;
-import com.ammar.filescenter.services.ServerService;
-import com.ammar.filescenter.network.Server;
 import com.ammar.filescenter.models.User;
+import com.ammar.filescenter.network.Server;
+import com.ammar.filescenter.services.ServerService;
 
 import java.util.Locale;
 

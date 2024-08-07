@@ -3,7 +3,6 @@ package com.ammar.filescenter.network;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-
 import com.ammar.filescenter.custom.io.ProgressManager;
 import com.ammar.filescenter.custom.io.ProgressOutputStream;
 import com.ammar.filescenter.models.Sharable;

@@ -1,7 +1,5 @@
 package com.ammar.filescenter.models;
 
-import android.net.Uri;
-
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.network.Server;
 

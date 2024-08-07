@@ -21,10 +21,10 @@ import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.MainActivity.MainActivity;
 import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.common.Data;
+import com.ammar.filescenter.models.Sharable;
+import com.ammar.filescenter.models.SharableApp;
 import com.ammar.filescenter.models.User;
 import com.ammar.filescenter.network.Server;
-import com.ammar.filescenter.models.SharableApp;
-import com.ammar.filescenter.models.Sharable;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;

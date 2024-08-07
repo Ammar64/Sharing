@@ -1,17 +1,11 @@
 package com.ammar.filescenter.activities.MainActivity.adaptersR;
 
 
-import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMode;
-
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
