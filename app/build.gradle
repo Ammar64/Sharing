@@ -10,8 +10,6 @@ android {
         applicationId "com.ammar.filescenter"
         minSdk 21
         targetSdk 34
-        renderscriptTargetApi 34
-        renderscriptSupportModeEnabled true
         versionCode 15
         versionName "1.5"
 
