@@ -87,6 +87,9 @@
     <string name="package_installed_success">تم تثبيت الحزمة</string>
     <string name="failed">فشل</string>
 
+    <!-- Activity Fast Share -->
+    <string name="please_choose_a_file">رجاء شارك ملف</string>
+
     <!-- common   -->
     <string name="app_name">شارك</string>
     <string name="settings">الإعدادات</string>
@@ -107,4 +110,5 @@
     <string name="back">Back</string>
     <string name="no_web_browser_found">لم يتم العثور على متصفح</string>
     <string name="remove">إزالة</string>
+    <string name="something_went_wrong">لقد حدث خطأ ما!</string>
 </resources>

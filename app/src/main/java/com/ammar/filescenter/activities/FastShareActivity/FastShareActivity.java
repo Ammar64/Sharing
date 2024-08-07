@@ -47,9 +47,20 @@ public class FastShareActivity extends AppCompatActivity {
             Uri uri = intent.getData();
             if( uri == null )
                 uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
-            ((TextView) findViewById(R.id.TV_FastShareFileName)).setText(FileUtils.getFileName(getContentResolver(), uri));
+
+            String filename;
+            try {
+                filename = FileUtils.getFileName(getContentResolver(), uri);
+            } catch (Exception e) {
+                finishActivityWithMessage(R.string.please_choose_a_file);
+                return;
+            }
+
+            ((TextView) findViewById(R.id.TV_FastShareFileName)).setText(filename);
             server = new FastShareServer(this, uri);
-        } else finish();
+        } else {
+            finishActivityWithMessage(R.string.something_went_wrong);
+        }
     }
 
     private void finishActivityWithMessage(@StringRes int noDataAttached) {

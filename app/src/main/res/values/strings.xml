@@ -84,6 +84,10 @@
     <string name="extracting_done">Extracting done</string>
     <string name="package_installed_success">Package installed successfully</string>
     <string name="failed">Failed</string>
+
+    <!-- Activity Fast Share -->
+    <string name="please_choose_a_file">Please share a file</string>
+
     <!-- common   -->
     <string name="app_name">sharing</string>
     <string name="settings">Settings</string>
@@ -106,6 +110,7 @@
     <string name="no_web_browser_found">No web browser found</string>
     <string name="remove">Remove</string>
     <string name="no_data_attached">No data specified</string>
+    <string name="something_went_wrong">Something went wrong!</string>
 
 
     <string-array name="langs">
