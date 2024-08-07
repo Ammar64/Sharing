@@ -175,12 +175,9 @@ function requestAvailableDownloads() {
             newFileItem.appendChild(infoContainer);
             newFileItem.appendChild(colorfulLine);
 
-            if (e.type !== "file") {
-                newFileItemImg.style.display = "block"
-                newFileItemImg.src = "/get-icon/".concat(e.uuid);
-            } else {
-                newFileItemImg.style.display = "none"
-            }
+            newFileItemImg.src = "/get-icon/".concat(e.uuid);
+            newFileItemImg.style.display = "block"
+            
             newFileItemText.textContent = e.name.concat("     ").concat(!e.hasSplits ? `(${getFormattedFileSize(e.size)})` : '(splits)');
             downloads.appendChild(newFileItem);
             downloadBtn.addEventListener("click", () => {

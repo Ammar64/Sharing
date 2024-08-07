@@ -8,14 +8,13 @@
     android:layout_marginVertical="4dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="0dp"
+    android:foreground="@drawable/ripple_item"
     app:cardBackgroundColor="#65000000">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:focusable="true">
+        android:layout_marginTop="10dp">
 
         <ProgressBar
             android:id="@+id/PB_SharedFileProgress"

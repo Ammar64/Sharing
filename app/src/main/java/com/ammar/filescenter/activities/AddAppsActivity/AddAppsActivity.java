@@ -101,7 +101,7 @@ public class AddAppsActivity extends AppCompatActivity {
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_done, menu);
+        getMenuInflater().inflate(R.menu.menu_select, menu);
         return true;
     }
 
@@ -113,7 +113,7 @@ public class AddAppsActivity extends AppCompatActivity {
             finish();
             return true;
         }
-        if (id == R.id.MI_AddFilesDone) {
+        if (id == R.id.MI_Select) {
             if (selectedApps.isEmpty()) {
                 setResult(RESULT_CANCELED);
                 finish();

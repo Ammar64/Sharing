@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,6 +61,7 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Locale;
 
@@ -70,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private View changeThemeMI;
     private View threeDotsMI;
-    private View threeDotsMenuLayout;
     private View tutorialTV;
     private View apksInstallerTV;
     private FloatingActionButton serverButton;
@@ -99,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         initStates();
         observeStates();
     }
+
 
     public void prepareActivity() {
         settingsPref = getSharedPreferences(Consts.PREF_SETTINGS, MODE_PRIVATE);
@@ -134,9 +136,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    private boolean warningShown = false;
     private void initItems() {
         layout = findViewById(R.id.CL_MainLayout);
-
         ViewCompat.setOnApplyWindowInsetsListener(layout, (v, insets) -> {
             Insets paddings = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(0, paddings.top, 0, 0);
@@ -172,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
 
         // show warning if user didn't choose to not show it again
         final boolean isUserWantsWarning = appInfoPref.getBoolean(Consts.PREF_FIELD_IS_USER_WANTS_WARNING, true);
-        if (isUserWantsWarning) {
+        if (isUserWantsWarning && !warningShown) {
             View warningDialogLayout = LayoutInflater.from(this).inflate(R.layout.dialog_warning, null, false);
             CheckBox dontShowAgainCB = warningDialogLayout.findViewById(R.id.CB_DialogWarningDontShowAgain);
             TextView dontShowAgainTV = warningDialogLayout.findViewById(R.id.TB_DialogWarningDontShowAgainTV);
@@ -195,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
 
             // show dialog
             warningDialog.show();
+            warningShown = true;
         }
     }
 

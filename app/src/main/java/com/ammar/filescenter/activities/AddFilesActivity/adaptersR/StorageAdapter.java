@@ -2,23 +2,25 @@ package com.ammar.filescenter.activities.AddFilesActivity.adaptersR;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.res.ColorStateList;
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.LayoutAnimationController;
-import android.view.animation.TranslateAnimation;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +32,7 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.ammar.filescenter.R;
 import com.ammar.filescenter.activities.AddFilesActivity.AddFilesActivity;
@@ -46,7 +49,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.ListIterator;
 import java.util.Stack;
 
@@ -71,9 +73,16 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private Runnable onGoBack = null;
 
+
+    private CircularProgressDrawable progressDrawable;
+
+
+    private final AlertDialog loadingDialog;
+    private final int loadingSize = (int) Utils.dpToPx(60);
+
     public StorageAdapter(AddFilesActivity act) {
         this.act = act;
-        viewDirectory(currentDir);
+        viewDirectorySync(currentDir);
 
         act.getOnBackPressedDispatcher().addCallback(act, new OnBackPressedCallback(true) {
             @Override
@@ -81,10 +90,30 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 goBack();
             }
         });
+
+        progressDrawable = new CircularProgressDrawable(act);
+        progressDrawable.setStrokeWidth(5);
+        progressDrawable.setColorSchemeColors(Color.CYAN);
+        progressDrawable.setCenterRadius(30);
+
+        int size = (int) Utils.dpToPx(24);
+        progressDrawable.setBounds(0, 0, size, size);
+
+        ProgressBar progressBar = new ProgressBar(act);
+        progressBar.setLayoutParams(new FrameLayout.LayoutParams(loadingSize, loadingSize));
+
+        FrameLayout frameLayout = new FrameLayout(act);
+        frameLayout.setLayoutParams(new FrameLayout.LayoutParams(loadingSize + 100, loadingSize + 100, Gravity.CENTER));
+        frameLayout.addView(progressBar);
+        loadingDialog = new AlertDialog.Builder(act)
+                .setView(frameLayout)
+                .setCancelable(false)
+                .create();
     }
 
     @Override
     public int getItemViewType(int position) {
+
         if (position == 0) return TYPE_SEARCH;
         if (position == 1) return TYPE_FILE_TYPES;
         position -= 2;
@@ -94,6 +123,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
         if (position > lastDirIndex && hasSpaceView) position--;
         return displayedFiles[position].isDirectory() ? TYPE_DIR : TYPE_FILE;
+
     }
 
     @NonNull
@@ -114,7 +144,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 return new FileTypesHolder(scrollView, this);
             case TYPE_DIR:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_directory, parent, false);
-                return new DirectoryViewHolder(view);
+                return new DirectoryViewHolder(this, view);
             case TYPE_FILE:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_file, parent, false);
                 return new FileViewHolder(view);
@@ -133,7 +163,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         switch (type) {
             case TYPE_DIR:
                 DirectoryViewHolder dirHolder = (DirectoryViewHolder) holder;
-                dirHolder.setup(displayedFiles[position], (view) -> viewDirectory(displayedFiles[position]));
+                dirHolder.setup(displayedFiles[position]);
                 break;
             case TYPE_FILE:
                 // we might have added an empty space
@@ -154,7 +184,8 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return ((lastDirIndex & 1) == 1 ? displayedFiles.length : displayedFiles.length + 1) + 2;
     }
 
-    private void viewDirectory(File dir, boolean pop) {
+    // used to view dirs for the first time
+    private void viewDirectorySync(File dir) {
         this.currentDir = dir;
         File[] listedFiles = currentDir.listFiles();
         if (listedFiles == null) { // permission denied
@@ -162,48 +193,126 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return;
         }
         this.files = listedFiles;
-        this.displayedFiles = files;
-
-        Animation anim;
-        if (!pop) {
-            recyclerViewStates.push(act.recyclerView.getLayoutManager().onSaveInstanceState());
-            anim = AnimationUtils.loadAnimation(act, R.anim.to_up);
-        } else {
-            act.recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewStates.pop());
-            anim = AnimationUtils.loadAnimation(act, R.anim.to_down);
-        }
-
+        displayedFiles = files;
         sortFiles(this.files, SORT_NAME);
         lastDirIndex = getLastDirectoryIndex();
-
+        recyclerViewStates.push(act.recyclerView.getLayoutManager().onSaveInstanceState());
         if (this.displayedFiles.length == 0) {
-            act.folderEmptyTV.setVisibility(View.VISIBLE);
-            act.folderEmptyTV.startAnimation(AnimationUtils.loadAnimation(act, R.anim.appear));
+            displayFolderIsEmptyMessage(R.string.folder_is_empty);
         } else act.folderEmptyTV.setVisibility(View.GONE);
-
-
-        filesChanged();
         if (internalStorage.compareTo(dir) == 0) {
             act.appBar.setTitle(R.string.internal_storage);
         } else {
             act.appBar.setTitle(dir.getName());
         }
-
-        act.recyclerView.startAnimation(anim);
     }
 
-    private void viewFileType(int fileType) {
-        ArrayList<File> filesList = new ArrayList<>();
-        Utils.findFileTypeRecursively(Environment.getExternalStorageDirectory().getAbsolutePath(), filesList, fileType);
-        currentDir = null;
-        this.files = filesList.toArray(new File[0]);
-        sortFiles(files, SORT_LAST_MODIFIED);
-        this.displayedFiles = files;
-        lastDirIndex = -1;
-        filesChanged();
+    private void viewDirectory(File dir) {
+        viewDirectory(dir, false);
     }
 
-    private void viewRecentFiles() {
+
+    private void viewDirectory(File dir, boolean pop) {
+        if (isGettingFileType) return;
+        Handler handler = new Handler();
+
+        act.layoutManager.setCanScroll(false);
+
+        handler.postDelayed(() -> {
+            loadingDialog.setCanceledOnTouchOutside(false);
+            loadingDialog.show();
+            loadingDialog.getWindow().setLayout(loadingSize + 100, loadingSize + 100);
+        }, 700);
+
+        new Thread(() -> {
+
+            this.currentDir = dir;
+            File[] listedFiles = currentDir.listFiles();
+            if (listedFiles == null) { // permission denied
+                Toast.makeText(act, R.string.permission_denied, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            this.files = listedFiles;
+            displayedFiles = files;
+            sortFiles(this.files, SORT_NAME);
+            lastDirIndex = getLastDirectoryIndex();
+
+            act.runOnUiThread(() -> {
+                Animation anim;
+                if (pop) {
+                    act.recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewStates.pop());
+                    anim = null;
+                } else {
+                    recyclerViewStates.push(act.recyclerView.getLayoutManager().onSaveInstanceState());
+                    anim = AnimationUtils.loadAnimation(act, R.anim.to_up);
+                }
+                if (this.displayedFiles.length == 0) {
+                    displayFolderIsEmptyMessage(R.string.folder_is_empty);
+                } else act.folderEmptyTV.setVisibility(View.GONE);
+
+
+                filesChanged();
+
+                if (internalStorage.compareTo(dir) == 0) {
+                    act.appBar.setTitle(R.string.internal_storage);
+                } else {
+                    act.appBar.setTitle(dir.getName());
+                }
+
+                act.layoutManager.setCanScroll(true);
+                handler.removeCallbacksAndMessages(null);
+
+                // start animation after Ui changed
+                if (!pop)
+                    act.recyclerView.startAnimation(anim);
+                loadingDialog.dismiss();
+            });
+        }).start();
+    }
+
+    private void displayFolderIsEmptyMessage(@StringRes int stringRes) {
+        act.folderEmptyTV.setText(stringRes);
+        act.folderEmptyTV.setVisibility(View.VISIBLE);
+        float height = act.getWindow().getDecorView().getHeight();
+        act.folderEmptyTV.setY(height);
+        act.folderEmptyTV.animate().translationY(0).setDuration(700).start();
+    }
+
+    private boolean isGettingFileType = false;
+
+    private boolean viewFileType(FileTypesHolder.FileType fileType) {
+        if (isGettingFileType) return false;
+        isGettingFileType = true;
+
+        fileType.setInProgress(true);
+        new Thread(() -> {
+            ArrayList<File> filesList = new ArrayList<>();
+            FileUtils.findFilesTypesRecursively(Environment.getExternalStorageDirectory(), filesList, fileType.fileType);
+            currentDir = null;
+            this.files = filesList.toArray(new File[0]);
+            sortFiles(files, SORT_LAST_MODIFIED);
+            this.displayedFiles = files;
+            lastDirIndex = -1;
+            act.runOnUiThread(() -> {
+                recyclerViewStates.push(act.recyclerView.getLayoutManager().onSaveInstanceState());
+                if (this.displayedFiles.length == 0) {
+                    displayFolderIsEmptyMessage(R.string.no_files_found);
+                } else {
+                    act.folderEmptyTV.setVisibility(View.GONE);
+                }
+                filesChanged();
+                isGettingFileType = false;
+                fileType.setInProgress(false);
+
+            });
+        }).start();
+        return true;
+    }
+
+
+    private boolean viewRecentFiles() {
+        if( isGettingFileType ) return false;
+        isGettingFileType = true;
         class RecentFile {
             final File file;
             final long lastSelected;
@@ -216,10 +325,11 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         new Thread(() -> {
             try {
+                if (!act.getRecentsFile().exists()) return;
                 JSONArray jsonArray = new JSONArray(new String(FileUtils.readWholeFile(act.getRecentsFile())));
 
                 RecentFile[] recentFiles = new RecentFile[jsonArray.length()];
-                for( int i = 0 ; i < jsonArray.length() ; i++ ) {
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject fileObject = jsonArray.getJSONObject(i);
                     recentFiles[i] = new RecentFile(
                             new File(fileObject.getString("path")),
@@ -229,31 +339,37 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 Arrays.sort(recentFiles, (l, r) -> Long.compare(r.lastSelected, l.lastSelected));
 
                 this.files = new File[recentFiles.length];
-                for( int i = 0 ; i < recentFiles.length ; i++ ) {
+                for (int i = 0; i < recentFiles.length; i++) {
                     this.files[i] = recentFiles[i].file;
                 }
                 this.displayedFiles = files;
 
-                currentDir = null;
+                this.currentDir = null;
                 lastDirIndex = -1;
-
-                act.runOnUiThread(this::filesChanged);
+                recyclerViewStates.push(act.recyclerView.getLayoutManager().onSaveInstanceState());
+                act.runOnUiThread(() -> {
+                    if (this.displayedFiles.length == 0) {
+                        displayFolderIsEmptyMessage(R.string.no_files_found);
+                    } else {
+                        act.folderEmptyTV.setVisibility(View.GONE);
+                    }
+                    filesChanged();
+                    isGettingFileType = false;
+                });
             } catch (JSONException e) {
                 Utils.showErrorDialog("StorageAdapter.viewRecentFiles(). JSONException:", e.getMessage());
             } catch (IOException e) {
                 Utils.showErrorDialog("StorageAdapter.viewRecentFiles(). IOException:", e.getMessage());
             }
         }).start();
+        return true;
     }
 
-    private void viewDirectory(File dir) {
-        viewDirectory(dir, false);
-    }
 
     public void goBack() {
-        if( onGoBack != null ) onGoBack.run();
-        if( currentDir == null ) {
-            viewDirectory(internalStorage);
+        if (onGoBack != null) onGoBack.run();
+        if (currentDir == null) {
+            viewDirectory(internalStorage, true);
         } else if (currentDir.compareTo(internalStorage) != 0) {
             viewDirectory(currentDir.getParentFile(), true);
         } else {
@@ -342,6 +458,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private void filesChanged() {
         notifyDataSetChanged();
     }
+
     public static class SearchBarHolder extends RecyclerView.ViewHolder {
 
         public SearchBarHolder(@NonNull View itemView, StorageAdapter adapter) {
@@ -363,6 +480,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
         }
     }
+
     public void setOnGoBack(Runnable onGoBack) {
         this.onGoBack = onGoBack;
     }
@@ -377,124 +495,115 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             int padding = Math.round(Utils.dpToPx(8));
             layout.setPadding(padding, 0, padding, 0);
 
-            FileType recent = new FileType(R.string.recent, R.drawable.icon_recent);
-            FileType images = new FileType(R.string.images, R.drawable.icon_image);
-            FileType videos = new FileType(R.string.videos, R.drawable.icon_video);
-            FileType audio = new FileType(R.string.audio, R.drawable.icon_audio);
-            FileType docs = new FileType(R.string.documents, R.drawable.icon_document);
-
-            recent.setOnClick((view) -> {
-                recent.setSelected(true);
-                images.setSelected(false);
-                videos.setSelected(false);
-                audio.setSelected(false);
-                docs.setSelected(false);
-
-                adapter.act.appBar.setTitle(R.string.recent);
-                adapter.viewRecentFiles();
-            });
-            images.setOnClick((view) -> {
-                recent.setSelected(false);
-                images.setSelected(true);
-                videos.setSelected(false);
-                audio.setSelected(false);
-                docs.setSelected(false);
-
-                adapter.act.appBar.setTitle(R.string.images);
-                adapter.viewFileType(Utils.FILE_TYPE_IMAGE);
-            });
-            videos.setOnClick((view) -> {
-                recent.setSelected(false);
-                images.setSelected(false);
-                videos.setSelected(true);
-                audio.setSelected(false);
-                docs.setSelected(false);
-
-                adapter.act.appBar.setTitle(R.string.videos);
-                adapter.viewFileType(Utils.FILE_TYPE_VIDEO);
-            });
-            audio.setOnClick((view) -> {
-                recent.setSelected(false);
-                images.setSelected(false);
-                videos.setSelected(false);
-                audio.setSelected(true);
-                docs.setSelected(false);
-
-                adapter.act.appBar.setTitle(R.string.audio);
-                adapter.viewFileType(Utils.FILE_TYPE_AUDIO);
-            });
-            docs.setOnClick((view) -> {
-                recent.setSelected(false);
-                images.setSelected(false);
-                videos.setSelected(false);
-                audio.setSelected(false);
-                docs.setSelected(true);
-
-                adapter.act.appBar.setTitle(R.string.documents);
-                adapter.viewFileType(Utils.FILE_TYPE_DOCUMENT);
-            });
+            FileType.allInstances = new ArrayList<>(5);
+            FileType recent = new FileType(adapter, R.string.recent, R.drawable.icon_recent, -1);
+            new FileType(adapter, R.string.images, R.drawable.icon_image, FileUtils.FILE_TYPE_IMAGE);
+            new FileType(adapter, R.string.videos, R.drawable.icon_video, FileUtils.FILE_TYPE_VIDEO);
+            new FileType(adapter, R.string.audio, R.drawable.icon_audio, FileUtils.FILE_TYPE_AUDIO);
+            new FileType(adapter, R.string.documents, R.drawable.icon_document, FileUtils.FILE_TYPE_DOCUMENT);
 
             adapter.setOnGoBack(() -> {
-                recent.setSelected(false);
-                images.setSelected(false);
-                videos.setSelected(false);
-                audio.setSelected(false);
-                docs.setSelected(false);
+                for (FileType i : FileType.allInstances) {
+                    i.setSelected(false);
+                }
             });
-            List<FileType> types = Arrays.asList(
-                    recent,
-                    images,
-                    videos,
-                    audio,
-                    docs
-            );
 
             LayoutInflater inflater = LayoutInflater.from(itemView.getContext());
-            ListIterator<FileType> iterator = types.listIterator();
+            ListIterator<FileType> iterator = FileType.allInstances.listIterator();
 
             while (iterator.hasNext()) {
                 iterator.next().setupView(inflater, layout, iterator.hasNext());
             }
+            recent.getView().setEnabled(adapter.act.getRecentsFile().exists());
+
         }
 
         private static class FileType {
             @StringRes
             public int text;
-
             @DrawableRes
             public int icon;
-
-            public View.OnClickListener onClick;
-
-            public FileType(int text, int icon) {
-                this.text = text;
-                this.icon = icon;
-            }
-
-            public void setOnClick(View.OnClickListener onClick) {
-                this.onClick = onClick;
-            }
+            private final int index;
 
             private CardView view;
+            private final StorageAdapter adapter;
+            private boolean selected;
+
+            private static ArrayList<FileType> allInstances;
+
+            private final int fileType;
+
+            public FileType(StorageAdapter adapter, int text, int icon, int fileType) {
+                this.text = text;
+                this.icon = icon;
+                this.adapter = adapter;
+                this.index = allInstances.size();
+                this.fileType = fileType;
+                allInstances.add(this);
+            }
+
             public void setupView(LayoutInflater inflater, ViewGroup layout, boolean withMarginEnd) {
                 view = (CardView) inflater.inflate(R.layout.card_file_type, layout, false);
                 AdaptiveTextView textView = view.findViewById(R.id.TV_FileTypeText);
                 textView.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, 0, 0, 0);
                 textView.setText(text);
-                if( withMarginEnd ){ // is not last element
+                if (withMarginEnd) { // is not last element
                     ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(view.getLayoutParams());
                     layoutParams.setMarginEnd(Math.round(Utils.dpToPx(8)));
                     view.setLayoutParams(layoutParams);
                 }
-                view.setOnClickListener(onClick);
+                view.setOnClickListener((v) -> {
+                    this.select();
+                });
                 layout.addView(view);
             }
 
-            public void setSelected(boolean selected) {
-                if( selected ) {
+            public CardView getView() {
+                return view;
+            }
+
+            public void select() {
+                if (isSelected()) {
+                    this.setSelected(false);
+                    adapter.goBack();
+                    return;
+                }
+
+                boolean success;
+                if (fileType != -1) {
+                    success = adapter.viewFileType(this);
+                } else {
+                    success = adapter.viewRecentFiles();
+                }
+
+                if (!success) return;
+                for (FileType i : allInstances) {
+                    i.setSelected(i.index == this.index);
+                }
+            }
+
+
+            private void setSelected(boolean selected) {
+                this.selected = selected;
+                if (selected) {
                     view.setCardBackgroundColor(view.getContext().getResources().getColor(R.color.checked_card));
                 } else {
                     view.setCardBackgroundColor(0x77000000);
+                }
+            }
+
+            private boolean isSelected() {
+                return selected;
+            }
+
+            public void setInProgress(boolean inProgress) {
+                TextView textView = view.findViewById(R.id.TV_FileTypeText);
+                if (inProgress) {
+                    adapter.progressDrawable.start();
+                    textView.setCompoundDrawablesRelative(adapter.progressDrawable, null, null, null);
+                } else {
+                    adapter.progressDrawable.stop();
+                    textView.setCompoundDrawablesRelativeWithIntrinsicBounds(icon, 0, 0, 0);
                 }
             }
         }
@@ -502,17 +611,20 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private static class DirectoryViewHolder extends RecyclerView.ViewHolder {
         private final TextView dirNameTV;
+        private final StorageAdapter adapter;
 
-        public DirectoryViewHolder(@NonNull View itemView) {
+        public DirectoryViewHolder(StorageAdapter adapter, @NonNull View itemView) {
             super(itemView);
+            this.adapter = adapter;
             dirNameTV = itemView.findViewById(R.id.TV_DirectoryName);
         }
 
-        public void setup(File file, View.OnClickListener onClickListener) {
+        public void setup(File file) {
             dirNameTV.setText(file.getName());
-            itemView.setOnClickListener(onClickListener);
+            itemView.setOnClickListener((v) -> {
+                adapter.viewDirectory(file, false);
+            });
         }
-
     }
 
 
@@ -539,10 +651,14 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             File file = adapter.displayedFiles[pos];
 
-            if (FileUtils.setFileIcon(fileImageIV, file)) {
+            if (FileUtils.setFileIcon(fileImageIV, fileTypeNameTV, file)) {
                 lineV.setVisibility(View.INVISIBLE);
             } else {
                 lineV.setVisibility(View.VISIBLE);
+                fileTypeNameTV.setCompoundDrawablesRelative(null, null, null, null);
+                int paddingPx = (int) Utils.dpToPx(40);
+                fileImageIV.setPadding(paddingPx, paddingPx, paddingPx, paddingPx);
+                fileImageIV.setScaleType(ImageView.ScaleType.FIT_CENTER);
             }
 
             fileNameTV.setText(file.getName());

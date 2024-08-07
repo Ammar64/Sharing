@@ -10,7 +10,6 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/qrcodegen)
 project("filescenter")
 
 add_library(nativeutils SHARED 
-    utils.c
-    files_exts.c)
+    ${CMAKE_CURRENT_SOURCE_DIR}/utils.c)
 
 target_link_libraries(nativeutils PRIVATE qrcodegen log)

@@ -1,23 +1,30 @@
 package com.ammar.filescenter.activities.MainActivity.adaptersR;
 
 
+import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMode;
+
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.StateListDrawable;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.filescenter.R;
+import com.ammar.filescenter.activities.FastShareActivity.FastShareActivity;
 import com.ammar.filescenter.common.Consts;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.custom.ui.AdaptiveDropDown;
@@ -26,6 +33,8 @@ import com.ammar.filescenter.models.SharableApp;
 import com.ammar.filescenter.network.Server;
 import com.ammar.filescenter.services.ServerService;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.Map;
@@ -61,6 +70,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
 
         final View removeB;
         final View fastShareB;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             fileIconIV = itemView.findViewById(R.id.IV_FileChosenIcon);
@@ -78,21 +88,24 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
             setFileName(file.getName());
             setFileIconIV(file, pos);
             setFileSizeTV(file.getSize());
-            setFileListener(file.getUUID());
+            setFileListener(file);
         }
 
-        public void setFileListener(String uuid) {
+        public void setFileListener(Sharable file) {
             adaptiveDropDown.setAnchorView(showOptions);
             removeB.setOnClickListener(v -> {
                 Intent serviceIntent = new Intent(itemView.getContext(), ServerService.class);
                 serviceIntent.setAction(Consts.ACTION_REMOVE_DOWNLOAD);
-                serviceIntent.putExtra(Consts.EXTRA_DOWNLOAD_UUID, uuid);
+                serviceIntent.putExtra(Consts.EXTRA_DOWNLOAD_UUID, file.getUUID());
                 itemView.getContext().startService(serviceIntent);
                 adaptiveDropDown.dismiss();
             });
 
             fastShareB.setOnClickListener(v -> {
-                Toast.makeText(itemView.getContext(), "TODO", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(itemView.getContext(), FastShareActivity.class);
+                intent.setAction(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file.getFile()));
+                itemView.getContext().startActivity(intent);
                 adaptiveDropDown.dismiss();
             });
         }
@@ -110,19 +123,17 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         public void setFileIconIV(@NonNull Sharable file, int pos) {
             String mimeType = file.getMimeType();
             int imageSize = (int) Utils.dpToPx(40);
+            RequestManager request = Glide.with(itemView.getContext());
+            RequestBuilder<Drawable> builder;
             if (file instanceof SharableApp) {
                 SharableApp app = (SharableApp) file;
-                Glide.with(itemView.getContext())
-                        .load(app.getIcon())
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .override(imageSize, imageSize)
-                        .into(fileIconIV);
+                builder = request.load(app.getIcon());
             } else if (mimeType.startsWith("image/")) {
-                Glide.with(itemView.getContext())
-                        .load(file.getFile())
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .override(imageSize, imageSize)
-                        .into(fileIconIV);
+                builder = request.load(file.getFile());
+            } else if(mimeType.startsWith("audio/")) {
+                builder = request.load(R.drawable.icon_audio);
+            } else if(mimeType.startsWith("video/")) {
+                builder = request.load(R.drawable.icon_video);
             } else if ("application/vnd.android.package-archive".equals(mimeType)) {
                 Drawable appIcon = appsIconCache.get(pos);
                 if (appIcon == null) {
@@ -135,32 +146,21 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
                         appIcon = appInfo.loadIcon(pm);
                         appsIconCache.put(pos, appIcon);
 
-                        Glide.with(itemView.getContext())
-                                .load(appIcon)
-                                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                .override(imageSize, imageSize)
-                                .into(fileIconIV);
+                        builder = request.load(appIcon);
+                        builder = builder.skipMemoryCache(true);
 
-                    } else Glide.with(itemView.getContext())
-                            .load(appIcon)
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .override(imageSize, imageSize)
-                            .into(fileIconIV);
-
+                    } else builder = request.load(R.drawable.icon_file);
                 } else {
-                    Glide.with(itemView.getContext())
-                            .load(appIcon)
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                            .override(imageSize, imageSize)
-                            .into(fileIconIV);
+                    builder = request.load(appIcon);
                 }
             } else {
-                Glide.with(itemView.getContext())
-                        .load(R.drawable.icon_file_red)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .override(imageSize, imageSize)
-                        .into(fileIconIV);
+                builder = request.load(R.drawable.icon_file_red);
             }
+
+
+            builder.diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .override(imageSize, imageSize)
+                    .into(fileIconIV);
         }
     }
 }

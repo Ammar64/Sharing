@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@id/TV_FileChosenSize"
-        app:layout_constraintEnd_toEndOf="@+id/B_ShowSelectedFileOptions"
+        app:layout_constraintEnd_toStartOf="@+id/B_ShowSelectedFileOptions"
         app:layout_constraintStart_toEndOf="@+id/IV_FileChosenIcon"
         app:layout_constraintTop_toTopOf="@+id/IV_FileChosenIcon"
         android:layout_marginStart="8dp"
@@ -39,6 +39,7 @@
         app:layout_constraintStart_toStartOf="@+id/TV_FileChosenName"
         app:layout_constraintTop_toBottomOf="@+id/TV_FileChosenName"
         android:layout_marginTop="-10dp"
+        android:drawablePadding="6dp"
         tools:text="(15 MB)" />
 
 
@@ -53,7 +54,6 @@
         android:insetLeft="0dp"
         android:insetRight="0dp"
         android:padding="0dp"
-
         android:textStyle="bold"
         android:fontFamily="sans-serif-medium"
         android:textSize="28sp"

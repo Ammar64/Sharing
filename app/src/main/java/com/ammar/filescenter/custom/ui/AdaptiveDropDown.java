@@ -3,6 +3,7 @@ package com.ammar.filescenter.custom.ui;
 import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMode;
 
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -47,19 +48,19 @@ public class AdaptiveDropDown extends PopupWindow {
     private Context context;
     public LinearLayout layout;
 
-    public AdaptiveDropDown(Context act) {
-        this.context = act;
-        setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+    public AdaptiveDropDown(Context ctx) {
+        this.context = ctx;
+        setWidth((int) Utils.dpToPx(180));
         setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         setOutsideTouchable(true);
 
         layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(darkMode ? R.color.popupDarkerBG : R.color.popupLightBG)));
         setElevation(24);
-        setContentView(layout);
+        setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(darkMode ? R.color.popupDarkerBG : R.color.popupLightBG)));
 
+        setContentView(layout);
         AdaptiveDropDown.menus.addLast(new WeakReference<>(this));
     }
 
@@ -91,6 +92,7 @@ public class AdaptiveDropDown extends PopupWindow {
         view.setCompoundDrawablesRelative(icon, null, null, null);
         view.setDark(darkMode);
         layout.addView(view);
+
         return view;
     }
 

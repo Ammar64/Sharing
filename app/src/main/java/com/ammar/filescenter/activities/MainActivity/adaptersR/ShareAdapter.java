@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Handler;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.FileProvider;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -235,6 +237,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         private void setupQrCode() {
             String ip = ServerService.getIpAddress();
+
             if (ip != null) {
                 connectToWifiOrHotspotTV.setVisibility(View.GONE);
                 serverLinkTV.setVisibility(View.VISIBLE);
@@ -243,7 +246,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 String link = "http://" + ip + ":" + ServerService.PORT_NUMBER;
                 serverLinkTV.setText(link);
                 byte[] qrCodeBytes = Utils.encodeTextToQR(link);
-                Bitmap qrCodeBitmap = Utils.QrCodeArrayToBitmap(qrCodeBytes);
+                Bitmap qrCodeBitmap = Utils.QrCodeArrayToBitmap(qrCodeBytes, darkMode);
                 // Display the bitmap in an ImageView or any other suitable view
                 QRImageIV.setImageBitmap(qrCodeBitmap);
             } else {
@@ -392,38 +395,27 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         private void setClickListeners(ProgressManager manager) {
 
-//            if (manager.getOperation() == ProgressManager.OP.UPLOAD) {
-//
-//                itemView.setOnClickListener((view) -> {
-//                    String type = manager.getFileType();
-//                    Intent intent = new Intent();
-//
-//                    if (type.startsWith("image/")
-//                            || type.startsWith("audio/")
-//                            || type.startsWith("video")
-//                            || type.equals("application/vnd.android.package-archive")
-//                            || Utils.isDocumentType(type)) {
-//                        intent.setAction(Intent.ACTION_VIEW);
-//                        Uri uri = FileProvider.getUriForFile(
-//                                itemView.getContext(),
-//                                itemView.getContext().getApplicationContext().getPackageName() + ".provider",
-//                                manager.getFile());
-//                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//                        intent.setDataAndType(uri, type);
-//                        itemView.getContext().startActivity(intent);
-//                    } else {
-//                        intent.setAction(Intent.ACTION_GET_CONTENT);
-//                        Uri uri = Uri.parse(manager.getFile().getParent()); // a directory
-//                        intent.setDataAndType(uri, "*/*");
-//                        itemView.getContext().startActivity(Intent.createChooser(intent, "Open folder"));
-//                    }
-//                });
-//
-//
-//
-//            } else {
-//                itemView.setOnClickListener(null);
-//            }
+            if (manager.getOperation() == ProgressManager.OP.UPLOAD && manager.getLoaded() == ProgressManager.COMPLETED) {
+                itemView.setClickable(true);
+                itemView.setFocusable(true);
+                itemView.setOnClickListener((view) -> {
+                    String type = manager.getFileType();
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    Uri uri = FileProvider.getUriForFile(
+                            itemView.getContext(),
+                            itemView.getContext().getApplicationContext().getPackageName() + ".provider",
+                            manager.getFile());
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    intent.setDataAndType(uri, type);
+                    itemView.getContext().startActivity(intent);
+                });
+
+            } else {
+                itemView.setClickable(false);
+                itemView.setFocusable(false);
+                itemView.setOnClickListener(null);
+            }
 
             stopB.setOnClickListener((view) -> {
                 if( manager.getLoaded() >= 0 ) {

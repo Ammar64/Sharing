@@ -10,6 +10,8 @@ android {
         applicationId "com.ammar.filescenter"
         minSdk 21
         targetSdk 34
+        renderscriptTargetApi 34
+        renderscriptSupportModeEnabled true
         versionCode 13
         versionName "1.3-alpha1"
 
@@ -40,7 +42,7 @@ android {
     }
     externalNativeBuild {
         cmake {
-            path file('src/main/cpp/CMakeLists.txt')
+            path file('src/main/jni/CMakeLists.txt')
             version '3.22.1'
         }
     }
@@ -51,6 +53,7 @@ dependencies {
     implementation libs.appcompat
     implementation libs.constraintlayout // add this because we want negative margins
     implementation libs.recyclerview // when you add this recycler view width issue is fixed in dialogs
+    implementation libs.swiperefreshlayout // needed to get CircularProgressDrawable
     implementation libs.material
     implementation libs.glide
 

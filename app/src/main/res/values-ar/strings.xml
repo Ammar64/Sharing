@@ -72,6 +72,7 @@
     <string name="videos">مقاطع</string>
     <string name="audio">صوتيات</string>
     <string name="documents">مستندات</string>
+    <string name="no_files_found">لم يتم العثور على ملفات</string>
 
     <!-- Activity Apks Installer -->
     <string name="apks_installer_experimental">مثبت apks (تجريبيى)</string>

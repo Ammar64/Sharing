@@ -3,6 +3,9 @@ package com.ammar.filescenter.network.sessions;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import androidx.core.content.res.ResourcesCompat;
+
+import com.ammar.filescenter.R;
 import com.ammar.filescenter.common.FileUtils;
 import com.ammar.filescenter.common.Utils;
 import com.ammar.filescenter.models.Sharable;
@@ -64,13 +67,21 @@ public class DownloadSession extends HTTPSession {
                     Bitmap appIconBM = Utils.drawableToBitmap(app.getIcon());
                     res.sendBitmapResponse(appIconBM);
                 } else {
-                    if( file.getMimeType().startsWith("image/") ) {
-                        Bitmap imageBM = FileUtils.decodeSampledImage(file.getFile(), 128, 128);
-                        res.sendBitmapResponse(imageBM);
-                    } else{
-                        res.setStatusCode(400);
-                        res.sendResponse();
+                    String mimeType = file.getMimeType();
+                    Bitmap imageBM;
+                    if( mimeType.startsWith("image/") ) {
+                        imageBM = FileUtils.decodeSampledImage(file.getFile(), 128, 128);
+                    } else if (mimeType.startsWith("video/")) {
+                        imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_video, null));
+                    } else if(mimeType.startsWith("audio/")){
+                        imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_audio, null));
+                    } else if(Utils.isDocumentType(mimeType)) {
+                        imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_document, null));
+                    } else {
+                        imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_file, null));
                     }
+                    res.sendBitmapResponse(imageBM);
+
                 }
             }
         }

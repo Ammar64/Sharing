@@ -1,5 +1,5 @@
 Share files and apps using browser. you need the other device to be connected to the same network.
-Files sent from browser to the app can be found in Files-Center/ folder in your internal storage.
+Files sent from browser to the app can be found in Sharing/ folder in your internal storage.
 You will need to send this app to the other device in case you sent an app with split apk files.
 Make sure you use hotspot to get faster speeds transferring files.
 

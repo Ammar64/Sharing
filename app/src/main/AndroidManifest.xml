@@ -46,6 +46,15 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activities.FastShareActivity.FastShareActivity"
+            android:exported="true"
+            android:label="@string/fast_share">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.AddAppsActivity.AddAppsActivity"
             android:exported="false" />
 

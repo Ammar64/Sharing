@@ -13,24 +13,33 @@ import android.net.Uri;
 import android.provider.OpenableColumns;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.ammar.filescenter.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class FileUtils {
+    public static final int FILE_TYPE_IMAGE = 0;
+    public static final int FILE_TYPE_VIDEO = 1;
+    public static final int FILE_TYPE_AUDIO = 2;
+    public static final int FILE_TYPE_DOCUMENT = 3;
+
     private FileUtils() {
     }
 
@@ -41,14 +50,12 @@ public class FileUtils {
 
 
     /**
-     * @param img ImageView to load icon into
-     * @param file file of which icon or image will be loaded
+     * @param img            ImageView to load icon into
+     * @param fileTypeNameTV TextView we will add a small icon to
+     * @param file           file of which icon or image will be loaded
      * @return return true if we should remove the line under the image. false otherwise
      */
-    public static boolean setFileIcon(ImageView img, File file) {
-        int paddingPx = (int) Utils.dpToPx(40);
-        img.setPadding(paddingPx, paddingPx, paddingPx, paddingPx);
-        img.setScaleType(ImageView.ScaleType.FIT_CENTER);
+    public static boolean setFileIcon(ImageView img, TextView fileTypeNameTV, File file) {
         String filename = file.getName();
         String ext = filename.substring(filename.lastIndexOf(".") + 1);
         switch (ext) {
@@ -68,24 +75,25 @@ public class FileUtils {
                 } else break;
             default:
                 String mime = Utils.getMimeType(file.getName(), false);
-                if (mime.startsWith("image/")) {
+                boolean isImage = mime.startsWith("image/");
+                boolean isVideo = mime.startsWith("video/");
+                if (isImage || isVideo) {
                     img.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                         @Override
                         public boolean onPreDraw() {
                             img.getViewTreeObserver().removeOnPreDrawListener(this);
                             int iW = img.getMeasuredWidth();
                             int iH = img.getMeasuredHeight();
-
+                            fileTypeNameTV.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, ResourcesCompat.getDrawable(img.getResources(), isImage ? R.drawable.icon_image : R.drawable.icon_video, null), null);
                             Glide.with(img.getContext())
                                     .load(file)
-                                    .error(R.drawable.icon_image)
+                                    .error(isImage ? R.drawable.icon_image : R.drawable.icon_video)
                                     .addListener(new RequestListener<Drawable>() {
                                         @Override
                                         public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
-                                            img.setPadding(paddingPx, paddingPx, paddingPx, paddingPx);
-                                            img.setScaleType(ImageView.ScaleType.FIT_CENTER);
                                             return false;
                                         }
+
                                         @Override
                                         public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
                                             img.setPadding(0, 0, 0, 0);
@@ -93,18 +101,26 @@ public class FileUtils {
                                             return false;
                                         }
                                     })
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                                     .override(iW, iH)
                                     .into(img);
+
 
                             return true;
                         }
                     });
                     return true;
-                } else if( mime.startsWith("video/") ) {
+                } else if (mime.startsWith("audio/")) {
                     Glide.with(img.getContext())
-                            .load(R.drawable.icon_video)
+                            .load(R.drawable.icon_audio)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(img);
                     return false;
+                } else if (Utils.isDocumentType(mime)) {
+                    Glide.with(img.getContext())
+                            .load(R.drawable.icon_document)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .into(img);
                 }
                 break;
         }
@@ -113,7 +129,6 @@ public class FileUtils {
                 .into(img);
         return false;
     }
-
 
     public static Bitmap decodeSampledImage(File file, int iW, int iH) {
         // get image bounds
@@ -170,7 +185,7 @@ public class FileUtils {
 
     public static byte[] readWholeFile(File file) throws IOException {
         long size = file.length();
-        try( FileInputStream in = new FileInputStream(file)) {
+        try (FileInputStream in = new FileInputStream(file)) {
             byte[] data = new byte[(int) size];
             in.read(data);
             return data;
@@ -179,9 +194,57 @@ public class FileUtils {
 
     public static void overwriteFile(File file, byte[] data) throws IOException {
         file.createNewFile();
-        try(FileOutputStream out = new FileOutputStream(file)) {
+        try (FileOutputStream out = new FileOutputStream(file)) {
             out.write(data);
         }
     }
 
+    public static void findFilesTypesRecursively(File root, ArrayList<File> filesType, int type) {
+        findFilesTypesRecursively(root, filesType, type, 0);
+    }
+
+    private static void findFilesTypesRecursively(File root, ArrayList<File> filesType, int type, int depth) {
+
+        FileFilter fileFilter;
+        switch (type) {
+            case FILE_TYPE_IMAGE:
+                fileFilter = (file) -> {
+                    String name = file.getName();
+                    return Utils.getMimeType(name, false).startsWith("image/") || file.isDirectory();
+                };
+                break;
+            case FILE_TYPE_VIDEO:
+                fileFilter = (file) -> {
+                    String name = file.getName();
+                    return Utils.getMimeType(name, false).startsWith("video/") || file.isDirectory();
+                };
+                break;
+            case FILE_TYPE_AUDIO:
+                fileFilter = (file) -> {
+                    String name = file.getName();
+                    return Utils.getMimeType(name, false).startsWith("audio/") || file.isDirectory();
+                };
+                break;
+            case FILE_TYPE_DOCUMENT:
+                fileFilter = (file) -> {
+                    String name = file.getName();
+                    return Utils.isDocumentType(Utils.getMimeType(name, true)) || file.isDirectory();
+                };
+                break;
+            default:
+                throw new RuntimeException("Not a file type");
+        }
+
+        File[] currentList = root.listFiles(fileFilter);
+        if( currentList == null ) return;
+        for (File i : currentList) {
+            if (i.isDirectory()) {
+                if( depth < 3 ) {
+                    findFilesTypesRecursively(i, filesType, type, depth + 1);
+                }
+            } else if (i.isFile()) {
+                filesType.add(i);
+            }
+        }
+    }
 }

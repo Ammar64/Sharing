@@ -6,9 +6,10 @@
         android:title="@string/select"
         app:showAsAction="always"/>
 
-    <item
-        android:id="@+id/MI_DropDown"
-        android:title="@string/show_drop_down"
-        android:icon="@drawable/icon_three_dots"
-        app:showAsAction="always"/>
+    <!-- Disabled for now will be available next release -->
+<!--    <item-->
+<!--        android:id="@+id/MI_DropDown"-->
+<!--        android:title="@string/show_drop_down"-->
+<!--        android:icon="@drawable/icon_three_dots"-->
+<!--        app:showAsAction="always"/>-->
 </menu>

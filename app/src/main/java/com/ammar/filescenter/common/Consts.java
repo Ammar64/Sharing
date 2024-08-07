@@ -39,13 +39,13 @@ public final class Consts {
     public static final String PREF_FIELD_LANG = "LANGUAGE";
     public static final String PREF_FIELD_DEBUG_MODE = "DEBUG_MODE";
 
-    public static final File filesCenterDir = new File(Environment.getExternalStorageDirectory(), "Files-Center");
+    public static final File filesCenterDir = new File(Environment.getExternalStorageDirectory(), "Sharing");
     public static final File appsDir = new File(filesCenterDir, "Apps");
     public static final File imagesDir = new File(filesCenterDir, "Images");
     public static final File videosDir = new File(filesCenterDir, "Videos");
     public static final File audioDir = new File(filesCenterDir, "Audio");
     public static final File documentsDir = new File(filesCenterDir, "Documents");
-    public static final File filesDir = new File(filesCenterDir, "Files");
+    public static final File otherDir = new File(filesCenterDir, "Other");
 
     public static final List<String> langsCode = Arrays.asList("", "ar", "en", "du");
     public static Locale SystemLocale;

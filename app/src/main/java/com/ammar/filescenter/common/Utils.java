@@ -18,20 +18,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.util.TypedValue;
 import android.webkit.MimeTypeMap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RawRes;
 
-import com.ammar.filescenter.activities.MainActivity.MainActivity;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class Utils {
@@ -223,15 +219,9 @@ public class Utils {
     public static native byte[] encodeTextToQR(String text);
 
 
-    public static final int FILE_TYPE_IMAGE = 0;
-    public static final int FILE_TYPE_VIDEO = 1;
-    public static final int FILE_TYPE_AUDIO = 2;
-    public static final int FILE_TYPE_DOCUMENT = 3;
-    public static native void findFileTypeRecursively(String root, ArrayList<File> files, int type);
-
-    public static Bitmap QrCodeArrayToBitmap(byte[] qrCodeBytes) {
+    public static Bitmap QrCodeArrayToBitmap(byte[] qrCodeBytes, boolean darkMode) {
         int qrColor;
-        if (MainActivity.darkMode)
+        if (darkMode)
             qrColor = Color.WHITE;
         else
             qrColor = Color.BLACK;
@@ -394,7 +384,7 @@ public class Utils {
         dirsMade &= Consts.appsDir.mkdir();
         dirsMade &= Consts.imagesDir.mkdir();
         dirsMade &= Consts.audioDir.mkdir();
-        dirsMade &= Consts.filesDir.mkdir();
+        dirsMade &= Consts.otherDir.mkdir();
         dirsMade &= Consts.videosDir.mkdir();
         dirsMade &= Consts.documentsDir.mkdir();
 
@@ -488,8 +478,11 @@ public class Utils {
         } else if(fileName.substring(fileName.lastIndexOf(".")).equals(".apks")) { // apks files should go to apps folder
             return Consts.appsDir;
         } else {
-            Log.d("MYLOG", "Type: " + mimeType);
-            return Consts.filesDir;
+            return Consts.otherDir;
         }
+    }
+
+    public static Resources getRes() {
+        return res;
     }
 }

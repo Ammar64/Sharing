@@ -70,6 +70,7 @@
     <string name="videos">Videos</string>
     <string name="audio">Audio</string>
     <string name="documents">documents</string>
+    <string name="no_files_found">No files were found</string>
 
     <!-- Activity Apks Installer -->
     <string name="apks_installer_experimental">APKS Installer (Experimental)</string>
@@ -104,6 +105,8 @@
     <string name="back">Back</string>
     <string name="no_web_browser_found">No web browser found</string>
     <string name="remove">Remove</string>
+    <string name="no_data_attached">No data specified</string>
+
 
     <string-array name="langs">
         <item>@string/system_default_lang</item>

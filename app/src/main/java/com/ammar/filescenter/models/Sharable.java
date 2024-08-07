@@ -57,8 +57,8 @@ public class Sharable {
 
         if (mimeType.startsWith("image/"))
             jsonObject.put("type", "img");
-        else
-            jsonObject.put("type", "file");
+        else if( mimeType.startsWith("video/") )
+            jsonObject.put("type", "video");
         return jsonObject;
     }
 
