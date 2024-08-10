@@ -32,14 +32,14 @@
                 android:paddingVertical="8dp"
                 android:paddingStart="14dp">
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsUploadAllow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/disable_browser_upload"
                     android:textSize="@dimen/settings_big_text" />
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsUploadAllowSub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -68,14 +68,14 @@
                 android:paddingVertical="8dp"
                 android:paddingStart="14dp">
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsUserBlock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/block_users"
                     android:textSize="@dimen/settings_big_text" />
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsUserBlockSub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -103,14 +103,14 @@
                 android:paddingVertical="8dp"
                 android:paddingStart="14dp">
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsLanguage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/language"
                     android:textSize="@dimen/settings_big_text" />
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsLanguageSub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -130,7 +130,7 @@
                 android:orientation="horizontal">
 
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_PoweredBy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -1,4 +1,4 @@
-package com.ammar.filescenter.network.exceptions;
+package com.ammar.sharing.network.exceptions;
 
 public class NotImplementedException extends Exception {
     public NotImplementedException(String message) {

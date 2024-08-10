@@ -1,4 +1,4 @@
-package com.ammar.filescenter.custom.io;
+package com.ammar.sharing.custom.io;
 
 import java.io.IOException;
 import java.io.OutputStream;

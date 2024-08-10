@@ -1,4 +1,4 @@
-package com.ammar.filescenter.activities.MainActivity.adaptersR;
+package com.ammar.sharing.activities.MainActivity.adaptersR;
 
 
 
@@ -17,13 +17,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ammar.filescenter.R;
-import com.ammar.filescenter.common.Consts;
-import com.ammar.filescenter.services.NetworkService;
-import com.ammar.filescenter.network.Server;
-import com.ammar.filescenter.models.Sharable;
-import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.models.SharableApp;
+import com.ammar.sharing.R;
+import com.ammar.sharing.common.Consts;
+import com.ammar.sharing.services.NetworkService;
+import com.ammar.sharing.network.Server;
+import com.ammar.sharing.models.Sharable;
+import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.models.SharableApp;
 
 import java.util.Map;
 import java.util.TreeMap;

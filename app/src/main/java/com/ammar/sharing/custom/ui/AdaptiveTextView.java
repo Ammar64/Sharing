@@ -1,6 +1,6 @@
-package com.ammar.filescenter.custom.ui;
+package com.ammar.sharing.custom.ui;
 
-import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMode;
+import static com.ammar.sharing.activities.MainActivity.MainActivity.darkMode;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.ammar.filescenter.R;
+import com.ammar.sharing.R;
 
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;

@@ -1,12 +1,12 @@
-package com.ammar.filescenter.network;
+package com.ammar.sharing.network;
 
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.ammar.filescenter.custom.io.ProgressManager;
-import com.ammar.filescenter.custom.io.ProgressOutputStream;
-import com.ammar.filescenter.models.Sharable;
-import com.ammar.filescenter.models.User;
+import com.ammar.sharing.custom.io.ProgressManager;
+import com.ammar.sharing.custom.io.ProgressOutputStream;
+import com.ammar.sharing.models.Sharable;
+import com.ammar.sharing.models.User;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;

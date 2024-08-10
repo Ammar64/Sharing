@@ -1,4 +1,4 @@
-package com.ammar.filescenter.models;
+package com.ammar.sharing.models;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;

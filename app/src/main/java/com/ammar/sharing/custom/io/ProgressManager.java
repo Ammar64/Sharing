@@ -1,10 +1,10 @@
-package com.ammar.filescenter.custom.io;
+package com.ammar.sharing.custom.io;
 
 import android.os.Bundle;
 
-import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.services.NetworkService;
-import com.ammar.filescenter.models.User;
+import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.services.NetworkService;
+import com.ammar.sharing.models.User;
 
 import java.io.File;
 import java.util.LinkedList;

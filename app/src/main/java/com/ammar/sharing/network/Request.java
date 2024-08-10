@@ -1,12 +1,12 @@
-package com.ammar.filescenter.network;
+package com.ammar.sharing.network;
 
-import static com.ammar.filescenter.common.Utils.readLineUTF8;
+import static com.ammar.sharing.common.Utils.readLineUTF8;
 
 import android.util.Log;
 
-import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.network.exceptions.BadRequestException;
-import com.ammar.filescenter.network.exceptions.NotImplementedException;
+import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.network.exceptions.BadRequestException;
+import com.ammar.sharing.network.exceptions.NotImplementedException;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

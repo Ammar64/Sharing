@@ -1,4 +1,4 @@
-package com.ammar.filescenter.activities.MainActivity;
+package com.ammar.sharing.activities.MainActivity;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -6,8 +6,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
-import com.ammar.filescenter.activities.MainActivity.fragments.ShareFragment;
+import com.ammar.sharing.activities.MainActivity.fragments.SettingsFragment;
+import com.ammar.sharing.activities.MainActivity.fragments.ShareFragment;
 
 public class MainViewPagerAdapter extends FragmentStateAdapter {
     private final Fragment[] fragments;

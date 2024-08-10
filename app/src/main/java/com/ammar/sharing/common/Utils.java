@@ -1,4 +1,4 @@
-package com.ammar.filescenter.common;
+package com.ammar.sharing.common;
 
 import android.content.ContentUris;
 import android.content.Context;
@@ -26,8 +26,8 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.RawRes;
 
-import com.ammar.filescenter.activities.MainActivity.MainActivity;
-import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
+import com.ammar.sharing.activities.MainActivity.MainActivity;
+import com.ammar.sharing.activities.MainActivity.fragments.SettingsFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.ammar.filescenter.activities.TutorialActivity;
+package com.ammar.sharing.activities.TutorialActivity;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.ammar.filescenter.activities.TutorialActivity.fragments.TutorialFragment;
+import com.ammar.sharing.activities.TutorialActivity.fragments.TutorialFragment;
 
 import java.util.ArrayList;
 

@@ -1,10 +1,10 @@
-package com.ammar.filescenter.network.sessions;
+package com.ammar.sharing.network.sessions;
 
-import com.ammar.filescenter.R;
-import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.network.Request;
-import com.ammar.filescenter.network.Response;
-import com.ammar.filescenter.network.sessions.base.HTTPSession;
+import com.ammar.sharing.R;
+import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.network.Request;
+import com.ammar.sharing.network.Response;
+import com.ammar.sharing.network.sessions.base.HTTPSession;
 
 import java.io.IOException;
 

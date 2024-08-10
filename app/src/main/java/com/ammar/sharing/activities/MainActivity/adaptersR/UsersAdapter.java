@@ -1,4 +1,4 @@
-package com.ammar.filescenter.activities.MainActivity.adaptersR;
+package com.ammar.sharing.activities.MainActivity.adaptersR;
 
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
@@ -12,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ammar.filescenter.R;
-import com.ammar.filescenter.models.User;
+import com.ammar.sharing.R;
+import com.ammar.sharing.models.User;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 

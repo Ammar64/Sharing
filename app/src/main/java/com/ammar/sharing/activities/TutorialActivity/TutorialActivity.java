@@ -1,4 +1,4 @@
-package com.ammar.filescenter.activities.TutorialActivity;
+package com.ammar.sharing.activities.TutorialActivity;
 
 import android.graphics.Color;
 import android.os.Build;
@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.ammar.filescenter.R;
+import com.ammar.sharing.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 

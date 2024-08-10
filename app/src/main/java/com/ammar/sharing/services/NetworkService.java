@@ -1,4 +1,4 @@
-package com.ammar.filescenter.services;
+package com.ammar.sharing.services;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -18,13 +18,13 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.MutableLiveData;
 
-import com.ammar.filescenter.R;
-import com.ammar.filescenter.activities.MainActivity.MainActivity;
-import com.ammar.filescenter.common.Consts;
-import com.ammar.filescenter.custom.data.QueueMutableLiveData;
-import com.ammar.filescenter.network.Server;
-import com.ammar.filescenter.models.SharableApp;
-import com.ammar.filescenter.models.Sharable;
+import com.ammar.sharing.R;
+import com.ammar.sharing.activities.MainActivity.MainActivity;
+import com.ammar.sharing.common.Consts;
+import com.ammar.sharing.custom.data.QueueMutableLiveData;
+import com.ammar.sharing.network.Server;
+import com.ammar.sharing.models.SharableApp;
+import com.ammar.sharing.models.Sharable;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -45,7 +45,7 @@ public class NetworkService extends Service {
     public static final MutableLiveData<Bundle> downloadsListObserver = new MutableLiveData<>();
     public static final MutableLiveData<Bundle> filesListNotifier = new MutableLiveData<>();
     public static final String DATA_DOWNLOADS_LIST = "DATA_DOWNLOADS_LIST";
-    public static final String VALUE_MODIFY_DELETE = "com.ammar.filescenter.services.VALUE_MODIFY_DELETE";
+    public static final String VALUE_MODIFY_DELETE = "com.ammar.sharing.services.VALUE_MODIFY_DELETE";
     public static final QueueMutableLiveData<Bundle> filesSendNotifier = new QueueMutableLiveData<>();
     public static final MutableLiveData<Bundle> usersListObserver = new QueueMutableLiveData<>();
 
@@ -174,7 +174,7 @@ public class NetworkService extends Service {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Notification channel ID
-        String channelId = "com.ammar.filescenter";
+        String channelId = "com.ammar.sharing";
         // Notification channel name
         CharSequence channelName = "Server";
         // Notification importance level

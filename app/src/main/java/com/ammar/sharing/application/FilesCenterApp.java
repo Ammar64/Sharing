@@ -1,10 +1,10 @@
-package com.ammar.filescenter.application;
+package com.ammar.sharing.application;
 
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
 
-import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.network.sessions.Sessions;
+import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.network.sessions.Sessions;
 
 
 public class FilesCenterApp extends Application {

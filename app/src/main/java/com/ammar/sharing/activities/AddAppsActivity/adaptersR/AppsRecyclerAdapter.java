@@ -1,4 +1,4 @@
-package com.ammar.filescenter.activities.AddAppsActivity.adaptersR;
+package com.ammar.sharing.activities.AddAppsActivity.adaptersR;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -14,9 +14,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ammar.filescenter.R;
-import com.ammar.filescenter.activities.AddAppsActivity.AddAppsActivity;
-import com.ammar.filescenter.common.Utils;
+import com.ammar.sharing.R;
+import com.ammar.sharing.activities.AddAppsActivity.AddAppsActivity;
+import com.ammar.sharing.common.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

@@ -1,4 +1,4 @@
-package com.ammar.filescenter.common;
+package com.ammar.sharing.common;
 
 import android.os.Bundle;
 

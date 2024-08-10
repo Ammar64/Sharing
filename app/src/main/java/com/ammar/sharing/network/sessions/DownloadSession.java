@@ -1,15 +1,15 @@
-package com.ammar.filescenter.network.sessions;
+package com.ammar.sharing.network.sessions;
 
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.models.Sharable;
-import com.ammar.filescenter.models.SharableApp;
-import com.ammar.filescenter.network.Request;
-import com.ammar.filescenter.network.Response;
-import com.ammar.filescenter.network.Server;
-import com.ammar.filescenter.network.sessions.base.HTTPSession;
+import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.models.Sharable;
+import com.ammar.sharing.models.SharableApp;
+import com.ammar.sharing.network.Request;
+import com.ammar.sharing.network.Response;
+import com.ammar.sharing.network.Server;
+import com.ammar.sharing.network.sessions.base.HTTPSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;

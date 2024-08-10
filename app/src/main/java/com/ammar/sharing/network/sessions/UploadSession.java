@@ -1,11 +1,11 @@
-package com.ammar.filescenter.network.sessions;
+package com.ammar.sharing.network.sessions;
 
-import com.ammar.filescenter.common.Consts;
-import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.custom.io.ProgressManager;
-import com.ammar.filescenter.network.Request;
-import com.ammar.filescenter.network.Response;
-import com.ammar.filescenter.network.sessions.base.HTTPSession;
+import com.ammar.sharing.common.Consts;
+import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.custom.io.ProgressManager;
+import com.ammar.sharing.network.Request;
+import com.ammar.sharing.network.Response;
+import com.ammar.sharing.network.sessions.base.HTTPSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;

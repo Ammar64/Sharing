@@ -1,4 +1,4 @@
-package com.ammar.filescenter.activities.TutorialActivity;
+package com.ammar.sharing.activities.TutorialActivity;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.StringRes;

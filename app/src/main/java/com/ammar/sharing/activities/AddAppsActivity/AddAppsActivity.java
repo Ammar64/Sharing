@@ -1,6 +1,6 @@
-package com.ammar.filescenter.activities.AddAppsActivity;
+package com.ammar.sharing.activities.AddAppsActivity;
 
-import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMode;
+import static com.ammar.sharing.activities.MainActivity.MainActivity.darkMode;
 
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -20,14 +20,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ammar.filescenter.R;
-import com.ammar.filescenter.activities.AddAppsActivity.adaptersR.AppsRecyclerAdapter;
+import com.ammar.sharing.R;
+import com.ammar.sharing.activities.AddAppsActivity.adaptersR.AppsRecyclerAdapter;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class AddAppsActivity extends AppCompatActivity {
-    public static final String EXTRA_INTENT_APPS = "com.ammar.filescenter.SELECTED_APPS";
+    public static final String EXTRA_INTENT_APPS = "com.ammar.sharing.SELECTED_APPS";
     public static final String ACTION_ADD_APPS = "ACTION_ADD_APPS";
     private RecyclerView appsRecycler;
     private Toolbar appBar;

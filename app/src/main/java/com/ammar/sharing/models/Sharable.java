@@ -1,7 +1,7 @@
-package com.ammar.filescenter.models;
+package com.ammar.sharing.models;
 
-import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.network.Server;
+import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.network.Server;
 
 import org.json.JSONException;
 import org.json.JSONObject;

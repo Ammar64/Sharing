@@ -1,9 +1,9 @@
-package com.ammar.filescenter.network;
+package com.ammar.sharing.network;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.ammar.filescenter.models.Sharable;
+import com.ammar.sharing.models.Sharable;
 
 import java.io.IOException;
 import java.net.ServerSocket;

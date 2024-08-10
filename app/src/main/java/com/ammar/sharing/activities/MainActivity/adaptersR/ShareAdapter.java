@@ -1,6 +1,6 @@
-package com.ammar.filescenter.activities.MainActivity.adaptersR;
+package com.ammar.sharing.activities.MainActivity.adaptersR;
 
-import static com.ammar.filescenter.activities.MainActivity.MainActivity.darkMode;
+import static com.ammar.sharing.activities.MainActivity.MainActivity.darkMode;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,14 +27,14 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ammar.filescenter.R;
-import com.ammar.filescenter.activities.AddAppsActivity.AddAppsActivity;
-import com.ammar.filescenter.activities.MainActivity.fragments.ShareFragment;
-import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.custom.io.ProgressManager;
-import com.ammar.filescenter.services.NetworkService;
-import com.ammar.filescenter.network.Server;
-import com.ammar.filescenter.models.User;
+import com.ammar.sharing.R;
+import com.ammar.sharing.activities.AddAppsActivity.AddAppsActivity;
+import com.ammar.sharing.activities.MainActivity.fragments.ShareFragment;
+import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.custom.io.ProgressManager;
+import com.ammar.sharing.services.NetworkService;
+import com.ammar.sharing.network.Server;
+import com.ammar.sharing.models.User;
 
 import java.util.Locale;
 

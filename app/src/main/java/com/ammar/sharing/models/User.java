@@ -1,12 +1,12 @@
-package com.ammar.filescenter.models;
+package com.ammar.sharing.models;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import com.ammar.filescenter.common.Consts;
-import com.ammar.filescenter.services.NetworkService;
+import com.ammar.sharing.common.Consts;
+import com.ammar.sharing.services.NetworkService;
 
 import java.net.SocketAddress;
 import java.util.ArrayList;

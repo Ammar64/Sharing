@@ -1,8 +1,8 @@
-package com.ammar.filescenter.network.sessions.base;
+package com.ammar.sharing.network.sessions.base;
 
-import com.ammar.filescenter.models.User;
-import com.ammar.filescenter.network.Request;
-import com.ammar.filescenter.network.Response;
+import com.ammar.sharing.models.User;
+import com.ammar.sharing.network.Request;
+import com.ammar.sharing.network.Response;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,11 +1,11 @@
-package com.ammar.filescenter.activities.MainActivity.color;
+package com.ammar.sharing.activities.MainActivity.color;
 
 
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 
-import com.ammar.filescenter.R;
+import com.ammar.sharing.R;
 
 public class ColorsDark {
     @DrawableRes

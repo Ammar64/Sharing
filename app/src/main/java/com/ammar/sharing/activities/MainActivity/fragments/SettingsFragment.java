@@ -1,4 +1,4 @@
-package com.ammar.filescenter.activities.MainActivity.fragments;
+package com.ammar.sharing.activities.MainActivity.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,10 +15,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.ammar.filescenter.R;
-import com.ammar.filescenter.activities.MainActivity.MainActivity;
-import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.common.Consts;
+import com.ammar.sharing.R;
+import com.ammar.sharing.activities.MainActivity.MainActivity;
+import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.common.Consts;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SettingsFragment extends Fragment {

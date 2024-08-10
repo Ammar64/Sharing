@@ -1,4 +1,4 @@
-package com.ammar.filescenter.services;
+package com.ammar.sharing.services;
 
 import android.app.Service;
 import android.content.Intent;

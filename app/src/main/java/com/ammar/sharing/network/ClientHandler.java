@@ -1,13 +1,13 @@
-package com.ammar.filescenter.network;
+package com.ammar.sharing.network;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.ammar.filescenter.activities.MainActivity.fragments.SettingsFragment;
-import com.ammar.filescenter.common.Consts;
-import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.models.User;
-import com.ammar.filescenter.network.sessions.base.HTTPSession;
+import com.ammar.sharing.activities.MainActivity.fragments.SettingsFragment;
+import com.ammar.sharing.common.Consts;
+import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.models.User;
+import com.ammar.sharing.network.sessions.base.HTTPSession;
 
 import java.io.IOException;
 import java.net.Socket;

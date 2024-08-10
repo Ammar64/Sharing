@@ -1,4 +1,4 @@
-package com.ammar.filescenter.activities.MainActivity.fragments;
+package com.ammar.sharing.activities.MainActivity.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,12 +14,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ammar.filescenter.R;
-import com.ammar.filescenter.activities.AddAppsActivity.AddAppsActivity;
-import com.ammar.filescenter.activities.MainActivity.adaptersR.ShareAdapter;
-import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.common.Consts;
-import com.ammar.filescenter.services.NetworkService;
+import com.ammar.sharing.R;
+import com.ammar.sharing.activities.AddAppsActivity.AddAppsActivity;
+import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter;
+import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.common.Consts;
+import com.ammar.sharing.services.NetworkService;
 
 import java.util.ArrayList;
 

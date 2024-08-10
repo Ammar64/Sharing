@@ -1,4 +1,4 @@
-package com.ammar.filescenter.activities.MainActivity;
+package com.ammar.sharing.activities.MainActivity;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -45,15 +45,15 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.widget.ImageViewCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.ammar.filescenter.R;
-import com.ammar.filescenter.activities.MainActivity.color.ColorsDark;
-import com.ammar.filescenter.activities.MainActivity.color.ColorsLight;
-import com.ammar.filescenter.application.FilesCenterApp;
-import com.ammar.filescenter.common.Data;
-import com.ammar.filescenter.common.Utils;
-import com.ammar.filescenter.common.Consts;
-import com.ammar.filescenter.custom.ui.AdaptiveTextView;
-import com.ammar.filescenter.services.NetworkService;
+import com.ammar.sharing.R;
+import com.ammar.sharing.activities.MainActivity.color.ColorsDark;
+import com.ammar.sharing.activities.MainActivity.color.ColorsLight;
+import com.ammar.sharing.application.FilesCenterApp;
+import com.ammar.sharing.common.Data;
+import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.common.Consts;
+import com.ammar.sharing.custom.ui.AdaptiveTextView;
+import com.ammar.sharing.services.NetworkService;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

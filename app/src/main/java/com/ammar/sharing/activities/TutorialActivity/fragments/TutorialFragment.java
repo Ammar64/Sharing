@@ -1,4 +1,4 @@
-package com.ammar.filescenter.activities.TutorialActivity.fragments;
+package com.ammar.sharing.activities.TutorialActivity.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.ammar.filescenter.R;
-import com.ammar.filescenter.activities.TutorialActivity.FragmentHolder;
+import com.ammar.sharing.R;
+import com.ammar.sharing.activities.TutorialActivity.FragmentHolder;
 
 public class TutorialFragment extends Fragment {
     FragmentHolder holder;
