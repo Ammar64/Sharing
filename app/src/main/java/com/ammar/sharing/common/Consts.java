@@ -33,13 +33,13 @@ public final class Consts {
     public static final String PREF_FIELD_ARE_USER_BLOCKED = "USERS_BLOCK";
     public static final String PREF_FIELD_LANG = "LANGUAGE";
 
-    public static final File filesCenterDir = new File(Environment.getExternalStorageDirectory(), "Files-Center");
-    public static final File appsDir = new File(filesCenterDir, "Apps");
-    public static final File imagesDir = new File(filesCenterDir, "Images");
-    public static final File videosDir = new File(filesCenterDir, "Videos");
-    public static final File audioDir = new File(filesCenterDir, "Audio");
-    public static final File documentsDir = new File(filesCenterDir, "Documents");
-    public static final File filesDir = new File(filesCenterDir, "Files");
+    public static final File Sharing = new File(Environment.getExternalStorageDirectory(), "Sharing");
+    public static final File appsDir = new File(Sharing, "Apps");
+    public static final File imagesDir = new File(Sharing, "Images");
+    public static final File videosDir = new File(Sharing, "Videos");
+    public static final File audioDir = new File(Sharing, "Audio");
+    public static final File documentsDir = new File(Sharing, "Documents");
+    public static final File filesDir = new File(Sharing, "Files");
 
     public static final List<String> langsCode = Arrays.asList("", "ar", "en", "du");
 

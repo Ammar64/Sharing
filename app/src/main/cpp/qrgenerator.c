@@ -1,7 +1,7 @@
 #include <jni.h>
 #include <qrcode.h>
 
-#define encodeTextToQR Java_com_ammar_filescenter_common_Utils_encodeTextToQR
+#define encodeTextToQR Java_com_ammar_sharing_common_Utils_encodeTextToQR
 
 JNIEXPORT jbyteArray JNICALL encodeTextToQR(JNIEnv *env, jobject thiz, jstring jtext) {
     const char *text = (*env)->GetStringUTFChars(env, jtext, 0);

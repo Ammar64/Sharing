@@ -7,7 +7,7 @@ import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.network.sessions.Sessions;
 
 
-public class FilesCenterApp extends Application {
+public class SharingApp extends Application {
     private static boolean _isDebuggable;
 
     @Override

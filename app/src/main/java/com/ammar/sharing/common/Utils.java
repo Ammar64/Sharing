@@ -27,7 +27,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RawRes;
 
 import com.ammar.sharing.activities.MainActivity.MainActivity;
-import com.ammar.sharing.activities.MainActivity.fragments.SettingsFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -375,7 +374,7 @@ public class Utils {
     }
 
     public static void createAppDirs() {
-        assert Consts.filesCenterDir.mkdir();
+        assert Consts.Sharing.mkdir();
         assert Consts.appsDir.mkdir();
         assert Consts.imagesDir.mkdir();
         assert Consts.audioDir.mkdir();

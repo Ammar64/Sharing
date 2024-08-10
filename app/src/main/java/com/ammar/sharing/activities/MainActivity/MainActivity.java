@@ -48,7 +48,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.MainActivity.color.ColorsDark;
 import com.ammar.sharing.activities.MainActivity.color.ColorsLight;
-import com.ammar.sharing.application.FilesCenterApp;
+import com.ammar.sharing.application.SharingApp;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.common.Consts;
@@ -286,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if (FilesCenterApp.isDebuggable())
+        if (SharingApp.isDebuggable())
             Data.alertNotifier.observe(this, info -> {
                 errorDialogAD.setTitle(info.getString("title"));
                 errorDialogAD.setMessage(info.getString("message"));
