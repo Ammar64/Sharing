@@ -40,7 +40,7 @@
             android:textColor="@color/white"
             app:backgroundTint="#B6164D"/>
 
-        <com.ammar.filescenter.custom.ui.AdaptiveTextView
+        <com.ammar.sharing.custom.ui.AdaptiveTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"

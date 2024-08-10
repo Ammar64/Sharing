@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="300dp">
 
-    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+    <com.ammar.sharing.custom.ui.AdaptiveTextView
         android:id="@+id/TV_UsersDialogTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +20,7 @@
         android:layout_below="@id/TV_UsersDialogTitle"
         tools:listitem="@layout/row_user"/>
 
-    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+    <com.ammar.sharing.custom.ui.AdaptiveTextView
         android:id="@+id/TV_NoUserConnected"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

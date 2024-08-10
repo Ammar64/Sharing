@@ -5,7 +5,7 @@
     android:layout_height="400dp"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+    <com.ammar.sharing.custom.ui.AdaptiveTextView
         android:id="@+id/TV_FilesDialogTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
         tools:listitem="@layout/row_chosen_files" />
 
 
-    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+    <com.ammar.sharing.custom.ui.AdaptiveTextView
         android:id="@+id/TV_NoFilesSelected"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

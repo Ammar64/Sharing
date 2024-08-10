@@ -33,7 +33,7 @@
         tools:spanCount="3"
         tools:visibility="invisible" />
 
-    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+    <com.ammar.sharing.custom.ui.AdaptiveTextView
         android:id="@+id/TV_AppsLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

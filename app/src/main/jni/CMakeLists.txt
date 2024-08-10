@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.21)
 add_link_options(LINKER:--build-id=none)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/qrcodegen)
-project("filescenter")
+project("sharing")
 
 add_library(nativeutils SHARED 
     ${CMAKE_CURRENT_SOURCE_DIR}/utils.c)

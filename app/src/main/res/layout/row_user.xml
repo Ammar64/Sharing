@@ -15,7 +15,7 @@
         android:layout_marginStart="8dp"
         tools:src="@drawable/icon_android" />
 
-    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+    <com.ammar.sharing.custom.ui.AdaptiveTextView
         android:id="@+id/TV_Username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
 
         tools:text="User0"/>
 
-    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+    <com.ammar.sharing.custom.ui.AdaptiveTextView
         android:id="@+id/TV_UserIpAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

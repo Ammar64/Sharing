@@ -33,7 +33,7 @@
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="8dp">
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsUploadAllow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                     android:textSize="@dimen/settings_big_text"
                     app:lightModeColor="#fff" />
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsUploadAllowSub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="8dp">
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsUserBlock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
                     android:textSize="@dimen/settings_big_text"
                     app:lightModeColor="#fff" />
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsUserBlockSub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="8dp">
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsLanguage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
                     android:textSize="@dimen/settings_big_text"
                     app:lightModeColor="#fff" />
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsLanguageSub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="8dp">
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsDebugMode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -186,7 +186,7 @@
                     android:textSize="@dimen/settings_big_text"
                     app:lightModeColor="#fff" />
 
-                <com.ammar.filescenter.custom.ui.AdaptiveTextView
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsDebugModeSub"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

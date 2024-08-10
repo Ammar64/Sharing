@@ -9,7 +9,7 @@ You can always disable uploads in the app settings.
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
-     height="80">](https://f-droid.org/packages/com.ammar.filescenter/)
+     height="80">](https://f-droid.org/packages/com.ammar.sharing/)
 
 Or download the latest APK from the [Releases Section](https://github.com/Ammar64/Sharing/releases/latest).
 

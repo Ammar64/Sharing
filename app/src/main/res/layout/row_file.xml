@@ -37,7 +37,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.ammar.filescenter.custom.ui.AdaptiveTextView
+        <com.ammar.sharing.custom.ui.AdaptiveTextView
             android:id="@+id/TV_FileTypeName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                 android:layout_height="1dp"
                 android:background="#AAFFFFFF"/>
 
-            <com.ammar.filescenter.custom.ui.AdaptiveTextView
+            <com.ammar.sharing.custom.ui.AdaptiveTextView
                 android:id="@+id/TV_FileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                 app:lightModeColor="#FFF"
                 tools:text="Filename.txt"/>
 
-            <com.ammar.filescenter.custom.ui.AdaptiveTextView
+            <com.ammar.sharing.custom.ui.AdaptiveTextView
                 android:id="@+id/TV_FileSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

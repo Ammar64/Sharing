@@ -25,7 +25,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.ammar.filescenter.custom.ui.AdaptiveTextView
+        <com.ammar.sharing.custom.ui.AdaptiveTextView
             android:id="@+id/TV_DirectoryName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

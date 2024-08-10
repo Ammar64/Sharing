@@ -29,7 +29,7 @@
         tools:itemCount="0"
         tools:listitem="@layout/row_file" />
 
-    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+    <com.ammar.sharing.custom.ui.AdaptiveTextView
         android:id="@+id/TV_FolderEmpty"
         android:layout_width="0dp"
         android:layout_height="50dp"

@@ -9,7 +9,7 @@
     app:cardBackgroundColor="#77000000"
     android:foreground="@drawable/ripple_item">
 
-    <com.ammar.filescenter.custom.ui.AdaptiveTextView
+    <com.ammar.sharing.custom.ui.AdaptiveTextView
         android:id="@+id/TV_FileTypeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
