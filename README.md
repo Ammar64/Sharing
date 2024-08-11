@@ -34,7 +34,7 @@ Screen shots
 Note
 ----------------
 Tutorial is available at https://ammar64.github.io/Sharing/Tutorial <br>
-Clicking the tutorial button in the app will open the previous link in a web browser in version 1.3 and up<br>
+Clicking the tutorial button in the app will open the previous link in a web browser in version 1.5 and up<br>
 Feel free to contribute to it in the [tutorial](https://github.com/Ammar64/Sharing/tree/tutorial) branch<br>
 
 License
