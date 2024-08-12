@@ -28,6 +28,7 @@ Screen shots
      <img width="200px" src="https://github.com/Ammar64/Sharing/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/4.jpg" alt="App screen shot">
      &nbsp;&nbsp;&nbsp;
      <img width="200px" src="https://github.com/Ammar64/Sharing/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/5.jpg" alt="App screen shot">
+     &nbsp;&nbsp;&nbsp;
 </p>
 
 
