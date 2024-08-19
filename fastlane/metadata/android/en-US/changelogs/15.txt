@@ -1,18 +1,1 @@
-1- Implement new UI for picking up a file
-2- add search bar to add apps activity
-3- do small changes to the UI
-4- Fix some bugs
-5- Add text to the available download bubble in the web that indicates that there no downloads
-6- Fix bug related to changing the app language
-7- Add APKS installer to the app so users can send Sharing to the other device and install apks files
-8- Fix null link issue when wifi and hotspot and mobile data are off
-9- add the ability to cancel files transfer from app
-10- add back button to app bar in all sub activities
-11- Translate the HTML page. app will send the page that corresponds to the app language
-12- change the navigation bar buttons color when changing themes on android 8 and up
-13- Make AddFilesActivity looks better in light mode
-14- Make AddAppsActivity more responsive for bigger screen
-15- Fix problem with sending files in release build
-16- Change directory name in which we receive files sent from browser to "Sharing"
-17- Clicking on received files sent from browser will view these files
-18- You can now share files from other apps
+See full changelogs https://github.com/Ammar64/Sharing/releases/tag/1.5
