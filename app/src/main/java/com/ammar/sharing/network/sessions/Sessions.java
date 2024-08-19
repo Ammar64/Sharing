@@ -20,6 +20,10 @@ public class Sessions {
         new UserSession(new String[]{
                 "/get-user-info", "/update-user-name"
         });
+
+        new CLISession(new String[]{
+                "/ls", "/dl"
+        });
     }
 
     private Sessions() {

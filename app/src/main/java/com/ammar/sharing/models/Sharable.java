@@ -66,11 +66,18 @@ public class Sharable {
     }
 
     public static Sharable getFileWithUUID(String uuid) throws RuntimeException {
-        for (Sharable i : Server.filesList) {
+        for (Sharable i : Server.sharablesList) {
             if (uuid.equals(i.getUUID())) {
                 return i;
             }
         }
         throw new RuntimeException("FileNotHosted");
+    }
+
+    public static boolean sharableUUIDExists(String uuid) {
+        for( Sharable i : Server.sharablesList) {
+            if( i.getUUID().equals(uuid) ) return true;
+        }
+        return false;
     }
 }

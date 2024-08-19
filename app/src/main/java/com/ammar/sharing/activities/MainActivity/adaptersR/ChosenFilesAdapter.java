@@ -51,7 +51,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
 
     @Override
     public int getItemCount() {
-        return Server.filesList.size();
+        return Server.sharablesList.size();
     }
 
 
@@ -78,7 +78,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         }
 
         public void setup(int pos) {
-            Sharable file = Server.filesList.get(pos);
+            Sharable file = Server.sharablesList.get(pos);
             setFileName(file.getName());
             setFileIconIV(file, pos);
             setFileSizeTV(file.getSize());

@@ -105,7 +105,7 @@ public class DownloadSession extends HTTPSession {
 
     private byte[] getFilesJson() throws JSONException {
         JSONArray jsonArray = new JSONArray();
-        for (Sharable i : Server.filesList) {
+        for (Sharable i : Server.sharablesList) {
             jsonArray.put(i.getJSON());
         }
         return jsonArray.toString().getBytes();

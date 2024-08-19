@@ -17,7 +17,7 @@ public class Server {
     private ServerSocket serverSocket;
     private Thread serverThread;
 
-    public static final LinkedList<Sharable> filesList = new LinkedList<>();
+    public static final LinkedList<Sharable> sharablesList = new LinkedList<>();
     private boolean running = false;
     private final ServerService service;
 

@@ -16,6 +16,7 @@ import java.net.SocketException;
 import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -35,13 +36,13 @@ public class Request {
         this.headers = new HashMap<>();
     }
 
-    public boolean readSocket()  {
+    public boolean readSocket() {
         if (_connClose) return false;
         try {
             params = new TreeMap<>();
             parseHTTPHeader();
 
-            String connection = headers.get("Connection");
+            String connection = getHeader("Connection");
             if (connection == null || !connection.contains("keep-alive")) {
                 _connClose = true;
                 Log.d("MYLOG", "Connection will close");
@@ -80,7 +81,8 @@ public class Request {
         }
 
         this.method = st.nextToken();
-        if(!Arrays.asList("GET", "POST").contains( this.method ) ) throw new BadRequestException("Method not supported\n Method requested: " + this.method);
+        if (!Arrays.asList("GET", "POST").contains(this.method))
+            throw new BadRequestException("Method not supported\n Method requested: " + this.method);
         if (!st.hasMoreTokens()) {
             throw new RuntimeException("BAD REQUEST: Missing URI. Usage: GET /example/file.html");
         }
@@ -98,7 +100,7 @@ public class Request {
         while ((!(line = readLineUTF8(clientInput)).isEmpty())) {
             String[] headerParts = line.split(": ");
             if (headerParts.length != 2) throw new RuntimeException("Header is invalid");
-            this.headers.put(headerParts[0], headerParts[1]);
+            this.headers.put(headerParts[0].toLowerCase(Locale.ENGLISH), headerParts[1]);
         }
 
         String contentLengthT = getHeader("Content-Length");
@@ -208,7 +210,7 @@ public class Request {
     }
 
     public String getHeader(String header) {
-        return headers.get(header);
+        return headers.get(header.toLowerCase(Locale.ENGLISH));
     }
 
     public String getParam(String key) {

@@ -82,7 +82,7 @@ public class ServerService extends Service {
                 ArrayList<String> filePaths = intent.getStringArrayListExtra(Consts.EXTRA_FILES_PATH);
                 assert filePaths != null;
                 for( String i : filePaths ) {
-                    Server.filesList.add( new Sharable(i));
+                    Server.sharablesList.add( new Sharable(i));
                 }
                 Bundle fb = new Bundle();
                 fb.putChar("action", 'A');
@@ -93,7 +93,7 @@ public class ServerService extends Service {
                 if( packages_name != null ) {
                     for( String i : packages_name ) {
                         try {
-                            Server.filesList.add(new SharableApp(this, i));
+                            Server.sharablesList.add(new SharableApp(this, i));
                         } catch (PackageManager.NameNotFoundException e) {
                             throw new RuntimeException(e);
                         }
@@ -107,9 +107,9 @@ public class ServerService extends Service {
                 String uuid = intent.getStringExtra(Consts.EXTRA_DOWNLOAD_UUID);
 
                 int index = 0;
-                for( Sharable i : Server.filesList ) {
+                for( Sharable i : Server.sharablesList) {
                     if( i.getUUID().equals(uuid) ) {
-                        Server.filesList.remove(index);
+                        Server.sharablesList.remove(index);
                         break;
                     }
                     index++;

@@ -101,7 +101,7 @@ public class PageSession extends HTTPSession {
         StringBuilder pageBuilder = new StringBuilder();
 
         pageBuilder.append(pageOffset);
-        for (Sharable i : Server.filesList) {
+        for (Sharable i : Server.sharablesList) {
             final String downloadLink = "/download/" + i.getUUID();
             final String downloadElement = String.format(Locale.ENGLISH, "        <li><a download href=\"%s\">%s</a></li>\n", downloadLink, i.getName());
             pageBuilder.append(downloadElement);

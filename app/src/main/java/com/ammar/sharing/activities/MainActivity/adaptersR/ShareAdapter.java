@@ -126,8 +126,8 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             TextView usersNumTV = itemView.findViewById(R.id.TV_NumberUsers);
             TextView filesNumTV = itemView.findViewById(R.id.TV_NumberSelected);
 
-            if (!Server.filesList.isEmpty()) {
-                filesNumTV.setText(String.valueOf(Server.filesList.size()));
+            if (!Server.sharablesList.isEmpty()) {
+                filesNumTV.setText(String.valueOf(Server.sharablesList.size()));
                 filesNumTV.setVisibility(View.VISIBLE);
             }
             if (!User.users.isEmpty()) {
@@ -179,7 +179,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             Data.filesListNotifier.observe(fragment.getViewLifecycleOwner(), info -> {
                 char action = info.getChar("action");
-                int size = Server.filesList.size();
+                int size = Server.sharablesList.size();
                 if ('R' == action) {
                     int index = info.getInt("index");
                     chosenFilesAdapter.notifyItemRemoved(index);
