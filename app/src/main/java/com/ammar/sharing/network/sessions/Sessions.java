@@ -5,7 +5,7 @@ public class Sessions {
         // main page
 
         new PageSession(new String[]{
-                "/", "/index.html", "/style.css", "/script.js", "/dv.png", "/cairo.ttf", "/favicon.ico", "/blocked"
+                "/", "/index.html", "/style.css", "/script.js", "/dv.png", "/cairo.ttf", "/favicon.ico", "/no-JS", "/blocked"
         });
 
 

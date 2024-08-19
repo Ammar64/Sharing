@@ -143,7 +143,7 @@ function requestAvailableDownloads() {
             infoContainer.className = "infoContainer";
 
             // Create button element
-            var downloadBtn = document.createElement('button');
+            var downloadBtn = document.createElement('a');
             downloadBtn.classList.add('Btn1');
 
             // Create div for the sign
@@ -180,9 +180,8 @@ function requestAvailableDownloads() {
             
             newFileItemText.textContent = e.name.concat("     ").concat(!e.hasSplits ? `(${getFormattedFileSize(e.size)})` : '(splits)');
             downloads.appendChild(newFileItem);
-            downloadBtn.addEventListener("click", () => {
-                downloadFileWithProgress(`/download/${e.uuid}`);
-            });
+            downloadBtn.setAttribute("download", "");
+            downloadBtn.setAttribute("href", "/download/" + e.uuid);
         });
     }).catch(error => {
         console.error('Error fetching available downloads:', error);

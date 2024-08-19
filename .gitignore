@@ -16,3 +16,4 @@ app/release/
 app/src/main/cpp/.vscode/
 
 /build_and_sign.bat
+/build_and_sign.sh
