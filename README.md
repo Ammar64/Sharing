@@ -31,6 +31,9 @@ Screen shots
      &nbsp;&nbsp;&nbsp;
 </p>
 
+Translation
+----------------
+When translating [res/values/string.xml](app/src/main/res/values/string.xml) consider also translating [res/raw/index](app/src/main/res/raw/index.html) to translate the webpage that shows on the other device
 
 Note
 ----------------
