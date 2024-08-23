@@ -5,7 +5,6 @@ import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
-import com.ammar.sharing.network.Server;
 import com.ammar.sharing.network.sessions.base.HTTPSession;
 
 import java.nio.charset.StandardCharsets;
@@ -20,23 +19,25 @@ public class CLISession extends HTTPSession {
         String path = req.getPath();
         if ("/ls".equals(path)) {
             listDownloads(req, res);
-        } else if (path.startsWith("/dl/")) {
+        } else if (path.startsWith("/dl/")) { // download a file
             String uuid = path.substring(4);
-            if( Sharable.sharableUUIDExists(uuid) ) {
+            if (Sharable.sharableUUIDExists(uuid)) {
                 sendSharable(uuid, res);
             } else {
                 res.setHeader("Content-Type", "text/plain");
                 res.setStatusCode(404);
                 res.sendResponse("Download doesn't exist.\nMake sure you've typed the URL correctly.\n".getBytes(StandardCharsets.UTF_8));
             }
+        } else if ("/da".equals(path)) {
+            sendAllSharables(res);
         }
     }
 
 
-    private void listDownloads(Request req ,Response res) {
+    private void listDownloads(Request req, Response res) {
         res.setHeader("Content-Type", "text/plain");
         StringBuilder listedDownloadsString = new StringBuilder();
-        for( Sharable i : Server.sharablesList ) {
+        for (Sharable i : Sharable.sharablesList) {
             listedDownloadsString
                     .append("Name: ").append(i.getName()).append("\n")
                     .append("Size: ").append(Utils.getFormattedSize(i.getSize())).append("\n")
@@ -61,10 +62,15 @@ public class CLISession extends HTTPSession {
                 for (int i = 1; i < app_files.length; i++) {
                     app_files[i] = app_splits[i - 1];
                 }
-                res.sendZippedFilesResponse(app_files, user);
+                res.sendZippedFilesResponse(app_files, app.getName() + "apks", user);
             } else {
                 res.sendFileResponse(app, user);
             }
-        }
+        }Sharable.sharablesList.toArray(new Sharable[0]);
+    }
+
+    private void sendAllSharables(Response res) {
+        Sharable[] sharables = Sharable.sharablesList.toArray(new Sharable[0]);
+        res.sendZippedFilesResponse(sharables, "files.zip", user);
     }
 }

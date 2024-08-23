@@ -24,7 +24,6 @@ import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.custom.ui.AdaptiveDropDown;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
-import com.ammar.sharing.network.Server;
 import com.ammar.sharing.services.ServerService;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
@@ -51,7 +50,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
 
     @Override
     public int getItemCount() {
-        return Server.sharablesList.size();
+        return Sharable.sharablesList.size();
     }
 
 
@@ -74,11 +73,11 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
             adaptiveDropDown = new AdaptiveDropDown(itemView.getContext());
 
             removeB = adaptiveDropDown.addItem(R.string.remove, R.drawable.icon_trash);
-            fastShareB = adaptiveDropDown.addItem(R.string.fast_share, R.drawable.share_icon);
+            fastShareB = adaptiveDropDown.addItem(R.string.fast_share, R.drawable.icon_share);
         }
 
         public void setup(int pos) {
-            Sharable file = Server.sharablesList.get(pos);
+            Sharable file = Sharable.sharablesList.get(pos);
             setFileName(file.getName());
             setFileIconIV(file, pos);
             setFileSizeTV(file.getSize());
@@ -148,7 +147,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
                     builder = request.load(appIcon);
                 }
             } else {
-                builder = request.load(R.drawable.icon_file_red);
+                builder = request.load(R.drawable.icon_file);
             }
 
 

@@ -189,7 +189,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.currentDir = dir;
         File[] listedFiles = currentDir.listFiles();
         if (listedFiles == null) { // permission denied
-            Toast.makeText(act, R.string.permission_denied, Toast.LENGTH_SHORT).show();
+            act.runOnUiThread(() -> Toast.makeText(act, R.string.permission_denied, Toast.LENGTH_SHORT).show() );
             return;
         }
         this.files = listedFiles;
@@ -229,7 +229,9 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             this.currentDir = dir;
             File[] listedFiles = currentDir.listFiles();
             if (listedFiles == null) { // permission denied
-                Toast.makeText(act, R.string.permission_denied, Toast.LENGTH_SHORT).show();
+                act.runOnUiThread(() -> Toast.makeText(act, R.string.permission_denied, Toast.LENGTH_SHORT).show() );
+                handler.removeCallbacksAndMessages(null);
+                loadingDialog.dismiss();
                 return;
             }
             this.files = listedFiles;

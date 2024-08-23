@@ -5,7 +5,6 @@ import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
-import com.ammar.sharing.network.Server;
 import com.ammar.sharing.network.sessions.base.HTTPSession;
 
 import java.io.IOException;
@@ -101,7 +100,7 @@ public class PageSession extends HTTPSession {
         StringBuilder pageBuilder = new StringBuilder();
 
         pageBuilder.append(pageOffset);
-        for (Sharable i : Server.sharablesList) {
+        for (Sharable i : Sharable.sharablesList) {
             final String downloadLink = "/download/" + i.getUUID();
             final String downloadElement = String.format(Locale.ENGLISH, "        <li><a download href=\"%s\">%s</a></li>\n", downloadLink, i.getName());
             pageBuilder.append(downloadElement);

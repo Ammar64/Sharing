@@ -11,14 +11,20 @@
 
     <string name="sending_to_user">Sending to %1$s</string>
     <string name="sending_to_user_stopped">Sending to %1$s stopped</string>
-    <string name="sending_to_user_done">Sent to %1$s</string>
+    <string name="sending_to_user_done">Sent to %1$s in %2$s</string>
     <string name="receiving_from_user">Receiving from %1$s</string>
     <string name="receiving_from_user_stopped">Receiving from %1$s stopped</string>
-    <string name="receiving_from_user_done">Received from %1$s</string>
+    <string name="receiving_from_user_done">Received from %1$s in %2$s</string>
 
     <string name="completed">Completed</string>
     <string name="stopped">Stopped</string>
     <string name="stop">Stop</string>
+
+    <string name="days">%d days</string>
+    <string name="hours">%d hours</string>
+    <string name="minutes">%d minutes</string>
+    <string name="seconds">%d seconds</string>
+    <string name="milliSeconds">%d milli seconds</string>
 
     <!-- dialogs   -->
     <string name="connected_users">Connected users</string>

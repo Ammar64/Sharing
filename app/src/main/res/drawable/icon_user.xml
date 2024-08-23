@@ -1,6 +1,5 @@
-<!-- AUTHOR: Dazzle UI -->
-<!-- Attribution:  https://www.svgrepo.com/page/licensing/#CC%20Attribution -->
-<!-- this file was converted from svg to android xml -->
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:autoMirrored="true" android:height="50dp" android:viewportHeight="24" android:viewportWidth="24" android:width="50dp">
-    <path android:fillColor="#00000000" android:pathData="M5,21C5,17.134 8.134,14 12,14C15.866,14 19,17.134 19,21M16,7C16,9.209 14.209,11 12,11C9.791,11 8,9.209 8,7C8,4.791 9.791,3 12,3C14.209,3 16,4.791 16,7Z" android:strokeColor="#000000" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeWidth="2"/>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:height="40dp" android:viewportHeight="24" android:viewportWidth="24" android:width="40dp">
+      
+    <path android:fillColor="#111" android:pathData="M4,22C4,17.582 7.582,14 12,14C16.418,14 20,17.582 20,22H18C18,18.686 15.314,16 12,16C8.686,16 6,18.686 6,22H4ZM12,13C8.685,13 6,10.315 6,7C6,3.685 8.685,1 12,1C15.315,1 18,3.685 18,7C18,10.315 15.315,13 12,13ZM12,11C14.21,11 16,9.21 16,7C16,4.79 14.21,3 12,3C9.79,3 8,4.79 8,7C8,9.21 9.79,11 12,11Z"/>
+    
 </vector>

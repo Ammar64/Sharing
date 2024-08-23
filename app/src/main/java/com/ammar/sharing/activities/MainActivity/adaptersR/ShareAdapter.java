@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.FileProvider;
@@ -36,8 +37,8 @@ import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.custom.io.ProgressManager;
 import com.ammar.sharing.custom.ui.AdaptiveTextView;
+import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.User;
-import com.ammar.sharing.network.Server;
 import com.ammar.sharing.services.ServerService;
 
 import java.util.Locale;
@@ -117,7 +118,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             ImageButton addAppsB = itemView.findViewById(R.id.B_AddApps);
             ImageButton addFilesB = itemView.findViewById(R.id.B_AddFiles);
-            ImageButton QRCodeB = itemView.findViewById(R.id.B_ShowAddress);
+            AppCompatButton QRCodeB = itemView.findViewById(R.id.B_ShowAddress);
 
             ImageButton showSelected = itemView.findViewById(R.id.B_ShowSelected);
             ImageButton showUsersB = itemView.findViewById(R.id.B_ShowUsers);
@@ -126,8 +127,8 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             TextView usersNumTV = itemView.findViewById(R.id.TV_NumberUsers);
             TextView filesNumTV = itemView.findViewById(R.id.TV_NumberSelected);
 
-            if (!Server.sharablesList.isEmpty()) {
-                filesNumTV.setText(String.valueOf(Server.sharablesList.size()));
+            if (!Sharable.sharablesList.isEmpty()) {
+                filesNumTV.setText(String.valueOf(Sharable.sharablesList.size()));
                 filesNumTV.setVisibility(View.VISIBLE);
             }
             if (!User.users.isEmpty()) {
@@ -179,7 +180,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             Data.filesListNotifier.observe(fragment.getViewLifecycleOwner(), info -> {
                 char action = info.getChar("action");
-                int size = Server.sharablesList.size();
+                int size = Sharable.sharablesList.size();
                 if ('R' == action) {
                     int index = info.getInt("index");
                     chosenFilesAdapter.notifyItemRemoved(index);
@@ -295,7 +296,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             switch (operation) {
                 case DOWNLOAD:
                     if (manager.getLoaded() == ProgressManager.COMPLETED)
-                        operationText = ctx.getString(R.string.sending_to_user_done, username);
+                        operationText = ctx.getString(R.string.sending_to_user_done, username, Utils.getFormattedTime(manager.getTotalTime()));
                     else if (manager.getLoaded() == ProgressManager.STOPPED_BY_REMOTE)
                         operationText = ctx.getString(R.string.sending_to_user_stopped, username);
                     else
@@ -303,7 +304,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     break;
                 case UPLOAD:
                     if (manager.getLoaded() == ProgressManager.COMPLETED)
-                        operationText = ctx.getString(R.string.receiving_from_user_done, username);
+                        operationText = ctx.getString(R.string.receiving_from_user_done, username, Utils.getFormattedTime(manager.getTotalTime()));
                     else if (manager.getLoaded() == ProgressManager.STOPPED_BY_REMOTE)
                         operationText = ctx.getString(R.string.receiving_from_user_stopped, username);
                     else
@@ -341,7 +342,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         private void setProgress(ProgressManager manager) {
             if (manager.getLoaded() < 0) {
-                stopB.setImageResource(R.drawable.icon_trash);
+                stopB.setImageResource(R.drawable.icon_minus);
                 fileProgressTV.setText("");
                 fileProgressTV.setVisibility(View.INVISIBLE);
 

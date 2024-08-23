@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/B_Share"
-        android:icon="@drawable/share_icon"
+        android:icon="@drawable/icon_share"
         android:title="@string/share" />
 
     <item

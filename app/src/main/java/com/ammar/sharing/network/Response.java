@@ -6,6 +6,7 @@ import android.util.Log;
 import com.ammar.sharing.custom.io.ProgressManager;
 import com.ammar.sharing.custom.io.ProgressOutputStream;
 import com.ammar.sharing.models.Sharable;
+import com.ammar.sharing.models.SharableApp;
 import com.ammar.sharing.models.User;
 
 import java.io.ByteArrayOutputStream;
@@ -118,44 +119,48 @@ public class Response {
 
     }
 
-    public void sendZippedFilesResponse(Sharable[] files, User user) {
+    public void sendZippedFilesResponse(Sharable[] files, String filename, User user) {
         ProgressManager progressManager = new ProgressManager(files[0].getFile(), clientSocket, -1, user, ProgressManager.OP.DOWNLOAD);
         progressManager.setUUID(files[0].getUUID());
-        progressManager.setDisplayName(files[0].getName());
+        progressManager.setDisplayName(filename);
         try {
             OutputStream out = clientSocket.getOutputStream();
             ByteArrayOutputStream bout = new ByteArrayOutputStream(2048);
             ZipOutputStream zout = new ZipOutputStream(bout);
 
             setHeader("Content-Type", "application/octet-stream");
-            setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", files[0].getName() + ".apks"));
+
+            filename = filename.replace("\"", "\\\"");
+            setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", filename));
             setHeader("Transfer-Encoding", "chunked");
             setHeader("Accept-Ranges", "none");
 
             writeHeaders(out);
-
             zout.setMethod(ZipOutputStream.DEFLATED);
             for (Sharable i : files) {
-                ZipEntry zipEntry = new ZipEntry(i.getFileName());
-                zout.putNextEntry(zipEntry);
 
-                FileInputStream fin = new FileInputStream(i.getFilePath());
-                byte[] buffer = new byte[2048];
-                int bytesRead;
-                while ((bytesRead = fin.read(buffer)) != -1) {
-                    zout.write(buffer, 0, bytesRead);
-                    byte[] buf = bout.toByteArray();
-                    // write chunk to client socket
-                    if (buf.length != 0) {
-                        out.write(String.format("%x\r\n", buf.length).getBytes());
-                        out.write(buf);
-                        out.write("\r\n".getBytes());
+                ZipEntry zipEntry = new ZipEntry(i.getName());
+                zout.putNextEntry(zipEntry);
+                if(i instanceof SharableApp && ((SharableApp) i).hasSplits()) {
+                    // in case zipped file response has an app with splits in it
+                    // we include the apks file in the zip response
+                    SharableApp app = (SharableApp) i;
+                    Sharable[] appApkFiles = new Sharable[app.getSplits().length + 1];
+                    appApkFiles[0] = app;
+                    System.arraycopy(app.getSplits(), 0, appApkFiles, 1, app.getSplits().length);
+
+                    ZipOutputStream apksZout = new ZipOutputStream(zout);
+                    for( Sharable apk : appApkFiles ) {
+                        ZipEntry apkEntry = new ZipEntry(apk.getFileName());
+                        apksZout.putNextEntry(apkEntry);
+                        __writeFileZippedToSocket(apk, out, apksZout, bout, progressManager);
+                        apksZout.closeEntry();
                     }
-                    Log.d("HTTP", String.format("%x\\r\\n", buf.length) + new String(buf) + "\\r\\n");
-                    bout.reset();
-                    progressManager.accumulateLoaded(bytesRead);
+                    apksZout.finish();
+                } else {
+                    // this is the normal case where Sharable is one file
+                    __writeFileZippedToSocket(i, out, zout, bout, progressManager);
                 }
-                fin.close();
                 zout.closeEntry();
             }
 
@@ -171,6 +176,29 @@ public class Response {
             progressManager.reportStopped();
             Log.e("MYLOG", "sendZippedFilesResponse(). Exception: " + e.getMessage());
         }
+    }
+
+    // this function is used for sendZippedFilesResponse
+    // don't ask me about how it works.
+    private static void __writeFileZippedToSocket(Sharable i, OutputStream clientOut, ZipOutputStream zout, ByteArrayOutputStream bout, ProgressManager progressManager) throws IOException {
+        FileInputStream fin = new FileInputStream(i.getFilePath());
+        byte[] buffer = new byte[2048];
+        int bytesRead;
+
+        while ((bytesRead = fin.read(buffer)) != -1) {
+            zout.write(buffer, 0, bytesRead);
+            byte[] buf = bout.toByteArray();
+
+            // write chunk length to client socket
+            if (buf.length != 0) {
+                clientOut.write(String.format("%x\r\n", buf.length).getBytes());
+                clientOut.write(buf);
+                clientOut.write("\r\n".getBytes());
+            }
+            bout.reset();
+            progressManager.accumulateLoaded(bytesRead);
+        }
+        fin.close();
     }
 
     public void sendResponse(byte[] content) {

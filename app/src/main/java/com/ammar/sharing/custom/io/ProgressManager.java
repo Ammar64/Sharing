@@ -27,6 +27,12 @@ public class ProgressManager {
     private long loaded;
     // total file size
     private long total;
+    // when we started transferring file
+    private long startTime;
+
+    // total time taken to finish. -1 if not finished
+    private long totalFinishTime = -1;
+
     private int index;
     private String uuid = null;
 
@@ -71,6 +77,8 @@ public class ProgressManager {
         // set action to P for later use
         progress_info.putChar("action", 'P');
         progress_info.putInt("index", index);
+
+        startTime = System.currentTimeMillis();
     }
 
 
@@ -142,6 +150,11 @@ public class ProgressManager {
         return (int) ((float) loaded / (float) total * 100.0f);
     }
 
+    // totalFinishTime is -1 if not finished
+    public long getTotalTime() {
+        return totalFinishTime;
+    }
+
     public void setUUID(String uuid) {
         this.uuid = uuid;
     }
@@ -167,6 +180,7 @@ public class ProgressManager {
 
 
     public void reportCompleted() {
+        totalFinishTime = System.currentTimeMillis() - startTime;
         setLoaded(COMPLETED);
         Data.filesSendNotifier.forcePostValue(progress_info);
     }

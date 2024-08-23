@@ -2,14 +2,13 @@ package com.ammar.sharing.network;
 
 import android.util.Log;
 
-import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.services.ServerService;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.LinkedList;
+
 public class Server {
 
     public static final int PORT_NUMBER = 2999;
@@ -17,7 +16,6 @@ public class Server {
     private ServerSocket serverSocket;
     private Thread serverThread;
 
-    public static final LinkedList<Sharable> sharablesList = new LinkedList<>();
     private boolean running = false;
     private final ServerService service;
 

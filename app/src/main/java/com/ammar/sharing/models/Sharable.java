@@ -1,16 +1,17 @@
 package com.ammar.sharing.models;
 
 import com.ammar.sharing.common.Utils;
-import com.ammar.sharing.network.Server;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.LinkedList;
 import java.util.UUID;
 
 public class Sharable {
 
+    public static final LinkedList<Sharable> sharablesList = new LinkedList<>();
     protected String uuid;
     protected File file;
     public Sharable(String path) {
@@ -66,7 +67,7 @@ public class Sharable {
     }
 
     public static Sharable getFileWithUUID(String uuid) throws RuntimeException {
-        for (Sharable i : Server.sharablesList) {
+        for (Sharable i : sharablesList) {
             if (uuid.equals(i.getUUID())) {
                 return i;
             }
@@ -75,7 +76,7 @@ public class Sharable {
     }
 
     public static boolean sharableUUIDExists(String uuid) {
-        for( Sharable i : Server.sharablesList) {
+        for( Sharable i : sharablesList) {
             if( i.getUUID().equals(uuid) ) return true;
         }
         return false;

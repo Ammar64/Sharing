@@ -35,7 +35,8 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="@drawable/circular_button_white"
-        app:srcCompat="@drawable/icon_file_red"
+        app:srcCompat="@drawable/icon_file"
+        app:tint="#c00"
         app:layout_constraintEnd_toStartOf="@id/B_ShowSelected"
         app:layout_constraintStart_toEndOf="@+id/B_AddApps"
         app:layout_constraintTop_toTopOf="@+id/B_AddApps" />
@@ -92,16 +93,19 @@
         app:layout_constraintStart_toStartOf="@+id/B_ShowSelected"
         app:layout_constraintTop_toBottomOf="@+id/B_ShowSelected" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/B_ShowAddress"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="@drawable/circular_button_white"
-        app:srcCompat="@drawable/icon_link"
         app:layout_constraintEnd_toStartOf="@id/B_ShowUsers"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TV_AddApps"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp"
+        android:text="IP"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="32sp"/>
 
     <TextView
         android:id="@+id/textView4"

@@ -11,10 +11,10 @@
 
     <string name="sending_to_user">Sende an %1$s</string>
     <string name="sending_to_user_stopped">%1$s hat den Download gestoppt</string>
-    <string name="sending_to_user_done">Gesendet an %1$s</string>
+    <string name="sending_to_user_done">Gesendet an %1$s %2$s</string>
     <string name="receiving_from_user">Empfange von %1$s</string>
     <string name="receiving_from_user_stopped">%1$s hat das Senden gestoppt</string>
-    <string name="receiving_from_user_done">Empfangen von %1$s</string>
+    <string name="receiving_from_user_done">Empfangen von %1$s %2$s</string>
 
     <string name="completed">Abgeschlossen</string>
     <string name="stopped">Gestoppt</string>

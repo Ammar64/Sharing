@@ -22,7 +22,7 @@ public class Sessions {
         });
 
         new CLISession(new String[]{
-                "/ls", "/dl"
+                "/ls", "/dl", "/da"
         });
     }
 

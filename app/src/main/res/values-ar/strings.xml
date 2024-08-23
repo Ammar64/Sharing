@@ -11,14 +11,20 @@
 
     <string name="sending_to_user">ارسال إلى %1$s</string>
     <string name="sending_to_user_stopped">%1$s توقف الإرسال إلى</string>
-    <string name="sending_to_user_done">تم الإرسال إلى %1$s</string>
+    <string name="sending_to_user_done">تم الإرسال إلى %1$s فى %2$s</string>
     <string name="receiving_from_user">استلام من %1$s</string>
     <string name="receiving_from_user_stopped">%1$s توقف الاستقبال من</string>
-    <string name="receiving_from_user_done">تم الاستلام من %1$s</string>
+    <string name="receiving_from_user_done">تم الاستلام من %1$s فى %2$s</string>
 
     <string name="completed">نجح</string>
     <string name="stopped">توقف</string>
     <string name="stop">أوقف</string>
+
+    <string name="days">%d أيام</string>
+    <string name="hours">%d ساعات</string>
+    <string name="minutes">%d دقائق</string>
+    <string name="seconds">%d ثوانى</string>
+    <string name="milliSeconds">%d أجزاء من الثانية</string>
 
     <!-- dialogs   -->
     <string name="connected_users">المستخدمون المتصلون</string>

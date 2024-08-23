@@ -1,14 +1,11 @@
 package com.ammar.sharing.services;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -73,7 +70,7 @@ public class ServerService extends Service {
             case Consts.ACTION_STOP_SERVICE:
                 stopSelf();
             case Consts.ACTION_GET_SERVER_STATUS:
-                sendServerStatusToActivity();
+                Data.serverStatusObserver.postValue(server.isRunning());
                 break;
             case Consts.ACTION_UPDATE_NOTIFICATION_TEXT:
                 startForeground(FOREGROUND_NOTIFICATION_ID, buildNotification(this));
@@ -82,7 +79,7 @@ public class ServerService extends Service {
                 ArrayList<String> filePaths = intent.getStringArrayListExtra(Consts.EXTRA_FILES_PATH);
                 assert filePaths != null;
                 for( String i : filePaths ) {
-                    Server.sharablesList.add( new Sharable(i));
+                    Sharable.sharablesList.add( new Sharable(i));
                 }
                 Bundle fb = new Bundle();
                 fb.putChar("action", 'A');
@@ -93,7 +90,7 @@ public class ServerService extends Service {
                 if( packages_name != null ) {
                     for( String i : packages_name ) {
                         try {
-                            Server.sharablesList.add(new SharableApp(this, i));
+                            Sharable.sharablesList.add(new SharableApp(this, i));
                         } catch (PackageManager.NameNotFoundException e) {
                             throw new RuntimeException(e);
                         }
@@ -107,9 +104,9 @@ public class ServerService extends Service {
                 String uuid = intent.getStringExtra(Consts.EXTRA_DOWNLOAD_UUID);
 
                 int index = 0;
-                for( Sharable i : Server.sharablesList) {
+                for( Sharable i : Sharable.sharablesList) {
                     if( i.getUUID().equals(uuid) ) {
-                        Server.sharablesList.remove(index);
+                        Sharable.sharablesList.remove(index);
                         break;
                     }
                     index++;
@@ -139,11 +136,11 @@ public class ServerService extends Service {
         } else {
             server.Start();
         }
-        sendServerStatusToActivity();
+        toggleForegroundAndReportToActivity();
     }
 
     private boolean isRunningFirstTime = true;
-    private void sendServerStatusToActivity() {
+    private void toggleForegroundAndReportToActivity() {
         boolean isServerRunning = server.isRunning();
 
         // stop notification or start it
@@ -160,38 +157,22 @@ public class ServerService extends Service {
     }
 
     public Notification buildNotification(Context context) {
-        // Create a notification manager
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        // Notification channel ID
-        String channelId = "com.ammar.sharing";
-        // Notification channel name
-        CharSequence channelName = "Server";
-        // Notification importance level
-
-        // Check if Android version is Oreo or higher, as notification channels are required from Oreo onwards
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            // Create a notification channel
-            NotificationChannel channel = new NotificationChannel(channelId, channelName, importance);
-            // Configure the notification channel
-            channel.setDescription("Your channel description");
-            channel.enableLights(true);
-            channel.setLightColor(Color.RED);
-            // Register the notification channel with the system
-            notificationManager.createNotificationChannel(channel);
-        }
-
         String address = ServerService.getIpAddress();
         if (address == null) address = "localhost";
         // Build the notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId).setContentTitle(getResources().getString(R.string.svr_running)).setSmallIcon(android.R.drawable.ic_dialog_info);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Consts.serverNotificationChannelID)
+                .setContentTitle(getResources().getString(R.string.svr_running))
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setOngoing(true);
 
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_IMMUTABLE);
         builder.setContentIntent(pendingIntent);
 
-        return new NotificationCompat.BigTextStyle(builder).bigText(getResources().getString(R.string.svr_notification_message, address, String.format(Locale.ENGLISH, "%d", PORT_NUMBER)))
+        return new NotificationCompat
+                .BigTextStyle(builder)
+                .bigText(getResources().getString(R.string.svr_notification_message, address, String.format(Locale.ENGLISH, "%d", PORT_NUMBER)))
                 .build();
     }
 

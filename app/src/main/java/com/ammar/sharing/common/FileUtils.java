@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.ammar.sharing.R;
+import com.ammar.sharing.models.Sharable;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -32,6 +33,7 @@ import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class FileUtils {
@@ -58,6 +60,7 @@ public class FileUtils {
     public static boolean setFileIcon(ImageView img, TextView fileTypeNameTV, File file) {
         String filename = file.getName();
         String ext = filename.substring(filename.lastIndexOf(".") + 1);
+        img.setScaleType(ImageView.ScaleType.FIT_CENTER);
         switch (ext) {
             case "pdf":
                 img.setImageResource(R.drawable.icon_pdf);
@@ -126,6 +129,7 @@ public class FileUtils {
         }
         Glide.with(img.getContext())
                 .load(R.drawable.icon_file)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(img);
         return false;
     }
@@ -246,5 +250,10 @@ public class FileUtils {
                 filesType.add(i);
             }
         }
+    }
+
+
+    public static void zipFilesToOutStream(OutputStream out, Sharable[] sharables) {
+
     }
 }

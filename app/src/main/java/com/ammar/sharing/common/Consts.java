@@ -49,6 +49,7 @@ public final class Consts {
 
     public static final List<String> langsCode = Arrays.asList("", "ar", "en", "du");
     public static Locale SystemLocale;
+    public static String serverNotificationChannelID = "com.ammar.sharing.SERVER_NOTIFICATION_CHANNEL";
 
     public enum OS {LINUX, WINDOWS, ANDROID, IOS, MAC, UNKNOWN};
     private Consts(){}

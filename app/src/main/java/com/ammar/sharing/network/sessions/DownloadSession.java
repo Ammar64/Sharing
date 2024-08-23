@@ -12,7 +12,6 @@ import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
-import com.ammar.sharing.network.Server;
 import com.ammar.sharing.network.sessions.base.HTTPSession;
 
 import org.json.JSONArray;
@@ -49,7 +48,7 @@ public class DownloadSession extends HTTPSession {
                         for (int i = 1; i < app_files.length; i++) {
                             app_files[i] = app_splits[i - 1];
                         }
-                        res.sendZippedFilesResponse(app_files, user);
+                        res.sendZippedFilesResponse(app_files, app.getName() + ".apks" ,user);
                     } else {
                         long start = req.getStartRange();
                         if (start == -1)
@@ -105,7 +104,7 @@ public class DownloadSession extends HTTPSession {
 
     private byte[] getFilesJson() throws JSONException {
         JSONArray jsonArray = new JSONArray();
-        for (Sharable i : Server.sharablesList) {
+        for (Sharable i : Sharable.sharablesList) {
             jsonArray.put(i.getJSON());
         }
         return jsonArray.toString().getBytes();

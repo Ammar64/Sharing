@@ -24,11 +24,14 @@ import android.webkit.MimeTypeMap;
 import androidx.annotation.NonNull;
 import androidx.annotation.RawRes;
 
+import com.ammar.sharing.R;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
+import java.util.concurrent.Callable;
 
 public class Utils {
 
@@ -55,6 +58,7 @@ public class Utils {
 
     private static Resources res;
     private static SharedPreferences settings;
+
     public static void setupUtils(Context ctx) {
         Utils.res = ctx.getResources();
         Utils.assetManager = ctx.getAssets();
@@ -272,18 +276,19 @@ public class Utils {
         // extension
         String extension = null;
         int dotIndex = name.lastIndexOf(".");
-        if( dotIndex != -1 ) extension = name.substring( dotIndex + 1 );
+        if (dotIndex != -1) extension = name.substring(dotIndex + 1);
 
         if (extension != null) {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension.toLowerCase());
         }
         if (type == null) {
-            if( extraTypes )
-                type = getExtraTypes(name.substring( name.lastIndexOf(".") + 1 ));
+            if (extraTypes)
+                type = getExtraTypes(name.substring(name.lastIndexOf(".") + 1));
             else type = "*/*";
         }
         return type;
     }
+
     public static String getMimeType(String name) {
         return getMimeType(name, true);
     }
@@ -388,12 +393,12 @@ public class Utils {
         dirsMade &= Consts.videosDir.mkdir();
         dirsMade &= Consts.documentsDir.mkdir();
 
-        if(!dirsMade) throw new IOException("Failed to make app directories");
+        if (!dirsMade) throw new IOException("Failed to make app directories");
     }
 
     public static void setLocale(Context context, String languageCode) {
         Locale locale;
-        if(languageCode.isEmpty()) {
+        if (languageCode.isEmpty()) {
             locale = Consts.SystemLocale;
         } else {
             locale = new Locale(languageCode);
@@ -412,17 +417,17 @@ public class Utils {
 
     }
 
-    public static Bitmap drawableToBitmap (Drawable drawable) {
+    public static Bitmap drawableToBitmap(Drawable drawable) {
         Bitmap bitmap = null;
 
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            if(bitmapDrawable.getBitmap() != null) {
+            if (bitmapDrawable.getBitmap() != null) {
                 return bitmapDrawable.getBitmap();
             }
         }
 
-        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
             bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
         } else {
             bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
@@ -435,8 +440,9 @@ public class Utils {
     }
 
     private static AssetManager assetManager;
+
     public static byte[] readFileFromWebAssets(String filepath) throws IOException {
-        InputStream input = assetManager.open( "web_app/" + filepath);
+        InputStream input = assetManager.open("web_app/" + filepath);
         int size = input.available();
         byte[] content = new byte[size];
         int numBytes = input.read(content);
@@ -449,17 +455,18 @@ public class Utils {
     }
 
     public static byte[] readRawRes(@RawRes int id) throws IOException {
-        try(InputStream in = res.openRawResource(id)) {
+        try (InputStream in = res.openRawResource(id)) {
             int size = in.available();
             byte[] buffer = new byte[size];
             in.read(buffer);
             return buffer;
         }
     }
-    public static void showErrorDialog( String title, String message ) {
+
+    public static void showErrorDialog(String title, String message) {
         Bundle bundle = new Bundle();
         bundle.putString("title", title);
-        bundle.putString("message",message);
+        bundle.putString("message", message);
         Data.alertNotifier.postValue(bundle);
     }
 
@@ -475,7 +482,7 @@ public class Utils {
             return Consts.audioDir;
         } else if (Utils.isDocumentType(mimeType)) {
             return Consts.documentsDir;
-        } else if(fileName.substring(fileName.lastIndexOf(".")).equals(".apks")) { // apks files should go to apps folder
+        } else if (fileName.substring(fileName.lastIndexOf(".")).equals(".apks")) { // apks files should go to apps folder
             return Consts.appsDir;
         } else {
             return Consts.otherDir;
@@ -484,5 +491,59 @@ public class Utils {
 
     public static Resources getRes() {
         return res;
+    }
+
+    public static String getFormattedTime(long milliSeconds) {
+        long x = milliSeconds / 1000;
+        final long seconds = x % 60;
+        x /= 60;
+        final long minutes = x % 60;
+        x /= 60;
+        final long hours = x % 24;
+        x /= 24;
+        final long days = x;
+
+
+        try {
+            int timesUsed = 0;
+            StringBuilder timeStringBuilder = new StringBuilder();
+
+            Callable<String> buildTimeString = () -> {
+                String timeString = timeStringBuilder.toString();
+                return timeString.substring(0, timeString.length() - 1);
+            };
+
+            if (days != 0) {
+                timeStringBuilder.append(res.getString(R.string.days, days)).append(' ');
+                timesUsed++;
+            }
+
+            if (hours != 0) {
+                timeStringBuilder.append(res.getString(R.string.hours, hours)).append(' ');
+                timesUsed++;
+            }
+
+            if (timesUsed >= 2) return buildTimeString.call();
+
+            if (minutes != 0) {
+                timeStringBuilder.append(res.getString(R.string.minutes, minutes)).append(' ');
+                timesUsed++;
+            }
+
+            if (timesUsed >= 2) return buildTimeString.call();
+
+            if (seconds != 0) {
+                timeStringBuilder.append(res.getString(R.string.seconds, seconds)).append(' ');
+                timesUsed++;
+            }
+
+            if( timesUsed == 0 ) {
+                return res.getString(R.string.milliSeconds, milliSeconds);
+            }
+
+            return buildTimeString.call();
+        } catch (Exception e) {
+            return "Couldn't get time";
+        }
     }
 }
