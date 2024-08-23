@@ -40,4 +40,5 @@
     <string name="system_default_lang">系统默认</string>
     <string name="search">搜索</string>
     <string name="videos">视频</string>
+    <string name="receiving_from_user_done">已接收自 %1$s，用时 %2$s</string>
 </resources>
