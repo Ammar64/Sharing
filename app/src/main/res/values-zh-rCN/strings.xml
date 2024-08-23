@@ -1,2 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="share">分享</string>
+    <string name="failed">失败</string>
+    <string name="app_name">分享</string>
+    <string name="settings">设置</string>
+    <string name="ok">好的</string>
+    <string name="dark_mode">深色模式</string>
+    <string name="light_mode">亮色模式</string>
+    <string name="tutorial">教程</string>
+    <string name="back">返回</string>
+    <string name="remove">删除</string>
+    <string name="about_us">关于我们</string>
+    <string name="add_apps">添加应用</string>
+    <string name="add_files">添加文件</string>
+    <string name="selected">已选择</string>
+    <string name="link">链接</string>
+    <string name="users">用户</string>
+    <string name="sending_to_user">正在发送到 %1$s</string>
+    <string name="sending_to_user_stopped">已停止发送到 %1$s</string>
+    <string name="receiving_from_user">正从 %1$s 接收</string>
+    <string name="receiving_from_user_stopped">已停止从 %1$s 接收</string>
+    <string name="completed">看过</string>
+    <string name="stopped">已暂停</string>
+    <string name="stop">停止</string>
+    <string name="connected_users">已连接的用户</string>
+    <string name="block">封禁</string>
+    <string name="unblock">解封</string>
+    <string name="user_default_name">用户 %1$d</string>
+    <string name="choose_language">选择语言</string>
+    <string name="no_user_connected">暂无用户连接</string>
+    <string name="no_files_selected">未选择文件</string>
+    <string name="warning">警告!</string>
+    <string name="warning_details">这个应用程序不使用 https 来传输你的文件，这使得它容易受到中间人攻击。
+\n为安全起见，我建议在这台设备上激活一个安全热点，并确保只有其他想要的设备连接到它。</string>
+    <string name="dont_show_again">不再显示这条消息</string>
+    <string name="fast_share">快速分享</string>
+    <string name="toggle_dark_mode">开关黑暗模式</string>
+    <string name="disable_browser_upload">禁用浏览器上传</string>
+    <string name="system_default_lang">系统默认</string>
+    <string name="search">搜索</string>
+    <string name="videos">视频</string>
+</resources>
