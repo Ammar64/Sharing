@@ -33,7 +33,7 @@ Screen shots
 
 Translation
 ----------------
-When translating [res/values/strings.xml](app/src/main/res/values/strings.xml) consider also translating [res/raw/index](app/src/main/res/raw/index.html) to translate the webpage that shows on the other device
+When translating [res/values/strings.xml](app/src/main/res/values/strings.xml) consider also translating [res/raw/index.html](app/src/main/res/raw/index.html) to translate the webpage that shows on the other device
 
 Note
 ----------------
