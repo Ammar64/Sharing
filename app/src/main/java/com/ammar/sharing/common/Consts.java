@@ -47,7 +47,7 @@ public final class Consts {
     public static final File documentsDir = new File(Sharing, "Documents");
     public static final File otherDir = new File(Sharing, "Other");
 
-    public static final List<String> langsCode = Arrays.asList("", "ar", "en", "du");
+    public static final List<String> langsCode = Arrays.asList("", "ar", "en", "du", "zh");
     public static Locale SystemLocale;
     public static String serverNotificationChannelID = "com.ammar.sharing.SERVER_NOTIFICATION_CHANNEL";
 
