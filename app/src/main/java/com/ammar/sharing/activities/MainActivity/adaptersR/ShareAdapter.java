@@ -31,7 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddAppsActivity.AddAppsActivity;
-import com.ammar.sharing.activities.AddFilesActivity.AddFilesActivity;
+import com.ammar.sharing.activities.AddFilesActivity2.AddFilesActivity2;
 import com.ammar.sharing.activities.MainActivity.fragments.ShareFragment;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.Utils;
@@ -137,7 +137,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
 
             addAppsB.setOnClickListener((button) -> fragment.launcher.launch(new Intent(itemView.getContext(), AddAppsActivity.class)));
-            addFilesB.setOnClickListener((button) -> fragment.mGetContent.launch(new Intent(fragment.requireContext(), AddFilesActivity.class)));
+            addFilesB.setOnClickListener((button) -> fragment.mGetContent.launch(new Intent(fragment.requireContext(), AddFilesActivity2.class)));
             // setup QR Code dialog
             View QRDialogView = LayoutInflater.from(itemView.getContext()).inflate(R.layout.dialog_qrcode, null, false);
             AlertDialog QRDialogAD = new AlertDialog.Builder(itemView.getContext())

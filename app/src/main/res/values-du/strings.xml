@@ -74,12 +74,4 @@
     <string name="documents">documents</string>
     <string name="remove">Remove</string>
     <string name="fast_share" />
-
-    <string-array name="langs">
-        <item>@string/system_default_lang</item>
-        <item>العربية</item>
-        <item>Englisch</item>
-        <item>Deutsch</item>
-        <item>Chinese Simplified</item>
-    </string-array>
 </resources>
