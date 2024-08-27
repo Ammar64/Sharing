@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Activity Main   -->
     <string name="about_us">About us</string>
     <!-- Fragment Share   -->

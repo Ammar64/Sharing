@@ -2,15 +2,30 @@ package com.ammar.sharing.activities.AddFilesActivity2;
 
 import static com.ammar.sharing.activities.MainActivity.MainActivity.darkMode;
 
+import android.app.AlertDialog;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 import android.view.Menu;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
+import com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.FilesViewerAdapter;
+
+import java.io.File;
+import java.util.List;
+
+import hendrawd.storageutil.library.StorageUtil;
 
 public class AddFilesActivity2 extends AppCompatActivity {
     private Toolbar toolbar;
@@ -40,6 +55,10 @@ public class AddFilesActivity2 extends AppCompatActivity {
         toolbar = findViewById(R.id.TB_AddFilesActivityToolbar);
         setSupportActionBar(toolbar);
         setTitle(R.string.internal_storage);
+
+        RecyclerView recyclerView = findViewById(R.id.RC_FilesRecyclerView);
+        recyclerView.setAdapter(new FilesViewerAdapter(this));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
     }
 
     @Override
