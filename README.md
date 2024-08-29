@@ -15,10 +15,10 @@ Or download the latest APK from the [Releases Section](https://github.com/Ammar6
 
 TODO
 -----------------
-[ ] Add the ability to stream video and audio from camera and/or microphone.
-[ ] Support sending files from SD Card.
-[ ] Add the ability to send and receive text using websocket
-[ ] Make a script that will help translate html.
+- [ ] Add the ability to stream video and audio from camera and/or microphone.
+- [ ] Support sending files from SD Card.
+- [ ] Add the ability to send and receive text using websocket
+- [ ] Make a script that will help translate html.
 
 
 Screen shots
