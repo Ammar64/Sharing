@@ -15,8 +15,9 @@ Or download the latest APK from the [Releases Section](https://github.com/Ammar6
 
 TODO
 -----------------
-- [ ] Add the ability to stream video and audio from camera and/or microphone.
+- [ ] Add the ability to stream video and/or audio from camera, screen and/or microphone to the browser and the otherway around.
 - [ ] Support sending files from SD Card.
+- [ ] Redesign the Add Files Activity so it can detect real time file system updates and make the UI responsive for larger devices
 - [ ] Add the ability to send and receive text using websocket
 - [ ] Make a script that will help translate html.
 
