@@ -38,7 +38,7 @@ public class FilesViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         currentDir = Environment.getExternalStorageDirectory();
         displayedFiles = FSObject.listDirectorySorted(currentDir, FSObject.SortType.BY_NAME);
         lastDirIndex = getLastDirectoryIndex();
-        hasSpaceView = MathsUtils.isDividableBy(lastDirIndex, activity.getSpanCount()) && activity.getSpanCount() != 1;
+        hasSpaceView = !MathsUtils.isDividableBy(lastDirIndex, activity.getSpanCount()) && lastDirIndex > activity.getSpanCount();
         ((GridLayoutManager) this.recyclerView.getLayoutManager()).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -48,7 +48,7 @@ public class FilesViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     case VIEW_TYPE_PATH -> spanCount;
                     case VIEW_TYPE_FILE_TYPES -> spanCount;
                     case VIEW_TYPE_DIRECTORIES, VIEW_TYPE_FILES -> 1;
-                    case VIEW_TYPE_SPACE -> spanCount - (lastDirIndex % spanCount);
+                    case VIEW_TYPE_SPACE -> spanCount - ((lastDirIndex + 1) % spanCount);
                     default -> throw new RuntimeException("");
                 };
             }
