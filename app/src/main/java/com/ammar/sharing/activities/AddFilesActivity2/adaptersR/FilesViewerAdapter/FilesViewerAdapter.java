@@ -3,24 +3,34 @@ package com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdap
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddFilesActivity2.AddFilesActivity2;
 import com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.models.FSObject;
-import com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.viewHolders.FileViewHolder;
+import com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.viewHolders.DirectoryViewHolder;
+import com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.viewHolders.FileTypeViewHolder;
 
 import java.io.File;
 
 public class FilesViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public AddFilesActivity2 activity;
+    public final RecyclerView recyclerView;
     private FSObject[] files;
     private FSObject[] displayedFiles;
     private File currentDir;
 
     private int lastDirIndex;
-    public FilesViewerAdapter(AddFilesActivity2 activity) {
+    public FilesViewerAdapter(AddFilesActivity2 activity, RecyclerView recyclerView) {
         this.activity = activity;
+        this.recyclerView = recyclerView;
+
+        ((GridLayoutManager) this.recyclerView.getLayoutManager()).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return 2;
+            }
+        });
     }
 
 
@@ -50,16 +60,11 @@ public class FilesViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return FileViewHolder.Companion.makeFileViewHolder(activity);
+        return FileTypeViewHolder.Companion.makeFileTypeViewHolder(activity);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        FileViewHolder h = (FileViewHolder) holder;
-        h.getImageView().setImageResource(R.drawable.icon_file);
-        h.getFileTypeTV().setText("text file");
-        h.getFileNameTV().setText("test.txt");
-        h.getFileSizeTV().setText("36 MB");
     }
 
     @Override

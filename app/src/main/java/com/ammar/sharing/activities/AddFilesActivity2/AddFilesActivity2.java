@@ -57,8 +57,8 @@ public class AddFilesActivity2 extends AppCompatActivity {
         setTitle(R.string.internal_storage);
 
         RecyclerView recyclerView = findViewById(R.id.RC_FilesRecyclerView);
-        recyclerView.setAdapter(new FilesViewerAdapter(this));
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setAdapter(new FilesViewerAdapter(this, recyclerView));
     }
 
     @Override
