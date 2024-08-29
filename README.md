@@ -13,6 +13,14 @@ You can always disable uploads in the app settings.
 
 Or download the latest APK from the [Releases Section](https://github.com/Ammar64/Sharing/releases/latest).
 
+TODO
+-----------------
+[ ] Add the ability to stream video and audio from camera and/or microphone.
+[ ] Support sending files from SD Card.
+[ ] Add the ability to send and receive text using websocket
+[ ] Make a script that will help translate html.
+
+
 Screen shots
 -----------------
 
