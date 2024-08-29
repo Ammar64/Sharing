@@ -13,8 +13,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
+import com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.models.FSObject
+import com.ammar.sharing.common.FileUtils
 import com.ammar.sharing.common.Utils
 import com.ammar.sharing.custom.ui.AdaptiveTextView
+import java.io.File
 
 class FileViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
     companion object {
@@ -155,4 +158,10 @@ class FileViewHolder private constructor(itemView: View) : RecyclerView.ViewHold
     var fileTypeTV: AdaptiveTextView? = null
     var fileNameTV: AdaptiveTextView? = null
     var fileSizeTV: AdaptiveTextView? = null
+
+    fun setup(file: FSObject) {
+        FileUtils.setFileIcon(imageView, fileTypeTV, file.file)
+        fileNameTV!!.text = file.file.name
+        fileSizeTV!!.text = Utils.getFormattedSize(file.file.length())
+    }
 }

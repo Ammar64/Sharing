@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.FilesViewerAdapter;
+import com.ammar.sharing.common.Utils;
 
 import java.io.File;
 import java.util.List;
@@ -29,6 +30,7 @@ import hendrawd.storageutil.library.StorageUtil;
 
 public class AddFilesActivity2 extends AppCompatActivity {
     private Toolbar toolbar;
+    private int spanCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +59,11 @@ public class AddFilesActivity2 extends AppCompatActivity {
         setTitle(R.string.internal_storage);
 
         RecyclerView recyclerView = findViewById(R.id.RC_FilesRecyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        recyclerView.setAdapter(new FilesViewerAdapter(this, recyclerView));
+        recyclerView.post(() -> {
+            setSpanCount(recyclerView.getMeasuredWidth() / (int) Utils.dpToPx(250));
+            recyclerView.setLayoutManager(new GridLayoutManager(this, getSpanCount()));
+            recyclerView.setAdapter(new FilesViewerAdapter(this, recyclerView));
+        });
     }
 
     @Override
@@ -66,5 +71,14 @@ public class AddFilesActivity2 extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_add_files, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.MI_SearchFiles).getActionView();
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public int getSpanCount() {
+        return spanCount;
+    }
+
+    public void setSpanCount(int spanCount) {
+        if( spanCount == 0 ) spanCount = 1;
+        this.spanCount = spanCount;
     }
 }

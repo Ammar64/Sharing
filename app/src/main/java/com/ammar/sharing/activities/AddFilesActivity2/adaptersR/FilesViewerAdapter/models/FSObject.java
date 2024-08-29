@@ -1,5 +1,7 @@
 package com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.models;
 
+import com.ammar.sharing.models.Sharable;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -9,20 +11,15 @@ import java.util.TreeSet;
 public class FSObject {
 
     public FSObject(File file) {
-        path = file.getAbsolutePath();
-        name = file.getName();
-        isDirectory = file.isDirectory();
+        this.file = file;
     }
 
-    public boolean isDirectory() {
-        return isDirectory;
-    }
-
-    private final String path;
-    private final String name;
-    private final boolean isDirectory;
+    private final File file;
     public boolean isSelected = false;
 
+    public File getFile() {
+        return file;
+    }
 
     public enum SortType {
         BY_NAME,
