@@ -2,6 +2,7 @@ package com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdap
 
 import android.app.AlertDialog;
 import android.os.Environment;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Space;
 
@@ -28,6 +29,7 @@ public class FilesViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private int lastDirIndex;
     private boolean hasSpaceView;
+    public boolean multiSelectMode = false;
 
     public FilesViewerAdapter(AddFilesActivity2 activity, RecyclerView recyclerView) {
         this.activity = activity;
@@ -36,7 +38,7 @@ public class FilesViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         currentDir = Environment.getExternalStorageDirectory();
         displayedFiles = FSObject.listDirectorySorted(currentDir, FSObject.SortType.BY_NAME);
         lastDirIndex = getLastDirectoryIndex();
-        hasSpaceView = MathsUtils.isDividableBy(lastDirIndex, activity.getSpanCount());
+        hasSpaceView = MathsUtils.isDividableBy(lastDirIndex, activity.getSpanCount()) && activity.getSpanCount() != 1;
         ((GridLayoutManager) this.recyclerView.getLayoutManager()).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
@@ -62,16 +64,15 @@ public class FilesViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public static final int VIEW_TYPE_FILES = 3;
     public static final int VIEW_TYPE_SPACE = 4;
 
-    boolean shown = false;
     @Override
     public int getItemViewType(int position) {
         if (position == 0) return VIEW_TYPE_PATH;
         if (position == 1) return VIEW_TYPE_FILE_TYPES;
         position -= 2;
-        if ((position == lastDirIndex) && hasSpaceView) {
+        if ((position - 1 == lastDirIndex) && hasSpaceView) {
             return VIEW_TYPE_SPACE;
         }
-
+        Log.d("Adapter", "LastDirIndex: " + lastDirIndex);
         if (position > lastDirIndex && hasSpaceView) position--;
         return displayedFiles[position].getFile().isDirectory() ? VIEW_TYPE_DIRECTORIES : VIEW_TYPE_FILES;
     }
@@ -92,6 +93,7 @@ public class FilesViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if( holder instanceof DirectoryViewHolder dirHolder) {
+            Log.d("Adapter", "ItemCount: " + getItemCount());
             position -= 2;
             dirHolder.setup(displayedFiles[position]);
         } else if (holder instanceof FileViewHolder fileHolder) {
@@ -103,8 +105,7 @@ public class FilesViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        int numSpace = hasSpaceView ? 1 : 0;
-        return displayedFiles.length + numSpace + 2;
+        return displayedFiles.length + (hasSpaceView ? 3 : 2);
     }
 
 

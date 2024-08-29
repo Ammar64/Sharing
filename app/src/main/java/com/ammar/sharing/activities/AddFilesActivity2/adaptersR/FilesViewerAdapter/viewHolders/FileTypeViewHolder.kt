@@ -1,6 +1,7 @@
 package com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.viewHolders
 
 import android.content.Context
+import android.os.Build
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -28,10 +29,16 @@ class FileTypeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             )
 
             val scrollView = HorizontalScrollView(context).apply {
-                layoutParams = ViewGroup.LayoutParams(
+                layoutParams = ViewGroup.MarginLayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
+                val padding = Utils.dpToPx(8f).toInt()
+                setPadding(padding, padding, padding, padding)
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    horizontalScrollbarThumbDrawable = null
+                }
             }
 
             val linearLayout = LinearLayout(context).apply {

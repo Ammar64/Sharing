@@ -1,6 +1,7 @@
 package com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.viewHolders
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.text.TextUtils
 import android.util.TypedValue
@@ -8,12 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
+import com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.FilesViewerAdapter
 import com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.models.FSObject
+import com.ammar.sharing.common.Consts
 import com.ammar.sharing.common.FileUtils
 import com.ammar.sharing.common.Utils
 import com.ammar.sharing.custom.ui.AdaptiveTextView
@@ -140,9 +145,6 @@ class FileViewHolder private constructor(itemView: View) : RecyclerView.ViewHold
             }
 
             cardView.addView(constraintLayout)
-            cardView.setOnClickListener {
-                checkBox.toggle();
-            }
             return FileViewHolder(cardView).apply {
                 this.imageView = imageView
                 this.checkBox = checkBox
@@ -163,5 +165,28 @@ class FileViewHolder private constructor(itemView: View) : RecyclerView.ViewHold
         FileUtils.setFileIcon(imageView, fileTypeTV, file.file)
         fileNameTV!!.text = file.file.name
         fileSizeTV!!.text = Utils.getFormattedSize(file.file.length())
+        val adapter = bindingAdapter as FilesViewerAdapter
+        itemView.setOnClickListener {
+            if( adapter.multiSelectMode ) {
+                file.isSelected = true
+
+            } else {
+                val a = adapter.activity
+                val selectedFile = arrayListOf(file.file.path)
+                val intent = Intent(Consts.ACTION_ADD_FILES)
+                intent.putExtra(Consts.EXTRA_FILES_PATH, selectedFile)
+                a.setResult(AppCompatActivity.RESULT_OK, intent)
+                a.finish()
+            }
+        }
+        itemView.setOnLongClickListener {
+            if( !adapter.multiSelectMode ) {
+                adapter.multiSelectMode = true
+                Toast.makeText(itemView.context, "Long clicked", Toast.LENGTH_SHORT).show()
+                return@setOnLongClickListener true
+            }
+            false
+        }
     }
+
 }

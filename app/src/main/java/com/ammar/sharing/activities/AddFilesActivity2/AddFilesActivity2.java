@@ -60,7 +60,7 @@ public class AddFilesActivity2 extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.RC_FilesRecyclerView);
         recyclerView.post(() -> {
-            setSpanCount(recyclerView.getMeasuredWidth() / (int) Utils.dpToPx(250));
+            setSpanCount(recyclerView.getMeasuredWidth() / (int) Utils.dpToPx(150));
             recyclerView.setLayoutManager(new GridLayoutManager(this, getSpanCount()));
             recyclerView.setAdapter(new FilesViewerAdapter(this, recyclerView));
         });

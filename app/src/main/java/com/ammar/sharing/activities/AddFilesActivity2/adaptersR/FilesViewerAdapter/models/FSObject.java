@@ -1,10 +1,13 @@
 package com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.models;
 
+import androidx.annotation.NonNull;
+
 import com.ammar.sharing.models.Sharable;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.TreeSet;
 
 // can be a file or directory
@@ -34,13 +37,25 @@ public class FSObject {
         Comparator<File> compareStrategy;
         switch (sortType) {
             case BY_NAME:
-                compareStrategy = (l, r) -> l.getName().compareTo(r.getName());
+                compareStrategy = (l, r) -> {
+                    if (l.isDirectory() && !r.isDirectory()) return -1;
+                    if (!l.isDirectory() && r.isDirectory()) return 1;
+                    return l.getName().compareTo(r.getName());
+                };
                 break;
             case BY_LAST_MODIFIED:
-                compareStrategy = (l, r) -> Long.compare(r.lastModified(), l.lastModified());
+                compareStrategy = (l, r) -> {
+                    if (l.isDirectory() && !r.isDirectory()) return -1;
+                    if (!l.isDirectory() && r.isDirectory()) return 1;
+                    return Long.compare(r.lastModified(), l.lastModified());
+                };
                 break;
             case BY_SIZE:
-                compareStrategy = (l, r) -> Long.compare(l.length(), r.length());
+                compareStrategy = (l, r) -> {
+                    if (l.isDirectory() && !r.isDirectory()) return -1;
+                    if (!l.isDirectory() && r.isDirectory()) return 1;
+                    return Long.compare(l.length(), r.length());
+                };
                 break;
             default:
                 throw new RuntimeException();
@@ -52,6 +67,12 @@ public class FSObject {
             fsObjects[i] = new FSObject(files[i]);
         }
         return fsObjects;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format(Locale.ENGLISH, "%s. isDirectory: %b", file.getName(), file.isDirectory());
     }
 
 }
