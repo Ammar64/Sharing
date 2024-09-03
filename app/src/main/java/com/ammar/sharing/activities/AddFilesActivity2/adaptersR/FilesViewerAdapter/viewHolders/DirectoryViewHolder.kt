@@ -7,11 +7,13 @@ import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ammar.sharing.R
+import com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.FilesViewerAdapter
 import com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.models.FSObject
 import com.ammar.sharing.common.Utils
 import com.ammar.sharing.custom.ui.AdaptiveTextView
@@ -93,5 +95,12 @@ class DirectoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var folderNameTV: AdaptiveTextView? = null
     fun setup(file: FSObject) {
         folderNameTV!!.text = file.file.name;
+
+
+        val adapter = bindingAdapter as FilesViewerAdapter;
+        itemView.setOnClickListener {
+            adapter.cd(file.file)
+            Toast.makeText(itemView.context, "DIR WORKING", Toast.LENGTH_SHORT).show();
+        }
     }
 }

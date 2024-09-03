@@ -169,7 +169,6 @@ class FileViewHolder private constructor(itemView: View) : RecyclerView.ViewHold
         itemView.setOnClickListener {
             if( adapter.multiSelectMode ) {
                 file.isSelected = true
-
             } else {
                 val a = adapter.activity
                 val selectedFile = arrayListOf(file.file.path)
