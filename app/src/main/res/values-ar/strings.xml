@@ -1,6 +1,8 @@
 <resources>
     <!-- Activity Main   -->
     <string name="about_us">عنا</string>
+    <string name="no_app_found_to_handle">لم يتم العثور على تطبيق لفتح الرابط</string>
+
     <!-- Fragment Share   -->
     <string name="share" >مشاركة</string>
     <string name="add_apps">أضف تطبيقات</string>

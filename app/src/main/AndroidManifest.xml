@@ -61,9 +61,6 @@
         <activity android:name=".activities.AddFilesActivity.AddFilesActivity"
             android:exported="false"/>
 
-        <activity android:name=".activities.TutorialActivity.TutorialActivity"
-            android:exported="true" />
-
         <activity android:name=".activities.ApksInstallerActivity.ApksInstallerActivity"
             android:exported="false" />
 

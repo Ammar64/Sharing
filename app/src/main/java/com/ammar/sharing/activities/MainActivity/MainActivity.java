@@ -26,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -44,7 +45,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.ApksInstallerActivity.ApksInstallerActivity;
-import com.ammar.sharing.activities.TutorialActivity.TutorialActivity;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.Utils;
@@ -257,8 +257,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
         tutorialTV.setOnClickListener((view) -> {
-            startActivity(new Intent(this, TutorialActivity.class));
+            Intent intent = new Intent(Intent.ACTION_VIEW ,Uri.parse("https://ammar64.github.io/Sharing/Tutorial"));
+            if(intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, R.string.no_app_found_to_handle, Toast.LENGTH_SHORT).show();
+            }
         });
 
         apksInstallerTV.setOnClickListener((view) -> {

@@ -35,7 +35,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="@drawable/circular_button_white"
-        app:srcCompat="@drawable/icon_file"
+        app:srcCompat="@drawable/icon_file_red"
         app:tint="#c00"
         app:layout_constraintEnd_toStartOf="@id/B_ShowSelected"
         app:layout_constraintStart_toEndOf="@+id/B_AddApps"

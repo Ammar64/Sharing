@@ -1,6 +1,8 @@
 <resources>
     <!-- Activity Main   -->
     <string name="about_us">About us</string>
+    <string name="no_app_found_to_handle">No app found to handle this action</string>
+
     <!-- Fragment Share   -->
     <string name="share" >Share</string>
     <string name="add_apps">Add apps</string>
