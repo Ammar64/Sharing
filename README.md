@@ -20,7 +20,7 @@ TODO
 - [ ] Support sending files from SD Card.
 - [ ] Redesign the Add Files Activity so it can detect real time file system updates and make the UI responsive for larger devices
 - [ ] Add the ability to send and receive text using websocket
-- [ ] Make a script that will help translate html.
+- [x] Make a script that will help translate html.
 
 
 Screen shots
@@ -43,7 +43,8 @@ Screen shots
 
 Translation
 ----------------
-When translating [res/values/strings.xml](app/src/main/res/values/strings.xml) consider also translating [res/raw/index.html](app/src/main/res/raw/index.html) to translate the webpage that shows on the other device
+When translating [app/src/main/res/values/strings.xml](app/src/main/res/values/strings.xml) consider also translating [web/strings/**/strings.xml](web/strings/en/strings.xml) to translate the webpage that shows on the other device.
+[Learn more](web/README.md)
 
 Note
 ----------------
