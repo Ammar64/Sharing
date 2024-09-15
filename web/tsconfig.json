@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "ES6",
         "strict": true,
-        "module": "NodeNext",
+        "module": "CommonJS",
         "rootDir": "src/",
         "outDir": "build/web_app",
         "lib": [

@@ -529,12 +529,8 @@ button {
   justify-content: center;
 }
 
-.sign svg {
+.sign img {
   width: 17px;
-}
-
-.sign svg path {
-  fill: white;
 }
 
 /* text */
