@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "strict": true,
+        "module": "NodeNext",
+        "outDir": "build/scripts",
+        "lib": [
+            "dom",
+            "dom.iterable"
+        ]
+    },
+
+    "include": [
+        "src/scripts/**/*.ts",
+        "src/scripts/**/*.tsx"
+    ]
+}
