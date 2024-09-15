@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="lang">ar</string>
+    <string name="sharing">شارك</string>
+    <string name="enter_your_user_name">أدخل اسم المستخدم</string>
+    <string name="submit">تسليم</string>
+    <string name="current_username">الاسم الحالى</string>
+    <string name="sharing_app">تطبيق شارك</string>
+    <string name="sharing_app_purpose">قــــم بـــنــقــل الـــمـــلـــفـــات و الــــتـــطــــبــــيـــقـــات مـــجــانـــا</string>
+    <string name="sharing_app_desc">تـــطـــبـــيـــق شــــــارك هــــو تـــــطـــــبـــــيــــق ســــهــــل و مـــجـــانـــى لـــنــقـــل بــــيـــانـــاتـــك</string>
+    <string name="send">إرسال</string>
+    <string name="receive">استلام</string>
+    <string name="available_downloads">التنزيلات المتاحة</string>
+    <string name="no_downloads_available">لا تنزيلات متاحة</string>
+    <string name="done">تم</string>
+    <string name="update">تحديث</string>
+    <string name="uploading_is_disabled">الإرســـال مـن الــمــتــصــفــح مــعــطــل</string>
+    <string name="uploading_is_disabled_text">قــم بــتــفــعــيــل الإرســـال مــن الــمــتــصــفــح فـى الاعــدادات حـتـى يــمــكــنــك رفــع الــمــلــفــات</string>
+    <string name="ok">حسنا</string>
+    <string name="no_js">لا جافا سكريبت ؟ استعمل &lt;a href="/no-JS"&gt;صفحة HTML فقط&lt;/a&gt;</string>
+</resources>
