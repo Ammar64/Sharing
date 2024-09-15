@@ -3,15 +3,18 @@
         "target": "ES6",
         "strict": true,
         "module": "NodeNext",
-        "outDir": "build/scripts",
+        "rootDir": "src/",
+        "outDir": "build/",
         "lib": [
             "dom",
             "dom.iterable"
-        ]
+        ],
+        "removeComments": true
+
     },
 
     "include": [
-        "src/scripts/**/*.ts",
-        "src/scripts/**/*.tsx"
+        "src/**/*.ts",
+        "src/**/*.tsx"
     ]
 }

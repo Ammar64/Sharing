@@ -25,15 +25,7 @@ def getStringsDict(lang: str):
 
 def buildHTMLFiles(lang: str):
     strings_map = getStringsDict(lang)
-    # Translate index.html
-    with open(os.path.join(SRC_DIR, 'index.html')) as index_html_file:
-        html_string = index_html_file.read()
-        translated_html = html_string.format_map(strings_map)
-
-        with open(os.path.join(BUILD_DIR, f"index-{lang}.html"), "w") as translated_html_file:
-            translated_html_file.write(translated_html)
-
-
+    
     # Translate any other HTML file in pages directory
     pages = os.listdir(SRC_PAGES_DIR)
     for page in pages:

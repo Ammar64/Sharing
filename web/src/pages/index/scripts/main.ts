@@ -63,12 +63,12 @@ loginBtn.onclick = () => {
     openBubble(loginBubble);
 };
 
-function openBubble(bubble) {
+function openBubble(bubble: HTMLElement) {
     bubble.style.display = 'block';
     overlay.style.display = 'block';
 }
 
-function closeBubbles(bubbles) {
+function closeBubbles(bubbles: HTMLElement[] | HTMLElement) {
     // Ensure bubbles is always treated as an array
     if (!Array.isArray(bubbles)) {
         bubbles = [bubbles];
@@ -96,7 +96,7 @@ function hideLoader() {
     }, 600);
 }
 
-function updateProgress(percent) {
+function updateProgress(percent: number) {
     const progressBar = document.querySelector('.progress-bar') as HTMLElement;
     const progressText = document.querySelector('.progress-text') as HTMLElement;
     progressBar.style.width = percent + '%';
@@ -127,7 +127,7 @@ function requestAvailableDownloads() {
         } else {
             noDownloadsText.style.display = "none";
         }
-        data.forEach(e => {
+        data.forEach((e: { uuid: string; name: string; hasSplits: boolean; size: number; }) => {
             const newFileItem = download_item.cloneNode();
 
             const newFileItemImg = document.createElement("img");
@@ -188,7 +188,7 @@ function requestAvailableDownloads() {
     });
 }
 
-function downloadFileWithProgress(url) {
+function downloadFileWithProgress(url: string) {
     const link = document.createElement("a");
     link.href = url
     document.body.append(link);
@@ -237,18 +237,7 @@ function downloadFileWithProgress(url) {
     // xhr.send();
 }
 
-function getFileNameFromContentDisposition(contentDisposition) {
-    let fileName = "downloadedFile";
-    if (contentDisposition) {
-        const fileNameMatch = contentDisposition.match(/filename="?(.+)"?/);
-        if (fileNameMatch.length === 2) {
-            fileName = fileNameMatch[1];
-        }
-    }
-    return fileName;
-}
-
-function getFormattedFileSize(s) {
+function getFormattedFileSize(s: number) {
     const levels = ["B", "KB", "MB", "GB", "TB", "PB"];
     let level = 0;
     let isGood = false;
@@ -355,7 +344,7 @@ usernameForm.addEventListener('submit', function (event) {
 /**
  * @param {string} username 
  */
-function updateUsername(username) {
+function updateUsername(username: string) {
     fetch('/update-user-name', {
         method: 'POST',
         headers: {
@@ -372,7 +361,11 @@ function updateUsername(username) {
         .then(data => {
             console.log('Username updated successfully:', data);
             if(data.changed) {
-                updateStoredUsername(data.username);
+                if( data.username ) {
+                    updateStoredUsername(data.username);
+                } else {
+                    throw new Error()
+                }
             }
             closeBubbles([loginBubble]); // Assuming closeBubbles accepts an array
         })
@@ -383,7 +376,7 @@ function updateUsername(username) {
         });
 }
 
-function updateStoredUsername(username) {
+function updateStoredUsername(username: string) {
     localStorage.setItem("username", username);
     storedUsername = username;
     // Update the display of current username
