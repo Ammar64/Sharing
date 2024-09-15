@@ -4,12 +4,13 @@ import xml.etree.ElementTree as ET
 import shutil
 
 
-BUILD_DIR = "build"
 SRC_DIR = "src"
+BUILD_DIR = "build"
 
+WEB_APP_DIR = os.path.join(BUILD_DIR, "web_app")
 # directory where we put other html files
 SRC_PAGES_DIR = os.path.join(SRC_DIR, "pages")
-BUILD_PAGES_DIR = os.path.join(BUILD_DIR, "pages")
+BUILD_PAGES_DIR = os.path.join(WEB_APP_DIR, "pages")
 
 
 def getStringsDict(lang: str):
@@ -51,11 +52,10 @@ if __name__ == "__main__":
     langs = os.listdir("strings")
 
     # if we have pages make a pages dir in the build dir and make its subdirs
-    if  os.path.exists(SRC_PAGES_DIR):
-        os.mkdir(BUILD_PAGES_DIR)
+    if os.path.exists(SRC_PAGES_DIR):
         pages = os.listdir(SRC_PAGES_DIR)
         for i in pages:
-            os.mkdir(os.path.join(BUILD_PAGES_DIR, i))
+            os.makedirs(os.path.join(BUILD_PAGES_DIR, i))
 
 
     for lang in langs:
