@@ -3,6 +3,7 @@ package com.ammar.sharing.network.sessions;
 import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
+import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
 import com.ammar.sharing.network.sessions.base.HTTPSession;
@@ -10,8 +11,9 @@ import com.ammar.sharing.network.sessions.base.HTTPSession;
 import java.nio.charset.StandardCharsets;
 
 public class CLISession extends HTTPSession {
-    public CLISession(String[] paths) {
-        super(paths, true);
+
+    public CLISession(User user) {
+        super(user);
     }
 
     @Override

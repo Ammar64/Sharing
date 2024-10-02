@@ -3,6 +3,7 @@ package com.ammar.sharing.network.sessions;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.custom.io.ProgressManager;
+import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
 import com.ammar.sharing.network.sessions.base.HTTPSession;
@@ -18,8 +19,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 public class UploadSession extends HTTPSession {
-    public UploadSession(String[] paths) {
-        super(paths, true);
+
+    public UploadSession(User user) {
+        super(user);
     }
 
     @Override

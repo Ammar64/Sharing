@@ -3,6 +3,7 @@ package com.ammar.sharing.network.sessions;
 import com.ammar.sharing.R;
 import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.models.Sharable;
+import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
 import com.ammar.sharing.network.sessions.base.HTTPSession;
@@ -12,8 +13,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 public class PageSession extends HTTPSession {
-    public PageSession(String[] paths) {
-        super(paths);
+    public PageSession(User user) {
+        super(user);
     }
 
     @Override

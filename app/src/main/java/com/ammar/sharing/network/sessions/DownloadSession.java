@@ -10,6 +10,7 @@ import com.ammar.sharing.common.FileUtils;
 import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
+import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
 import com.ammar.sharing.network.sessions.base.HTTPSession;
@@ -20,10 +21,9 @@ import org.json.JSONException;
 import java.nio.charset.StandardCharsets;
 
 public class DownloadSession extends HTTPSession {
-    public DownloadSession(String[] paths) {
-        super(paths, true);
+    public DownloadSession(User user) {
+        super(user);
     }
-
 
     @Override
     public void GET(Request req, Response res) {

@@ -2,12 +2,14 @@ package com.ammar.sharing.network;
 
 import android.util.Log;
 
+import com.ammar.sharing.network.sessions.base.HTTPSession;
 import com.ammar.sharing.services.ServerService;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.HashMap;
 
 public class Server {
 
@@ -17,7 +19,8 @@ public class Server {
     private Thread serverThread;
 
     private boolean running = false;
-    private final ServerService service;
+    final ServerService service;
+    final HashMap<String, Class<? extends HTTPSession>> pathsMap = new HashMap<>();
 
     public Server(ServerService service) {
         this.service = service;
@@ -51,11 +54,15 @@ public class Server {
         }
     }
 
+    public void addPath(String pathPattern, Class<? extends HTTPSession> sessionClass) {
+        pathsMap.put(pathPattern, sessionClass);
+    }
+
     private void Accept() {
         try {
             while (!serverSocket.isClosed()) {
                 Socket clientSocket = serverSocket.accept();
-                ClientHandler clientHandler = new ClientHandler(service, clientSocket);
+                ClientHandler clientHandler = new ClientHandler(this, clientSocket);
 
                 Thread clientThread = new Thread(clientHandler);
                 clientThread.start();
@@ -66,6 +73,7 @@ public class Server {
             Log.e("MYLOG", "Server.Accept(). IOException: " + e.getMessage());
         }
     }
+
 
 
     public boolean isRunning() {

@@ -1,6 +1,7 @@
 package com.ammar.sharing.network.sessions;
 
 import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
 import com.ammar.sharing.network.exceptions.BadRequestException;
@@ -12,8 +13,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 public class UserSession extends HTTPSession {
-    public UserSession(String[] paths) {
-        super(paths);
+    public UserSession(User user) {
+        super(user);
     }
 
     @Override
