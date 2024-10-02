@@ -16,7 +16,7 @@ Or download the latest APK from the [Releases Section](https://github.com/Ammar6
 Important issue
 -----
 We need a new icon design for this app.  
-A new update will not be released without the new icon and I'm not a good designer 😁.  
+A new update is almost ready but will not be released without the new icon and I'm not a good designer 😁.  
 See this [issue](https://github.com/Ammar64/Sharing/issues/19) for more details 
 
 TODO
