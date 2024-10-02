@@ -22,6 +22,11 @@ import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Server;
+import com.ammar.sharing.network.sessions.CLISession;
+import com.ammar.sharing.network.sessions.DownloadSession;
+import com.ammar.sharing.network.sessions.PageSession;
+import com.ammar.sharing.network.sessions.UploadSession;
+import com.ammar.sharing.network.sessions.UserSession;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -42,12 +47,37 @@ public class ServerService extends Service {
 
 
     private final Server server = new Server(this);
-    final Intent serverStatusIntent = new Intent();
+    final Intent serverStatusIntent = new Intent(Consts.ACTION_GET_SERVER_STATUS);
 
     @Override
     public void onCreate() {
         super.onCreate();
-        serverStatusIntent.setAction(Consts.ACTION_GET_SERVER_STATUS);
+
+        // PageSession
+        server.addPath("/",PageSession.class);
+        server.addPath("/no-JS",PageSession.class);
+        server.addPath("/pages/(.*)",PageSession.class);
+        server.addPath("/common",PageSession.class);
+
+        // DownloadSession
+        server.addPath("/download", DownloadSession.class);
+        server.addPath("/available-downloads", DownloadSession.class);
+        server.addPath("/get-icon", DownloadSession.class);
+
+        // UploadSession
+        server.addPath("/upload", UploadSession.class);
+        server.addPath("/check-upload-allowed", UploadSession.class);
+
+        // UserSession
+        server.addPath("/get-user-info", UserSession.class);
+        server.addPath("/update-user-name", UserSession.class);
+
+        // CLI Session
+        server.addPath("/ls", CLISession.class);
+        server.addPath("/dl", CLISession.class);
+        server.addPath("/da", CLISession.class);
+
+
     }
 
     @Nullable

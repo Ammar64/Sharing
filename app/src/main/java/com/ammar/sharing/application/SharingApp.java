@@ -10,7 +10,6 @@ import android.os.Build;
 
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Utils;
-import com.ammar.sharing.network.sessions.Sessions;
 
 import java.util.Locale;
 
@@ -23,7 +22,6 @@ public class SharingApp extends Application {
         super.onCreate();
         _isDebuggable =  ( 0 != ( getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) );
         Utils.setupUtils(this);
-        Sessions.defineSessions();
         Consts.SystemLocale = Locale.getDefault();
 
 
