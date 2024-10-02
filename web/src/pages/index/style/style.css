@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: 'Cairo';
-  src: url('cairo.ttf');
+  src: url('/common/cairo.ttf');
 }
 
 
@@ -537,8 +537,9 @@ button {
 .text1 {
   position: absolute;
   right: 0%;
-  width: 0%;
+  width: max-content;
   opacity: 0;
+  white-space: nowrap;
   color: white;
   font-size: 1.2em;
   font-weight: 600;
@@ -1133,7 +1134,7 @@ strong {
   position: absolute;
   right: 0;
   top: -12px;
-  width: 29px;
+  width: max-content;
   height: 29px;
   cursor: pointer;
   background-color: #00BCD4;

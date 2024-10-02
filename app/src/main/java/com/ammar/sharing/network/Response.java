@@ -236,6 +236,9 @@ public class Response {
         headers.put(key, value);
     }
 
+    public void setContentType(String contentType) {
+        setHeader("Content-Type", contentType);
+    }
 
     private void writeTopHeader(OutputStream out, int statusCode) throws IOException {
         String readableStatus = "";
@@ -279,4 +282,6 @@ public class Response {
     public void close() throws IOException {
         clientSocket.close();
     }
+
+
 }

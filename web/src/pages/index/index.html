@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="{lang}">
+<html lang="{lang}" dir="{dir}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/pages/index/" />
     <link rel="stylesheet" href="style/style.css" />
     <script defer src="scripts/main.js"></script>
     <title>{sharing}</title>
@@ -30,14 +31,14 @@
             <div class="progress-text">0 %</div>
         </div>
     </div>
-    <div class="container">
+    <div class="container" dir="ltr">
 
-        <button class="Btn1" id="loginBtn">
+        <div class="Btn1" id="loginBtn">
             <div class="sign">
                 <img src="assets/user-regular.svg"/>
             </div>
-            <div class="text1">info</div>
-        </button>
+            <div class="text1">{username}</div>
+        </div>
 
         <div class="form-container" id="loginBubble">
             <h1>{enter_your_user_name}</h1>

@@ -5,6 +5,8 @@ import android.util.Log;
 import com.ammar.sharing.network.sessions.base.HTTPSession;
 import com.ammar.sharing.services.ServerService;
 
+import org.intellij.lang.annotations.RegExp;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -54,7 +56,7 @@ public class Server {
         }
     }
 
-    public void addPath(String pathPattern, Class<? extends HTTPSession> sessionClass) {
+    public void addPath(@RegExp String pathPattern, Class<? extends HTTPSession> sessionClass) {
         pathsMap.put(pathPattern, sessionClass);
     }
 

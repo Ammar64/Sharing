@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="lang">zh</string>
+    <string name="dir">ltr</string>
     <string name="sharing">Sharing</string>
+    <string name="username">User name</string>
     <string name="enter_your_user_name">输入你的用户名</string>
     <string name="submit">提交</string>
     <string name="current_username">当前用户名：</string>
