@@ -13,6 +13,12 @@ You can always disable uploads in the app settings.
 
 Or download the latest APK from the [Releases Section](https://github.com/Ammar64/Sharing/releases/latest).
 
+Important issue
+-----
+We need a new icon design for this app.
+A new update will not be released without the new icon and I'm not a good designer 😁.
+See this [issue](#19) for more details 
+
 TODO
 -----------------
 - [ ] Add the ability to share files and/or apps app-to-app
