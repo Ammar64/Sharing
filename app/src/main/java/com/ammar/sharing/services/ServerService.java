@@ -57,7 +57,7 @@ public class ServerService extends Service {
         server.addPath("/",PageSession.class);
         server.addPath("/no-JS",PageSession.class);
         server.addPath("/pages/(.*)",PageSession.class);
-        server.addPath("/common",PageSession.class);
+        server.addPath("/common/(.*)",PageSession.class);
 
         // DownloadSession
         server.addPath("/download", DownloadSession.class);
