@@ -60,7 +60,7 @@ Feel free to contribute to it in the [tutorial](https://github.com/Ammar64/Shari
 
 License
 -------------
-    Copyright (C) <2024> Sharing authors
+    Copyright (C) 2024 Sharing authors
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
