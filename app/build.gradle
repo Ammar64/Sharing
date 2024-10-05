@@ -35,7 +35,7 @@ android {
         group = 'Build'
         description = 'Builds the web side of the app and put it in the assets'
         println 'Building the web'
-        runCommand("npm run build --prefix $rootDir/web")
+        runCommand("npm run build --prefix ${new File( rootDir, 'web' ).absolutePath}".toString())
     }
     preBuild.dependsOn buildWeb
 
@@ -46,14 +46,14 @@ android {
 
 
     sourceSets {
-        main.assets.srcDirs += new File(rootDir, "web/build").getAbsolutePath()
+        main.assets.srcDirs += new File(rootDir, "web/build").absolutePath
     }
     defaultConfig {
         applicationId "com.ammar.sharing"
         minSdk 21
         targetSdk 34
-        versionCode 16
-        versionName "v1.5.1"
+        versionCode 17
+        versionName "v1.5.1-beta2"
 
         vectorDrawables.useSupportLibrary = true
         externalNativeBuild {
