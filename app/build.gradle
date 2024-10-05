@@ -35,7 +35,7 @@ android {
         group = 'Build'
         description = 'Builds the web side of the app and put it in the assets'
         println 'Building the web'
-        runCommand("npm run build --prefix ${new File(rootDir, 'web/').getAbsolutePath()}")
+        runCommand("npm run build --prefix $rootDir/web")
     }
     preBuild.dependsOn buildWeb
 
