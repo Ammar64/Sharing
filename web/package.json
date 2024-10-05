@@ -9,7 +9,7 @@
   "description": "The web side of Sharing app",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "python translate-html.py && tsc && rsync -av --exclude '*.html' --exclude '*.ts' --exclude '*.tsx' src/ build/web_app"
+    "build": "python3 translate-html.py && tsc && rsync -av --exclude '*.html' --exclude '*.ts' --exclude '*.tsx' src/ build/web_app"
   },
   "keywords": [
     "sharing",
