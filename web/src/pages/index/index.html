@@ -5,41 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="/pages/index/" />
+    <link rel="stylesheet" href="style/blocks.css" />
     <link rel="stylesheet" href="style/style.css" />
+    <link rel="stylesheet" href="style/queries.css">
+    <link rel="stylesheet" href="style/plane.css" />
     <script defer src="scripts/main.js"></script>
     <title>{sharing}</title>
 </head>
 
 <body>
-    <div class="process">
-        <div class="line steamJet"></div>
-        <div class="line steamJet"></div>
-        <div class="line steamJet"></div>
-        <div class="line steamJet"></div>
-        <div class="line steamJet"></div>
-        <div class="plane">
-            <div class="steamJet1"></div>
-            <img src="assets/jet-fighter-solid.svg" class="jet-fighter-icon" />
-            <div class="jet-fighter-shadow"></div>
-            <div class="steamJet3"></div>
-            <div class="steamJetBig"></div>
-            <div class="steamJet4"></div>
-            <div class="steamJet2"></div>
-        </div>
-        <div class="progress">
-            <div class="progress-bar"></div>
-            <div class="progress-text">0 %</div>
-        </div>
-    </div>
-    <div class="container" dir="ltr">
 
-        <div class="Btn1" id="loginBtn">
-            <div class="sign">
-                <img src="assets/user-regular.svg"/>
-            </div>
-            <div class="text1">{username}</div>
-        </div>
+    <!-- Translations used by scripts -->
+    <span id="current-user-text" style="display: none;">{current_username}</span>
+    <span id="download-text" style="display: none;">{download}</span>
+    <!-- Translations used by scripts -->
 
+
+    <main id="main-content">
+        <button id="button-username" class="icon-button">
+            <img src="assets/user-regular.svg" />
+            {username}
+        </button>
         <div class="form-container" id="loginBubble">
             <h1>{enter_your_user_name}</h1>
             <div class="form-control">
@@ -52,7 +38,6 @@
                             style="transition-delay:300ms">m</span><span style="transition-delay:350ms">e</span>
                     </label>
                     <button type="submit" class="form-submit-btn">{submit}</button>
-                    <span id="current-user-text" style="display: none;">{current_username}</span>
                 </form>
             </div>
             <div class="current-username">
@@ -70,6 +55,8 @@
         <div id="sendBtn" class="btn">
             {send}
         </div>
+        <!-- Hidden upload input elemnt -->
+        <input type="file" name="file-upload" id="uploadInput" style="display: none;" />
         <div id="recieveBtn" class="btn">
             {receive}
         </div>
@@ -105,16 +92,34 @@
 
         </div>
 
-        <div id="overlay"></div> <!-- Overlay div for covering the page -->
-    </div>
-    <footer>
-        <p>{no_js}</p>
-    </footer>
 
-    <div style="display: none;">
-        <label for="uploadInput" id="uploadLabel">{send}</label>
-        <input type="file" name="file-upload" id="uploadInput" style="display: none;" />
-    </div>
+
+        <div id="overlay-process" dir="ltr">
+            <div class="line steamJet"></div>
+            <div class="line steamJet"></div>
+            <div class="line steamJet"></div>
+            <div class="line steamJet"></div>
+            <div class="line steamJet"></div>
+            <div id="plane">
+                <div class="steamJet1"></div>
+                <img src="assets/jet-fighter-solid.svg" id="jet-fighter-icon" />
+                <div id="jet-fighter-shadow"></div>
+                <div class="steamJet3"></div>
+                <div class="steamJetBig"></div>
+                <div class="steamJet4"></div>
+                <div class="steamJet2"></div>
+            </div>
+            <div id="progress-container">
+                <div id="progress-bar"></div>
+                <div id="progress-text">0 %</div>
+            </div>
+        </div>
+
+        <div id="overlay"></div> <!-- Overlay div for covering the page -->
+        <div id="no-javascript-text">
+            <p>{no_js}</p>
+        </div>
+    </main>
 </body>
 
 </html>

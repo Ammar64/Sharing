@@ -1,0 +1,103 @@
+/* icon button */
+
+.icon-button {
+    display: flex;
+    align-items: center;
+    background-color: var(--colorTwo);
+    color: #eee;
+    font-size: large;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    white-space: nowrap;
+    cursor: pointer;
+    padding: 0.4em 0.7em;
+}
+
+.icon-button:hover {
+    background-color: var(--colorTwoDarker);
+}
+
+.icon-button>img {
+    width: 20px;
+    margin-inline-end: 0.5em;
+}
+
+/* download item */
+
+.download-item {
+    margin-top: 1em;
+    padding: 1em;
+    border-radius: 0.5em;
+    color: #fff;
+    display: flex;
+    border: none;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    scrollbar-width: 0;
+    text-shadow: 7px 0px 7px #00BCD4;
+}
+
+.download-item-img {
+    width: 2.3em;
+    height: 2.3em;
+
+    -webkit-margin-end: 0.5em;
+    -moz-margin-end: 0.5em;
+    margin-inline-end: 0.5em;
+}
+
+.download-item-name {
+    -webkit-margin-end: 0.5em;
+    -moz-margin-end: 0.5em;
+    margin-inline-end: 0.5em;
+}
+
+.download-item-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    width: 100%;
+
+}
+
+.download-item-info>.button-download {
+    cursor: pointer;
+    background-color: #00BCD4;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+
+    -moz-margin-start: auto;
+    -webkit-margin-start: auto;
+    margin-inline-start: auto;
+}
+
+.download-item-info>.button-download:hover {
+    background-color: #00889a;
+}
+
+.download-item-info>.button-download>img {
+    width: 1.5em;
+}
+
+.colorful-line {
+    height: 3px;
+    /* Adjust the height of the line */
+    width: 100%;
+    background: linear-gradient(45deg,
+            #e81cff,
+            #40c9ff,
+            #ffd700,
+            #00bfff,
+            #ff69b4);
+    /* Define the gradient colors */
+    background-size: 500% 100%;
+    /* Increase background-size to cover the whole animation */
+    -webkit-animation: gradient-animation 20s ease infinite;
+    animation: gradient-animation 20s infinite;
+    /* Animation properties */
+    border-radius: 6px;
+    margin-top: 5px;
+}
