@@ -13,6 +13,7 @@
     <string name="send">发送</string>
     <string name="receive">接收</string>
     <string name="available_downloads">可下载的文件</string>
+    <string name="download">Download</string>
     <string name="no_downloads_available">暂无文件可供下载</string>
     <string name="done">完成</string>
     <string name="update">更新</string>

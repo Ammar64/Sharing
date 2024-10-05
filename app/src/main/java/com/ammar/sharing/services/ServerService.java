@@ -60,12 +60,12 @@ public class ServerService extends Service {
         server.addPath("/common/(.*)",PageSession.class);
 
         // DownloadSession
-        server.addPath("/download", DownloadSession.class);
+        server.addPath("/download/(.*)", DownloadSession.class);
         server.addPath("/available-downloads", DownloadSession.class);
-        server.addPath("/get-icon", DownloadSession.class);
+        server.addPath("/get-icon/(.*)", DownloadSession.class);
 
         // UploadSession
-        server.addPath("/upload", UploadSession.class);
+        server.addPath("/upload/(.*)", UploadSession.class);
         server.addPath("/check-upload-allowed", UploadSession.class);
 
         // UserSession
@@ -74,7 +74,7 @@ public class ServerService extends Service {
 
         // CLI Session
         server.addPath("/ls", CLISession.class);
-        server.addPath("/dl", CLISession.class);
+        server.addPath("/dl/(.*)", CLISession.class);
         server.addPath("/da", CLISession.class);
 
 

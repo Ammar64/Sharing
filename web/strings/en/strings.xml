@@ -16,6 +16,7 @@
     <string name="send">Send</string>
     <string name="receive">Receive</string>
     <string name="available_downloads">Available downloads</string>
+    <string name="download">Download</string>
     <string name="no_downloads_available">No downloads available</string>
     <string name="done">Done</string>
     <string name="update">Update</string>
