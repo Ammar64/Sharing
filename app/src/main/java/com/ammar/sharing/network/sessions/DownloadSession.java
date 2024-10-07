@@ -48,7 +48,7 @@ public class DownloadSession extends HTTPSession {
                         for (int i = 1; i < app_files.length; i++) {
                             app_files[i] = app_splits[i - 1];
                         }
-                        res.sendZippedFilesResponse(app_files, app.getName() + ".apks" ,user);
+                        res.sendApksFileResponse(app_files ,user);
                     } else {
                         long start = req.getStartRange();
                         if (start == -1)

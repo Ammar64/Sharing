@@ -24,8 +24,8 @@ public class SharableApp extends Sharable {
         this.pm = context.getPackageManager();
         this.appInfo = pm.getApplicationInfo(package_id, 0);
         app_name = appInfo.loadLabel(pm).toString();
-
         // construct base class
+        fileName = app_name + ".apk";
         super.uuid = UUID.randomUUID().toString();
 
         // check for splits
@@ -43,6 +43,7 @@ public class SharableApp extends Sharable {
 
 
         super.file = new File(appInfo.publicSourceDir);
+        fileSize = super.file.length();
         this.mimeType = "application/vnd.android.package-archive";
     }
 
@@ -83,10 +84,6 @@ public class SharableApp extends Sharable {
         return app_name;
     }
 
-    @Override
-    public String getFileName() {
-        return app_name + ".apk";
-    }
     public Sharable getSplitWithUUID(String uuid) {
         for (Sharable i : splits) {
             if (uuid.equals(i.getUUID())) {
