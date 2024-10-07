@@ -1,7 +1,5 @@
 package com.ammar.sharing.network.sessions;
 
-import androidx.annotation.Keep;
-
 import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
@@ -12,7 +10,6 @@ import com.ammar.sharing.network.sessions.base.HTTPSession;
 
 import java.nio.charset.StandardCharsets;
 
-@Keep
 public class CLISession extends HTTPSession {
 
     public CLISession(User user) {

@@ -22,11 +22,6 @@ import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Server;
-import com.ammar.sharing.network.sessions.CLISession;
-import com.ammar.sharing.network.sessions.DownloadSession;
-import com.ammar.sharing.network.sessions.PageSession;
-import com.ammar.sharing.network.sessions.UploadSession;
-import com.ammar.sharing.network.sessions.UserSession;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
