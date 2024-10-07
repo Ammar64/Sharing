@@ -7,6 +7,10 @@ You need the other device to be connected to the same network. just toggle on th
 Files sent from browser to the app can be found in Sharing/ folder in your internal storage.
 You can always disable uploads in the app settings. 
 
+[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"
+alt="Get it on IzzyOnDroid"
+height="80">](https://apt.izzysoft.de/fdroid/index/apk/com.ammar.sharing)
+
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
      height="80">](https://f-droid.org/packages/com.ammar.sharing/)
