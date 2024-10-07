@@ -23,7 +23,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:textIsSelectable="true"
-        tools:text="http://192.168.1.9:2999" />
+        tools:text="http://192.168.1.9:2999"
+        app:fontFamily="sans-serif"
+        android:includeFontPadding="false"/>
 
     <android.widget.ImageView
         android:id="@+id/IV_QRCodeImage"

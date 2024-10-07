@@ -1,5 +1,6 @@
 package com.ammar.sharing.common;
 
+import android.graphics.Typeface;
 import android.os.Environment;
 
 import java.io.File;
@@ -53,5 +54,4 @@ public final class Consts {
 
     public enum OS {LINUX, WINDOWS, ANDROID, IOS, MAC, UNKNOWN};
     private Consts(){}
-
 }

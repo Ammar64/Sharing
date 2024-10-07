@@ -29,6 +29,8 @@
         android:layout_marginEnd="16dp"
         android:maxLines="1"
         android:ellipsize="end"
+        android:includeFontPadding="false"
+        android:textAlignment="viewStart"
         tools:text="Picture 2023-12-12 12:12:12" />
 
     <com.ammar.sharing.custom.ui.AdaptiveTextView
@@ -38,9 +40,9 @@
         app:layout_constraintBottom_toBottomOf="@+id/IV_FileChosenIcon"
         app:layout_constraintStart_toStartOf="@+id/TV_FileChosenName"
         app:layout_constraintTop_toBottomOf="@+id/TV_FileChosenName"
-        android:layout_marginTop="-10dp"
         android:drawablePadding="6dp"
-        tools:text="(15 MB)" />
+        tools:text="(15 MB)"
+        android:includeFontPadding="false"/>
 
 
     <androidx.appcompat.widget.AppCompatImageButton

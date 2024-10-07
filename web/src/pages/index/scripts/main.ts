@@ -2,15 +2,14 @@ import { DownloadObject } from './main.d'
 
 const sendBtn = document.getElementById("sendBtn")!;
 const recieveBtn = document.getElementById("recieveBtn")!;
-const downloadBubble = document.getElementById("downloadBubble")!;
+const downloadBubble = document.getElementById("downloadBubble")! as HTMLDivElement;
 const noDownloadsText = document.getElementById("no-downloads-text")!;
-const loginBubble = document.getElementById("loginBubble")!;
+const usernameBubble = document.getElementById("usernameBubble")!;
 const uploadDisabledDialog = document.getElementById("uploadDisabledDialog")!;
-const overlay = document.getElementById('overlay')!;
 const downloadsBubbleOkButton = document.getElementById('okButton')!;
 const uploadDisabledDialogOkButton = document.getElementById("uploadDisabledDialogOkBtn")!;
 const updateBtn = document.getElementById('update')!;
-const loginBtn = document.getElementById('button-username')!;
+const usernameBtn = document.getElementById('button-username')!;
 const downloads = document.getElementById("downloads")!;
 const uploadInput = document.getElementById('uploadInput') as HTMLInputElement;
 const loader = document.getElementById('overlay-process')! as HTMLElement;
@@ -39,7 +38,7 @@ sendBtn.onclick = function () {
 }
 
 recieveBtn.onclick = () => {
-    openBubble(downloadBubble);
+    openDownloadBubble(downloadBubble);
     requestAvailableDownloads();
 };
 
@@ -56,32 +55,12 @@ uploadDisabledDialogOkButton.onclick = () => {
 }
 
 overlay.onclick = () => {
-    closeBubbles([downloadBubble, uploadDisabledDialog, loginBubble]);
+    closeBubbles([downloadBubble, uploadDisabledDialog, usernameBubble]);
 }
 
-loginBtn.onclick = () => {
-    openBubble(loginBubble);
+usernameBtn.onclick = () => {
+    openBubble(usernameBubble);
 };
-
-function openBubble(bubble: HTMLElement) {
-    bubble.style.display = 'block';
-    overlay.style.display = 'block';
-}
-
-function closeBubbles(bubbles: HTMLElement[] | HTMLElement) {
-    // Ensure bubbles is always treated as an array
-    if (!Array.isArray(bubbles)) {
-        bubbles = [bubbles];
-    }
-
-    bubbles.forEach(bubble => {
-        if (bubble && bubble.style.display !== 'none') {
-            bubble.style.display = 'none';
-        }
-    });
-    overlay.style.display = 'none';
-}
-
 
 function showLoader() {
     loader.style.display = 'block';
@@ -118,6 +97,8 @@ function makeDownloadItem(e: DownloadObject) {
     downloadItemName.textContent = e.name;
 
     const downloadItemSize = document.createElement("span");
+    downloadItemSize.className = "download-item-size"
+    downloadItemSize.dir = "ltr"
     downloadItemSize.textContent = !e.hasSplits ? `(${getFormattedFileSize(e.size)})` : '(splits)'
 
     const downloadItemButton = document.createElement("a");
@@ -278,8 +259,7 @@ uploadInput.addEventListener('input', function (e) {
 
 /* username field */
 const usernameForm = document.getElementById('usernameForm')!;
-/*     const loginBubble = document.getElementById('loginBubble'); // Assuming this is the login bubble element
- */
+
 // Check if username is already stored in localStorage
 let storedUsername = localStorage.getItem('username');
 
@@ -350,7 +330,7 @@ function updateUsername(username: string) {
                     throw new Error()
                 }
             }
-            closeBubbles([loginBubble]); // Assuming closeBubbles accepts an array
+            closeBubbles([usernameBubble]); // Assuming closeBubbles accepts an array
         })
         .catch(error => {
             console.error('Error updating username:', error);

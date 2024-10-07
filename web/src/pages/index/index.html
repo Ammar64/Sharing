@@ -5,11 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="/pages/index/" />
+
     <link rel="stylesheet" href="style/blocks.css" />
     <link rel="stylesheet" href="style/style.css" />
     <link rel="stylesheet" href="style/queries.css">
     <link rel="stylesheet" href="style/plane.css" />
+    <link rel="stylesheet" href="style/mobile.css" media="only screen and (max-width: 525px)" />
+
+    <script defer src="scripts/dialogs.js"></script>
     <script defer src="scripts/main.js"></script>
+
     <title>{sharing}</title>
 </head>
 
@@ -26,16 +31,13 @@
             <img src="assets/user-regular.svg" />
             {username}
         </button>
-        <div class="form-container" id="loginBubble">
+        <div class="form-container" id="usernameBubble">
             <h1>{enter_your_user_name}</h1>
             <div class="form-control">
                 <form id="usernameForm">
                     <input type="text" id="usernameInput" name="username" required>
-                    <label>
-                        <span style="transition-delay:0ms">U</span><span style="transition-delay:50ms">s</span><span
-                            style="transition-delay:100ms">e</span><span style="transition-delay:150ms">r</span><span
-                            style="transition-delay:200ms">n</span><span style="transition-delay:250ms">a</span><span
-                            style="transition-delay:300ms">m</span><span style="transition-delay:350ms">e</span>
+                    <label id="username-label">
+                        <span>{username}</span>
                     </label>
                     <button type="submit" class="form-submit-btn">{submit}</button>
                 </form>
@@ -66,7 +68,7 @@
             <ul id="downloads">
             </ul>
             <span id="no-downloads-text">{no_downloads_available}</span>
-            <div class="btns">
+            <div id="downloadBubbleBtns">
                 <button id="okButton">{done}</button>
                 <button id="update">{update}</button>
             </div>

@@ -37,10 +37,10 @@ public class PageSession extends HTTPSession {
             }
         } else if ("/no-JS".equals(path)) {
             generateAndSendNoJSPage(res);
-        } else if ("/common/cairo.ttf".equals(path)) {
+        } else if ("/common/almarai_regular.ttf".equals(path)) {
             try {
                 res.setContentType("font/ttf");
-                res.sendResponse(Utils.readRawRes(R.raw.cairo));
+                res.sendResponse(Utils.readRawRes(R.raw.almarai_regular));
             } catch (IOException e) {
                 Utils.showErrorDialog("PagesSession.GET(). IOException.", "Note: error happened when reading raw resources\n" + e.getMessage());
             }
