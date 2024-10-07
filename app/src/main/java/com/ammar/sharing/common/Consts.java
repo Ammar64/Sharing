@@ -1,6 +1,5 @@
 package com.ammar.sharing.common;
 
-import android.graphics.Typeface;
 import android.os.Environment;
 
 import java.io.File;

@@ -39,32 +39,6 @@
     text-shadow: 7px 0px 7px #00BCD4;
 }
 
-/* .download-item-info {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: relative;
-    width: 100%;
-
-}
-
-
-.download-item-img {
-    width: 2.3em;
-    height: 2.3em;
-
-    -webkit-margin-end: 0.5em;
-    -moz-margin-end: 0.5em;
-    margin-inline-end: 0.5em;
-}
-
-.download-item-name {
-    -webkit-margin-end: 0.5em;
-    -moz-margin-end: 0.5em;
-    margin-inline-end: 0.5em;
-    white-space: nowrap;
-} */
-
 .download-item-info {
     display: grid;
     grid-template-columns: min-content 1fr min-content;
