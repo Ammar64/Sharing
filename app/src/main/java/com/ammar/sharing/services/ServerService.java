@@ -22,6 +22,11 @@ import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Server;
+import com.ammar.sharing.network.sessions.CLISession;
+import com.ammar.sharing.network.sessions.DownloadSession;
+import com.ammar.sharing.network.sessions.PageSession;
+import com.ammar.sharing.network.sessions.UploadSession;
+import com.ammar.sharing.network.sessions.UserSession;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -43,6 +48,32 @@ public class ServerService extends Service {
 
     private final Server server = new Server(this);
     final Intent serverStatusIntent = new Intent(Consts.ACTION_GET_SERVER_STATUS);
+
+    @Override
+    public void onCreate() {
+        // PageSession
+        server.addPath("/", PageSession.class);
+        server.addPath("/no-JS", PageSession.class);
+        server.addPath("/pages/(.*)", PageSession.class);
+        server.addPath("/common/(.*)", PageSession.class);
+        // DownloadSession
+        server.addPath("/download/(.*)", DownloadSession.class);
+        server.addPath("/available-downloads", DownloadSession.class);
+        server.addPath("/get-icon/(.*)", DownloadSession.class);
+
+        // UploadSession
+        server.addPath("/upload/(.*)", UploadSession.class);
+        server.addPath("/check-upload-allowed", UploadSession.class);
+
+        // UserSession
+        server.addPath("/get-user-info", UserSession.class);
+        server.addPath("/update-user-name", UserSession.class);
+
+        // CLI Session
+        server.addPath("/ls", CLISession.class);
+        server.addPath("/dl/(.*)", CLISession.class);
+        server.addPath("/da", CLISession.class);
+    }
 
     @Nullable
     @Override
@@ -72,8 +103,8 @@ public class ServerService extends Service {
             case Consts.ACTION_ADD_DOWNLOADS:
                 ArrayList<String> filePaths = intent.getStringArrayListExtra(Consts.EXTRA_FILES_PATH);
                 assert filePaths != null;
-                for( String i : filePaths ) {
-                    Sharable.sharablesList.add( new Sharable(i));
+                for (String i : filePaths) {
+                    Sharable.sharablesList.add(new Sharable(i));
                 }
                 Bundle fb = new Bundle();
                 fb.putChar("action", 'A');
@@ -81,8 +112,8 @@ public class ServerService extends Service {
                 break;
             case Consts.ACTION_ADD_APPS_DOWNLOADS:
                 ArrayList<String> packages_name = intent.getStringArrayListExtra(Consts.EXTRA_APPS_NAMES);
-                if( packages_name != null ) {
-                    for( String i : packages_name ) {
+                if (packages_name != null) {
+                    for (String i : packages_name) {
                         try {
                             Sharable.sharablesList.add(new SharableApp(this, i));
                         } catch (PackageManager.NameNotFoundException e) {
@@ -98,8 +129,8 @@ public class ServerService extends Service {
                 String uuid = intent.getStringExtra(Consts.EXTRA_DOWNLOAD_UUID);
 
                 int index = 0;
-                for( Sharable i : Sharable.sharablesList) {
-                    if( i.getUUID().equals(uuid) ) {
+                for (Sharable i : Sharable.sharablesList) {
+                    if (i.getUUID().equals(uuid)) {
                         Sharable.sharablesList.remove(index);
                         break;
                     }
@@ -111,7 +142,7 @@ public class ServerService extends Service {
                 Data.filesListNotifier.forcePostValue(remove_info);
                 break;
             case Consts.ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN:
-                if( !server.isRunning() ) {
+                if (!server.isRunning()) {
                     Log.d("MYLOG", "Stopping App process");
                     int pid = android.os.Process.myPid();
                     android.os.Process.killProcess(pid);
@@ -134,6 +165,7 @@ public class ServerService extends Service {
     }
 
     private boolean isRunningFirstTime = true;
+
     private void toggleForegroundAndReportToActivity() {
         boolean isServerRunning = server.isRunning();
 

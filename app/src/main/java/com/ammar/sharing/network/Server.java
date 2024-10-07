@@ -31,30 +31,6 @@ public class Server {
 
     public Server(ServerService service) {
         this.service = service;
-
-        // PageSession
-        this.addPath("/", PageSession.class);
-        this.addPath("/no-JS",PageSession.class);
-        this.addPath("/pages/(.*)",PageSession.class);
-        this.addPath("/common/(.*)",PageSession.class);
-
-        // DownloadSession
-        this.addPath("/download/(.*)", DownloadSession.class);
-        this.addPath("/available-downloads", DownloadSession.class);
-        this.addPath("/get-icon/(.*)", DownloadSession.class);
-
-        // UploadSession
-        this.addPath("/upload/(.*)", UploadSession.class);
-        this.addPath("/check-upload-allowed", UploadSession.class);
-
-        // UserSession
-        this.addPath("/get-user-info", UserSession.class);
-        this.addPath("/update-user-name", UserSession.class);
-
-        // CLI Session
-        this.addPath("/ls", CLISession.class);
-        this.addPath("/dl/(.*)", CLISession.class);
-        this.addPath("/da", CLISession.class);
     }
 
     public void Start() {
