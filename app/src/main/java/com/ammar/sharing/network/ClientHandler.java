@@ -1,9 +1,5 @@
 package com.ammar.sharing.network;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
-import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.sessions.base.HTTPSession;

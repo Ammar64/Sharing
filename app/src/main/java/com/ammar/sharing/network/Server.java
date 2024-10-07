@@ -2,11 +2,6 @@ package com.ammar.sharing.network;
 
 import android.util.Log;
 
-import com.ammar.sharing.network.sessions.CLISession;
-import com.ammar.sharing.network.sessions.DownloadSession;
-import com.ammar.sharing.network.sessions.PageSession;
-import com.ammar.sharing.network.sessions.UploadSession;
-import com.ammar.sharing.network.sessions.UserSession;
 import com.ammar.sharing.network.sessions.base.HTTPSession;
 import com.ammar.sharing.services.ServerService;
 
