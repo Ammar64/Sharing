@@ -1,5 +1,7 @@
 package com.ammar.sharing.network.sessions;
 
+import androidx.annotation.Keep;
+
 import com.ammar.sharing.R;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Utils;
@@ -13,6 +15,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
+@Keep
 public class PageSession extends HTTPSession {
     public PageSession(User user) {
         super(user);
