@@ -92,6 +92,9 @@
     width: 100%;
     justify-content: center;
     margin-top: 0.5em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .download-item-info>.button-download {

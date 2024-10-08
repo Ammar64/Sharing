@@ -1,9 +1,10 @@
 .download-item-info {
     display: grid;
-    grid-template-columns: min-content min-content min-content 1fr;
+    grid-template-columns: min-content 1fr;
     grid-template-rows: auto auto auto;
     justify-content: center;
-
+    width: 100%;
+    padding: relative;
 }
 
 .download-item-img {
@@ -14,12 +15,19 @@
 .download-item-name {
     grid-column: 2/3;
     grid-row: 1/2;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .download-item-size {
     grid-column: 2/3;
     grid-row: 2/3;
 
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 
