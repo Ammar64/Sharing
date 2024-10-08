@@ -13,8 +13,9 @@ public final class Consts {
     public static final String ACTION_GET_SERVER_STATUS = "com.ammar.sharing.services.GET_SERVER_STATUS";
     public static final String ACTION_UPDATE_NOTIFICATION_TEXT = "com.ammar.sharing.services.UPDATE_NOTIFICATION_STRING";
     public static final String ACTION_REMOVE_DOWNLOAD = "ACTION_REMOVE_DOWNLOAD";
-    public static final String ACTION_ADD_DOWNLOADS = "ACTION_ADD_DOWNLOADS";
-    public static final String ACTION_ADD_APPS_DOWNLOADS = "ACTION_ADD_APPS_DOWNLOADS";
+    public static final String ACTION_ADD_FILE_SHARABLES = "ACTION_ADD_FILE_SHARABLES";
+    public static final String ACTION_ADD_APPS_SHARABLES = "ACTION_ADD_APPS_SHARABLES";
+    public static final String ACTION_ADD_URI_SHARABLES = "ACTION_ADD_URI_SHARABLES";
     public static final String ACTION_ADD_FILES = "ACTION_ADD_FILES";
     public static final String ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN = "ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN";
 
@@ -24,6 +25,7 @@ public final class Consts {
 
     public static final String EXTRA_FILES_PATH = "com.ammar.sharing.services.FILE_PATHS";
     public static final String EXTRA_APPS_NAMES = "com.ammar.sharing.services.APPS_NAME";
+    public static final String EXTRA_URIS = "com.ammar.sharing.services.EXTRA_URIS";
     public static final String EXTRA_DOWNLOAD_UUID = "EXTRA_DOWNLOAD_UUID";
     public static final String EXTRA_INTENT_PATHS = "com.ammar.sharing.EXTRA_INTENT_PATHS";
 
@@ -48,6 +50,7 @@ public final class Consts {
     public static final File otherDir = new File(Sharing, "Other");
 
     public static final List<String> langsCode = Arrays.asList("", "ar", "en", "du", "zh");
+
     public static Locale SystemLocale;
     public static String serverNotificationChannelID = "com.ammar.sharing.SERVER_NOTIFICATION_CHANNEL";
 

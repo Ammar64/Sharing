@@ -7,7 +7,7 @@
 
     <!-- We use foreground service so the app can still transfer files when the user remove the app from task manager -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/> <!-- A notification is required for foreground service -->
     <!--___________________________________________-->
 
@@ -46,15 +46,18 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activities.FastShareActivity.FastShareActivity"
+        <activity-alias
+            android:name="Share"
             android:exported="true"
-            android:label="@string/fast_share">
+            android:targetActivity=".activities.MainActivity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
+                <action android:name="android.intent.action.SEND_MULTIPLE"/>
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="*/*"/>
             </intent-filter>
-        </activity>
+        </activity-alias>
+
         <activity android:name=".activities.AddAppsActivity.AddAppsActivity"
             android:exported="false" />
 
@@ -66,7 +69,7 @@
 
         <service android:name=".services.ServerService"
             android:exported="false"
-            android:foregroundServiceType="specialUse"/>
+            android:foregroundServiceType="dataSync"/>
 
         <service android:name=".services.PackageInstallerService"
             android:exported="false" />

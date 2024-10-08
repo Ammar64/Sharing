@@ -37,7 +37,7 @@ public class Response {
     public void sendFileResponse(Sharable file, boolean progress, User user) {
         ProgressManager progressManager = null;
         if (progress) {
-            progressManager = new ProgressManager(file.getFile(), clientSocket, file.getSize(), user, ProgressManager.OP.DOWNLOAD);
+            progressManager = new ProgressManager(file, clientSocket, file.getSize(), user, ProgressManager.OP.DOWNLOAD);
             progressManager.setDisplayName(file.getName());
             progressManager.setUUID(file.getUUID());
         }
@@ -121,7 +121,7 @@ public class Response {
     }
 
     public void sendZippedFilesResponse(Sharable[] files, String filename, User user) {
-        ProgressManager progressManager = new ProgressManager(files[0].getFile(), clientSocket, -1, user, ProgressManager.OP.DOWNLOAD);
+        ProgressManager progressManager = new ProgressManager(files[0], clientSocket, -1, user, ProgressManager.OP.DOWNLOAD);
         progressManager.setUUID(files[0].getUUID());
         progressManager.setDisplayName(filename);
         try {
@@ -183,7 +183,7 @@ public class Response {
     }
 
     public void sendApksFileResponse(Sharable[] files, User user) {
-        ProgressManager progressManager = new ProgressManager(files[0].getFile(), clientSocket, -1, user, ProgressManager.OP.DOWNLOAD);
+        ProgressManager progressManager = new ProgressManager(files[0], clientSocket, -1, user, ProgressManager.OP.DOWNLOAD);
         progressManager.setUUID(files[0].getUUID());
         progressManager.setDisplayName(files[0].getName());
         try {

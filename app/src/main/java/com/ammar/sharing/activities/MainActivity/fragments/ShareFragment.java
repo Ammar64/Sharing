@@ -92,12 +92,12 @@ public class ShareFragment extends Fragment {
             if (data.getAction().equals(Consts.ACTION_ADD_FILES)) {
                 ArrayList<String> selectedFilePaths = data.getStringArrayListExtra(Consts.EXTRA_INTENT_PATHS);
                 // intent to be sent to service
-                intent.setAction(Consts.ACTION_ADD_DOWNLOADS);
+                intent.setAction(Consts.ACTION_ADD_FILE_SHARABLES);
                 intent.putExtra(Consts.EXTRA_FILES_PATH, selectedFilePaths);
             } else if (data.getAction().equals(AddAppsActivity.ACTION_ADD_APPS)) {
                 ArrayList<String> selectedApps = data.getStringArrayListExtra(AddAppsActivity.EXTRA_INTENT_APPS);
 
-                intent.setAction(Consts.ACTION_ADD_APPS_DOWNLOADS);
+                intent.setAction(Consts.ACTION_ADD_APPS_SHARABLES);
                 intent.putExtra(Consts.EXTRA_APPS_NAMES, selectedApps);
             }
             requireContext().startService(intent);
@@ -111,7 +111,7 @@ public class ShareFragment extends Fragment {
         if ( result.getResultCode() == Activity.RESULT_OK && intent != null && Consts.ACTION_ADD_FILES.equals( intent.getAction())) {
            ArrayList<String> filesPath = intent.getStringArrayListExtra(Consts.EXTRA_FILES_PATH);
            Intent serviceIntent = new Intent(requireContext(), ServerService.class);
-           serviceIntent.setAction(Consts.ACTION_ADD_DOWNLOADS);
+           serviceIntent.setAction(Consts.ACTION_ADD_FILE_SHARABLES);
            serviceIntent.putStringArrayListExtra(Consts.EXTRA_FILES_PATH, filesPath);
            requireContext().startService(serviceIntent);
         }

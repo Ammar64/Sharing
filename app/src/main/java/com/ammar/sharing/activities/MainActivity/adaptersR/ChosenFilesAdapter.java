@@ -122,7 +122,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
                 SharableApp app = (SharableApp) file;
                 builder = request.load(app.getIcon());
             } else if (mimeType.startsWith("image/")) {
-                builder = request.load(file.getFile());
+                builder = request.load(file.isUri() ? file.getUri() : file.getFile());
             } else if(mimeType.startsWith("audio/")) {
                 builder = request.load(R.drawable.icon_audio);
             } else if(mimeType.startsWith("video/")) {
@@ -131,18 +131,22 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
                 Drawable appIcon = appsIconCache.get(pos);
                 if (appIcon == null) {
                     PackageManager pm = itemView.getContext().getApplicationContext().getPackageManager();
-                    PackageInfo packageInfo = pm.getPackageArchiveInfo(file.getFilePath(), 0);
-                    if (packageInfo != null) {
-                        ApplicationInfo appInfo = packageInfo.applicationInfo;
-                        appInfo.sourceDir = file.getFilePath();
-                        appInfo.publicSourceDir = file.getFilePath();
-                        appIcon = appInfo.loadIcon(pm);
-                        appsIconCache.put(pos, appIcon);
+                    if( !file.isUri() ) {
+                        PackageInfo packageInfo = pm.getPackageArchiveInfo(file.getFilePath(), 0);
+                        if (packageInfo != null) {
+                            ApplicationInfo appInfo = packageInfo.applicationInfo;
+                            appInfo.sourceDir = file.getFilePath();
+                            appInfo.publicSourceDir = file.getFilePath();
+                            appIcon = appInfo.loadIcon(pm);
+                            appsIconCache.put(pos, appIcon);
 
-                        builder = request.load(appIcon);
-                        builder = builder.skipMemoryCache(true);
+                            builder = request.load(appIcon);
+                            builder = builder.skipMemoryCache(true);
 
-                    } else builder = request.load(R.drawable.icon_file);
+                        } else builder = request.load(R.drawable.icon_archive);
+                    } else {
+                        builder = request.load(R.drawable.icon_archive);
+                    }
                 } else {
                     builder = request.load(appIcon);
                 }

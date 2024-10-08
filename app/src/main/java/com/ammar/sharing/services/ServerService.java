@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -100,7 +101,7 @@ public class ServerService extends Service {
             case Consts.ACTION_UPDATE_NOTIFICATION_TEXT:
                 startForeground(FOREGROUND_NOTIFICATION_ID, buildNotification(this));
                 break;
-            case Consts.ACTION_ADD_DOWNLOADS:
+            case Consts.ACTION_ADD_FILE_SHARABLES:
                 ArrayList<String> filePaths = intent.getStringArrayListExtra(Consts.EXTRA_FILES_PATH);
                 assert filePaths != null;
                 for (String i : filePaths) {
@@ -110,7 +111,7 @@ public class ServerService extends Service {
                 fb.putChar("action", 'A');
                 Data.filesListNotifier.postValue(fb);
                 break;
-            case Consts.ACTION_ADD_APPS_DOWNLOADS:
+            case Consts.ACTION_ADD_APPS_SHARABLES:
                 ArrayList<String> packages_name = intent.getStringArrayListExtra(Consts.EXTRA_APPS_NAMES);
                 if (packages_name != null) {
                     for (String i : packages_name) {
@@ -124,6 +125,16 @@ public class ServerService extends Service {
                 Bundle ab = new Bundle();
                 ab.putChar("action", 'A');
                 Data.filesListNotifier.postValue(ab);
+                break;
+            case Consts.ACTION_ADD_URI_SHARABLES:
+                ArrayList<Uri> uris = intent.getParcelableArrayListExtra(Consts.EXTRA_URIS);
+                assert uris != null;
+                for (Uri i : uris) {
+                    Sharable.sharablesList.add(new Sharable(getContentResolver(), i));
+                }
+                Bundle ub = new Bundle();
+                ub.putChar("action", 'A');
+                Data.filesListNotifier.postValue(ub);
                 break;
             case Consts.ACTION_REMOVE_DOWNLOAD:
                 String uuid = intent.getStringExtra(Consts.EXTRA_DOWNLOAD_UUID);

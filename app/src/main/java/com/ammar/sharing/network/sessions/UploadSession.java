@@ -3,6 +3,7 @@ package com.ammar.sharing.network.sessions;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.custom.io.ProgressManager;
+import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
@@ -76,7 +77,7 @@ public class UploadSession extends HTTPSession {
                 Utils.createAppDirs();
             }
             File upload_file = Utils.createNewFile(upload_dir, fullFileName);
-            ProgressManager progressManager = new ProgressManager(upload_file, request.getClientSocket(), size, user, ProgressManager.OP.UPLOAD);
+            ProgressManager progressManager = new ProgressManager(new Sharable(upload_file.getPath()), request.getClientSocket(), size, user, ProgressManager.OP.UPLOAD);
             progressManager.setDisplayName(upload_file.getName());
         try {
             FileOutputStream out = new FileOutputStream(upload_file);

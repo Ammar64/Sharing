@@ -4,16 +4,16 @@ import android.os.Bundle;
 
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.User;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
 public class ProgressManager {
 
-    private final File file;
+    private final Sharable sharable;
     private Socket socket;
     private String displayName = null;
     // The other device receiving or sending
@@ -58,8 +58,8 @@ public class ProgressManager {
     }
 
 
-    public ProgressManager(File file, Socket socket, long total, User user, OP opType) {
-        this.file = file;
+    public ProgressManager(Sharable sharable, Socket socket, long total, User user, OP opType) {
+        this.sharable = sharable;
         this.socket = socket;
         this.total = total;
         this.user = user;
@@ -87,19 +87,19 @@ public class ProgressManager {
     }
 
     public String getFileName() {
-        return file.getName();
+        return sharable.getFileName();
     }
 
     public String getDisplayName() {
-        return displayName == null ? file.getName() : displayName;
+        return displayName == null ? sharable.getName() : displayName;
     }
 
-    public File getFile() {
-        return file;
+    public Sharable getSharable() {
+        return sharable;
     }
 
     public String getFileType() {
-        return Utils.getMimeType(file.getName());
+        return Utils.getMimeType(sharable.getName());
     }
 
     public User getUser() {

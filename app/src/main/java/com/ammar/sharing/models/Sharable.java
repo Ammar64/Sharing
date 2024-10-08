@@ -39,7 +39,7 @@ public class Sharable {
         isUri = false;
     }
 
-    public Sharable(ContentResolver resolver, Uri uri) throws FileNotFoundException {
+    public Sharable(ContentResolver resolver, Uri uri) {
         this.uri = uri;
         this.resolver = resolver;
         this.uuid = UUID.randomUUID().toString();
@@ -94,9 +94,18 @@ public class Sharable {
         return jsonObject;
     }
 
+    public boolean isUri() {
+        return isUri;
+    }
+
     public File getFile() {
         if( isUri ) throw new RuntimeException("Sharable is not a file");
         return file;
+    }
+
+    public Uri getUri() {
+        if(!isUri) throw new RuntimeException("Sharable is not a Uri");
+        return uri;
     }
     public InputStream openInputStream() throws FileNotFoundException {
         if( isUri ) {
