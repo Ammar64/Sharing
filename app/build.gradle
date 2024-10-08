@@ -43,8 +43,6 @@ android {
     namespace 'com.ammar.sharing'
     compileSdk 34
 
-
-
     sourceSets {
         main.assets.srcDirs += new File(rootDir, "web/build").absolutePath
     }

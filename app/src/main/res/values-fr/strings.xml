@@ -1,4 +1,3 @@
-
 <resources>
     <!-- Activité principale   -->
     <string name="about_us">À propos de nous</string>
@@ -41,7 +40,7 @@
     <string name="no_files_selected">Aucun fichier sélectionné</string>
 
     <string name="warning">Avertissement !!</string>
-    <string name="warning_details">Cette application n'utilise pas https pour transférer vos fichiers, ce qui la rend vulnérable aux attaques de type "man in the middle". \nPour être plus en sécurité, je recommande d'activer un point d'accès sécurisé sur cet appareil et de vous assurer que les autres appareils souhaités sont les seuls à y être connectés.</string>
+    <string name="warning_details">Cette application n\'utilise pas https pour transférer vos fichiers, ce qui la rend vulnérable aux attaques de type \"man in the middle\". \nPour être plus en sécurité, je recommande d\'activer un point d\'accès sécurisé sur cet appareil et de vous assurer que les autres appareils souhaités sont les seuls à y être connectés.</string>
     <string name="dont_show_again">Ne plus afficher ce message</string>
 
     <string name="fast_share">Partage rapide</string>
@@ -49,17 +48,17 @@
     <string name="toggle_dark_mode">Activer/désactiver le mode sombre</string>
 
     <string name="disable_browser_upload">Désactiver le téléchargement par navigateur</string>
-    <string name="disable_browser_upload_desc">Empêche les navigateurs d'envoyer des fichiers vers votre appareil.</string>
+    <string name="disable_browser_upload_desc">Empêche les navigateurs d\'envoyer des fichiers vers votre appareil.</string>
 
     <string name="block_users">Bloquer les utilisateurs connectés</string>
-    <string name="block_users_desc">Bloquer les utilisateurs une fois qu'ils sont connectés à votre appareil.</string>
+    <string name="block_users_desc">Bloquer les utilisateurs une fois qu\'ils sont connectés à votre appareil.</string>
 
     <string name="language">Langues</string>
     <string name="languages_desc">Système, العربية, English, German, French</string>
     <string name="system_default_lang">Langue par défaut du système</string>
 
     <string name="debug_mode">Mode débogage</string>
-    <string name="debug_mode_desc">Affiche certaines erreurs lorsqu'elles se produisent</string>
+    <string name="debug_mode_desc">Affiche certaines erreurs lorsqu\'elles se produisent</string>
 
     <!-- Activité Ajouter des applications   -->
     <string name="loading_apps">Chargement des applications…</string>
@@ -82,12 +81,12 @@
     <string name="no_files_found">Aucun fichier trouvé</string>
 
     <!-- Activité Installeur d'APKs -->
-    <string name="apks_installer_experimental">Installeur d'APKS (Expérimental)</string>
-    <string name="apks_installer">Installeur d'apks</string>
+    <string name="apks_installer_experimental">Installeur d\'APKS (Expérimental)</string>
+    <string name="apks_installer">Installeur d\'apks</string>
     <string name="pls_choose_apks">Veuillez choisir un fichier apks</string>
     <string name="pick_apks_file">choisir un fichier apks</string>
-    <string name="installer_note">Après avoir envoyé un fichier apks avec succès à l'autre appareil, envoyez cette application à l'autre appareil distant et ouvrez cette page pour installer le fichier apks.</string>
-    <string name="initialising">Initialisation...</string>
+    <string name="installer_note">Après avoir envoyé un fichier apks avec succès à l\'autre appareil, envoyez cette application à l\'autre appareil distant et ouvrez cette page pour installer le fichier apks.</string>
+    <string name="initialising">Initialisation…</string>
     <string name="installing">Installation</string>
     <string name="extracting_x">extraction de %1$s</string>
     <string name="extracting_done">Extraction terminée</string>
@@ -107,10 +106,10 @@
     <string name="light_mode">Mode clair</string>
 
     <string name="svr_running">Le serveur fonctionne</string>
-    <string name="svr_notification_message">Le serveur est actif à l'adresse %1$s:%2$s et accepte de nouvelles demandes</string>
-    <string name="app_icon_acc_desc">Icône de l'application</string>
+    <string name="svr_notification_message">Le serveur est actif à l\'adresse %1$s:%2$s et accepte de nouvelles demandes</string>
+    <string name="app_icon_acc_desc">Icône de l\'application</string>
     <string name="tutorial">Tutoriel</string>
-    <string name="connect_to_wifi_or_hotspot">Veuillez activer le wifi ou le point d'accès pour commencer le partage</string>
+    <string name="connect_to_wifi_or_hotspot">Veuillez activer le wifi ou le point d\'accès pour commencer le partage</string>
 
     <string name="select">Sélectionner</string>
     <string name="sort_by">Trier par…</string>
@@ -127,6 +126,6 @@
         <item>English</item>
         <item>German</item>
         <item>Chinese Simplified</item>
-        <item>French</item>
+        <item>Française</item>
     </string-array>
 </resources>
