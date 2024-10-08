@@ -31,8 +31,10 @@ import com.bumptech.glide.request.target.Target;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
@@ -134,16 +136,26 @@ public class FileUtils {
         return false;
     }
 
-    public static Bitmap decodeSampledImage(File file, int iW, int iH) {
-        // get image bounds
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(file.getPath(), options);
+    public static Bitmap decodeSampledImage(Sharable file, int iW, int iH) {
+        try {
+            InputStream in = file.openInputStream();
+            // get image bounds
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(in, null, options);
 
-        // get inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, iW, iH);
-        options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(file.getPath(), options);
+            in.close();
+            in = file.openInputStream();
+            // get inSampleSize
+            options.inSampleSize = calculateInSampleSize(options, iW, iH);
+            options.inJustDecodeBounds = false;
+
+            Bitmap bitmap = BitmapFactory.decodeStream(in, null, options);
+            in.close();
+            return bitmap;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
@@ -240,10 +252,10 @@ public class FileUtils {
         }
 
         File[] currentList = root.listFiles(fileFilter);
-        if( currentList == null ) return;
+        if (currentList == null) return;
         for (File i : currentList) {
             if (i.isDirectory()) {
-                if( depth < 3 ) {
+                if (depth < 3) {
                     findFilesTypesRecursively(i, filesType, type, depth + 1);
                 }
             } else if (i.isFile()) {

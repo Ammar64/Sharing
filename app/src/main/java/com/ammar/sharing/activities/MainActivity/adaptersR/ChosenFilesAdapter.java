@@ -6,7 +6,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
-import com.ammar.sharing.activities.FastShareActivity.FastShareActivity;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Utils;
-import com.ammar.sharing.custom.ui.AdaptiveDropDown;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
 import com.ammar.sharing.services.ServerService;
@@ -58,22 +54,15 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         final ImageView fileIconIV;
         final TextView fileNameTV;
         final TextView fileSizeTV;
-        final AppCompatImageButton showOptions;
-        final AdaptiveDropDown adaptiveDropDown;
 
         final View removeB;
-        final View fastShareB;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             fileIconIV = itemView.findViewById(R.id.IV_FileChosenIcon);
             fileNameTV = itemView.findViewById(R.id.TV_FileChosenName);
             fileSizeTV = itemView.findViewById(R.id.TV_FileChosenSize);
-            showOptions = itemView.findViewById(R.id.B_ShowSelectedFileOptions);
-            adaptiveDropDown = new AdaptiveDropDown(itemView.getContext());
-
-            removeB = adaptiveDropDown.addItem(R.string.remove, R.drawable.icon_trash);
-            fastShareB = adaptiveDropDown.addItem(R.string.fast_share, R.drawable.icon_share);
+            removeB = itemView.findViewById(R.id.FileChosenDelete);
         }
 
         public void setup(int pos) {
@@ -85,21 +74,11 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         }
 
         public void setFileListener(Sharable file) {
-            adaptiveDropDown.setAnchorView(showOptions);
             removeB.setOnClickListener(v -> {
                 Intent serviceIntent = new Intent(itemView.getContext(), ServerService.class);
                 serviceIntent.setAction(Consts.ACTION_REMOVE_DOWNLOAD);
                 serviceIntent.putExtra(Consts.EXTRA_DOWNLOAD_UUID, file.getUUID());
                 itemView.getContext().startService(serviceIntent);
-                adaptiveDropDown.dismiss();
-            });
-
-            fastShareB.setOnClickListener(v -> {
-                Intent intent = new Intent(itemView.getContext(), FastShareActivity.class);
-                intent.setAction(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file.getFile()));
-                itemView.getContext().startActivity(intent);
-                adaptiveDropDown.dismiss();
             });
         }
 

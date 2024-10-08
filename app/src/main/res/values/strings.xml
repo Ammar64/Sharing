@@ -2,6 +2,7 @@
     <!-- Activity Main   -->
     <string name="about_us">About us</string>
     <string name="no_app_found_to_handle">No app found to handle this action</string>
+    <string name="unsupported_data">Unsupported data</string>
 
     <!-- Fragment Share   -->
     <string name="share" >Share</string>

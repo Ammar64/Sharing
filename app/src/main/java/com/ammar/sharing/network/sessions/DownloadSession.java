@@ -69,7 +69,7 @@ public class DownloadSession extends HTTPSession {
                     String mimeType = file.getMimeType();
                     Bitmap imageBM;
                     if( mimeType.startsWith("image/") ) {
-                        imageBM = FileUtils.decodeSampledImage(file.getFile(), 128, 128);
+                        imageBM = FileUtils.decodeSampledImage(file, 128, 128);
                     } else if (mimeType.startsWith("video/")) {
                         imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_video, null));
                     } else if(mimeType.startsWith("audio/")){

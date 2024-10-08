@@ -287,15 +287,24 @@ public class MainActivity extends AppCompatActivity {
             Intent uriIntent = new Intent(this, ServerService.class);
             uriIntent.setAction(Consts.ACTION_ADD_URI_SHARABLES);
             ArrayList<Uri> uriArrayList = new ArrayList<>(1);
-            uriArrayList.add(getIntent().getParcelableExtra(Intent.EXTRA_STREAM));
-            uriIntent.putParcelableArrayListExtra(Consts.EXTRA_URIS, uriArrayList);
-            startService(uriIntent);
+            Uri uri = getIntent().getParcelableExtra(Intent.EXTRA_STREAM);
+            if( uri == null ) {
+                Toast.makeText(this, R.string.unsupported_data, Toast.LENGTH_SHORT).show();
+            } else {
+                uriArrayList.add(uri);
+                uriIntent.putParcelableArrayListExtra(Consts.EXTRA_URIS, uriArrayList);
+                startService(uriIntent);
+            }
         } else if (Intent.ACTION_SEND_MULTIPLE.equals(getIntent().getAction())) {
             Intent uriIntent = new Intent(this, ServerService.class);
             uriIntent.setAction(Consts.ACTION_ADD_URI_SHARABLES);
             ArrayList<Uri> uriArrayList = getIntent().getParcelableArrayListExtra(Intent.EXTRA_STREAM);
-            uriIntent.putParcelableArrayListExtra(Consts.EXTRA_URIS, uriArrayList);
-            startService(uriIntent);
+            if( uriArrayList == null ) {
+                Toast.makeText(this, R.string.unsupported_data, Toast.LENGTH_SHORT).show();
+            } else {
+                uriIntent.putParcelableArrayListExtra(Consts.EXTRA_URIS, uriArrayList);
+                startService(uriIntent);
+            }
         }
     }
 
