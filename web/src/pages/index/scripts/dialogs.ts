@@ -23,4 +23,5 @@ function closeBubbles(bubbles: HTMLElement[] | HTMLElement) {
 // special bubble
 function openDownloadBubble(bubble: HTMLDivElement) {
     bubble.style.display = 'flex';
+    overlay.style.display = 'block';
 }
