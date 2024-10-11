@@ -1,4 +1,4 @@
-name: Reproducible builds verifier
+name: Reproducible builds
 
 on:
   push:
