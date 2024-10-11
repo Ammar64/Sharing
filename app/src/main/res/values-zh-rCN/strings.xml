@@ -89,4 +89,5 @@
     <string name="no_web_browser_found">未找到浏览器</string>
     <string name="no_data_attached">没有指定数据</string>
     <string name="something_went_wrong">出问题啦！</string>
+    <string name="no_app_found_to_handle">找不到处理此操作的应用</string>
 </resources>

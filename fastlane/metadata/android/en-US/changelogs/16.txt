@@ -1,0 +1,5 @@
+1- License changed from GPLv3 to AGPLv3
+2- Add HTML only page on URL /no-JS
+3- Add CLI support for curl
+4- Update the web and make it less confusing
+5- New Chinese translations

@@ -10,6 +10,7 @@ import com.ammar.sharing.common.FileUtils;
 import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
+import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
 import com.ammar.sharing.network.sessions.base.HTTPSession;
@@ -20,10 +21,9 @@ import org.json.JSONException;
 import java.nio.charset.StandardCharsets;
 
 public class DownloadSession extends HTTPSession {
-    public DownloadSession(String[] paths) {
-        super(paths, true);
+    public DownloadSession(User user) {
+        super(user);
     }
-
 
     @Override
     public void GET(Request req, Response res) {
@@ -48,7 +48,7 @@ public class DownloadSession extends HTTPSession {
                         for (int i = 1; i < app_files.length; i++) {
                             app_files[i] = app_splits[i - 1];
                         }
-                        res.sendZippedFilesResponse(app_files, app.getName() + ".apks" ,user);
+                        res.sendApksFileResponse(app_files ,user);
                     } else {
                         long start = req.getStartRange();
                         if (start == -1)
@@ -69,7 +69,7 @@ public class DownloadSession extends HTTPSession {
                     String mimeType = file.getMimeType();
                     Bitmap imageBM;
                     if( mimeType.startsWith("image/") ) {
-                        imageBM = FileUtils.decodeSampledImage(file.getFile(), 128, 128);
+                        imageBM = FileUtils.decodeSampledImage(file, 128, 128);
                     } else if (mimeType.startsWith("video/")) {
                         imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_video, null));
                     } else if(mimeType.startsWith("audio/")){

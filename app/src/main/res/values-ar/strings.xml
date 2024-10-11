@@ -1,6 +1,9 @@
 <resources>
     <!-- Activity Main   -->
     <string name="about_us">عنا</string>
+    <string name="no_app_found_to_handle">لم يتم العثور على تطبيق لفتح الرابط</string>
+    <string name="unsupported_data">بيانات غير مدعومة</string>
+
     <!-- Fragment Share   -->
     <string name="share" >مشاركة</string>
     <string name="add_apps">أضف تطبيقات</string>
@@ -54,7 +57,7 @@
     <string name="block_users_desc">يحظر المستخديم فور إتصالهم بجهازك.</string>
 
     <string name="language">اللغة</string>
-    <string name="languages_desc">النظام, العربية, English, German</string>
+    <string name="languages_desc">تغيير لغة التطبيق</string>
     <string name="system_default_lang">لغة النظام</string>
 
     <string name="debug_mode">وضع تصحيح الأخطاء</string>

@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:fontFamily">@raw/cairo</item>
+        <item name="android:fontFamily">@raw/almarai_regular</item>
         <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="android:actionMenuTextColor">@color/defaultTextColor</item>
@@ -10,7 +10,7 @@
     </style>
 
     <style name="AppThemeDark" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="android:fontFamily">@raw/cairo</item>
+        <item name="android:fontFamily">@raw/almarai_regular</item>
         <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="android:actionMenuTextColor">@color/defaultTextColor</item>

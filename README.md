@@ -7,11 +7,36 @@ You need the other device to be connected to the same network. just toggle on th
 Files sent from browser to the app can be found in Sharing/ folder in your internal storage.
 You can always disable uploads in the app settings. 
 
+[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"
+alt="Get it on IzzyOnDroid"
+height="80">](https://apt.izzysoft.de/fdroid/index/apk/com.ammar.sharing)
+
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
      height="80">](https://f-droid.org/packages/com.ammar.sharing/)
 
 Or download the latest APK from the [Releases Section](https://github.com/Ammar64/Sharing/releases/latest).
+
+Important issue
+-----
+We need a new icon design for this app.  
+A new stable update is almost ready but will not be released without the new icon and I'm not a good designer 😁.  
+See this [issue](https://github.com/Ammar64/Sharing/issues/19) for more details 
+
+Active polls
+-----
+
+Vote whether version [v1.5.2-beta1](https://github.com/Ammar64/Sharing/releases/tag/v1.5.2-beta1) is better than [1.5](https://github.com/Ammar64/Sharing/releases/tag/1.5) or not in this [poll](https://github.com/Ammar64/Sharing/discussions/30).
+
+TODO
+-----------------
+- [ ] Add the ability to share files and/or apps app-to-app
+- [ ] Add the ability to stream video and/or audio from camera, screen and/or microphone to the browser and the otherway around.
+- [ ] Support sending files from SD Card.
+- [ ] Redesign the Add Files Activity so it can detect real time file system updates and make the UI responsive for larger devices
+- [ ] Add the ability to send and receive text using websocket
+- [x] Make a script that will help translate html.
+
 
 Screen shots
 -----------------
@@ -33,7 +58,8 @@ Screen shots
 
 Translation
 ----------------
-When translating [res/values/strings.xml](app/src/main/res/values/strings.xml) consider also translating [res/raw/index.html](app/src/main/res/raw/index.html) to translate the webpage that shows on the other device
+When translating [app/src/main/res/values/strings.xml](app/src/main/res/values/strings.xml) consider also translating [web/strings/**/strings.xml](web/strings/en/strings.xml) to translate the webpage that shows on the other device.
+[Learn more](web/README.md)
 
 Note
 ----------------
@@ -43,10 +69,18 @@ Feel free to contribute to it in the [tutorial](https://github.com/Ammar64/Shari
 
 License
 -------------
-Copyright &copy; 2024 Sharing authors
+    Copyright (C) 2024 Sharing authors
 
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+

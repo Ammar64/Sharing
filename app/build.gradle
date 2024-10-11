@@ -3,16 +3,83 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
 }
 
+// a wrapper closure around executing a string
+// can take either a string or a list of strings (for arguments with spaces)
+// prints all output, complains and halts on error
+def runCommand = { strList ->
+    assert ( strList instanceof String ||
+            ( strList instanceof List && strList.each{ it instanceof String } ) \
+)
+    def proc = strList.execute()
+    proc.in.eachLine { line -> println line }
+    proc.out.close()
+    proc.waitFor()
+
+    print "[INFO] ( "
+    if(strList instanceof List) {
+        strList.each { print "${it} " }
+    } else {
+        print strList
+    }
+    println " )"
+
+    if (proc.exitValue()) {
+        println "gave the following error: "
+        println "[ERROR] ${proc.getErrorStream()}"
+    }
+    assert !proc.exitValue()
+}
+
+// a wrapper closure around executing a string
+// can take either a string or a list of strings (for arguments with spaces)
+// prints all output, complains and halts on error
+def runCommand = { strList ->
+    assert ( strList instanceof String ||
+            ( strList instanceof List && strList.each{ it instanceof String } ) \
+)
+    def proc = strList.execute()
+    proc.in.eachLine { line -> println line }
+    proc.out.close()
+    proc.waitFor()
+
+    print "[INFO] ( "
+    if(strList instanceof List) {
+        strList.each { print "${it} " }
+    } else {
+        print strList
+    }
+    println " )"
+
+    if (proc.exitValue()) {
+        println "gave the following error: "
+        println "[ERROR] ${proc.getErrorStream()}"
+    }
+    assert !proc.exitValue()
+}
+
 android {
+
+    def buildWeb = tasks.register('buildWeb', Copy) {
+        group = 'Build'
+        description = 'Builds the web side of the app and put it in the assets'
+        println 'Building the web'
+        runCommand("npm run build --prefix ${new File( rootDir, 'web' ).absolutePath}".toString())
+    }
+    preBuild.dependsOn buildWeb
+
+
     namespace 'com.ammar.sharing'
     compileSdk 34
 
+    sourceSets {
+        main.assets.srcDirs += new File(rootDir, "web/build").absolutePath
+    }
     defaultConfig {
         applicationId "com.ammar.sharing"
         minSdk 21
         targetSdk 34
-        versionCode 15
-        versionName "1.5"
+        versionCode 19
+        versionName "v1.5.2-beta2"
 
         vectorDrawables.useSupportLibrary = true
         externalNativeBuild {

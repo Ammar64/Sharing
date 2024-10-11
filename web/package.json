@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "@types/node": "^22.5.5",
+    "typescript": "^5.6.2",
+    "undici-types": "^6.19.8"
+  },
+  "name": "sharing-web",
+  "version": "1.6.0",
+  "description": "The web side of Sharing app",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "python3 translate-html.py && tsc && rsync -av --exclude '*.html' --exclude '*.ts' --exclude '*.tsx' src/ build/web_app"
+  },
+  "keywords": [
+    "sharing",
+    "android",
+    "file-sharing"
+  ],
+  "author": "Ammar64",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Ammar64/Sharing/issues"
+  },
+  "homepage": "https://github.com/Ammar64/Sharing#readme"
+}

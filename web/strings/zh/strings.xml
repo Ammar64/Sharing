@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lang">zh</string>
+    <string name="dir">ltr</string>
+    <string name="sharing">Sharing</string>
+    <string name="username">User name</string>
+    <string name="enter_your_user_name">输入你的用户名</string>
+    <string name="submit">提交</string>
+    <string name="current_username">当前用户名：</string>
+    <string name="sharing_app">Sharing App</string>
+    <string name="sharing_app_purpose">自由传输，让您的文件去旅行</string>
+    <string name="sharing_app_desc">Sharing 是一种简单且免费的数据共享方式</string>
+    <string name="send">发送</string>
+    <string name="receive">接收</string>
+    <string name="available_downloads">可下载的文件</string>
+    <string name="download">Download</string>
+    <string name="no_downloads_available">暂无文件可供下载</string>
+    <string name="done">完成</string>
+    <string name="update">更新</string>
+    <string name="uploading_is_disabled">上传被禁用</string>
+    <string name="uploading_is_disabled_text">除非从设置中启用，否则您无法从浏览器将文件发送到手机</string>
+    <string name="ok">好</string>
+    <string name="no_js">无 JavaScript 环境？使用 &lt;a href="/no-JS"&gt;仅 HTML 页面&lt;/a&gt;</string>
+</resources>

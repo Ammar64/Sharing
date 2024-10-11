@@ -295,6 +295,8 @@ public class Utils {
 
     private static String getExtraTypes(String ext) {
         switch (ext) {
+            case "html":
+                return "text/html";
             case "apk":
                 return "application/vnd.android.package-archive";
             case "doc":
@@ -451,7 +453,6 @@ public class Utils {
             throw new RuntimeException("Error reading file");
         }
         return content;
-
     }
 
     public static byte[] readRawRes(@RawRes int id) throws IOException {

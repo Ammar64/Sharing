@@ -26,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -44,7 +45,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.ApksInstallerActivity.ApksInstallerActivity;
-import com.ammar.sharing.activities.TutorialActivity.TutorialActivity;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.Utils;
@@ -56,6 +56,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -94,8 +95,7 @@ public class MainActivity extends AppCompatActivity {
         observeStates();
     }
 
-
-    public void prepareActivity() {
+    private void prepareActivity() {
         settingsPref = getSharedPreferences(Consts.PREF_SETTINGS, MODE_PRIVATE);
         darkMode = settingsPref.getBoolean(Consts.PREF_FIELD_IS_DARK, true);
 
@@ -117,8 +117,6 @@ public class MainActivity extends AppCompatActivity {
                     .putBoolean(Consts.PREF_FIELD_IS_DARK, true)
                     .apply();
             appInfoPref.edit().putBoolean(Consts.PREF_FIELD_IS_FIRST_RUN, false).apply();
-
-
             //tutorial is more like a welcome page. and it's not really necessary
             //startActivity(new Intent(this, TutorialActivity.class));
         }
@@ -257,8 +255,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
         tutorialTV.setOnClickListener((view) -> {
-            startActivity(new Intent(this, TutorialActivity.class));
+            Intent intent = new Intent(Intent.ACTION_VIEW ,Uri.parse("https://ammar64.github.io/Sharing/Tutorial"));
+            if(intent.resolveActivity(getPackageManager()) != null) {
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, R.string.no_app_found_to_handle, Toast.LENGTH_SHORT).show();
+            }
         });
 
         apksInstallerTV.setOnClickListener((view) -> {
@@ -278,6 +282,30 @@ public class MainActivity extends AppCompatActivity {
         Intent serviceIntent = new Intent(this, ServerService.class);
         serviceIntent.setAction(Consts.ACTION_GET_SERVER_STATUS);
         startService(serviceIntent);
+
+        if(Intent.ACTION_SEND.equals(getIntent().getAction()) ) {
+            Intent uriIntent = new Intent(this, ServerService.class);
+            uriIntent.setAction(Consts.ACTION_ADD_URI_SHARABLES);
+            ArrayList<Uri> uriArrayList = new ArrayList<>(1);
+            Uri uri = getIntent().getParcelableExtra(Intent.EXTRA_STREAM);
+            if( uri == null ) {
+                Toast.makeText(this, R.string.unsupported_data, Toast.LENGTH_SHORT).show();
+            } else {
+                uriArrayList.add(uri);
+                uriIntent.putParcelableArrayListExtra(Consts.EXTRA_URIS, uriArrayList);
+                startService(uriIntent);
+            }
+        } else if (Intent.ACTION_SEND_MULTIPLE.equals(getIntent().getAction())) {
+            Intent uriIntent = new Intent(this, ServerService.class);
+            uriIntent.setAction(Consts.ACTION_ADD_URI_SHARABLES);
+            ArrayList<Uri> uriArrayList = getIntent().getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+            if( uriArrayList == null ) {
+                Toast.makeText(this, R.string.unsupported_data, Toast.LENGTH_SHORT).show();
+            } else {
+                uriIntent.putParcelableArrayListExtra(Consts.EXTRA_URIS, uriArrayList);
+                startService(uriIntent);
+            }
+        }
     }
 
     private void observeStates() {

@@ -1,17 +1,14 @@
 package com.ammar.sharing.network;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
-import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.sessions.base.HTTPSession;
-import com.ammar.sharing.services.ServerService;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Locale;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 
 public class ClientHandler implements Runnable {
@@ -19,19 +16,15 @@ public class ClientHandler implements Runnable {
      * @noinspection FieldCanBeLocal
      */
     public static final int timeout = 5000;
+
+    final Server server;
     private final Socket clientSocket;
-
-    private final SharedPreferences settings;
-
     private User user = null;
 
-    public ClientHandler(ServerService service, Socket clientSocket) {
+    public ClientHandler(Server server, Socket clientSocket) {
         this.clientSocket = clientSocket;
-        this.settings = service.getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
+        this.server = server;
     }
-
-    private final BlockedSession blockedSession = new BlockedSession();
-    private final NotFoundSession notFoundSession = new NotFoundSession();
 
     // handle client here
     @Override
@@ -51,16 +44,18 @@ public class ClientHandler implements Runnable {
 
                 String userAgent = request.getHeader("User-Agent");
                 if (userAgent != null)
-                    user = User.RegisterUser(settings, clientSocket, userAgent);
+                    user = User.RegisterUser(Utils.getSettings(), clientSocket, userAgent);
                 if (user != null && !user.isBlocked()) {
-                    boolean found = false;
-                    for (HTTPSession i : HTTPSession.sessions) {
-                        found = handleSession(i, request, response);
-                        if (found) break;
+                    Class<? extends HTTPSession> sessionClass = inferSessionFromPath(request.getPath());
+                    if (sessionClass == null) {
+                        startSession(new NotFoundSession(user), request, response);
+                    } else {
+                        HTTPSession session = sessionClass.getDeclaredConstructor(User.class).newInstance(user);
+                        startSession(session, request, response);
                     }
-                    if (!found) handleSession(notFoundSession, request, response);
-                } else  // if user is blocked redirect to blocked page
-                    handleSession(blockedSession, request, response);
+                } else { // if user is blocked redirect to blocked page
+                    startSession(new BlockedSession(user), request, response);
+                }
             }
         } catch (Exception e) {
             Utils.showErrorDialog("ClientHandler.run(). Exception: ", e.getMessage());
@@ -73,38 +68,30 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private boolean handleSession(HTTPSession session, Request req, Response res) {
-        session.setUser(user);
-        boolean isRequestedSession = false;
-        if (session.getPaths() != null) {
-            if (session.isParentPath()) {
-                // not that fast
-                for (String i : session.getPaths()) {
-                    if (req.getPath().startsWith(i)) {
-                        isRequestedSession = true;
-                        break;
-                    }
-                }
-            } else {
-                // fast
-                isRequestedSession = session.getPaths().contains(req.getPath());
-            }
-        } else isRequestedSession = true;
-        if (isRequestedSession) {
-            if ("GET".equals(req.getMethod()))
-                session.GET(req, res);
-            else if ("POST".equals(req.getMethod()))
-                session.POST(req, res);
+    private void startSession(HTTPSession session, Request req, Response res) {
+        if("GET".equals(req.getMethod())) {
+            session.GET(req, res);
+        } else if("POST".equals(req.getMethod())) {
+            session.POST(req, res);
         }
-        return isRequestedSession;
+    }
+
+    private Class<? extends HTTPSession> inferSessionFromPath(String path) {
+        for(Map.Entry<String, Class<? extends HTTPSession>> i : server.pathsMap.entrySet() ) {
+            String pathPattern = i.getKey();
+            if( Pattern.matches(pathPattern, path) ) {
+                return i.getValue();
+            }
+        }
+        return null;
     }
 
 
     // special sessions
     private static class BlockedSession extends HTTPSession {
 
-        public BlockedSession() {
-            super();
+        public BlockedSession(User user) {
+            super(user);
         }
 
         @Override
@@ -131,8 +118,8 @@ public class ClientHandler implements Runnable {
     }
 
     private static class NotFoundSession extends HTTPSession {
-        public NotFoundSession() {
-            super();
+        public NotFoundSession(User user) {
+            super(user);
         }
 
         @Override

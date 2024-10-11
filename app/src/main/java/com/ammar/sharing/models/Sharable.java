@@ -1,11 +1,20 @@
 package com.ammar.sharing.models;
 
+import android.content.ContentResolver;
+import android.content.res.AssetFileDescriptor;
+import android.net.Uri;
+
+import com.ammar.sharing.common.FileUtils;
 import com.ammar.sharing.common.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.UUID;
 
@@ -14,23 +23,48 @@ public class Sharable {
     public static final LinkedList<Sharable> sharablesList = new LinkedList<>();
     protected String uuid;
     protected File file;
+    protected Uri uri;
+
+    protected ContentResolver resolver;
+    protected String fileName;
+    protected long fileSize;
+    private final boolean isUri;
     public Sharable(String path) {
         this.file = new File(path);
         this.uuid = UUID.randomUUID().toString();
-        this.mimeType = Utils.getMimeType(file.getName());
+        fileName = file.getName();
+        fileSize = file.length();
+        this.mimeType = Utils.getMimeType(fileName);
         if(mimeType.equals("*/*")) mimeType = "application/octet-stream";
+        isUri = false;
+    }
+
+    public Sharable(ContentResolver resolver, Uri uri) {
+        this.uri = uri;
+        this.resolver = resolver;
+        this.uuid = UUID.randomUUID().toString();
+        fileName = FileUtils.getFileName(resolver, uri);
+        try( AssetFileDescriptor assetFileDescriptor = resolver.openAssetFileDescriptor(uri, "r")) {
+            fileSize = assetFileDescriptor.getLength();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        this.mimeType = Utils.getMimeType(fileName);
+        if(mimeType.equals("*/*")) mimeType = "application/octet-stream";
+        isUri = true;
     }
 
     protected Sharable() {
+        isUri = false;
     }
 
     // this method is meant to be overridden.
     public String getName() {
-        return file.getName();
+        return getFileName();
     }
 
     public String getFileName() {
-        return file.getName();
+        return fileName;
     }
 
     public String getFilePath() {
@@ -38,11 +72,10 @@ public class Sharable {
     }
 
     public long getSize() {
-        return file.length();
+        return fileSize;
     }
+
     protected String mimeType;
-
-
     public String getUUID() {
         return uuid;
     }
@@ -61,9 +94,25 @@ public class Sharable {
         return jsonObject;
     }
 
+    public boolean isUri() {
+        return isUri;
+    }
 
     public File getFile() {
+        if( isUri ) throw new RuntimeException("Sharable is not a file");
         return file;
+    }
+
+    public Uri getUri() {
+        if(!isUri) throw new RuntimeException("Sharable is not a Uri");
+        return uri;
+    }
+    public InputStream openInputStream() throws FileNotFoundException {
+        if( isUri ) {
+            return resolver.openInputStream(uri);
+        } else {
+            return new FileInputStream(file);
+        }
     }
 
     public static Sharable getFileWithUUID(String uuid) throws RuntimeException {

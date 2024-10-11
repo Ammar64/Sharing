@@ -403,10 +403,12 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     String type = manager.getFileType();
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_VIEW);
-                    Uri uri = FileProvider.getUriForFile(
+                    Sharable sharable = manager.getSharable();
+
+                    Uri uri = sharable.isUri() ? sharable.getUri() : FileProvider.getUriForFile(
                             itemView.getContext(),
                             itemView.getContext().getApplicationContext().getPackageName() + ".provider",
-                            manager.getFile());
+                            sharable.getFile());
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     intent.setDataAndType(uri, type);
                     itemView.getContext().startActivity(intent);

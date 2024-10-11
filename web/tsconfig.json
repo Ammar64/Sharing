@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "strict": true,
+        "module": "Preserve",
+        "paths": {
+            // This is solely to stop a bug with @types/node as of 12/15/2023
+            "undici-types": [
+                "./node_modules/undici-types/index.d.ts"
+            ],
+        },
+        "rootDir": "src/",
+        "outDir": "build/web_app",
+        "lib": [
+            "dom",
+            "dom.iterable"
+        ],
+        "removeComments": true
+    },
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.tsx"
+    ]
+}

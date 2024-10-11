@@ -1,0 +1,131 @@
+<resources>
+    <!-- Activité principale   -->
+    <string name="about_us">À propos de nous</string>
+    <string name="no_app_found_to_handle">Aucune application trouvée pour gérer cette action</string>
+
+    <!-- Fragment Partager   -->
+    <string name="share">Partager</string>
+    <string name="add_apps">Ajouter des applications</string>
+    <string name="add_files">Ajouter des fichiers</string>
+    <string name="selected">Sélectionné</string>
+    <string name="link">Lien</string>
+    <string name="users">Utilisateurs</string>
+
+    <string name="sending_to_user">Envoi à %1$s</string>
+    <string name="sending_to_user_stopped">Envoi à %1$s arrêté</string>
+    <string name="sending_to_user_done">Envoyé à %1$s en %2$s</string>
+    <string name="receiving_from_user">Réception de %1$s</string>
+    <string name="receiving_from_user_stopped">Réception de %1$s arrêtée</string>
+    <string name="receiving_from_user_done">Reçu de %1$s en %2$s</string>
+
+    <string name="completed">Terminé</string>
+    <string name="stopped">Arrêté</string>
+    <string name="stop">Arrêter</string>
+
+    <string name="days">%d jours</string>
+    <string name="hours">%d heures</string>
+    <string name="minutes">%d minutes</string>
+    <string name="seconds">%d secondes</string>
+    <string name="milliSeconds">%d millisecondes</string>
+
+    <!-- dialogues   -->
+    <string name="connected_users">Utilisateurs connectés</string>
+    <string name="block">BLOQUER</string>
+    <string name="unblock">DÉBLOQUER</string>
+    <string name="user_default_name">Utilisateur %1$d</string>
+
+    <string name="choose_language">Choisissez la langue</string>
+
+    <string name="no_user_connected">Aucun utilisateur connecté</string>
+    <string name="no_files_selected">Aucun fichier sélectionné</string>
+
+    <string name="warning">Avertissement !!</string>
+    <string name="warning_details">Cette application n\'utilise pas https pour transférer vos fichiers, ce qui la rend vulnérable aux attaques de type \"man in the middle\". \nPour être plus en sécurité, je recommande d\'activer un point d\'accès sécurisé sur cet appareil et de vous assurer que les autres appareils souhaités sont les seuls à y être connectés.</string>
+    <string name="dont_show_again">Ne plus afficher ce message</string>
+
+    <string name="fast_share">Partage rapide</string>
+    <!-- Fragment Paramètres   -->
+    <string name="toggle_dark_mode">Activer/désactiver le mode sombre</string>
+
+    <string name="disable_browser_upload">Désactiver le téléchargement par navigateur</string>
+    <string name="disable_browser_upload_desc">Empêche les navigateurs d\'envoyer des fichiers vers votre appareil.</string>
+
+    <string name="block_users">Bloquer les utilisateurs connectés</string>
+    <string name="block_users_desc">Bloquer les utilisateurs une fois qu\'ils sont connectés à votre appareil.</string>
+
+    <string name="language">Langues</string>
+    <string name="languages_desc">Changer la langue de l\'application</string>
+    <string name="system_default_lang">Langue par défaut du système</string>
+
+    <string name="debug_mode">Mode débogage</string>
+    <string name="debug_mode_desc">Affiche certaines erreurs lorsqu\'elles se produisent</string>
+
+    <!-- Activité Ajouter des applications   -->
+    <string name="loading_apps">Chargement des applications…</string>
+    <string name="select_apps">Sélectionner des applications</string>
+    <string name="selected_num">Sélectionné %1$d</string>
+    <string name="splits">partages</string>
+
+    <!-- Activité Ajouter des fichiers  -->
+    <string name="select_files">Sélectionner des fichiers</string>
+    <string name="folder_is_empty">Ce dossier est vide</string>
+    <string name="internal_storage">Stockage interne</string>
+    <string name="file_type">%1$s fichier</string>
+    <string name="permission_denied">Permission refusée</string>
+    <string name="search">Recherche</string>
+    <string name="recent">récent</string>
+    <string name="images">Images</string>
+    <string name="videos">Vidéos</string>
+    <string name="audio">Audio</string>
+    <string name="documents">documents</string>
+    <string name="no_files_found">Aucun fichier trouvé</string>
+
+    <!-- Activité Installeur d'APKs -->
+    <string name="apks_installer_experimental">Installeur d\'APKS (Expérimental)</string>
+    <string name="apks_installer">Installeur d\'apks</string>
+    <string name="pls_choose_apks">Veuillez choisir un fichier apks</string>
+    <string name="pick_apks_file">choisir un fichier apks</string>
+    <string name="installer_note">Après avoir envoyé un fichier apks avec succès à l\'autre appareil, envoyez cette application à l\'autre appareil distant et ouvrez cette page pour installer le fichier apks.</string>
+    <string name="initialising">Initialisation…</string>
+    <string name="installing">Installation</string>
+    <string name="extracting_x">extraction de %1$s</string>
+    <string name="extracting_done">Extraction terminée</string>
+    <string name="package_installed_success">Package installé avec succès</string>
+    <string name="failed">Échoué</string>
+
+    <!-- Activité Partage rapide -->
+    <string name="please_choose_a_file">Veuillez partager un fichier</string>
+
+    <!-- commun   -->
+    <string name="app_name">partage</string>
+    <string name="settings">Paramètres</string>
+    <string name="done">terminé</string>
+    <string name="ok">OK</string>
+
+    <string name="dark_mode">Mode sombre</string>
+    <string name="light_mode">Mode clair</string>
+
+    <string name="svr_running">Le serveur fonctionne</string>
+    <string name="svr_notification_message">Le serveur est actif à l\'adresse %1$s:%2$s et accepte de nouvelles demandes</string>
+    <string name="app_icon_acc_desc">Icône de l\'application</string>
+    <string name="tutorial">Tutoriel</string>
+    <string name="connect_to_wifi_or_hotspot">Veuillez activer le wifi ou le point d\'accès pour commencer le partage</string>
+
+    <string name="select">Sélectionner</string>
+    <string name="sort_by">Trier par…</string>
+    <string name="show_drop_down">Afficher le menu déroulant</string>
+    <string name="back">Retour</string>
+    <string name="no_web_browser_found">Aucun navigateur web trouvé</string>
+    <string name="remove">Supprimer</string>
+    <string name="no_data_attached">Aucune donnée spécifiée</string>
+    <string name="something_went_wrong">Quelque chose a mal tourné !</string>
+
+    <string-array name="langs">
+        <item>@string/system_default_lang</item>
+        <item>العربية</item>
+        <item>English</item>
+        <item>German</item>
+        <item>Chinese Simplified</item>
+        <item>Française</item>
+    </string-array>
+</resources>

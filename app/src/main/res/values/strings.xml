@@ -1,6 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Activity Main   -->
     <string name="about_us">About us</string>
+    <string name="no_app_found_to_handle">No app found to handle this action</string>
+    <string name="unsupported_data">Unsupported data</string>
+
     <!-- Fragment Share   -->
     <string name="share" >Share</string>
     <string name="add_apps">Add apps</string>
@@ -52,7 +55,7 @@
     <string name="block_users_desc">Block users once they are connected to your device.</string>
 
     <string name="language">Languages</string>
-    <string name="languages_desc">System, العربية, English, German</string>
+    <string name="languages_desc">Change app language</string>
     <string name="system_default_lang">System default</string>
 
     <string name="debug_mode">Debug Mode</string>
@@ -126,5 +129,6 @@
         <item>English</item>
         <item>Deutsch</item>
         <item>Chinese Simplified</item>
+        <item>French</item>
     </string-array>
 </resources>

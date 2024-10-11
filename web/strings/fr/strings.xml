@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <!-- Code de langue à 2 lettres -->
+    <string name="lang">fr</string>
+    <!-- Direction de la langue -->
+     <string name="dir">ltr</string>
+
+    <string name="sharing">Partage</string>
+    <string name="username">Nom d'utilisateur</string>
+    <string name="enter_your_user_name">Entrez votre nom d'utilisateur</string>
+    <string name="submit">Soumettre</string>
+    <string name="current_username">Nom d'utilisateur actuel :</string>
+    <string name="sharing_app">Application de partage</string>
+    <string name="sharing_app_purpose">Transférez et faites voyager vos fichiers gratuitement</string>
+    <string name="sharing_app_desc">L'application de partage est un moyen simple et gratuit de partager vos données</string>
+    <string name="send">Envoyer</string>
+    <string name="receive">Recevoir</string>
+    <string name="available_downloads">Téléchargements disponibles</string>
+    <string name="download">Télécharger</string>
+    <string name="no_downloads_available">Aucun téléchargement disponible</string>
+    <string name="done">Terminé</string>
+    <string name="update">Mettre à jour</string>
+    <string name="uploading_is_disabled">Le téléchargement est désactivé</string>
+    <string name="uploading_is_disabled_text">Vous ne pouvez pas envoyer de fichiers vers votre téléphone depuis le navigateur, sauf si vous l'activez dans les paramètres</string>
+    <string name="ok">Ok</string>
+    <string name="no_js">Pas de JavaScript ? Utilisez &lt;a href="/no-JS"&gt;la page HTML uniquement&lt;/a&gt;</string>
+</resources>
