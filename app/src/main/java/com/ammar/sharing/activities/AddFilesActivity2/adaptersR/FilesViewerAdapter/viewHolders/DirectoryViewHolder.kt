@@ -100,7 +100,6 @@ class DirectoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val adapter = bindingAdapter as FilesViewerAdapter;
         itemView.setOnClickListener {
             adapter.cd(file.file)
-            Toast.makeText(itemView.context, "DIR WORKING", Toast.LENGTH_SHORT).show();
         }
     }
 }

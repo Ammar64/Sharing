@@ -2,6 +2,7 @@ package com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdap
 
 import android.content.Context
 import android.os.Build
+import android.os.Environment
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -14,18 +15,23 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ammar.sharing.R
+import com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.FilesViewerAdapter
+import com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.models.FSObject
+import com.ammar.sharing.common.FileUtils
 import com.ammar.sharing.common.Utils
 import com.ammar.sharing.custom.ui.AdaptiveTextView
+import java.io.File
 
 class FileTypeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     companion object {
 
-        fun makeFileTypeViewHolder(context: Context): FileTypeViewHolder {
-            val fileTypes = listOf<FileType>(
-                FileType(R.string.images, R.drawable.icon_image),
-                FileType(R.string.videos, R.drawable.icon_video),
-                FileType(R.string.audio, R.drawable.icon_audio),
-                FileType(R.string.documents, R.drawable.icon_document),
+        fun makeFileTypeViewHolder(context: Context, adapter: FilesViewerAdapter): FileTypeViewHolder {
+            val fileTypes = listOf(
+                FileType(adapter ,R.string.images, R.drawable.icon_image, FileUtils.FILE_TYPE_IMAGE),
+                FileType(adapter ,R.string.videos, R.drawable.icon_video, FileUtils.FILE_TYPE_VIDEO),
+                FileType(adapter ,R.string.audio, R.drawable.icon_audio, FileUtils.FILE_TYPE_AUDIO),
+                FileType(adapter ,R.string.documents, R.drawable.icon_document, FileUtils.FILE_TYPE_DOCUMENT),
+
             )
 
             val scrollView = HorizontalScrollView(context).apply {
@@ -50,18 +56,25 @@ class FileTypeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
 
             for (i in fileTypes) {
-                linearLayout.addView( makeFileTypeElement(context, i.name, i.icon) )
+                linearLayout.addView( makeFileTypeElement(context, i) )
             }
             scrollView.addView(linearLayout)
             return FileTypeViewHolder(scrollView)
         }
 
-        private data class FileType(@StringRes val name: Int, @DrawableRes val icon: Int)
+        private data class FileType(val adapter: FilesViewerAdapter ,@StringRes val name: Int, @DrawableRes val icon: Int, val fileType: Int) {
+            val onClick: (View) -> Unit = {
+                val filesArray = ArrayList<File>();
+                FileUtils.findFilesTypesRecursively(Environment.getExternalStorageDirectory(), filesArray, fileType);
+                val javaFiles = filesArray.toArray(emptyArray<File>())
+                val files = Array(javaFiles.size) { FSObject(javaFiles[it]) }
+                adapter.showArrayOfFiles(files)
+            }
+        }
 
         private fun makeFileTypeElement(
             context: Context,
-            @StringRes text: Int,
-            @DrawableRes icon: Int
+            fileType: FileType
         ): CardView {
             val cardView = CardView(context).apply {
                 layoutParams = ViewGroup.LayoutParams(
@@ -78,6 +91,7 @@ class FileTypeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                         true
                     )
                     foreground = ContextCompat.getDrawable(context, typedValue.resourceId)
+                    setOnClickListener( fileType.onClick )
                 }
             }
 
@@ -94,9 +108,9 @@ class FileTypeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
                 // this is the same as paddingV
                 compoundDrawablePadding = paddingV
-                setText(text)
+                setText(fileType.name)
                 setModifyDrawableColor(false)
-                setCompoundDrawablesRelativeWithIntrinsicBounds(icon, 0, 0, 0)
+                setCompoundDrawablesRelativeWithIntrinsicBounds(fileType.icon, 0, 0, 0)
             }
             cardView.addView(textView)
             return cardView

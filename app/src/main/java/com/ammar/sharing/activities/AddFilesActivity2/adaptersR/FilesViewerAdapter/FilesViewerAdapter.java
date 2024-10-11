@@ -1,16 +1,13 @@
 package com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter;
 
-import android.app.AlertDialog;
 import android.os.Environment;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.Space;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,10 +20,8 @@ import com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapt
 import com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.viewHolders.FileViewHolder;
 import com.ammar.sharing.activities.AddFilesActivity2.adaptersR.FilesViewerAdapter.viewHolders.PathViewHolder;
 import com.ammar.sharing.common.MathsUtils;
-import com.google.android.material.animation.AnimationUtils;
 
 import java.io.File;
-import java.util.LinkedList;
 
 public class FilesViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public AddFilesActivity2 activity;
@@ -62,6 +57,13 @@ public class FilesViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 };
             }
         });
+
+        this.activity.getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                cdDotDot();
+            }
+        });
     }
 
 
@@ -91,7 +93,7 @@ public class FilesViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return switch (viewType) {
             case VIEW_TYPE_PATH -> PathViewHolder.Companion.makePathViewHolder(activity);
             case VIEW_TYPE_FILE_TYPES ->
-                    FileTypeViewHolder.Companion.makeFileTypeViewHolder(activity);
+                    FileTypeViewHolder.Companion.makeFileTypeViewHolder(activity, this);
             case VIEW_TYPE_DIRECTORIES ->
                     DirectoryViewHolder.Companion.makeDirectoryViewHolder(activity);
             case VIEW_TYPE_FILES -> FileViewHolder.Companion.makeFileViewHolder(activity);
@@ -119,62 +121,72 @@ public class FilesViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return displayedFiles.length + (hasSpaceView ? 3 : 2);
     }
 
+    public void showDirectoryEmpty() {
+        float screenHeight = activity.getWindow().getDecorView().getHeight();
+        activity.directoryEmptyLL.setY(screenHeight);
+        activity.directoryEmptyLL.setVisibility(View.VISIBLE);
+        activity.directoryEmptyLL.animate().setDuration(400).translationY(0).start();
+    }
+
     public void cd(File dir) {
         // cd
         FSObject[] filesBak = files;
         files = FSObject.listDirectorySorted(dir, FSObject.SortType.BY_NAME);
         // it returns null on error and that error is probably permission denied.
-        if( files == null ) {
+        if (files == null) {
             Toast.makeText(activity, R.string.permission_denied, Toast.LENGTH_SHORT).show();
             files = filesBak;
             return;
         }
+
         displayedFiles = files;
         currentDir = dir;
         lastDirIndex = getLastDirectoryIndex();
         hasSpaceView = shouldHaveSpaceView();
 
+        notifyDataSetChanged();
 
-        // get dirs and files views and hide them
-        int childCount = recyclerView.getChildCount();
-        LinkedList<View> views = new LinkedList<>();
-        for (int i = 0; i < childCount; i++) {
-            View view = recyclerView.getChildAt(i);
-            RecyclerView.ViewHolder viewHolder = recyclerView.getChildViewHolder(view);
-            if (viewHolder instanceof FileViewHolder || viewHolder instanceof DirectoryViewHolder) {
-                view.setVisibility(View.GONE);
-                views.addLast(view);
-            }
+        if(files.length == 0) {
+            showDirectoryEmpty();
+        } else {
+            activity.directoryEmptyLL.setVisibility(View.GONE);
         }
 
-            notifyDataSetChanged();
-            new AlertDialog.Builder(activity)
-                    .setMessage("currentDir: " + currentDir.getAbsolutePath()+ "\n" +
-                            "lastDirIndex: " + lastDirIndex + "\n" +
-                            "spanCount: " + activity.getSpanCount() + "\n" +
-                            "hasSpace: " + hasSpaceView + "\n" +
-                            "displayedFilesLength: " + displayedFiles.length +"\n" +
-                            "TEST: 3 % 4 == " + 3 % 4).show();
+        if( dir.equals(Environment.getExternalStorageDirectory()) ) {
+            activity.setTitle(R.string.internal_storage);
+        } else {
+            activity.setTitle(dir.getName());
+        }
 
-            // show and animate
-            Animation downToUp = new TranslateAnimation(Animation.ABSOLUTE, 0, Animation.ABSOLUTE, 0, Animation.RELATIVE_TO_PARENT, 1.0f, Animation.RELATIVE_TO_PARENT, 0.0f);
-            downToUp.setDuration(500L);
-            for (View i : views) {
-                i.setVisibility(View.VISIBLE);
-            }
-            for (View i : views) {
-                i.startAnimation(downToUp);
-            }
+
     }
 
     // go back
     public void cdDotDot() {
-        if( currentDir == Environment.getExternalStorageDirectory() ) return;
-        File parent = currentDir.getParentFile();
-        cd(parent);
-
+        if( currentDir == null ) {
+            
+        } else if (currentDir.equals(Environment.getExternalStorageDirectory())) {
+            activity.finish();
+        } else {
+            File parent = currentDir.getParentFile();
+            cd(parent);
+        }
     }
 
+    public void showArrayOfFiles(FSObject[] files) {
+        this.files = files;
+        this.displayedFiles = files;
+        lastDirIndex = -1; // no dirs
+        hasSpaceView = false;
+        currentDir = null;
+        notifyDataSetChanged();
+
+        if( this.displayedFiles.length == 0 ) {
+            showDirectoryEmpty();
+        } else {
+            activity.directoryEmptyLL.setVisibility(View.GONE);
+        }
+    }
     private int getLastDirectoryIndex() {
         // use binary search :)
         int low = 0;
@@ -197,7 +209,7 @@ public class FilesViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private boolean shouldHaveSpaceView() {
-        return !MathsUtils.isDividableBy(lastDirIndex+1, activity.getSpanCount()); //&& (lastDirIndex + 1) > activity.getSpanCount();
+        return !MathsUtils.isDividableBy(lastDirIndex + 1, activity.getSpanCount()); //&& (lastDirIndex + 1) > activity.getSpanCount();
     }
 
 }
