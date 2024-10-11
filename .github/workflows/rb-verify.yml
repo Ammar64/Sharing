@@ -24,9 +24,10 @@ jobs:
       run:  sudo apt install npm node-typescript rsync apksigcopier
 
     - name: Set env
+      uses: "WyriHaximus/github-action-get-previous-tag@v1"
       run: |
-        echo "VERSION_NAME=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
-        echo "RELEASE_APK_NAME=Sharing-${{ github.event.release.tag_name }}.apk" >> $GITHUB_ENV
+        echo "VERSION_NAME=${{ steps.previoustag.outputs.tag }}" >> $GITHUB_ENV
+        echo "RELEASE_APK_NAME=Sharing-${{ steps.previoustag.outputs.tag }}.apk" >> $GITHUB_ENV
     - name: Build App
       run: |
         npm install --prefix web/
