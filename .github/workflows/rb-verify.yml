@@ -1,0 +1,53 @@
+name: Reproducible builds
+
+on:
+  push:
+    tags:
+     - '*'
+  workflow_dispatch:
+     
+jobs:
+  verify-reproducible-builds:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+          fetch-depth: 0
+
+    - name: 'Get Previous tag'
+      id: previoustag
+      uses: "WyriHaximus/github-action-get-previous-tag@v1"
+      with:
+        fallback: 1.0.0
+        
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Set env
+      run: |
+        echo "VERSION_NAME=${{ steps.previoustag.outputs.tag }}" >> $GITHUB_ENV
+        echo "RELEASE_APK_NAME=Sharing-${{ steps.previoustag.outputs.tag }}.apk" >> $GITHUB_ENV
+
+    - name: Download signed apk
+      run:  wget https://github.com/Ammar64/Sharing/releases/download/${{ env.VERSION_NAME }}/${{ env.RELEASE_APK_NAME }}
+
+    - name: Install required packages
+      run: |
+        sudo apt update -y
+        sudo apt install -y npm node-typescript rsync apksigner apksigcopier
+
+    - name: Build App
+      run: |
+        npm install --prefix web/
+        ./gradlew assembleRelease
+
+    - name: Verify Reproducible builds
+      run: |
+        cp app/build/outputs/apk/release/app-release-unsigned.apk .
+        apksigcopier compare --unsigned ${{ env.RELEASE_APK_NAME }} app-release-unsigned.apk
