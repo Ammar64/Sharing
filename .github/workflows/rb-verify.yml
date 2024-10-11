@@ -38,7 +38,9 @@ jobs:
       run:  wget https://github.com/Ammar64/Sharing/releases/download/${{ env.VERSION_NAME }}/${{ env.RELEASE_APK_NAME }}
 
     - name: Install required packages
-      run:  sudo apt install -y npm node-typescript rsync apksigcopier
+      run: |
+        sudo apt update -y
+        sudo apt install -y npm node-typescript rsync apksigner apksigcopier
 
     - name: Build App
       run: |
