@@ -1,5 +1,6 @@
 Sharing
 -------
+![Reproducible builds](https://github.com/Ammar64/Sharing/actions/workflows/rb-verify.yml/badge.svg)
 
 Share files and apps over HTTP.
 
