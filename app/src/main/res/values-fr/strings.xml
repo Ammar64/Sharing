@@ -5,7 +5,7 @@
 
     <!-- Fragment Partager   -->
     <string name="share">Partager</string>
-    <string name="add_apps">Ajouter des applications</string>
+    <string name="add_apps">Ajouter des apps</string>
     <string name="add_files">Ajouter des fichiers</string>
     <string name="selected">Sélectionné</string>
     <string name="link">Lien</string>

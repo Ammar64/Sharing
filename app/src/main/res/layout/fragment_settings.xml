@@ -25,7 +25,7 @@
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp">
 
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/RL_UploadDisable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,28 +39,33 @@
                     android:layout_height="wrap_content"
                     android:text="@string/disable_browser_upload"
                     android:textSize="@dimen/settings_big_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:lightModeColor="#fff" />
 
                 <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsUploadAllowSub"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/TV_SettingsUploadAllow"
                     android:text="@string/disable_browser_upload_desc"
                     android:textSize="@dimen/small_text"
+                    app:layout_constraintEnd_toStartOf="@+id/SC_UploadAllowToggle"
+                    app:layout_constraintStart_toStartOf="@+id/TV_SettingsUploadAllow"
+                    app:layout_constraintTop_toBottomOf="@id/TV_SettingsUploadAllow"
                     app:lightModeColor="#fff" />
 
                 <com.suke.widget.SwitchButton
                     android:id="@+id/SC_UploadAllowToggle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/disable_browser_upload"
                     app:sb_background="#aaa"
                     app:sb_show_indicator="false" />
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
 
@@ -75,7 +80,7 @@
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp">
 
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/RL_UserBlock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,15 +92,19 @@
                     android:id="@+id/TV_SettingsUserBlock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     android:text="@string/block_users"
                     android:textSize="@dimen/settings_big_text"
                     app:lightModeColor="#fff" />
 
                 <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsUserBlockSub"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/TV_SettingsUserBlock"
+                    app:layout_constraintEnd_toStartOf="@+id/SC_UsersBlockToggle"
+                    app:layout_constraintStart_toStartOf="@+id/TV_SettingsUserBlock"
+                    app:layout_constraintTop_toBottomOf="@id/TV_SettingsUserBlock"
                     android:text="@string/block_users_desc"
                     android:textSize="@dimen/small_text"
                     app:lightModeColor="#fff" />
@@ -104,13 +113,14 @@
                     android:id="@+id/SC_UsersBlockToggle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/block_users"
                     app:sb_background="#aaa"
                     app:sb_show_indicator="false" />
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
 
@@ -125,7 +135,7 @@
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp">
 
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/RL_SettingsLanguage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -137,19 +147,23 @@
                     android:id="@+id/TV_SettingsLanguage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     android:text="@string/language"
                     android:textSize="@dimen/settings_big_text"
                     app:lightModeColor="#fff" />
 
                 <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsLanguageSub"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/TV_SettingsLanguage"
+                    app:layout_constraintTop_toBottomOf="@id/TV_SettingsLanguage"
+                    app:layout_constraintStart_toStartOf="@id/TV_SettingsLanguage"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:text="@string/languages_desc"
                     android:textSize="@dimen/small_text"
                     app:lightModeColor="#fff" />
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
         <View
@@ -170,7 +184,7 @@
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp">
 
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/RL_DebugMode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -182,15 +196,19 @@
                     android:id="@+id/TV_SettingsDebugMode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     android:text="@string/debug_mode"
                     android:textSize="@dimen/settings_big_text"
                     app:lightModeColor="#fff" />
 
                 <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsDebugModeSub"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/TV_SettingsDebugMode"
+                    app:layout_constraintEnd_toStartOf="@+id/SC_DebugModeToggle"
+                    app:layout_constraintStart_toStartOf="@+id/TV_SettingsDebugMode"
+                    app:layout_constraintTop_toBottomOf="@id/TV_SettingsDebugMode"
                     android:text="@string/debug_mode_desc"
                     android:textSize="@dimen/small_text"
                     app:lightModeColor="#fff" />
@@ -199,13 +217,14 @@
                     android:id="@+id/SC_DebugModeToggle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     android:background="@android:color/transparent"
                     android:contentDescription="Debug Mode"
                     app:sb_background="#aaa"
                     app:sb_show_indicator="false" />
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
         <Space
