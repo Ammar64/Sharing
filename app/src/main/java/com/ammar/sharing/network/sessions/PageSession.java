@@ -1,5 +1,9 @@
 package com.ammar.sharing.network.sessions;
 
+import android.graphics.Bitmap;
+
+import androidx.core.content.res.ResourcesCompat;
+
 import com.ammar.sharing.R;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Utils;
@@ -44,6 +48,9 @@ public class PageSession extends HTTPSession {
             } catch (IOException e) {
                 Utils.showErrorDialog("PagesSession.GET(). IOException.", "Note: error happened when reading raw resources\n" + e.getMessage());
             }
+        } else if("/common/favicon".equals(path)) {
+            Bitmap favBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.mipmap.ic_launcher_round, null));
+            res.sendBitmapResponse(favBM);
         } else {
             try {
                 res.setContentType(Utils.getMimeType(path));
