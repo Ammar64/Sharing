@@ -24,13 +24,6 @@ We need a new icon design for this app.
 A new stable update is almost ready but will not be released without the new icon and I'm not a good designer 😁.  
 See this [issue](https://github.com/Ammar64/Sharing/issues/19) for more details 
 
-Active polls
------
-
-Vote whether version [v1.5.2-beta1](https://github.com/Ammar64/Sharing/releases/tag/v1.5.2-beta1) is better than [1.5](https://github.com/Ammar64/Sharing/releases/tag/1.5) or not in this [poll](https://github.com/Ammar64/Sharing/discussions/30).
-
-Vote whether the new icon is good or not [here](https://github.com/Ammar64/Sharing/discussions/36).
-
 TODO
 -----------------
 - [ ] Add the ability to share files and/or apps app-to-app
