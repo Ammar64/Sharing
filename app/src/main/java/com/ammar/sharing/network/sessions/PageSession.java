@@ -1,6 +1,8 @@
 package com.ammar.sharing.network.sessions;
 
 import android.graphics.Bitmap;
+import android.text.TextUtils;
+import android.view.View;
 
 import androidx.core.content.res.ResourcesCompat;
 
@@ -8,6 +10,7 @@ import com.ammar.sharing.R;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.models.Sharable;
+import com.ammar.sharing.models.SharableApp;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
@@ -48,7 +51,7 @@ public class PageSession extends HTTPSession {
             } catch (IOException e) {
                 Utils.showErrorDialog("PagesSession.GET(). IOException.", "Note: error happened when reading raw resources\n" + e.getMessage());
             }
-        } else if("/common/favicon".equals(path)) {
+        } else if ("/common/favicon".equals(path)) {
             Bitmap favBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.mipmap.ic_launcher_round, null));
             res.sendBitmapResponse(favBM);
         } else {
@@ -77,20 +80,28 @@ public class PageSession extends HTTPSession {
     }
 
     private void generateAndSendNoJSPage(Response res) {
+        Locale locale = Locale.getDefault();
+        String dir = switch (TextUtils.getLayoutDirectionFromLocale(locale)) {
+            case View.LAYOUT_DIRECTION_RTL -> "rtl";
+            case View.LAYOUT_DIRECTION_LTR -> "ltr";
+            default ->
+                    throw new IllegalStateException("Unexpected value: " + TextUtils.getLayoutDirectionFromLocale(locale));
+        };
         final String pageOffset =
                 "<!DOCTYPE html>\n" +
-                        "<html lang=\"en\">\n" +
+                        "<html lang=\"" + locale.toLanguageTag() + "\" dir=\"" + dir + "\">\n" +
                         "<head>\n" +
                         "    <meta charset=\"UTF-8\">\n" +
                         "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
+                        "    <link rel=\"icon\" type=\"image/x-icon\" href=\"/common/favicon\" />" +
                         "    <title>Sharing</title>\n" +
                         "</head>\n" +
                         "<body>\n" +
-                        "    <h3>Downloads</h3>\n" +
-                        "    <ul>";
+                        "    <h2>" + Utils.getRes().getString(R.string.downloads) + "</h2>\n" +
+                        "    <table rules=\"all\" border=\"1\" cellpadding=\"10px\">";
 
         final String pageEnd =
-                "    </ul>\n" +
+                "    </table>\n" +
                         "</body>\n" +
                         "</html>\n";
 
@@ -98,9 +109,16 @@ public class PageSession extends HTTPSession {
         StringBuilder pageBuilder = new StringBuilder();
 
         pageBuilder.append(pageOffset);
+
+        if (Sharable.sharablesList.isEmpty()) {
+            final String noDownloadsText = String.format(Locale.ENGLISH, "<tr>%s</tr>", Utils.getRes().getString(R.string.no_downloads));
+            pageBuilder.append(noDownloadsText);
+        }
         for (Sharable i : Sharable.sharablesList) {
             final String downloadLink = "/download/" + i.getUUID();
-            final String downloadElement = String.format(Locale.ENGLISH, "        <li><a download href=\"%s\">%s</a></li>\n", downloadLink, i.getName());
+            final String iconSrc = "/get-icon/" + i.getUUID();
+            final String downloadElement = String.format(Locale.ENGLISH, "<tr><td><img src=\"%s\" width=\"40px\" /></td><td><a download href=\"%s\">%s</a><br><span dir=\"ltr\">%s</span></td></tr>\n", iconSrc, downloadLink, i.getName(), (i instanceof SharableApp a && (a.hasSplits()) ? "(splits)" : Utils.getFormattedSize(i.getSize()) ));
+
             pageBuilder.append(downloadElement);
         }
         pageBuilder.append(pageEnd);

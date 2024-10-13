@@ -120,4 +120,7 @@
     <string name="no_web_browser_found">لم يتم العثور على متصفح</string>
     <string name="remove">إزالة</string>
     <string name="something_went_wrong">لقد حدث خطأ ما!</string>
+
+    <string name="downloads">التنزيلات</string>
+    <string name="no_downloads">لا تنزيلات متاحة</string>
 </resources>

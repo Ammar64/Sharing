@@ -1,3 +1,4 @@
+<!-- NOTE: You don't have to translate comments -->
 <resources>
     <!-- Activity Main   -->
     <string name="about_us">About us</string>
@@ -121,6 +122,10 @@
     <string name="no_data_attached">No data specified</string>
     <string name="something_went_wrong">Something went wrong!</string>
 
+    <!-- /no-JS HTML -->
+    <!-- /no-JS HTML is generated at runtime using java code that's why we translate it here and not in the web translation -->
+    <string name="downloads">Downloads</string>
+    <string name="no_downloads">No downloads available</string>
 
     <string-array name="langs">
         <item>@string/system_default_lang</item>
