@@ -3,6 +3,7 @@ package com.ammar.sharing.common;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -58,11 +59,12 @@ public class Utils {
 
     private static Resources res;
     private static SharedPreferences settings;
-
+    private static PackageManager pm;
     public static void setupUtils(Context ctx) {
         Utils.res = ctx.getResources();
         Utils.assetManager = ctx.getAssets();
         Utils.settings = ctx.getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
+        Utils.pm = ctx.getPackageManager();
     }
 
     public static float dpToPx(float dp) {
@@ -493,7 +495,7 @@ public class Utils {
     public static Resources getRes() {
         return res;
     }
-
+    public static PackageManager getPm() {return pm;}
     public static String getFormattedTime(long milliSeconds) {
         long x = milliSeconds / 1000;
         final long seconds = x % 60;

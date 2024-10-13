@@ -31,7 +31,6 @@ import com.bumptech.glide.request.target.Target;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -136,7 +135,7 @@ public class FileUtils {
         return false;
     }
 
-    public static Bitmap decodeSampledImage(Sharable file, int iW, int iH) {
+    public static Bitmap decodeSampledSharableImage(Sharable file, int iW, int iH) {
         try {
             InputStream in = file.openInputStream();
             // get image bounds
@@ -157,6 +156,7 @@ public class FileUtils {
             throw new RuntimeException(e);
         }
     }
+
 
     public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image

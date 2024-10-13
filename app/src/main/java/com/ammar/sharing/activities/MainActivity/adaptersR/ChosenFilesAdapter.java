@@ -69,7 +69,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
             Sharable file = Sharable.sharablesList.get(pos);
             setFileName(file.getName());
             setFileIconIV(file, pos);
-            setFileSizeTV(file.getSize());
+            setFileSizeTV(file);
             setFileListener(file);
         }
 
@@ -86,8 +86,12 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
             fileNameTV.setText(fileName);
         }
 
-        public void setFileSizeTV(long size) {
-            fileSizeTV.setText(Utils.getFormattedSize(size));
+        public void setFileSizeTV(Sharable file) {
+            fileSizeTV.setText(
+                    (file instanceof SharableApp a && a.hasSplits()) ?
+                    Utils.getRes().getString(R.string.splits):
+                    Utils.getFormattedSize(file.getSize())
+            );
         }
 
         Map<Integer, Drawable> appsIconCache = new TreeMap<>();

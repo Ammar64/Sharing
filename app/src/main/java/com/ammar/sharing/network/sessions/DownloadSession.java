@@ -1,12 +1,7 @@
 package com.ammar.sharing.network.sessions;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
-import androidx.core.content.res.ResourcesCompat;
-
-import com.ammar.sharing.R;
-import com.ammar.sharing.common.FileUtils;
 import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
@@ -61,27 +56,7 @@ public class DownloadSession extends HTTPSession {
                 res.sendResponse(available);
             } else if (req.getPath().startsWith("/get-icon/")) {
                 Sharable file = Sharable.getFileWithUUID(requestedUUID);
-                if (file instanceof SharableApp) {
-                    SharableApp app = (SharableApp) file;
-                    Bitmap appIconBM = Utils.drawableToBitmap(app.getIcon());
-                    res.sendBitmapResponse(appIconBM);
-                } else {
-                    String mimeType = file.getMimeType();
-                    Bitmap imageBM;
-                    if( mimeType.startsWith("image/") ) {
-                        imageBM = FileUtils.decodeSampledImage(file, 128, 128);
-                    } else if (mimeType.startsWith("video/")) {
-                        imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_video, null));
-                    } else if(mimeType.startsWith("audio/")){
-                        imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_audio, null));
-                    } else if(Utils.isDocumentType(mimeType)) {
-                        imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_document, null));
-                    } else {
-                        imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_file, null));
-                    }
-                    res.sendBitmapResponse(imageBM);
-
-                }
+                res.sendBitmapResponse(file.getBitmapIcon());
             }
         }
         catch (RuntimeException e) {

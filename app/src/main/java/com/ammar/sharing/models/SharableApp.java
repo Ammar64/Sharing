@@ -3,7 +3,14 @@ package com.ammar.sharing.models;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+
+import androidx.core.content.res.ResourcesCompat;
+
+import com.ammar.sharing.R;
+import com.ammar.sharing.common.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,6 +26,7 @@ import java.util.zip.ZipOutputStream;
 public class SharableApp extends Sharable {
     private PackageManager pm;
     private ApplicationInfo appInfo;
+
     public SharableApp(Context context, String package_id) throws PackageManager.NameNotFoundException {
         // get pm and app info
         this.pm = context.getPackageManager();
@@ -92,12 +100,24 @@ public class SharableApp extends Sharable {
         }
         throw new RuntimeException("SplitNotFound");
     }
+
     private Drawable icon = null;
+
     public Drawable getIcon() {
-        if( icon == null ) {
-            icon = appInfo.loadIcon(pm);
+        if (icon == null) {
+            Drawable appIcon = appInfo.loadIcon(pm);
+            if (hasSplits()) {
+                icon = new LayerDrawable(new Drawable[]{appIcon, ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.banner_splits, null)});
+            } else {
+                icon = appIcon;
+            }
         }
         return icon;
+    }
+
+    @Override
+    public Bitmap getBitmapIcon() {
+        return Utils.drawableToBitmap(getIcon());
     }
 
     private boolean _hasSplits = false;
