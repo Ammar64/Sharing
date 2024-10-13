@@ -1,74 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Activity Main   -->
     <string name="about_us">عنا</string>
     <string name="no_app_found_to_handle">لم يتم العثور على تطبيق لفتح الرابط</string>
     <string name="unsupported_data">بيانات غير مدعومة</string>
-
     <!-- Fragment Share   -->
-    <string name="share" >مشاركة</string>
+    <string name="share">مشاركة</string>
     <string name="add_apps">أضف تطبيقات</string>
     <string name="add_files">أضف ملفات</string>
     <string name="selected">تم تحديده</string>
     <string name="link">الرابط</string>
     <string name="users">المستخدمون</string>
-
     <string name="sending_to_user">ارسال إلى %1$s</string>
     <string name="sending_to_user_stopped">%1$s توقف الإرسال إلى</string>
     <string name="sending_to_user_done">تم الإرسال إلى %1$s فى %2$s</string>
     <string name="receiving_from_user">استلام من %1$s</string>
     <string name="receiving_from_user_stopped">%1$s توقف الاستقبال من</string>
     <string name="receiving_from_user_done">تم الاستلام من %1$s فى %2$s</string>
-
     <string name="completed">نجح</string>
     <string name="stopped">توقف</string>
     <string name="stop">أوقف</string>
-
     <string name="days">%d أيام</string>
     <string name="hours">%d ساعات</string>
     <string name="minutes">%d دقائق</string>
     <string name="seconds">%d ثوانى</string>
     <string name="milliSeconds">%d أجزاء من الثانية</string>
-
     <!-- dialogs   -->
     <string name="connected_users">المستخدمون المتصلون</string>
     <string name="block">حظر</string>
     <string name="unblock">إلغاء الحظر</string>
     <string name="user_default_name">المستخدم %1$s</string>
-
     <string name="choose_language">اختر لغة</string>
-
     <string name="no_user_connected">لم يتصل أى مستخدم بعد</string>
     <string name="no_files_selected">لم يتم تحديد ملف</string>
-
     <string name="warning">تنبيه !!</string>
     <string name="warning_details">هذا التطبيق لا ينقل الملفات باستعمال بروتوكول https مما يجعله عرضه لهجمات الرجل فى المنتصف.\nلتكون أكثر أمانا اللآن أوصى بتشغيل نقطة اتصال آمنة على هذا الجهاز و التأكد من أن الأجهزة الأخرى المرغوبة هى الوحيدة المتصلة بها.</string>
     <string name="dont_show_again">لا تظهر هذه الرسالة مرة أخرى</string>
-
     <string name="connect_to_wifi_or_hotspot">الرجاء تفعيل نقطة اتصال أو الاتصال بشبكة واى-فاى</string>
     <string name="fast_share">المشاركة السريعة</string>
-
     <!-- Fragment Settings   -->
     <string name="toggle_dark_mode">تشغيل الوضع الداكن</string>
-
     <string name="disable_browser_upload">تعطيل الإرسال من المتصفح</string>
     <string name="disable_browser_upload_desc">منع المتصفحات من إرسال ملفات إلى جهازك</string>
-
     <string name="block_users">حظر المستخدمين فورا</string>
     <string name="block_users_desc">يحظر المستخديم فور إتصالهم بجهازك.</string>
-
     <string name="language">اللغة</string>
     <string name="languages_desc">تغيير لغة التطبيق</string>
     <string name="system_default_lang">لغة النظام</string>
-
     <string name="debug_mode">وضع تصحيح الأخطاء</string>
     <string name="debug_mode_desc">اعرض بعض الأخطاء عند حدثها</string>
-
     <!-- Activity Add Apps   -->
     <string name="loading_apps">جار تحميل التطبيقات…</string>
     <string name="select_apps">حدد تطبيقات</string>
     <string name="selected_num">تم تحديد %1$d</string>
     <string name="splits">تقسيمات</string>
-    
     <!-- Activity Add Files  -->
     <string name="select_files">حدد ملفات</string>
     <string name="folder_is_empty">مجلد فارغ</string>
@@ -82,7 +67,6 @@
     <string name="audio">صوتيات</string>
     <string name="documents">مستندات</string>
     <string name="no_files_found">لم يتم العثور على ملفات</string>
-
     <!-- Activity Apks Installer -->
     <string name="apks_installer_experimental">مثبت apks (تجريبيى)</string>
     <string name="apks_installer">مثبت apks</string>
@@ -95,24 +79,19 @@
     <string name="extracting_done">تم الاستخراج</string>
     <string name="package_installed_success">تم تثبيت الحزمة</string>
     <string name="failed">فشل</string>
-
     <!-- Activity Fast Share -->
     <string name="please_choose_a_file">رجاء شارك ملف</string>
-
     <!-- common   -->
     <string name="app_name">شارك</string>
     <string name="settings">الإعدادات</string>
     <string name="done">تم</string>
     <string name="ok">حسنا</string>
-
     <string name="dark_mode">الوضع الداكن</string>
     <string name="light_mode">الوضع الفاتح</string>
-
     <string name="svr_running">الخادم قيد التشغيل</string>
     <string name="svr_notification_message">الخادم يعمل على العنوان %1$s:%2$s و يستقبل الطلبات الجديدة</string>
     <string name="app_icon_acc_desc">أيقونة التطبيق</string>
     <string name="tutorial">التعليمات</string>
-
     <string name="select">اختيار</string>
     <string name="sort_by">ترتيب حسب…</string>
     <string name="show_drop_down">أظهر النافذة المنبثقة</string>
@@ -120,7 +99,7 @@
     <string name="no_web_browser_found">لم يتم العثور على متصفح</string>
     <string name="remove">إزالة</string>
     <string name="something_went_wrong">لقد حدث خطأ ما!</string>
-
     <string name="downloads">التنزيلات</string>
     <string name="no_downloads">لا تنزيلات متاحة</string>
+    <string name="no_data_attached">لم يتم تحديد بيانات</string>
 </resources>
