@@ -2,7 +2,7 @@ import { DownloadObject } from './interfaces'
 
 const sendBtn = document.getElementById("sendBtn")!;
 const recieveBtn = document.getElementById("recieveBtn")!;
-const noDownloadsText = document.getElementById("no-downloads-text")!;
+const downloadsErrorSpan = document.getElementById("downloads-error")!;
 const downloadsBubbleOkButton = document.getElementById('okButton')!;
 const uploadDisabledDialogOkButton = document.getElementById("uploadDisabledDialogOkBtn")!;
 const updateBtn = document.getElementById('update')!;
@@ -12,6 +12,8 @@ const downloads = document.getElementById("downloads")!;
 // translations from HTML
 const currentUsernameText = document.getElementById('current-user-text')!.textContent!;
 const downloadText = document.getElementById('download-text')!.textContent!;
+const noDownloadsAvailableText = document.getElementById('no-downloads-text')!.textContent!;
+const downloadsRequestErrorText = document.getElementById('downloads-request-error-text')!.textContent!;
 
 let userId = -1;
 
@@ -95,7 +97,7 @@ function makeDownloadItem(e: DownloadObject) {
 }
 
 function requestAvailableDownloads() {
-    noDownloadsText.style.display = "none";
+    downloadsErrorSpan.style.display = "none";
     while (downloads.lastChild) {
         downloads.lastChild.remove();
     }
@@ -112,16 +114,18 @@ function requestAvailableDownloads() {
         }
     }).then(data => {
         if (data.length == 0) {
-            noDownloadsText.style.display = "block";
+            downloadsErrorSpan.style.display = "block";
+            downloadsErrorSpan.textContent = noDownloadsAvailableText
             return;
         } else {
-            noDownloadsText.style.display = "none";
+            downloadsErrorSpan.style.display = "none";
         }
         data.forEach((e: DownloadObject) => {
             downloads.appendChild(makeDownloadItem(e));
         });
     }).catch(error => {
-        console.error('Error fetching available downloads:', error);
+        downloadsErrorSpan.style.display = "block";
+        downloadsErrorSpan.textContent = downloadsRequestErrorText;
     });
 }
 

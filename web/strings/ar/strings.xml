@@ -13,6 +13,7 @@
     <string name="send">إرسال</string>
     <string name="receive">استلام</string>
     <string name="available_downloads">التنزيلات المتاحة</string>
+    <string name="downloads_request_error_text">فشل الحصول على التنزيلات المتاحة</string>
     <string name="download">تنزيل</string>
     <string name="no_downloads_available">لا تنزيلات متاحة</string>
     <string name="done">تم</string>

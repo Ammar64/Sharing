@@ -12,5 +12,4 @@ function getFormattedFileSize(s: number) {
         }
     }
     return `${s.toFixed(2)} ${levels[level]}`;
-
 }

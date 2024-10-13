@@ -12,17 +12,22 @@ WEB_APP_DIR = os.path.join(BUILD_DIR, "web_app")
 SRC_PAGES_DIR = os.path.join(SRC_DIR, "pages")
 BUILD_PAGES_DIR = os.path.join(WEB_APP_DIR, "pages")
 
-
 def getStringsDict(lang: str):
     strings_tree = ET.parse(os.path.join("strings/", lang, "strings.xml"))
     res_root = strings_tree.getroot()
     strings_elements = res_root.findall("string")
-
     strings_dict = {}
     for i in strings_elements:
         strings_dict[i.attrib["name"]] = i.text
+    if lang != 'en':
+        setDefaultsStringValues(strings_dict)
     return strings_dict
 
+# Use english as default
+def setDefaultsStringValues(langDict: dict):
+    englishDict = getStringsDict("en")
+    for k, v in englishDict.items():
+        langDict.setdefault(k, v)
 
 def buildHTMLFiles(lang: str):
     strings_map = getStringsDict(lang)

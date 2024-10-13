@@ -18,6 +18,7 @@
     <string name="available_downloads">Available downloads</string>
     <string name="download">Download</string>
     <string name="no_downloads_available">No downloads available</string>
+    <string name="downloads_request_error_text">requesting downloads failed. remote disconnected</string>
     <string name="done">Done</string>
     <string name="update">Update</string>
     <string name="uploading_is_disabled">Uploading is disabled</string>

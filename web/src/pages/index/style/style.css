@@ -233,7 +233,7 @@ button {
     z-index: 901;
 }
 
-#no-downloads-text {
+#downloads-error {
     position: absolute;
     color: white;
     white-space: nowrap;
