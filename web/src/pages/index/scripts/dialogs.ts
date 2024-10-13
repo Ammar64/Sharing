@@ -1,5 +1,9 @@
 const overlay = document.getElementById('overlay')!;
 
+// dialogs
+const usernameBubble = document.getElementById("usernameBubble")!;
+const downloadBubble = document.getElementById("downloadBubble")! as HTMLDivElement;
+const uploadDisabledDialog = document.getElementById("uploadDisabledDialog")!;
 
 function openBubble(bubble: HTMLElement) {
     bubble.style.display = 'block';
@@ -24,4 +28,9 @@ function closeBubbles(bubbles: HTMLElement[] | HTMLElement) {
 function openDownloadBubble(bubble: HTMLDivElement) {
     bubble.style.display = 'flex';
     overlay.style.display = 'block';
+}
+
+
+overlay.onclick = () => {
+    closeBubbles([downloadBubble, uploadDisabledDialog, usernameBubble]);
 }

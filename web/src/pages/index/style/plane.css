@@ -389,11 +389,21 @@
     width: 100%;
 }
 
-#overlay-process #progress-container #progress-text {
+#overlay-process #progress-container #progress-info {
     position: absolute;
     bottom: 55px;
     right: 55px;
     color: #fff;
+
+    display: flex;
+}
+
+#overlay-process #progress-container #progress-speed {
+    margin-right: 3em;
+}
+
+#overlay-process #progress-container #progress-text {
+    position: relative;
 }
 
 #overlay-process #progress-container #progress-text::after,

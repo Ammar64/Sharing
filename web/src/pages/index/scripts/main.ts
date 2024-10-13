@@ -1,18 +1,13 @@
-import { DownloadObject } from './main.d'
+import { DownloadObject } from './interfaces'
 
 const sendBtn = document.getElementById("sendBtn")!;
 const recieveBtn = document.getElementById("recieveBtn")!;
-const downloadBubble = document.getElementById("downloadBubble")! as HTMLDivElement;
 const noDownloadsText = document.getElementById("no-downloads-text")!;
-const usernameBubble = document.getElementById("usernameBubble")!;
-const uploadDisabledDialog = document.getElementById("uploadDisabledDialog")!;
 const downloadsBubbleOkButton = document.getElementById('okButton')!;
 const uploadDisabledDialogOkButton = document.getElementById("uploadDisabledDialogOkBtn")!;
 const updateBtn = document.getElementById('update')!;
 const usernameBtn = document.getElementById('button-username')!;
 const downloads = document.getElementById("downloads")!;
-const uploadInput = document.getElementById('uploadInput') as HTMLInputElement;
-const loader = document.getElementById('overlay-process')! as HTMLElement;
 
 // translations from HTML
 const currentUsernameText = document.getElementById('current-user-text')!.textContent!;
@@ -54,32 +49,10 @@ uploadDisabledDialogOkButton.onclick = () => {
     closeBubbles(uploadDisabledDialog);
 }
 
-overlay.onclick = () => {
-    closeBubbles([downloadBubble, uploadDisabledDialog, usernameBubble]);
-}
 
 usernameBtn.onclick = () => {
     openBubble(usernameBubble);
 };
-
-function showLoader() {
-    loader.style.display = 'block';
-}
-
-function hideLoader() {
-    (document.querySelector('#plane')! as HTMLElement).style.animation = 'plane-done 1.2s infinite';
-    setTimeout(() => {
-        loader.style.display = 'none';
-        (document.querySelector('#plane')! as HTMLElement).style.animation = 'plane-on-progress 5s infinite';
-    }, 600);
-}
-
-function updateProgress(percent: number) {
-    const progressBar = document.querySelector('#progress-bar') as HTMLElement;
-    const progressText = document.querySelector('#progress-text') as HTMLElement;
-    progressBar.style.width = percent + '%';
-    progressText.textContent = percent + '%';
-}
 
 function makeDownloadItem(e: DownloadObject) {
     const downloadItem = document.createElement("li");
@@ -151,111 +124,6 @@ function requestAvailableDownloads() {
         console.error('Error fetching available downloads:', error);
     });
 }
-
-function downloadFileWithProgress(url: string) {
-    const link = document.createElement("a");
-    link.href = url
-    document.body.append(link);
-    link.click();
-    link.remove();
-    // const xhr = new XMLHttpRequest();
-    // xhr.open("GET", url, true);
-    // xhr.responseType = "blob";
-
-    // xhr.onprogress = function(event) {
-    //     if (event.lengthComputable) {
-    //         const percentComplete = (event.loaded / event.total) * 100;
-    //         updateProgress(Math.round(percentComplete));
-    //     }
-    // };
-
-    // xhr.onloadstart = function() {
-    //     showLoader();
-    //     updateProgress(0);
-    // };
-
-    // xhr.onloadend = function() {
-    //     hideLoader();
-    // };
-
-    // xhr.onload = function() {
-    //     if (xhr.status === 200) {
-    //         // Create a link to download the file
-    //         const link = document.createElement("a");
-    //         link.style.display = "none";
-    //         const url = window.URL.createObjectURL(xhr.response);
-    //         link.href = url;
-    //         link.download = getFileNameFromContentDisposition(xhr.getResponseHeader('Content-Disposition'));
-    //         document.body.appendChild(link);
-    //         link.click();
-    //         window.URL.revokeObjectURL(url);
-    //         document.body.removeChild(link);
-    //     }
-    // };
-
-    // xhr.onerror = function() {
-    //     console.error('Error downloading the file');
-    //     hideLoader();
-    // };
-
-    // xhr.send();
-}
-
-function getFormattedFileSize(s: number) {
-    const levels = ["B", "KB", "MB", "GB", "TB", "PB"];
-    let level = 0;
-    let isGood = false;
-    while (!isGood) {
-        if (s > 1200 && level < levels.length) {
-            s /= 1024;
-            level++;
-        }
-        else {
-            isGood = true;
-        }
-    }
-    return `${s.toFixed(2)} ${levels[level]}`;
-
-}
-
-
-/* uploading */
-uploadInput.addEventListener('input', function (e) {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/upload/" + encodeURIComponent(this.files![0].name));
-
-    xhr.upload.onprogress = function (event) {
-        if (event.lengthComputable) {
-            const percentComplete = (event.loaded / event.total) * 100;
-            updateProgress(Math.round(percentComplete));
-        }
-    };
-
-    xhr.onloadstart = function () {
-        showLoader();
-        updateProgress(0);
-    };
-
-    xhr.onloadend = function () {
-        hideLoader();
-    };
-
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            console.log('File uploaded successfully');
-        } else {
-            console.error('Error uploading the file');
-        }
-    };
-
-    xhr.onerror = function () {
-        console.error('Error uploading the file');
-        hideLoader();
-    };
-
-    xhr.send(this.files![0]);
-});
-
 
 /* username field */
 const usernameForm = document.getElementById('usernameForm')!;

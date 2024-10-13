@@ -13,8 +13,10 @@
     <link rel="stylesheet" href="style/plane.css" />
     <link rel="stylesheet" href="style/mobile.css" media="only screen and (max-width: 525px)" />
 
-    <script defer src="scripts/dialogs.js"></script>
-    <script defer src="scripts/main.js"></script>
+    <script defer type="text/javascript" src="scripts/utils.js"></script>
+    <script defer type="text/javascript" src="scripts/dialogs.js"></script>
+    <script defer type="text/javascript" src="scripts/upload.js"></script>
+    <script defer type="text/javascript" src="scripts/main.js"></script>
 
 </head>
 
@@ -113,7 +115,10 @@
             </div>
             <div id="progress-container">
                 <div id="progress-bar"></div>
-                <div id="progress-text">0 %</div>
+                <div id="progress-info">
+                    <div id="progress-speed"></div>
+                    <div id="progress-text">0 %</div>
+                </div>
             </div>
         </div>
 
