@@ -6,6 +6,7 @@ plugins {
 // can take either a string or a list of strings (for arguments with spaces)
 // prints all output, complains and halts on error
 def runCommand = { strList ->
+    if( strList instanceof GString ) strList = strList.toString()
     assert ( strList instanceof String ||
             ( strList instanceof List && strList.each{ it instanceof String } ) \
 )
@@ -30,21 +31,22 @@ def runCommand = { strList ->
 }
 
 android {
+    def webDir = new File( rootDir, 'web' ).absolutePath
+    def webBuildDir = new File( webDir, 'build' ).absolutePath
 
     def buildWeb = tasks.register('buildWeb', Copy) {
         group = 'Build'
         description = 'Builds the web side of the app and put it in the assets'
         println 'Building the web'
-        runCommand("npm run build --prefix ${new File( rootDir, 'web' ).absolutePath}".toString())
+        runCommand("npm run build --prefix $webDir")
     }
+
     preBuild.dependsOn buildWeb
-
-
     namespace 'com.ammar.sharing'
     compileSdk 34
 
     sourceSets {
-        main.assets.srcDirs += new File(rootDir, "web/build").absolutePath
+        main.assets.srcDirs += webBuildDir
     }
     defaultConfig {
         applicationId "com.ammar.sharing"
