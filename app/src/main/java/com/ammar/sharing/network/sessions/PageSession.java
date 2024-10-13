@@ -33,11 +33,10 @@ public class PageSession extends HTTPSession {
         }
 
         if (path.startsWith("/pages/")) {
-            String assetPath = getCorrespondingAssetsPath(path);
+            // mimeType is set in getCorrespondingAssetsPath()
+            String assetPath = getCorrespondingAssetsPath(path, res);
             try {
-                res.setContentType(Utils.getMimeType(path));
                 res.sendResponse(Utils.readFileFromWebAssets(assetPath));
-
             } catch (IOException e) {
                 Utils.showErrorDialog("Requested paths", "Req path: " + path + "\nasset path: " + assetPath);
                 sendNotFoundResponse(res);
@@ -64,9 +63,10 @@ public class PageSession extends HTTPSession {
         }
     }
 
-    private String getCorrespondingAssetsPath(String requestedPath) {
+    private String getCorrespondingAssetsPath(String requestedPath, Response res) {
         int depth = getPathDepth(requestedPath);
         if (depth == 2) {
+            res.setContentType("text/html");
             String pageName = requestedPath.substring(requestedPath.lastIndexOf("/") + 1);
             String lang = Locale.getDefault().getLanguage();
             if (!Consts.langsCode.contains(lang)) {
@@ -75,6 +75,7 @@ public class PageSession extends HTTPSession {
             }
             return String.format(Locale.ENGLISH, "pages/%s/%s-%s.html", pageName, pageName, lang);
         } else {
+            res.setContentType(Utils.getMimeType(requestedPath));
             return requestedPath.substring(1); // remove the first / example "/pages/index/something" -> "pages/index/something"
         }
     }
