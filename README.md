@@ -48,8 +48,7 @@ Screen shots
 
 Translation
 ----------------
-When translating [app/src/main/res/values/strings.xml](app/src/main/res/values/strings.xml) consider also translating [web/strings/**/strings.xml](web/strings/en/strings.xml) to translate the webpage that shows on the other device.
-[Learn more](web/README.md)
+Translate on [weblate](https://hosted.weblate.org/projects/sharing)
 
 Note
 ----------------

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.TypedValue;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -24,6 +26,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddAppsActivity.AddAppsActivity;
 import com.ammar.sharing.activities.AddFilesActivity.AddFilesActivity;
+import com.ammar.sharing.activities.MainActivity.MainActivity;
 import com.ammar.sharing.activities.MainActivity.fragments.ShareFragment;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.Utils;
@@ -159,23 +163,36 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             // setup Chosen files dialog
             View chosenFilesView = LayoutInflater.from(itemView.getContext()).inflate(R.layout.dialog_chosen_files, null, false);
+
+            CardView chosenFilesWrapper = chosenFilesView.findViewById(R.id.CV_ChosenFilesWrapper);
+            RecyclerView chosenFilesRecycler = chosenFilesView.findViewById(R.id.RV_ChosenFilesRecycler);
+            int screenHeight = itemView.getResources().getDisplayMetrics().heightPixels - MainActivity.systemBarsPaddings.top - 20;
+            int rvHeight = (int) Utils.dpToPx(400);
             AlertDialog chosenFilesAD = new AlertDialog.Builder(itemView.getContext())
                     .setView(chosenFilesView)
-                    .setPositiveButton(R.string.ok, null)
                     .create();
 
-
-            RecyclerView chosenFilesRecycler = chosenFilesView.findViewById(R.id.RV_ChosenFilesRecycler);
             TextView noFilesTV = chosenFilesView.findViewById(R.id.TV_NoFilesSelected);
             ChosenFilesAdapter chosenFilesAdapter = new ChosenFilesAdapter();
+
             chosenFilesRecycler.setAdapter(chosenFilesAdapter);
             chosenFilesRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
 
+            chosenFilesView.findViewById(R.id.B_OkButton).setOnClickListener((v) -> {
+                chosenFilesAD.dismiss();
+            });
+
+            chosenFilesAD.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+
             showSelected.setOnClickListener(button -> {
-                Window window = chosenFilesAD.getWindow();
-                if (window != null)
-                    window.setBackgroundDrawableResource(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight);
+                chosenFilesWrapper.setCardBackgroundColor(darkMode ? itemView.getContext().getResources().getColor(R.color.dialogColorDark) : itemView.getContext().getResources().getColor(R.color.dialogColorLight));
                 chosenFilesAD.show();
+
+                var windowLayoutParams = new WindowManager.LayoutParams();
+                windowLayoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+                windowLayoutParams.height = Math.min(rvHeight, screenHeight);
+                chosenFilesAD.getWindow().setAttributes(windowLayoutParams);
+
             });
 
             Data.filesListNotifier.observe(fragment.getViewLifecycleOwner(), info -> {
@@ -421,10 +438,9 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
 
             stopB.setOnClickListener((view) -> {
-                if( manager.getLoaded() >= 0 ) {
+                if (manager.getLoaded() >= 0) {
                     manager.stop();
-                }
-                else
+                } else
                     ProgressManager.removeProgress(manager.getIndex());
             });
         }

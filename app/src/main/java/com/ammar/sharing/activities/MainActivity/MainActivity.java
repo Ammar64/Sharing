@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static boolean darkMode = true;
     public static boolean isFirstRun = false;
+    public static Insets systemBarsPaddings;
     public final int REQUEST_CODE_STORAGE_PERMISSION = 2;
     public final int REQUEST_CODE_NOTIFICATION_PERMISSION = 3;
 
@@ -133,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         layout = findViewById(R.id.CL_MainLayout);
         ViewCompat.setOnApplyWindowInsetsListener(layout, (v, insets) -> {
             Insets paddings = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            MainActivity.systemBarsPaddings = paddings;
             v.setPadding(0, paddings.top, 0, 0);
             return insets;
         });
