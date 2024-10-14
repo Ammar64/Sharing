@@ -23,6 +23,7 @@ public class RoundDialog {
     private final CardView cardView;
     private View view;
     private final int maxHeight;
+
     public RoundDialog(Context context) {
         cardView = new CardView(context);
         alertDialog = new AlertDialog.Builder(context)
@@ -40,10 +41,6 @@ public class RoundDialog {
     public void setView(@LayoutRes int resId) {
         view = LayoutInflater.from(cardView.getContext()).inflate(resId, cardView, false);
         cardView.addView(view, 0);
-    }
-
-    public CardView getRootCardView() {
-        return cardView;
     }
 
     public View getView() {
@@ -65,7 +62,7 @@ public class RoundDialog {
         int width = childLayoutParams.width;
         int height = childLayoutParams.height;
         Log.d("HEIGHT", "Height: " + height + "     Max Height: " + maxHeight);
-        if( height > maxHeight ) {
+        if (height > maxHeight) {
             height = maxHeight;
             childLayoutParams.height = maxHeight;
             child.setLayoutParams(childLayoutParams);
@@ -76,5 +73,13 @@ public class RoundDialog {
 
     public void dismiss() {
         alertDialog.dismiss();
+    }
+
+    public CardView getInternalRootCardView() {
+        return cardView;
+    }
+
+    public AlertDialog getInternalAlertDialog() {
+        return alertDialog;
     }
 }

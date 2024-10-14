@@ -51,6 +51,7 @@ import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.custom.ui.AdaptiveDropDown;
 import com.ammar.sharing.custom.ui.AdaptiveTextView;
+import com.ammar.sharing.custom.ui.RoundDialog;
 import com.ammar.sharing.services.ServerService;
 import com.ammar.sharing.BuildConfig;
 
@@ -138,13 +139,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private boolean warningShown = false;
+    private static boolean warningShown = false;
     private void initItems() {
         layout = findViewById(R.id.CL_MainLayout);
         ViewCompat.setOnApplyWindowInsetsListener(layout, (v, insets) -> {
             Insets paddings = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             MainActivity.systemBarsPaddings = paddings;
             v.setPadding(0, paddings.top, 0, 0);
+
+            // round dialog needs systemBarsPaddings to be set that's why we call here
+            showWarningIfUserWantsToSeeIt();
             return insets;
         });
 
@@ -173,33 +177,36 @@ public class MainActivity extends AppCompatActivity {
         errorDialogAD = new AlertDialog.Builder(this)
                 .setPositiveButton(R.string.ok, null)
                 .create();
+    }
 
-
+    private void showWarningIfUserWantsToSeeIt() {
         // show warning if user didn't choose to not show it again
         final boolean isUserWantsWarning = appInfoPref.getBoolean(Consts.PREF_FIELD_IS_USER_WANTS_WARNING, true);
         if (isUserWantsWarning && !warningShown) {
-            View warningDialogLayout = LayoutInflater.from(this).inflate(R.layout.dialog_warning, null, false);
+            RoundDialog warningDialogRD = new RoundDialog(this);
+            warningDialogRD.setView(R.layout.dialog_warning);
+            warningDialogRD.setCornerRadius((int)Utils.dpToPx(18));
+
+            View warningDialogLayout = warningDialogRD.getView();
             CheckBox dontShowAgainCB = warningDialogLayout.findViewById(R.id.CB_DialogWarningDontShowAgain);
             TextView dontShowAgainTV = warningDialogLayout.findViewById(R.id.TB_DialogWarningDontShowAgainTV);
 
             dontShowAgainTV.setOnClickListener((view) -> {
                 dontShowAgainCB.toggle();
             });
-            AlertDialog warningDialog = new AlertDialog.Builder(this)
-                    .setView(warningDialogLayout)
-                    .setPositiveButton(android.R.string.ok, null)
-                    .setOnDismissListener((dialog) -> {
-                        boolean showAgain = !dontShowAgainCB.isChecked();
-                        appInfoPref.edit().putBoolean(Consts.PREF_FIELD_IS_USER_WANTS_WARNING, showAgain).apply();
-                    })
-                    .create();
+
+            warningDialogRD.getInternalAlertDialog().setOnDismissListener((d) -> {
+                boolean showAgain = !dontShowAgainCB.isChecked();
+                appInfoPref.edit().putBoolean(Consts.PREF_FIELD_IS_USER_WANTS_WARNING, showAgain).apply();
+            });
+            warningDialogLayout.findViewById(R.id.B_WarningOkButton).setOnClickListener((v) -> {
+                warningDialogRD.dismiss();
+            });
             // set dialog bg color
-            Window window = warningDialog.getWindow();
-            if (window != null)
-                window.setBackgroundDrawableResource(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight);
+            warningDialogRD.setBackgroundColor(getResources().getColor(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight));
 
             // show dialog
-            warningDialog.show();
+            warningDialogRD.show();
             warningShown = true;
         }
     }

@@ -35,12 +35,28 @@
 
     <com.ammar.sharing.custom.ui.AdaptiveTextView
         android:id="@+id/TB_DialogWarningDontShowAgainTV"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/CB_DialogWarningDontShowAgain"
-        app:layout_constraintTop_toTopOf="@+id/CB_DialogWarningDontShowAgain"
         android:labelFor="@id/CB_DialogWarningDontShowAgain"
         android:text="@string/dont_show_again"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/B_WarningOkButton"
+        app:layout_constraintStart_toEndOf="@+id/CB_DialogWarningDontShowAgain"
+        app:layout_constraintTop_toTopOf="@+id/CB_DialogWarningDontShowAgain" />
+
+    <android.widget.Button
+        android:id="@+id/B_WarningOkButton"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/button_ok_bg"
+        android:text="@android:string/ok"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/TB_DialogWarningDontShowAgainTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/TB_DialogWarningDontShowAgainTV" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
