@@ -48,7 +48,12 @@ Screen shots
 
 Translation
 ----------------
-Translate on [weblate](https://hosted.weblate.org/projects/sharing)
+<div align="center">
+     
+[![](https://hosted.weblate.org/widget/sharing/287x66-black.png)](https://hosted.weblate.org/engage/sharing)  
+[![Translation status](https://hosted.weblate.org/widget/sharing/multi-auto.svg)](https://hosted.weblate.org/engage/sharing)
+
+</div>
 
 Note
 ----------------
