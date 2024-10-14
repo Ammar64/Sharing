@@ -102,4 +102,7 @@
     <string name="downloads">التنزيلات</string>
     <string name="no_downloads">لا تنزيلات متاحة</string>
     <string name="no_data_attached">لم يتم تحديد بيانات</string>
+    <string name="changelog">سجل التغييرات</string>
+    <string name="new_in_version">الجديد فى %s</string>
+    <string name="_continue">متابعة</string>
 </resources>
