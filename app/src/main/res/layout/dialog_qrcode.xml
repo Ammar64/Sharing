@@ -12,29 +12,30 @@
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="16dp"
         android:autoLink="web"
-        android:textAlignment="center"
+        android:includeFontPadding="false"
 
+        android:textAlignment="center"
         android:textColorLink="@color/linkColor"
+        android:textIsSelectable="true"
         android:textStyle="bold"
         app:autoSizeMaxTextSize="38sp"
         app:autoSizeMinTextSize="16sp"
         app:autoSizeTextType="uniform"
+        app:fontFamily="sans-serif"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textIsSelectable="true"
-        tools:text="http://192.168.1.9:2999"
-        app:fontFamily="sans-serif"
-        android:includeFontPadding="false"/>
+        tools:text="http://192.168.1.9:2999" />
 
     <android.widget.ImageView
         android:id="@+id/IV_QRCodeImage"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="12dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/B_OkButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TV_ServerLink" />
@@ -43,15 +44,27 @@
         android:id="@+id/TV_QRDialogConnectToNetwork"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="24sp"
-        android:textAlignment="center"
         android:padding="8dp"
-        android:text="@string/connect_to_wifi_or_hotspot" />
+        android:text="@string/connect_to_wifi_or_hotspot"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/B_OkButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <android.widget.Button
+        android:id="@+id/B_OkButton"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/button_ok_bg"
+        android:text="@android:string/ok"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,9 +4,9 @@ import static com.ammar.sharing.activities.MainActivity.MainActivity.darkMode;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.TypedValue;
@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -26,7 +28,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,12 +36,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddAppsActivity.AddAppsActivity;
 import com.ammar.sharing.activities.AddFilesActivity.AddFilesActivity;
-import com.ammar.sharing.activities.MainActivity.MainActivity;
 import com.ammar.sharing.activities.MainActivity.fragments.ShareFragment;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.custom.io.ProgressManager;
 import com.ammar.sharing.custom.ui.AdaptiveTextView;
+import com.ammar.sharing.custom.ui.RoundDialog;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.services.ServerService;
@@ -142,57 +143,48 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             addAppsB.setOnClickListener((button) -> fragment.launcher.launch(new Intent(itemView.getContext(), AddAppsActivity.class)));
             addFilesB.setOnClickListener((button) -> fragment.mGetContent.launch(new Intent(fragment.requireContext(), AddFilesActivity.class)));
+
+            Resources res = itemView.getResources();
             // setup QR Code dialog
-            View QRDialogView = LayoutInflater.from(itemView.getContext()).inflate(R.layout.dialog_qrcode, null, false);
-            AlertDialog QRDialogAD = new AlertDialog.Builder(itemView.getContext())
-                    .setView(QRDialogView)
-                    .setPositiveButton(R.string.ok, null)
-                    .create();
+            RoundDialog QRDialogRD = new RoundDialog(itemView.getContext());
+            QRDialogRD.setView(R.layout.dialog_qrcode);
+            View QRDialogView = QRDialogRD.getView();
+            QRDialogRD.setCornerRadius((int) Utils.dpToPx(18));
+
             QRImageIV = QRDialogView.findViewById(R.id.IV_QRCodeImage);
             serverLinkTV = QRDialogView.findViewById(R.id.TV_ServerLink);
             connectToWifiOrHotspotTV = QRDialogView.findViewById(R.id.TV_QRDialogConnectToNetwork);
 
-            QRCodeB.setOnClickListener(button -> {
-                Window window = QRDialogAD.getWindow();
-                if (window != null)
-                    window.setBackgroundDrawableResource(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight);
+            QRDialogView.findViewById(R.id.B_OkButton)
+                    .setOnClickListener((v) -> QRDialogRD.dismiss());
 
-                QRDialogAD.show();
+            QRCodeB.setOnClickListener(button -> {
+                QRDialogRD.setBackgroundColor(res.getColor(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight));
+                QRDialogRD.show();
                 setupQrCode();
             });
 
             // setup Chosen files dialog
-            View chosenFilesView = LayoutInflater.from(itemView.getContext()).inflate(R.layout.dialog_chosen_files, null, false);
+            RoundDialog chosenFilesRD = new RoundDialog(itemView.getContext());
+            chosenFilesRD.setView(R.layout.dialog_chosen_files);
+            View chosenFilesView = chosenFilesRD.getView();
 
-            CardView chosenFilesWrapper = chosenFilesView.findViewById(R.id.CV_ChosenFilesWrapper);
+            chosenFilesRD.setCornerRadius((int) Utils.dpToPx(18));
             RecyclerView chosenFilesRecycler = chosenFilesView.findViewById(R.id.RV_ChosenFilesRecycler);
-            int screenHeight = itemView.getResources().getDisplayMetrics().heightPixels - MainActivity.systemBarsPaddings.top - 20;
-            int rvHeight = (int) Utils.dpToPx(400);
-            AlertDialog chosenFilesAD = new AlertDialog.Builder(itemView.getContext())
-                    .setView(chosenFilesView)
-                    .create();
-
             TextView noFilesTV = chosenFilesView.findViewById(R.id.TV_NoFilesSelected);
             ChosenFilesAdapter chosenFilesAdapter = new ChosenFilesAdapter();
-
             chosenFilesRecycler.setAdapter(chosenFilesAdapter);
             chosenFilesRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
 
-            chosenFilesView.findViewById(R.id.B_OkButton).setOnClickListener((v) -> {
-                chosenFilesAD.dismiss();
+
+            Button okButton = chosenFilesView.findViewById(R.id.B_OkButton);
+            okButton.setOnClickListener((v) -> {
+                chosenFilesRD.dismiss();
             });
 
-            chosenFilesAD.getWindow().setBackgroundDrawable(new ColorDrawable(0));
-
             showSelected.setOnClickListener(button -> {
-                chosenFilesWrapper.setCardBackgroundColor(darkMode ? itemView.getContext().getResources().getColor(R.color.dialogColorDark) : itemView.getContext().getResources().getColor(R.color.dialogColorLight));
-                chosenFilesAD.show();
-
-                var windowLayoutParams = new WindowManager.LayoutParams();
-                windowLayoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
-                windowLayoutParams.height = Math.min(rvHeight, screenHeight);
-                chosenFilesAD.getWindow().setAttributes(windowLayoutParams);
-
+                chosenFilesRD.setBackgroundColor(res.getColor(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight));
+                chosenFilesRD.show();
             });
 
             Data.filesListNotifier.observe(fragment.getViewLifecycleOwner(), info -> {
@@ -214,21 +206,23 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
 
             // setup users dialog
-            View usersDialogView = LayoutInflater.from(itemView.getContext()).inflate(R.layout.dialog_users, null, false);
-            AlertDialog usersDialogAD = new AlertDialog.Builder(itemView.getContext())
-                    .setView(usersDialogView)
-                    .setPositiveButton(R.string.ok, null)
-                    .create();
+            RoundDialog usersDialogRD = new RoundDialog(itemView.getContext());
+            usersDialogRD.setView(R.layout.dialog_users);
+            View usersDialogView = usersDialogRD.getView();
+            usersDialogRD.setCornerRadius((int)Utils.dpToPx(18));
+
             RecyclerView usersRecycler = usersDialogView.findViewById(R.id.RV_UsersRecycler);
             TextView noUserConnectedTV = usersDialogView.findViewById(R.id.TV_NoUserConnected);
             UsersAdapter usersAdapter = new UsersAdapter();
             usersRecycler.setAdapter(usersAdapter);
             usersRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
+
+            usersDialogView.findViewById(R.id.B_OkButton)
+                    .setOnClickListener((v) -> usersDialogRD.dismiss());
+
             showUsersB.setOnClickListener(button -> {
-                Window window = usersDialogAD.getWindow();
-                if (window != null)
-                    window.setBackgroundDrawableResource(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight);
-                usersDialogAD.show();
+                usersDialogRD.setBackgroundColor(res.getColor(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight));
+                usersDialogRD.show();
             });
 
 
@@ -447,4 +441,3 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
 }
-

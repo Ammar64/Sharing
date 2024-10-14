@@ -121,8 +121,6 @@ public class MainActivity extends AppCompatActivity {
                     .putBoolean(Consts.PREF_FIELD_IS_DARK, true)
                     .apply();
             appInfoPref.edit().putBoolean(Consts.PREF_FIELD_IS_FIRST_RUN, false).apply();;
-            //tutorial is more like a welcome page. and it's not really necessary
-            //startActivity(new Intent(this, TutorialActivity.class));
         }
 
         int lastVerCode = appInfoPref.getInt(Consts.PREF_FIELD_LAST_VERCODE, 0);
