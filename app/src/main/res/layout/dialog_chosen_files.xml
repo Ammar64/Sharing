@@ -23,7 +23,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/B_OkButton"
+        app:layout_constraintBottom_toTopOf="@+id/B_ChosenFilesOkButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/TV_FilesDialogTitle"
@@ -38,13 +38,13 @@
         android:text="@string/no_files_selected"
         android:textAlignment="center"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/B_OkButton"
+        app:layout_constraintBottom_toTopOf="@+id/B_ChosenFilesOkButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/TV_FilesDialogTitle" />
 
     <android.widget.Button
-        android:id="@+id/B_OkButton"
+        android:id="@+id/B_ChosenFilesOkButton"
         android:layout_width="70dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"

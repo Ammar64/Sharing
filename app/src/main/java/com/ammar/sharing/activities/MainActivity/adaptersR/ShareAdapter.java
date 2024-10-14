@@ -155,7 +155,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             serverLinkTV = QRDialogView.findViewById(R.id.TV_ServerLink);
             connectToWifiOrHotspotTV = QRDialogView.findViewById(R.id.TV_QRDialogConnectToNetwork);
 
-            QRDialogView.findViewById(R.id.B_OkButton)
+            QRDialogView.findViewById(R.id.B_QRDialogOkButton)
                     .setOnClickListener((v) -> QRDialogRD.dismiss());
 
             QRCodeB.setOnClickListener(button -> {
@@ -177,7 +177,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             chosenFilesRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
 
 
-            Button okButton = chosenFilesView.findViewById(R.id.B_OkButton);
+            Button okButton = chosenFilesView.findViewById(R.id.B_ChosenFilesOkButton);
             okButton.setOnClickListener((v) -> {
                 chosenFilesRD.dismiss();
             });
@@ -217,7 +217,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             usersRecycler.setAdapter(usersAdapter);
             usersRecycler.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
 
-            usersDialogView.findViewById(R.id.B_OkButton)
+            usersDialogView.findViewById(R.id.B_UsersOkButton)
                     .setOnClickListener((v) -> usersDialogRD.dismiss());
 
             showUsersB.setOnClickListener(button -> {

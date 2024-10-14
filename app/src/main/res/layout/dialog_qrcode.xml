@@ -35,7 +35,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/B_OkButton"
+        app:layout_constraintBottom_toTopOf="@+id/B_QRDialogOkButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TV_ServerLink" />
@@ -48,13 +48,13 @@
         android:text="@string/connect_to_wifi_or_hotspot"
         android:textAlignment="center"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/B_OkButton"
+        app:layout_constraintBottom_toTopOf="@+id/B_QRDialogOkButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.widget.Button
-        android:id="@+id/B_OkButton"
+        android:id="@+id/B_QRDialogOkButton"
         android:layout_width="70dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"

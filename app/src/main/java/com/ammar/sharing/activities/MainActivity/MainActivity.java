@@ -112,7 +112,14 @@ public class MainActivity extends AppCompatActivity {
             getWindow().setBackgroundDrawableResource(R.drawable.gradient_background_light);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN);
+
+        // setup language
+        String lang = settingsPref.getString(Consts.PREF_FIELD_LANG, "");
+        if (!lang.isEmpty()) {
+            Utils.setLocale(this, lang);
+        }
         // check for first Run
         appInfoPref = getSharedPreferences(Consts.PREF_APP_INFO, MODE_PRIVATE);
         isFirstRun = appInfoPref.getBoolean(Consts.PREF_FIELD_IS_FIRST_RUN, true);
@@ -127,11 +134,6 @@ public class MainActivity extends AppCompatActivity {
         if(BuildConfig.VERSION_CODE > lastVerCode) {
             appInfoPref.edit().putInt(Consts.PREF_FIELD_LAST_VERCODE, BuildConfig.VERSION_CODE).apply();
             startActivity(new Intent(this, ChangeLogActivity.class));
-        }
-
-        String lang = settingsPref.getString(Consts.PREF_FIELD_LANG, "");
-        if (!lang.isEmpty()) {
-            Utils.setLocale(this, lang);
         }
     }
 

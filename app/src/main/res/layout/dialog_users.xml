@@ -24,7 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TV_UsersDialogTitle"
-        app:layout_constraintBottom_toTopOf="@id/B_OkButton"
+        app:layout_constraintBottom_toTopOf="@id/B_UsersOkButton"
         android:layout_marginBottom="4dp"
         tools:listitem="@layout/row_user" />
 
@@ -35,13 +35,13 @@
         android:text="@string/no_user_connected"
         android:textAlignment="center"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/B_OkButton"
+        app:layout_constraintBottom_toTopOf="@+id/B_UsersOkButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TV_UsersDialogTitle" />
 
     <android.widget.Button
-        android:id="@+id/B_OkButton"
+        android:id="@+id/B_UsersOkButton"
         android:layout_width="70dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"

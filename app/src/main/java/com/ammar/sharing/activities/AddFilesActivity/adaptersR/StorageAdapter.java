@@ -590,7 +590,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 if (selected) {
                     view.setCardBackgroundColor(view.getContext().getResources().getColor(R.color.checked_card));
                 } else {
-                    view.setCardBackgroundColor(0x77000000);
+                    view.setCardBackgroundColor(0x44000000);
                 }
             }
 

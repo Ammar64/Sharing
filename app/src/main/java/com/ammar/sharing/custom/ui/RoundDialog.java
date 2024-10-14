@@ -23,15 +23,13 @@ public class RoundDialog {
     private final CardView cardView;
     private View view;
     private final int maxHeight;
-    private static final ColorDrawable transparent = new ColorDrawable(0);
     public RoundDialog(Context context) {
         cardView = new CardView(context);
-        cardView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         alertDialog = new AlertDialog.Builder(context)
                 .setView(cardView)
                 .create();
         maxHeight = context.getResources().getDisplayMetrics().heightPixels - MainActivity.systemBarsPaddings.top - MainActivity.systemBarsPaddings.bottom;
-        alertDialog.getWindow().setBackgroundDrawable(transparent);
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
     }
 
     public void setView(View view) {
