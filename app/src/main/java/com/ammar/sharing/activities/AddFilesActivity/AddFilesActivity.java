@@ -69,6 +69,7 @@ public class AddFilesActivity extends AppCompatActivity {
         recentsFile = new File(getFilesDir(), "recent_files.json");
 
         appBar = findViewById(R.id.TB_Toolbar);
+        appBar.inflateMenu(R.menu.menu_select);
         appBar.setNavigationIcon(R.drawable.icon_back);
         appBar.setNavigationContentDescription(R.string.back);
         appBar.setTitle(R.string.select_files);

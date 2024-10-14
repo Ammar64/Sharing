@@ -67,6 +67,9 @@
         <activity android:name=".activities.ApksInstallerActivity.ApksInstallerActivity"
             android:exported="false" />
 
+        <activity android:name=".activities.ChangeLogActivity.ChangeLogActivity"
+            android:exported="false" />
+
         <service android:name=".services.ServerService"
             android:exported="false"
             android:foregroundServiceType="dataSync"/>

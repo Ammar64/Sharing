@@ -1,0 +1,22 @@
+// a file to write changelogs to show in ChangeLogsActivity
+// lines that starts with // are ignored
+// lines that starts with # are rendered with bigger text size and the # is omitted
+
+# Features
+1- Add CLI support for curl & wget
+2- Add HTML only page on URL /no-JS
+3- It now tells you how much time it took to transfer files after complete
+4- Show upload speed in the browser as well when uploading
+
+# Fixed
+1- Fixed the black screen issue when finishing tutorial
+
+# Changed
+1- Make most of the dialogs with round corners
+2- Update the web UI
+3- Change type of ServerService from SpecialUse to DataSync
+4- Remove FastShare activity and utilize the MainActivity for Share Intent
+
+# Translations
+1- New French translation
+2- New Chinese translation

@@ -98,6 +98,9 @@
     <!-- Activity Fast Share -->
     <string name="please_choose_a_file">Please share a file</string>
 
+    <!-- Activity Change Log -->
+    <string name="changelog">Change Log</string>
+    <string name="new_in_version">New in %s</string>
     <!-- common   -->
     <string name="app_name">sharing</string>
     <string name="settings">Settings</string>
@@ -126,6 +129,7 @@
     <!-- /no-JS HTML is generated at runtime using java code that's why we translate it here and not in the web translation -->
     <string name="downloads">Downloads</string>
     <string name="no_downloads">No downloads available</string>
+    <string name="_continue">Continue</string> <!-- string name can't be continue because it's reserved java keyword -->
 
     <string-array name="langs">
         <item>@string/system_default_lang</item>

@@ -40,6 +40,7 @@ public final class Consts {
     public static final String PREF_FIELD_ARE_USER_BLOCKED = "USERS_BLOCK";
     public static final String PREF_FIELD_LANG = "LANGUAGE";
     public static final String PREF_FIELD_DEBUG_MODE = "DEBUG_MODE";
+    public static final String PREF_FIELD_LAST_VERCODE = "LAST_VERCODE";
 
     public static final File Sharing = new File(Environment.getExternalStorageDirectory(), "Sharing");
     public static final File appsDir = new File(Sharing, "Apps");

@@ -45,12 +45,15 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.ApksInstallerActivity.ApksInstallerActivity;
+import com.ammar.sharing.activities.ChangeLogActivity.ChangeLogActivity;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.Utils;
 import com.ammar.sharing.custom.ui.AdaptiveDropDown;
 import com.ammar.sharing.custom.ui.AdaptiveTextView;
 import com.ammar.sharing.services.ServerService;
+import com.ammar.sharing.BuildConfig;
+
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -117,9 +120,15 @@ public class MainActivity extends AppCompatActivity {
             settingsPref.edit()
                     .putBoolean(Consts.PREF_FIELD_IS_DARK, true)
                     .apply();
-            appInfoPref.edit().putBoolean(Consts.PREF_FIELD_IS_FIRST_RUN, false).apply();
+            appInfoPref.edit().putBoolean(Consts.PREF_FIELD_IS_FIRST_RUN, false).apply();;
             //tutorial is more like a welcome page. and it's not really necessary
             //startActivity(new Intent(this, TutorialActivity.class));
+        }
+
+        int lastVerCode = appInfoPref.getInt(Consts.PREF_FIELD_LAST_VERCODE, 0);
+        if(BuildConfig.VERSION_CODE > lastVerCode) {
+            appInfoPref.edit().putInt(Consts.PREF_FIELD_LAST_VERCODE, BuildConfig.VERSION_CODE).apply();
+            startActivity(new Intent(this, ChangeLogActivity.class));
         }
 
         String lang = settingsPref.getString(Consts.PREF_FIELD_LANG, "");
