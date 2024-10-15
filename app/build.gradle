@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
+    alias(libs.plugins.jetbrainsKotlinAndroid)
 }
 
 // a wrapper closure around executing a string
@@ -87,6 +88,9 @@ android {
             version '3.22.1'
         }
     }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
 }
 
 dependencies {
@@ -100,4 +104,5 @@ dependencies {
 
     // I don't like the new library catalog declaration it makes you write more stuff :)
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
+    implementation libs.core.ktx
 }

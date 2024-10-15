@@ -67,6 +67,10 @@
         <activity android:name=".activities.ApksInstallerActivity.ApksInstallerActivity"
             android:exported="false" />
 
+        <activity android:name=".activities.MessagesActivity.MessagesActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true" />
+
         <activity android:name=".activities.ChangeLogActivity.ChangeLogActivity"
             android:exported="false" />
 

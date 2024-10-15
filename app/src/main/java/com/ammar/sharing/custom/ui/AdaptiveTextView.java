@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -66,6 +67,16 @@ public class AdaptiveTextView extends androidx.appcompat.widget.AppCompatTextVie
     public void setDark(boolean dark) {
         setTextColor( dark ? darkModeColor : lightModeColor );
         changeDrawableColor(dark);
+    }
+
+    public void setLightModeColor(@ColorInt int lightModeColor) {
+        this.lightModeColor = lightModeColor;
+        if(!darkMode) setTextColor(this.lightModeColor);
+    }
+
+    public void setDarkModeColor(@ColorInt int darkModeColor) {
+        this.darkModeColor = darkModeColor;
+        if(darkMode) setTextColor(this.darkModeColor);
     }
 
     private void changeDrawableColor(boolean dark) {
