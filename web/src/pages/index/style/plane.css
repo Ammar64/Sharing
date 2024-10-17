@@ -2,9 +2,11 @@
     background:
         radial-gradient(circle at top right, var(--colorOneTransparent), rgba(255, 0, 0, 0) 30%),
         linear-gradient(to bottom, #000, #000);
+    position: fixed;
     width: 100dvw;
     height: 100dvh;
-    position: fixed;
+    top: 0px;
+    left: 0px;
     -webkit-animation: paleArea 15s infinite;
     animation: paleArea 15s linear infinite;
     display: none;
