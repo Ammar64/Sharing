@@ -66,8 +66,8 @@
     <string name="documents">documents</string>
     <string name="no_files_found">Aucun fichier trouvé</string>
     <!-- Activité Installeur d'APKs -->
-    <string name="apks_installer_experimental">Installeur d\'APK (Expérimental)</string>
-    <string name="apks_installer">Installeur d\'APK</string>
+    <string name="apks_installer_experimental">Installeur d\'APKS (Expérimental)</string>
+    <string name="apks_installer">Installeur d\'APKS</string>
     <string name="pls_choose_apks">Veuillez choisir un fichier apks</string>
     <string name="pick_apks_file">choisir un fichier apks</string>
     <string name="installer_note">Après avoir envoyé un fichier apks avec succès à l\'autre appareil, envoyez cette application à l\'autre appareil distant et ouvrez cette page pour installer le fichier apks.</string>
