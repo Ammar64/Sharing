@@ -11,6 +11,7 @@
 
 # Fixed
 1- Fixed the black screen issue when finishing tutorial
+2- Fixed dialogs too big in landscape mode
 
 # Changed
 1- Changed the app icon
