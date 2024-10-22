@@ -1,11 +1,16 @@
 package com.ammar.sharing.network;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
+import androidx.core.content.res.ResourcesCompat;
+
+import com.ammar.sharing.R;
 import com.ammar.sharing.common.utils.SecurityUtils;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.sessions.base.HTTPSession;
+import com.ammar.sharing.network.utils.NetUtils;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -39,8 +44,8 @@ public class ClientHandler implements Runnable {
             boolean upgradeToWebSocket = false;
             while (request.readSocket()) {
                 // Check if it wants to upgrade to websocket
-                if("Upgrade".equalsIgnoreCase(request.getHeader("connection"))) {
-                    if("websocket".equalsIgnoreCase(request.getHeader("upgrade"))) {
+                if ("Upgrade".equalsIgnoreCase(request.getHeader("connection"))) {
+                    if ("websocket".equalsIgnoreCase(request.getHeader("upgrade"))) {
                         upgradeToWebSocket = true;
                         break;
                     } else {
@@ -54,7 +59,7 @@ public class ClientHandler implements Runnable {
                     handleNormalRequest(request);
                 }
             }
-            if( upgradeToWebSocket ) {
+            if (upgradeToWebSocket) {
                 Log.d("MYLOG", "Upgraded to websocket");
                 //TODO: handleWebsocketUpgrade(request);
             }
@@ -109,17 +114,17 @@ public class ClientHandler implements Runnable {
     }
 
     private void startSession(HTTPSession session, Request req, Response res) {
-        if("GET".equals(req.getMethod())) {
+        if ("GET".equals(req.getMethod())) {
             session.GET(req, res);
-        } else if("POST".equals(req.getMethod())) {
+        } else if ("POST".equals(req.getMethod())) {
             session.POST(req, res);
         }
     }
 
     private Class<? extends HTTPSession> inferSessionFromPath(String path) {
-        for(Map.Entry<String, Class<? extends HTTPSession>> i : server.pathsMap.entrySet() ) {
+        for (Map.Entry<String, Class<? extends HTTPSession>> i : server.pathsMap.entrySet()) {
             String pathPattern = i.getKey();
-            if( Pattern.matches(pathPattern, path) ) {
+            if (Pattern.matches(pathPattern, path)) {
                 return i.getValue();
             }
         }
@@ -138,17 +143,24 @@ public class ClientHandler implements Runnable {
         public void GET(Request req, Response res) {
             try {
                 if ("/favicon.ico".equals(req.getPath())) {
-                    res.setHeader("Content-Type", "image/svg+xml");
-                    res.sendResponse(Utils.readFileFromWebAssets("icons8-share.svg"));
-                } else if (!"/blocked".equals(req.getPath())) {
-                    res.setStatusCode(307);
-                    res.setHeader("Location", "/blocked");
+                    Bitmap favBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.mipmap.ic_launcher_round, null));
+                    res.sendBitmapResponse(favBM);
+                } else if ("/common/almarai_regular.ttf".equals(req.getPath())) {
+                    try {
+                        res.setContentType("font/ttf");
+                        res.sendResponse(Utils.readRawRes(R.raw.almarai_regular));
+                    } catch (IOException e) {
+                        Utils.showErrorDialog("PagesSession.GET(). IOException.", "Note: error happened when reading raw resources\n" + e.getMessage());
+                    }
+                } else if (!"/pages/blocked".equals(req.getPath())) {
+                    res.setStatusCode(302);
+                    res.setHeader("Location", "/pages/blocked");
                     res.sendResponse();
-                    req.getClientSocket().close();
                 } else {
-                    res.setStatusCode(401);
+                    res.setStatusCode(403);
                     res.setHeader("Content-Type", "text/html");
-                    res.sendResponse(Utils.readFileFromWebAssets("blocked.html"));
+                    String assetsPath = NetUtils.getCorrespondingAssetsPath("/pages/blocked", res);
+                    res.sendResponse(Utils.readFileFromWebAssets(assetsPath));
                     res.close();
                 }
             } catch (IOException e) {

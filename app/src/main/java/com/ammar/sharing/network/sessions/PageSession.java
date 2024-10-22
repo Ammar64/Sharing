@@ -15,6 +15,7 @@ import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
 import com.ammar.sharing.network.sessions.base.HTTPSession;
+import com.ammar.sharing.network.utils.NetUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -32,9 +33,15 @@ public class PageSession extends HTTPSession {
             path = "/pages/index";
         }
 
+        if("/pages/blocked".equals(path)) {
+            res.setStatusCode(302);
+            res.setHeader("Location", "/");
+            res.sendResponse();
+        }
+
         if (path.startsWith("/pages/")) {
             // mimeType is set in getCorrespondingAssetsPath()
-            String assetPath = getCorrespondingAssetsPath(path, res);
+            String assetPath = NetUtils.getCorrespondingAssetsPath(path, res);
             try {
                 res.sendResponse(Utils.readFileFromWebAssets(assetPath));
             } catch (IOException e) {
@@ -60,23 +67,6 @@ public class PageSession extends HTTPSession {
             } catch (IOException e) {
                 sendNotFoundResponse(res);
             }
-        }
-    }
-
-    private String getCorrespondingAssetsPath(String requestedPath, Response res) {
-        int depth = getPathDepth(requestedPath);
-        if (depth == 2) {
-            res.setContentType("text/html");
-            String pageName = requestedPath.substring(requestedPath.lastIndexOf("/") + 1);
-            String lang = Locale.getDefault().getLanguage();
-            if (!Consts.langsCode.contains(lang)) {
-                // default language
-                lang = "en";
-            }
-            return String.format(Locale.ENGLISH, "pages/%s/%s-%s.html", pageName, pageName, lang);
-        } else {
-            res.setContentType(Utils.getMimeType(requestedPath));
-            return requestedPath.substring(1); // remove the first / example "/pages/index/something" -> "pages/index/something"
         }
     }
 
@@ -130,16 +120,6 @@ public class PageSession extends HTTPSession {
         res.sendResponse(pageBytes);
     }
 
-    private int getPathDepth(String path) {
-        int count = 0;
-        String[] pathParts = path.split("/");
-        for (String i : pathParts) {
-            if (!i.isEmpty()) {
-                count++;
-            }
-        }
-        return count;
-    }
 
     private void sendNotFoundResponse(Response res) {
         res.setStatusCode(404);

@@ -26,4 +26,7 @@
     <string name="uploading_is_disabled_text">You can't send files to your phone from browser unless you enable it from settings</string>
     <string name="ok">Ok</string>
     <string name="no_js">No JavaScript ? Use &lt;a href="/no-JS"&gt;HTML-only page&lt;/a&gt;</string>
+
+    <string name="blocked">Blocked</string>
+    <string name="your_are_blocked">You are blocked</string>
 </resources>
