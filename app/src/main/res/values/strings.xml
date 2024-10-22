@@ -128,7 +128,7 @@
     <string name="app_icon_acc_desc">App icon</string>
     <string name="tutorial">Tutorial</string>
     <string name="connect_to_wifi_or_hotspot">Please activate wifi or hotspot to start sharing</string>
-
+    <string name="toggle_on_the_server">Please turn on the server first</string>
     <string name="select">Select</string>
     <string name="sort_by">Sort by…</string>
     <string name="show_drop_down">Show drop down</string>

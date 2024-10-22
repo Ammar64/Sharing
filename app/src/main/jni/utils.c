@@ -2,7 +2,7 @@
 #include <android/log.h>
 #include <jni.h>
 
-#define encodeTextToQR Java_com_ammar_sharing_common_Utils_encodeTextToQR
+#define encodeTextToQR Java_com_ammar_sharing_common_utils_Utils_encodeTextToQR
 
 JNIEXPORT jbyteArray JNICALL encodeTextToQR(JNIEnv *env, jobject thiz, jstring jtext) {
     const char *text = (*env)->GetStringUTFChars(env, jtext, 0);
@@ -12,7 +12,7 @@ JNIEXPORT jbyteArray JNICALL encodeTextToQR(JNIEnv *env, jobject thiz, jstring j
     qrcode_initText(&qrcode, qrcodeData, 2, 0, text);
 
     jbyteArray qrCodeArray = (*env)->NewByteArray(env, qrcode.size * qrcode.size);
-    jbyte *qrCodeBytes = (*env)->GetByteArrayElements(env, qrCodeArray, JNI_FALSE);
+    jbyte *qrCodeBytes = (*env)->GetByteArrayElements(env, qrCodeArray, NULL);
 
     for (int y = 0; y < qrcode.size; y++) {
         for (int x = 0; x < qrcode.size; x++) {

@@ -37,6 +37,7 @@
     <string name="warning_details">هذا التطبيق لا ينقل الملفات باستعمال بروتوكول https مما يجعله عرضه لهجمات الرجل فى المنتصف.\nلتكون أكثر أمانا اللآن أوصى بتشغيل نقطة اتصال آمنة على هذا الجهاز و التأكد من أن الأجهزة الأخرى المرغوبة هى الوحيدة المتصلة بها.</string>
     <string name="dont_show_again">لا تظهر هذه الرسالة مرة أخرى</string>
     <string name="connect_to_wifi_or_hotspot">الرجاء تفعيل نقطة اتصال أو الاتصال بشبكة واى-فاى</string>
+    <string name="toggle_on_the_server">رجاء فعل الخادم أولا</string>
     <string name="fast_share">المشاركة السريعة</string>
     <!-- Fragment Settings   -->
     <string name="toggle_dark_mode">تشغيل الوضع الداكن</string>

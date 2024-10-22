@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddAppsActivity.AddAppsActivity;
 import com.ammar.sharing.activities.AddFilesActivity.AddFilesActivity;
+import com.ammar.sharing.activities.MainActivity.MainActivity;
 import com.ammar.sharing.activities.MainActivity.fragments.ShareFragment;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.utils.Utils;
@@ -112,11 +113,11 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
         private final ImageView QRImageIV;
         private final AppCompatTextView serverLinkTV;
-        private final AdaptiveTextView connectToWifiOrHotspotTV;
-
+        private final AdaptiveTextView QRCodeErrorText;
+        private final ShareFragment fragment;
         public HeaderViewHolder(@NonNull View itemView, ShareFragment fragment) {
             super(itemView);
-
+            this.fragment = fragment;
             ImageButton addAppsB = itemView.findViewById(R.id.B_AddApps);
             ImageButton addFilesB = itemView.findViewById(R.id.B_AddFiles);
             AppCompatButton QRCodeB = itemView.findViewById(R.id.B_ShowAddress);
@@ -137,8 +138,8 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 usersNumTV.setVisibility(View.VISIBLE);
             }
 
-            addAppsB.setOnClickListener((button) -> fragment.launcher.launch(new Intent(itemView.getContext(), AddAppsActivity.class)));
-            addFilesB.setOnClickListener((button) -> fragment.mGetContent.launch(new Intent(fragment.requireContext(), AddFilesActivity.class)));
+            addAppsB.setOnClickListener((button) -> this.fragment.launcher.launch(new Intent(itemView.getContext(), AddAppsActivity.class)));
+            addFilesB.setOnClickListener((button) -> this.fragment.mGetContent.launch(new Intent(this.fragment.requireContext(), AddFilesActivity.class)));
 
             Resources res = itemView.getResources();
             // setup QR Code dialog
@@ -149,7 +150,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             QRImageIV = QRDialogView.findViewById(R.id.IV_QRCodeImage);
             serverLinkTV = QRDialogView.findViewById(R.id.TV_ServerLink);
-            connectToWifiOrHotspotTV = QRDialogView.findViewById(R.id.TV_QRDialogConnectToNetwork);
+            QRCodeErrorText = QRDialogView.findViewById(R.id.TV_QRDialogConnectToNetwork);
 
             QRDialogView.findViewById(R.id.B_QRDialogOkButton)
                     .setOnClickListener((v) -> QRDialogRD.dismiss());
@@ -183,7 +184,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 chosenFilesRD.show();
             });
 
-            Data.filesListNotifier.observe(fragment.getViewLifecycleOwner(), info -> {
+            Data.filesListNotifier.observe(this.fragment.getViewLifecycleOwner(), info -> {
                 char action = info.getChar("action");
                 int size = Sharable.sharablesList.size();
                 if ('R' == action) {
@@ -222,7 +223,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
 
 
-            Data.usersListObserver.observe(fragment.getViewLifecycleOwner(), info -> {
+            Data.usersListObserver.observe(this.fragment.getViewLifecycleOwner(), info -> {
                 char action = info.getChar("action");
                 int size = User.users.size();
                 int index = info.getInt("index");
@@ -245,9 +246,17 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         private void setupQrCode() {
             String ip = ServerService.getIpAddress();
+            MainActivity activity = (MainActivity) fragment.requireActivity();
+            if( !activity.isServerOn ) {
+                QRCodeErrorText.setText(R.string.toggle_on_the_server);
+                QRCodeErrorText.setVisibility(View.VISIBLE);
+                serverLinkTV.setVisibility(View.GONE);
+                QRImageIV.setVisibility(View.GONE);
+                return;
+            }
 
             if (ip != null) {
-                connectToWifiOrHotspotTV.setVisibility(View.GONE);
+                QRCodeErrorText.setVisibility(View.GONE);
                 serverLinkTV.setVisibility(View.VISIBLE);
                 QRImageIV.setVisibility(View.VISIBLE);
 
@@ -258,7 +267,8 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 // Display the bitmap in an ImageView or any other suitable view
                 QRImageIV.setImageBitmap(qrCodeBitmap);
             } else {
-                connectToWifiOrHotspotTV.setVisibility(View.VISIBLE);
+                QRCodeErrorText.setText(R.string.connect_to_wifi_or_hotspot);
+                QRCodeErrorText.setVisibility(View.VISIBLE);
                 serverLinkTV.setVisibility(View.GONE);
                 QRImageIV.setVisibility(View.GONE);
             }

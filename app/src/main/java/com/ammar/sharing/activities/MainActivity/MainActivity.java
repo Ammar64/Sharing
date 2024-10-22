@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     public static Insets systemBarsPaddings;
     public final int REQUEST_CODE_STORAGE_PERMISSION = 2;
     public final int REQUEST_CODE_NOTIFICATION_PERMISSION = 3;
-
+    public boolean isServerOn = false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         prepareActivity();
@@ -331,6 +331,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 ImageViewCompat.setImageTintList(serverButton, ColorStateList.valueOf(getResources().getColor(R.color.status_off)));
             }
+            this.isServerOn = running;
         });
 
         if (settingsPref.getBoolean(Consts.PREF_FIELD_DEBUG_MODE, false))
