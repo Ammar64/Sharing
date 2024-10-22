@@ -1,0 +1,17 @@
+# Features
+1- Add CLI support for curl & wget
+2- Add HTML only page on URL /no-JS
+3- It now tells you how much time it took to transfer files after complete
+4- Show upload speed in the browser when uploading
+5- Allow to download all files and apps with one click from the browser
+
+# Fixed
+1- Fixed the black screen issue when finishing tutorial
+
+# Changed
+1- Changed app icon
+2- Make most of the dialogs with round corners
+3- Update the web UI
+
+# Translations
+1- Added French & Chineese translations
