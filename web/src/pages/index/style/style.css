@@ -400,6 +400,8 @@ strong {
     flex-direction: row-reverse;
     padding: 0 1em;
     gap: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
 #downloadBubbleBtns>* {
