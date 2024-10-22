@@ -10,7 +10,7 @@ import android.graphics.drawable.LayerDrawable;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.ammar.sharing.R;
-import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.common.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;

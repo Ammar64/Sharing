@@ -19,7 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.common.Consts;
-import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.common.utils.Utils;
 import com.suke.widget.SwitchButton;
 
 public class SettingsFragment extends Fragment {

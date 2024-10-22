@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddFilesActivity.adaptersR.StorageAdapter;
 import com.ammar.sharing.common.Consts;
-import com.ammar.sharing.common.FileUtils;
-import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.common.utils.FileUtils;
+import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.ui.AdaptiveDropDown;
 
 import org.json.JSONArray;

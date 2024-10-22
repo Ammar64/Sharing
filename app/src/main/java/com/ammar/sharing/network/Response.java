@@ -302,6 +302,9 @@ public class Response {
     private void writeTopHeader(OutputStream out, int statusCode) throws IOException {
         String readableStatus = "";
         switch (statusCode) {
+            case 101:
+                readableStatus = "Switching Protocols";
+                break;
             case 200:
                 readableStatus = "OK";
                 break;

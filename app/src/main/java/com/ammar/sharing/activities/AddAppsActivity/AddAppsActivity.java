@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddAppsActivity.adaptersR.AppsRecyclerAdapter;
-import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

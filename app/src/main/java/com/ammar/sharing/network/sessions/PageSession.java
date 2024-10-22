@@ -8,7 +8,7 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.common.Consts;
-import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
 import com.ammar.sharing.models.User;

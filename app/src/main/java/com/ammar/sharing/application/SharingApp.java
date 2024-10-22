@@ -9,7 +9,7 @@ import android.graphics.Color;
 import android.os.Build;
 
 import com.ammar.sharing.common.Consts;
-import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.common.utils.Utils;
 
 import java.util.Locale;
 

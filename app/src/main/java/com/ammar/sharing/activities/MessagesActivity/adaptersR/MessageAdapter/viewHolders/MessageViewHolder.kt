@@ -13,12 +13,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.get
-import androidx.core.view.marginBottom
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import com.ammar.sharing.R
-import com.ammar.sharing.common.Utils
-import com.ammar.sharing.custom.ui.AdaptiveTextView
+import com.ammar.sharing.common.utils.Utils
 import java.util.Locale
 
 class MessageViewHolder(itemView: LinearLayout) : RecyclerView.ViewHolder(itemView) {

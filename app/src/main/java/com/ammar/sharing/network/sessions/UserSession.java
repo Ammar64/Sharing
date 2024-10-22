@@ -1,6 +1,6 @@
 package com.ammar.sharing.network.sessions;
 
-import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;

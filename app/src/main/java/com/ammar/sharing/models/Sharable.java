@@ -11,8 +11,8 @@ import android.net.Uri;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.ammar.sharing.R;
-import com.ammar.sharing.common.FileUtils;
-import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.common.utils.FileUtils;
+import com.ammar.sharing.common.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;

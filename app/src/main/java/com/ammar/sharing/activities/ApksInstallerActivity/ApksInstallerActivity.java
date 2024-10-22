@@ -24,7 +24,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.common.Consts;
-import com.ammar.sharing.common.FileUtils;
+import com.ammar.sharing.common.utils.FileUtils;
 import com.ammar.sharing.custom.ui.AdaptiveTextView;
 import com.ammar.sharing.services.PackageInstallerService;
 

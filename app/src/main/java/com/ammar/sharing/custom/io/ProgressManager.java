@@ -3,7 +3,7 @@ package com.ammar.sharing.custom.io;
 import android.os.Bundle;
 
 import com.ammar.sharing.common.Data;
-import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.User;
 
