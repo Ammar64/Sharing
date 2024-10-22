@@ -1,5 +1,6 @@
 package com.ammar.sharing.network.sessions;
 
+import com.ammar.sharing.R;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
@@ -72,7 +73,14 @@ public class CLISession extends HTTPSession {
     }
 
     private void sendAllSharables(Response res) {
-        Sharable[] sharables = Sharable.sharablesList.toArray(new Sharable[0]);
-        res.sendZippedFilesResponse(sharables, "files.zip", user);
+        if( Sharable.sharablesList.isEmpty() ) {
+            res.setStatusCode(500);
+            res.setContentType("text/plain; charset=UTF-8");
+            String errorText = Utils.getRes().getString(R.string.error_no_files_added);
+            res.sendResponse(errorText.getBytes(StandardCharsets.UTF_8));
+        } else {
+            Sharable[] sharables = Sharable.sharablesList.toArray(new Sharable[0]);
+            res.sendZippedFilesResponse(sharables, "files.zip", user);
+        }
     }
 }

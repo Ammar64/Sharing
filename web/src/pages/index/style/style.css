@@ -189,8 +189,7 @@ button {
 
 .text h1,
 .dialog-title,
-#okButton,
-#update {
+#downloadBubbleBtns>* {
     margin-bottom: 5px;
     background: linear-gradient(to right, var(--colorOne), var(--colorTwo));
     -webkit-background-clip: text;
@@ -403,8 +402,7 @@ strong {
     gap: 20px;
 }
 
-#okButton,
-#update {
+#downloadBubbleBtns>* {
     border: none;
     cursor: pointer;
     font-size: larger;
@@ -416,8 +414,7 @@ strong {
     transition: .5s;
 }
 
-#okButton:hover,
-#update:hover {
+#downloadBubbleBtns>*:hover {
     letter-spacing: 2px;
     scale: 1.2;
 }

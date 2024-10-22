@@ -102,7 +102,8 @@ public class PageSession extends HTTPSession {
                         "    <table rules=\"all\" border=\"1\" cellpadding=\"10px\">";
 
         final String pageEnd =
-                "    </table>\n" +
+                "</table><br>\n" +
+                        (!Sharable.sharablesList.isEmpty() ? "<a href=\"/da\">"+ Utils.getRes().getString(R.string.download_all) +"</a>" : "") +
                         "</body>\n" +
                         "</html>\n";
 
@@ -118,7 +119,7 @@ public class PageSession extends HTTPSession {
         for (Sharable i : Sharable.sharablesList) {
             final String downloadLink = "/download/" + i.getUUID();
             final String iconSrc = "/get-icon/" + i.getUUID();
-            final String downloadElement = String.format(Locale.ENGLISH, "<tr><td><img src=\"%s\" width=\"40px\" /></td><td><a download href=\"%s\">%s</a><br><span dir=\"ltr\">%s</span></td></tr>\n", iconSrc, downloadLink, i.getName(), (i instanceof SharableApp a && (a.hasSplits()) ? "(splits)" : Utils.getFormattedSize(i.getSize()) ));
+            final String downloadElement = String.format(Locale.ENGLISH, "<tr><td><img src=\"%s\" width=\"40px\" /></td><td><a download href=\"%s\">%s</a><br><span dir=\"ltr\">%s</span></td></tr>\n", iconSrc, downloadLink, i.getName(), (i instanceof SharableApp a && (a.hasSplits()) ? "(splits)" : Utils.getFormattedSize(i.getSize())));
 
             pageBuilder.append(downloadElement);
         }

@@ -7,15 +7,17 @@
 2- Add HTML only page on URL /no-JS
 3- It now tells you how much time it took to transfer files after complete
 4- Show upload speed in the browser as well when uploading
+5- Allow to download all files and apps with one click from the browser
 
 # Fixed
 1- Fixed the black screen issue when finishing tutorial
 
 # Changed
-1- Make most of the dialogs with round corners
-2- Update the web UI
-3- Change type of ServerService from SpecialUse to DataSync
-4- Remove FastShare activity and utilize the MainActivity for Share Intent
+1- Changed the app icon
+2- Make most of the dialogs with round corners
+3- Update the web UI
+4- Change type of ServerService from SpecialUse to DataSync
+5- Remove FastShare activity and utilize the MainActivity for Share Intent
 
 # Translations
 1- New French translation

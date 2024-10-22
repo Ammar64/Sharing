@@ -17,6 +17,7 @@
     <string name="receive">Receive</string>
     <string name="available_downloads">Available downloads</string>
     <string name="download">Download</string>
+    <string name="download_all">Download All</string>
     <string name="no_downloads_available">No downloads available</string>
     <string name="downloads_request_error_text">requesting downloads failed. remote disconnected</string>
     <string name="done">Done</string>

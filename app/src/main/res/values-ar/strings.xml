@@ -105,4 +105,6 @@
     <string name="changelog">سجل التغييرات</string>
     <string name="new_in_version">الجديد فى %s</string>
     <string name="_continue">متابعة</string>
+    <string name="error_no_files_added">لم يتم إضافة ملفات لتنزيلها</string>
+    <string name="download_all">تنزيل الكل</string>
 </resources>

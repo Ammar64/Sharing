@@ -56,7 +56,7 @@ public class ClientHandler implements Runnable {
             }
             if( upgradeToWebSocket ) {
                 Log.d("MYLOG", "Upgraded to websocket");
-                handleWebsocketUpgrade(request);
+                //TODO: handleWebsocketUpgrade(request);
             }
         } catch (Exception e) {
             Utils.showErrorDialog("ClientHandler.run(). Exception: ", e.getMessage());
