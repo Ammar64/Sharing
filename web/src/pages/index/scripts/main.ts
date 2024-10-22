@@ -8,6 +8,7 @@ const uploadDisabledDialogOkButton = document.getElementById("uploadDisabledDial
 const updateBtn = document.getElementById('update')!;
 const usernameBtn = document.getElementById('button-username')!;
 const downloads = document.getElementById("downloads")!;
+const downloadAllLink = document.getElementById("downloadAllLink")!;
 
 // translations from HTML
 const currentUsernameText = document.getElementById('current-user-text')!.textContent!;
@@ -116,9 +117,11 @@ function requestAvailableDownloads() {
         if (data.length == 0) {
             downloadsErrorSpan.style.display = "block";
             downloadsErrorSpan.textContent = noDownloadsAvailableText
+            downloadAllLink.style.display = 'none';
             return;
         } else {
             downloadsErrorSpan.style.display = "none";
+            downloadAllLink.style.display = 'block';
         }
         data.forEach((e: DownloadObject) => {
             downloads.appendChild(makeDownloadItem(e));

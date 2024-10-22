@@ -108,4 +108,6 @@
     <string name="message_title">الرسائل</string>
     <string name="send_message">أرسل رسالة</string>
     <string name="enter_message">اكتب رسالة</string>
+    <string name="error_no_files_added">لم يتم إضافة ملفات لتنزيلها</string>
+    <string name="download_all">تنزيل الكل</string>
 </resources>

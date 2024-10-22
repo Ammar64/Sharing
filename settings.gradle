@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Files Center"
+rootProject.name = "Sharing"
 include ':app'

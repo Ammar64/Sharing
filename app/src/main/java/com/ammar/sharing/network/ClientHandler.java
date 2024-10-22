@@ -1,10 +1,14 @@
 package com.ammar.sharing.network;
 
-import com.ammar.sharing.common.Utils;
+import android.util.Log;
+
+import com.ammar.sharing.common.utils.SecurityUtils;
+import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.sessions.base.HTTPSession;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.util.Locale;
 import java.util.Map;
@@ -32,30 +36,27 @@ public class ClientHandler implements Runnable {
 
         Request request = new Request(clientSocket);
         try {
+            boolean upgradeToWebSocket = false;
             while (request.readSocket()) {
-
-                Response response = new Response(clientSocket);
-                response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-                response.setHeader("Pragma", "no-cache");
-                response.setHeader("Expires", "0");
-
-                // multiply timeout by 0.001 to convert from milliseconds into seconds
-                response.setHeader("Keep-Alive", request.isKeepAlive() ? String.format(Locale.ENGLISH, "timeout=%d", (int) (timeout * 0.001)) : "close");
-
-                String userAgent = request.getHeader("User-Agent");
-                if (userAgent != null)
-                    user = User.RegisterUser(Utils.getSettings(), clientSocket, userAgent);
-                if (user != null && !user.isBlocked()) {
-                    Class<? extends HTTPSession> sessionClass = inferSessionFromPath(request.getPath());
-                    if (sessionClass == null) {
-                        startSession(new NotFoundSession(user), request, response);
+                // Check if it wants to upgrade to websocket
+                if("Upgrade".equalsIgnoreCase(request.getHeader("connection"))) {
+                    if("websocket".equalsIgnoreCase(request.getHeader("upgrade"))) {
+                        upgradeToWebSocket = true;
+                        break;
                     } else {
-                        HTTPSession session = sessionClass.getDeclaredConstructor(User.class).newInstance(user);
-                        startSession(session, request, response);
+                        // Not implemented
+                        Response response = new Response(clientSocket);
+                        response.setStatusCode(501);
+                        response.sendResponse();
+                        response.close();
                     }
-                } else { // if user is blocked redirect to blocked page
-                    startSession(new BlockedSession(user), request, response);
+                } else {
+                    handleNormalRequest(request);
                 }
+            }
+            if( upgradeToWebSocket ) {
+                Log.d("MYLOG", "Upgraded to websocket");
+                //TODO: handleWebsocketUpgrade(request);
             }
         } catch (Exception e) {
             Utils.showErrorDialog("ClientHandler.run(). Exception: ", e.getMessage());
@@ -66,6 +67,45 @@ public class ClientHandler implements Runnable {
                 Utils.showErrorDialog("ClientHandler.run().finally IOException: ", e.getMessage());
             }
         }
+    }
+
+    private void handleNormalRequest(Request request) throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException {
+        Response response = new Response(clientSocket);
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
+
+        // multiply timeout by 0.001 to convert from milliseconds into seconds
+        response.setHeader("Keep-Alive", request.isKeepAlive() ? String.format(Locale.ENGLISH, "timeout=%d", (int) (timeout * 0.001)) : "close");
+
+        String userAgent = request.getHeader("User-Agent");
+        if (userAgent != null)
+            user = User.RegisterUser(Utils.getSettings(), clientSocket, userAgent);
+        if (user != null && !user.isBlocked()) {
+            Class<? extends HTTPSession> sessionClass = inferSessionFromPath(request.getPath());
+            if (sessionClass == null) {
+                startSession(new NotFoundSession(user), request, response);
+            } else {
+                HTTPSession session = sessionClass.getDeclaredConstructor(User.class).newInstance(user);
+                startSession(session, request, response);
+            }
+        } else { // if user is blocked redirect to blocked page
+            startSession(new BlockedSession(user), request, response);
+        }
+    }
+
+    private void handleWebsocketUpgrade(Request request) {
+        // prove that we received websocket handshake
+        String wsKey = request.getHeader("Sec-WebSocket-Key").trim();
+        String wsKeyPlusGUID = wsKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+        String wsAccept = SecurityUtils.textToSha1Base64(wsKeyPlusGUID);
+
+        Response response = new Response(request.getClientSocket());
+        response.setHeader("Upgrade", "websocket");
+        response.setHeader("Connection", "Upgrade");
+        response.setHeader("Sec-WebSocket-Accept", wsAccept);
+        response.setStatusCode(101);
+        response.sendResponse();
     }
 
     private void startSession(HTTPSession session, Request req, Response res) {

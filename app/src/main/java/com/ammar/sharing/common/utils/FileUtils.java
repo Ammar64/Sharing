@@ -1,4 +1,4 @@
-package com.ammar.sharing.common;
+package com.ammar.sharing.common.utils;
 
 
 import android.content.ContentResolver;

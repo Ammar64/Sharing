@@ -1,7 +1,7 @@
 package com.ammar.sharing.network.sessions;
 
 import com.ammar.sharing.common.Consts;
-import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.io.ProgressManager;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.User;

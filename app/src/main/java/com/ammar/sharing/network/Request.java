@@ -1,10 +1,10 @@
 package com.ammar.sharing.network;
 
-import static com.ammar.sharing.common.Utils.readLineUTF8;
+import static com.ammar.sharing.common.utils.Utils.readLineUTF8;
 
 import android.util.Log;
 
-import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.network.exceptions.BadRequestException;
 import com.ammar.sharing.network.exceptions.NotImplementedException;
 
@@ -12,7 +12,6 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -47,13 +46,7 @@ public class Request {
                 _connClose = true;
                 Log.d("MYLOG", "Connection will close");
             } else {
-                try {
-                    clientSocket.setKeepAlive(true);
-                    clientSocket.setSoTimeout(ClientHandler.timeout);
-                    Log.d("MYLOG", "Connection will stay alive");
-                } catch (SocketException e) {
-                    Utils.showErrorDialog("Request.readSocket(). SocketException:", e.getMessage());
-                }
+                Log.d("MYLOG", "Connection will stay alive");
             }
             return true;
         } catch (NullPointerException e) {

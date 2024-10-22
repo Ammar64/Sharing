@@ -65,7 +65,8 @@ public class Server {
             while (!serverSocket.isClosed()) {
                 Socket clientSocket = serverSocket.accept();
                 ClientHandler clientHandler = new ClientHandler(this, clientSocket);
-
+                clientSocket.setKeepAlive(true);
+                clientSocket.setSoTimeout(ClientHandler.timeout);
                 Thread clientThread = new Thread(clientHandler);
                 clientThread.start();
             }

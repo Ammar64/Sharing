@@ -36,8 +36,8 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddFilesActivity.AddFilesActivity;
-import com.ammar.sharing.common.FileUtils;
-import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.common.utils.FileUtils;
+import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.ui.AdaptiveTextView;
 
 import org.json.JSONArray;

@@ -17,7 +17,7 @@ import androidx.annotation.StringRes;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.ammar.sharing.R;
-import com.ammar.sharing.common.Utils;
+import com.ammar.sharing.common.utils.Utils;
 
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;

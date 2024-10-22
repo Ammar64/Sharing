@@ -1,4 +1,4 @@
-package com.ammar.sharing.common;
+package com.ammar.sharing.common.utils;
 
 import android.content.ContentUris;
 import android.content.Context;
@@ -26,6 +26,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RawRes;
 
 import com.ammar.sharing.R;
+import com.ammar.sharing.common.Consts;
+import com.ammar.sharing.common.Data;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
