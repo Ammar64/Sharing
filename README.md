@@ -30,7 +30,8 @@ TODO
 
 Screen shots
 -----------------
-
+<details>
+<summary><h2>Click to expand</h2></summary>
 <p align="center" class="scroll" >
      <img width="200px" src="https://github.com/Ammar64/Sharing/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/0.jpg" alt="App screen shot">
      &nbsp;&nbsp;&nbsp;
@@ -44,7 +45,15 @@ Screen shots
      &nbsp;&nbsp;&nbsp;
      <img width="200px" src="https://github.com/Ammar64/Sharing/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/5.jpg" alt="App screen shot">
      &nbsp;&nbsp;&nbsp;
+     <img width="200px" src="https://github.com/Ammar64/Sharing/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/6.jpg" alt="App screen shot">
+     &nbsp;&nbsp;&nbsp;
+     <img width="200px" src="https://github.com/Ammar64/Sharing/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/8.jpg" alt="App screen shot">
+     &nbsp;&nbsp;&nbsp;
+     <img width="500px" src="https://github.com/Ammar64/Sharing/blob/master/fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" alt="App screen shot">
+     &nbsp;&nbsp;&nbsp;
+     
 </p>
+</details>
 
 Translation
 ----------------
