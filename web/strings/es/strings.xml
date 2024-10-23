@@ -7,7 +7,7 @@
     <string name="receive">Recibir</string>
     <string name="sharing_app_desc">La aplicación Sharing es una manera sencilla y gratuita de compartir tus datos</string>
     <string name="available_downloads">Descargas disponibles</string>
-    <string name="uploading_is_disabled_text">No puedes enviar archivos a tu teléfono desde el navegador a menos que lo actives en los ajustes</string>
+    <string name="uploading_is_disabled_text">No se pueden enviar archivos a tu teléfono desde el navegador, a menos que lo actives desde la configuración</string>
     <string name="download_all">Descargar todo</string>
     <string name="done">Hecho</string>
     <string name="uploading_is_disabled">La carga está desactivada</string>
@@ -19,7 +19,7 @@
     <string name="send">Enviar</string>
     <string name="download">Descargar</string>
     <string name="no_downloads_available">No hay descargas disponibles</string>
-    <string name="downloads_request_error_text">la solicitud de descarga ha fallado. Remoto desconectado</string>
+    <string name="downloads_request_error_text">falló la solicitud de descargas. desconectado remotamente</string>
     <string name="update">Actualizar</string>
     <string name="ok">De acuerdo</string>
     <string name="no_js">¿No tienes JavaScript? Utiliza &lt;a href=/no-JS&gt;HTML-only page&lt;/a&gt;</string>
