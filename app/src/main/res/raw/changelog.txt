@@ -19,6 +19,7 @@
 3- Update the web UI
 4- Change type of ServerService from SpecialUse to DataSync
 5- Remove FastShare activity and utilize the MainActivity for Share Intent
+6- It won't show you QR Code unless you turn on the sever first
 
 # Translations
 1- New French translation
