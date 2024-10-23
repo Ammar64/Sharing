@@ -2,4 +2,30 @@
 <resources>
     <string name="lang">es</string>
     <string name="dir">ltr</string>
+    <string name="enter_your_user_name">Introduce tu nombre de usuario</string>
+    <string name="sharing_app_purpose">Transfiere y haz que tus archivos viajen gratis</string>
+    <string name="receive">Recibir</string>
+    <string name="sharing_app_desc">La aplicación Sharing es una manera sencilla y gratuita de compartir tus datos</string>
+    <string name="available_downloads">Descargas disponibles</string>
+    <string name="uploading_is_disabled_text">No puedes enviar archivos a tu teléfono desde el navegador a menos que lo actives en los ajustes</string>
+    <string name="download_all">Descargar todo</string>
+    <string name="done">Hecho</string>
+    <string name="uploading_is_disabled">La carga está desactivada</string>
+    <string name="sharing">Sharing</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="submit">Enviar</string>
+    <string name="current_username">Nombre de usuario actual:</string>
+    <string name="sharing_app">Aplicación Sharing</string>
+    <string name="send">Enviar</string>
+    <string name="download">Descargar</string>
+    <string name="no_downloads_available">No hay descargas disponibles</string>
+    <string name="downloads_request_error_text">la solicitud de descarga ha fallado. Remoto desconectado</string>
+    <string name="update">Actualizar</string>
+    <string name="ok">De acuerdo</string>
+    <string name="no_js">¿No tienes JavaScript? Utiliza &lt;a href=/no-JS&gt;HTML-only page&lt;/a&gt;</string>
+    <string name="blocked">Bloqueado</string>
+    <string name="your_are_blocked">Estas bloqueado</string>
+    <string name="page_not_found">404 Página no encontrada</string>
+    <string name="are_you_trying_to_find_secret">¿Intentas encontrar algo secreto?</string>
+    <string name="there_is_a_secret">Hay algo secreto en este programa</string>
 </resources>
