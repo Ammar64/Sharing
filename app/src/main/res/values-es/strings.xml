@@ -48,7 +48,7 @@
     <string name="package_installed_success">Paquete instalado con éxito</string>
     <string name="send_message">Enviar mensaje</string>
     <string name="enter_message">Introducir mensaje</string>
-    <string name="downloads">Descargar</string>
+    <string name="downloads">Descargas</string>
     <string name="no_downloads">No hay descargas disponibles</string>
     <string name="download_all">Descargar todo</string>
     <string name="app_name">sharing</string>
