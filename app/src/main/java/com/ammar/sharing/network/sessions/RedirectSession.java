@@ -29,7 +29,7 @@ public class RedirectSession extends HTTPSession {
 
         if( redirectMap.containsKey(path) ) {
             String location = redirectMap.get(path);
-            res.setStatusCode(301); // moved
+            res.setStatusCode(301); // moved permanently
             res.setHeader("Content-Length", "0");
             res.setHeader("Location", location);
             res.sendResponse();
