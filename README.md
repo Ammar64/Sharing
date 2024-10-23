@@ -1,9 +1,8 @@
-Sharing
--------
+# <img src="https://github.com/Ammar64/Sharing/blob/master/fastlane/metadata/android/en-US/images/icon.png" height="30px"/> Sharing
+
 [![Reproducible builds](https://github.com/Ammar64/Sharing/actions/workflows/rb-verify.yml/badge.svg)](https://github.com/Ammar64/Sharing/actions/workflows/rb-verify.yml/)
 
 Share files and apps over HTTP.
-
 You need the other device to be connected to the same network. just toggle on the server and scan the QR Code on other device and you're good to go.
 Files sent from browser to the app can be found in Sharing/ folder in your internal storage.
 You can always disable uploads in the app settings. 
