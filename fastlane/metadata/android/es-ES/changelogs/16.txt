@@ -1,0 +1,5 @@
+1- Cambio de licencia de GPLv3 a AGPLv3
+2- Añadir página solo en HTML en URL /no Javascript
+3- Añadir compatibilidad CLI para curl
+4- Actualizar la web y hacerla menos confusa
+5- Nuevas traducciones en chino
