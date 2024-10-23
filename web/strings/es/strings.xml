@@ -23,9 +23,9 @@
     <string name="update">Actualizar</string>
     <string name="ok">De acuerdo</string>
     <string name="no_js">¿No tienes JavaScript? Utiliza &lt;a href=/no-JS&gt;HTML-only page&lt;/a&gt;</string>
-    <string name="blocked">Bloqueado</string>
-    <string name="your_are_blocked">Estas bloqueado</string>
-    <string name="page_not_found">404 Página no encontrada</string>
-    <string name="are_you_trying_to_find_secret">¿Intentas encontrar algo secreto?</string>
-    <string name="there_is_a_secret">Hay algo secreto en este programa</string>
+    <string name="blocked">Bloquead@</string>
+    <string name="your_are_blocked">Estas bloquead@</string>
+    <string name="page_not_found">Error 404 página no encontrada</string>
+    <string name="are_you_trying_to_find_secret">¿Estás tratando de encontrar algo escondido?</string>
+    <string name="there_is_a_secret">Hay algo escondido en este programa</string>
 </resources>
