@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class Server {
@@ -58,6 +59,12 @@ public class Server {
 
     public void addPath(@RegExp String pathPattern, Class<? extends HTTPSession> sessionClass) {
         pathsMap.put(pathPattern, sessionClass);
+    }
+
+    public void addPaths(Collection<String> paths, Class<? extends HTTPSession> sessionClass) {
+        for( @RegExp String i : paths ) {
+            addPath(i, sessionClass);
+        }
     }
 
     private void Accept() {

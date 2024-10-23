@@ -124,11 +124,12 @@ public class PageSession extends HTTPSession {
     private void sendNotFoundResponse(Response res) {
         res.setStatusCode(404);
         res.setContentType("text/html");
-        res.sendResponse("<h1>404</h1>".getBytes());
+        String assetsPath = NetUtils.getCorrespondingAssetsPath("/pages/404", res);
         try {
-            res.close();
+            res.sendResponse(Utils.readFileFromWebAssets(assetsPath));
         } catch (IOException e) {
-            Utils.showErrorDialog("PageSession.sendNotFoundResponse(). IOException", e.getMessage());
+            Utils.showErrorDialog("PageSession.GET(). IOException", "Failed to read from assets");
         }
+
     }
 }

@@ -26,6 +26,7 @@ import com.ammar.sharing.network.Server;
 import com.ammar.sharing.network.sessions.CLISession;
 import com.ammar.sharing.network.sessions.DownloadSession;
 import com.ammar.sharing.network.sessions.PageSession;
+import com.ammar.sharing.network.sessions.RedirectSession;
 import com.ammar.sharing.network.sessions.UploadSession;
 import com.ammar.sharing.network.sessions.UserSession;
 
@@ -74,6 +75,8 @@ public class ServerService extends Service {
         server.addPath("/ls", CLISession.class);
         server.addPath("/dl/(.*)", CLISession.class);
         server.addPath("/da", CLISession.class);
+
+        server.addPaths(RedirectSession.redirectMap.keySet(), RedirectSession.class);
     }
 
     @Nullable

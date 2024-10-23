@@ -89,6 +89,10 @@ public class Request {
             this.path = URLDecoder.decode(uri, "UTF-8");
         }
 
+        if(this.path.length() > 1 && this.path.endsWith("/")) {
+            this.path = this.path.substring(0, this.path.length() - 1);
+        }
+
         this.version = "HTTP/1.1";
         while ((!(line = readLineUTF8(clientInput)).isEmpty())) {
             String[] headerParts = line.split(": ");

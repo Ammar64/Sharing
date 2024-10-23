@@ -80,6 +80,7 @@ public class ClientHandler implements Runnable {
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
 
+        response.setHeader("Connection", "keep-alive");
         // multiply timeout by 0.001 to convert from milliseconds into seconds
         response.setHeader("Keep-Alive", request.isKeepAlive() ? String.format(Locale.ENGLISH, "timeout=%d", (int) (timeout * 0.001)) : "close");
 
@@ -154,6 +155,7 @@ public class ClientHandler implements Runnable {
                     }
                 } else if (!"/pages/blocked".equals(req.getPath())) {
                     res.setStatusCode(302);
+                    res.setHeader("Content-Length", "0");
                     res.setHeader("Location", "/pages/blocked");
                     res.sendResponse();
                 } else {
@@ -164,7 +166,7 @@ public class ClientHandler implements Runnable {
                     res.close();
                 }
             } catch (IOException e) {
-                Utils.showErrorDialog("ClientHandler.GET(). IOException", "Failed to read from assets");
+                Utils.showErrorDialog("BlockedSession.GET(). IOException", "Failed to read from assets");
             }
         }
     }
@@ -185,13 +187,13 @@ public class ClientHandler implements Runnable {
         }
 
         private void sendRes(Response res) {
+            res.setStatusCode(404);
+            res.setHeader("Content-Type", "text/html");
+            String assetsPath = NetUtils.getCorrespondingAssetsPath("/pages/404", res);
             try {
-                res.setStatusCode(404);
-                res.setHeader("Content-Type", "text/html");
-                res.sendResponse("404 What are you doing ?".getBytes());
-                res.close();
+                res.sendResponse(Utils.readFileFromWebAssets(assetsPath));
             } catch (IOException e) {
-                Utils.showErrorDialog("NotFoundSession.sendRes(). IOException.", e.getMessage());
+                Utils.showErrorDialog("NotFoundSession.GET(). IOException", "Failed to read from assets");
             }
         }
     }

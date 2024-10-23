@@ -24,6 +24,7 @@
     <string name="ok">حسنا</string>
     <string name="no_js">لا جافا سكريبت ؟ استعمل &lt;a href="/no-JS"&gt;صفحة HTML فقط&lt;/a&gt;</string>
 
+    <string name="page_not_found">404 لم يتم العثور على الصفحة</string>
     <string name="blocked">محظور</string>
     <string name="your_are_blocked">أنت محظور</string>
 

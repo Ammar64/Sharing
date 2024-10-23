@@ -29,4 +29,8 @@
 
     <string name="blocked">Blocked</string>
     <string name="your_are_blocked">You are blocked</string>
+
+    <string name="page_not_found">404 Page not found</string>
+    <string name="are_you_trying_to_find_secret">Are you trying to find something secret ?</string>
+    <string name="there_is_a_secret">There is something secret in this program</string>
 </resources>
