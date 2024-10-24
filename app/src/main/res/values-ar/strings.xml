@@ -70,7 +70,7 @@
     <string name="no_files_found">لم يتم العثور على ملفات</string>
     <!-- Activity Apks Installer -->
     <string name="apks_installer_experimental">مثبت apks (تجريبيى)</string>
-    <string name="apks_installer">مثبت apks</string>
+    <string name="apks_installer">مثبت APKS</string>
     <string name="pls_choose_apks">الرجاء اختيار ملف apks</string>
     <string name="pick_apks_file">اختر ملف apks</string>
     <string name="installer_note">التطبيقات التى تم ارسالها بامتداد apks تحتوى على أكثر من ملف apk\n لتثبيت هذه التطبيقات أرسل هذا التطبيق إلى الجهاز الآخر و افتح هذه الصفحة</string>
