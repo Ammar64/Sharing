@@ -108,4 +108,12 @@
     <string name="no_data_attached"></string>
     <string name="no_downloads"></string>
     <string name="something_went_wrong"></string>
+    <string name="warning"></string>
+    <string name="extracting_x"></string>
+    <string name="warning_details"></string>
+    <string name="package_installed_success"></string>
+    <string name="connect_to_wifi_or_hotspot"></string>
+    <string name="changelog"></string>
+    <string name="milliSeconds"></string>
+    <string name="no_user_connected"></string>
 </resources>
