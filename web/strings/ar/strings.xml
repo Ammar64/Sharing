@@ -23,9 +23,9 @@
     <string name="uploading_is_disabled_text">قــم بــتــفــعــيــل الإرســـال مــن الــمــتــصــفــح فـى الاعــدادات حـتـى يــمــكــنــك رفــع الــمــلــفــات</string>
     <string name="ok">حسنا</string>
     <string name="no_js">لا جافا سكريبت ؟ استعمل &lt;a href="/no-JS"&gt;صفحة HTML فقط&lt;/a&gt;</string>
-
     <string name="page_not_found">404 لم يتم العثور على الصفحة</string>
     <string name="blocked">محظور</string>
     <string name="your_are_blocked">أنت محظور</string>
-
+    <string name="there_is_a_secret">يوجد سر مخبأ بالتطبيق</string>
+    <string name="are_you_trying_to_find_secret">هل تحاول العثور على شيء ما مخفي ؟</string>
 </resources>
