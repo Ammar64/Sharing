@@ -1,0 +1,7 @@
+Compartir archivos y aplicaciones usando el navegador. necesita que el otro dispositivo esté conectado a la misma red.
+Los archivos enviados desde el navegador a la aplicación se pueden encontrar en Compartir/ carpeta en su almacenamiento interno.
+Tendrás que enviar esta aplicación al otro dispositivo en caso de que hayas enviado apk divididos.
+Asegúrate de que utilizas hotspot para obtener velocidades más rápidas de transferencia de archivos.
+
+Todo gracias a Hamdy El-Menshawy por el diseño de la interfaz de usuario especialmente el lado web
+Aplicación hecha por Ammar64

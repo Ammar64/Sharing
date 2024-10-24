@@ -1,0 +1,17 @@
+# Funciones
+1- Añadir compatibilidad CLI para curl y wget
+2- Añadir página solo HTML en URL / no-JS
+3- Mostrar cuanto tiempo se tardó en transferir los archivos tras completarse
+4- Mostrar la velocidad en el navegador mientras se suben archivos
+5- Descargar todos los archivos y apps con un clic desde el navegador
+
+# Corregido
+1- Problema con la pantalla en negro tras el tutorial
+
+# Cambios
+1- Icono aplicación
+2- Redondear diálogos
+3- Actualizar la IU web
+
+# Traducciones
+1- En francés y chino

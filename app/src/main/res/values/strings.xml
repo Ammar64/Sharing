@@ -1,73 +1,58 @@
-<!-- NOTE: You don't have to translate comments -->
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NOTE: You don't have to translate comments --><resources>
     <!-- Activity Main   -->
     <string name="about_us">About us</string>
     <string name="no_app_found_to_handle">No app found to handle this action</string>
     <string name="unsupported_data">Unsupported data</string>
-
     <!-- Fragment Share   -->
-    <string name="share" >Share</string>
+    <string name="share">Share</string>
     <string name="add_apps">Add apps</string>
     <string name="add_files">Add files</string>
     <string name="selected">Selected</string>
     <string name="link">Link</string>
     <string name="users">Users</string>
-
     <string name="sending_to_user">Sending to %1$s</string>
     <string name="sending_to_user_stopped">Sending to %1$s stopped</string>
     <string name="sending_to_user_done">Sent to %1$s in %2$s</string>
     <string name="receiving_from_user">Receiving from %1$s</string>
     <string name="receiving_from_user_stopped">Receiving from %1$s stopped</string>
     <string name="receiving_from_user_done">Received from %1$s in %2$s</string>
-
     <string name="completed">Completed</string>
     <string name="stopped">Stopped</string>
     <string name="stop">Stop</string>
-
     <string name="days">%d days</string>
     <string name="hours">%d hours</string>
     <string name="minutes">%d minutes</string>
     <string name="seconds">%d seconds</string>
-    <string name="milliSeconds">%d milli seconds</string>
-
+    <string name="milliSeconds">%d milliseconds</string>
     <!-- dialogs   -->
     <string name="connected_users">Connected users</string>
     <string name="block">BLOCK</string>
     <string name="unblock">UNBLOCK</string>
     <string name="user_default_name">User %1$d</string>
-
     <string name="choose_language">Choose language</string>
-
     <string name="no_user_connected">No user connected</string>
     <string name="no_files_selected">No files selected</string>
-
     <string name="warning">Warning !!</string>
     <string name="warning_details">This app doesn\'t use https to transfer your files which make it vulnerable to man in the middle attacks.\nTo be safer for now I recommend activating a secured hotspot on this device and make sure the other wanted devices are the only devices connected to it.</string>
     <string name="dont_show_again">Don\'t show this message again</string>
-
     <string name="fast_share">Fast share</string>
     <!-- Fragment Settings   -->
     <string name="toggle_dark_mode">Toggle dark mode</string>
-
     <string name="disable_browser_upload">Disable browser upload</string>
     <string name="disable_browser_upload_desc">Prevent browsers from sending files to your device.</string>
-
     <string name="block_users">Block connected users</string>
     <string name="block_users_desc">Block users once they are connected to your device.</string>
-
     <string name="language">Languages</string>
     <string name="languages_desc">Change app language</string>
     <string name="system_default_lang">System default</string>
-
     <string name="debug_mode">Debug Mode</string>
     <string name="debug_mode_desc">displays some errors it when occurs</string>
-
     <!-- Activity Add Apps   -->
     <string name="loading_apps">Loading Apps…</string>
     <string name="select_apps">Select Apps</string>
     <string name="selected_num">Selected %1$d</string>
     <string name="splits">splits</string>
-
     <!-- Activity Add Files  -->
     <string name="select_files">Select files</string>
     <string name="folder_is_empty">This folder is empty</string>
@@ -81,12 +66,11 @@
     <string name="audio">Audio</string>
     <string name="documents">documents</string>
     <string name="no_files_found">No files were found</string>
-
     <!-- Activity Apks Installer -->
     <string name="apks_installer_experimental">APKS Installer (Experimental)</string>
     <string name="apks_installer">Apks installer</string>
     <string name="pls_choose_apks">Please choose an apks file</string>
-    <string name="pick_apks_file">pick apks file</string>
+    <string name="pick_apks_file">pick APKS file</string>
     <string name="installer_note">After sending an apks file to the other device successfully send this app to the other remote device and open this page to install the apks file.</string>
     <string name="initialising">Initialising...</string>
     <string name="installing">Installing</string>
@@ -94,35 +78,30 @@
     <string name="extracting_done">Extracting done</string>
     <string name="package_installed_success">Package installed successfully</string>
     <string name="failed">Failed</string>
-
     <!-- Activity Fast Share -->
     <string name="please_choose_a_file">Please share a file</string>
-
     <!-- Activity Change Log -->
     <string name="changelog">Change Log</string>
     <string name="new_in_version">New in %s</string>
-    <string name="_continue">Continue</string> <!-- string name can't be continue because it's reserved java keyword -->
+    <string name="_continue">Continue</string>
+    <!-- string name can't be continue because it's reserved java keyword -->
 
     <!-- Activity Messages -->
     <string name="message_title">Messages</string>
     <string name="send_message">Send message</string>
     <string name="enter_message">Enter message</string>
-
     <!-- /no-JS HTML -->
     <!-- /no-JS HTML is generated at runtime using java code that's why we translate it here and not in the web translation -->
     <string name="downloads">Downloads</string>
     <string name="no_downloads">No downloads available</string>
     <string name="download_all">Download all</string>
-
     <!-- common   -->
     <string name="app_name">sharing</string>
     <string name="settings">Settings</string>
     <string name="done">done</string>
     <string name="ok">OK</string>
-
     <string name="dark_mode">Dark mode</string>
     <string name="light_mode">Light mode</string>
-
     <string name="svr_running">Server is running</string>
     <string name="svr_notification_message">Server is up on address %1$s:%2$s and accepts new requests</string>
     <string name="app_icon_acc_desc">App icon</string>
@@ -138,7 +117,6 @@
     <string name="no_data_attached">No data specified</string>
     <string name="something_went_wrong">Something went wrong!</string>
     <string name="error_no_files_added">No files were added to download</string>
-
     <string-array name="langs">
         <item>@string/system_default_lang</item>
         <item>العربية</item>
