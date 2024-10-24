@@ -71,7 +71,7 @@ Feel free to contribute to it in the [tutorial](https://github.com/Ammar64/Shari
 
 License
 -------------
-     Copyright (C) [year] [name of author]
+     Copyright (C) 2024 Sharing authors
 
      This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, version 3.
 
