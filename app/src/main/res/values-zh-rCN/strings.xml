@@ -108,4 +108,5 @@
     <string name="error_no_files_added"></string>
     <string name="_continue"></string>
     <string name="unsupported_data"></string>
+    <string name="changelog"></string>
 </resources>
