@@ -18,11 +18,11 @@
     <string name="seconds">%d segundos</string>
     <string name="milliSeconds">%d milisegundos</string>
     <string name="connected_users">Usuarios conectados</string>
-    <string name="block">BLOQUEAR</string>
-    <string name="unblock">DESBLOQUEAR</string>
+    <string name="block">Bloquear</string>
+    <string name="unblock">Desbloquear</string>
     <string name="user_default_name">Usuario %1$d</string>
     <string name="choose_language">Elegir idioma</string>
-    <string name="no_user_connected">Ningún usuario conectado</string>
+    <string name="no_user_connected">No hay usuarios conectados</string>
     <string name="no_files_selected">Ningún archivo seleccionado</string>
     <string name="warning">¡Atención!</string>
     <string name="warning_details">Esta aplicación no utiliza HTTPS para transferir tus archivos lo que la hace vulnerable a ataques de \'hombre en el medio\'.\nPara estar más seguro por ahora recomiendo activar un punto de acceso seguro en este dispositivo y asegurarte que los otros dispositivos deseados son los únicos dispositivos conectados a él.</string>
@@ -43,9 +43,9 @@
     <string name="installer_note">Después de enviar con éxito el archivo APKS a otro dispositivo, envía esta aplicación a otro dispositivo remoto y abre esta página para instalar el archivo APKS.</string>
     <string name="initialising">Inicializando...</string>
     <string name="installing">Instalando</string>
-    <string name="extracting_x">extrayendo %1$s</string>
+    <string name="extracting_x">Extrayendo %1$s…</string>
     <string name="extracting_done">Extraccion completa</string>
-    <string name="package_installed_success">Paquete instalado con éxito</string>
+    <string name="package_installed_success">Paquete instalado</string>
     <string name="send_message">Enviar mensaje</string>
     <string name="enter_message">Introducir mensaje</string>
     <string name="downloads">Descargas</string>
