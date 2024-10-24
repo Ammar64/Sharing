@@ -1,2 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="current_username">Nåværende brukernavn</string>
+    <string name="sharing">Sharing</string>
+    <string name="username">Brukernavn</string>
+    <string name="lang">nb_NO</string>
+    <string name="dir">ltr</string>
+    <string name="send">Send</string>
+    <string name="receive">Motta</string>
+    <string name="downloads_request_error_text">Kunne ikke forespørre nedlasting. Fjernenhet koblet fra.</string>
+    <string name="done">Ferdig</string>
+    <string name="update">Oppdater</string>
+    <string name="ok">OK</string>
+    <string name="blocked">Blokkert</string>
+    <string name="your_are_blocked">Du er blokkert</string>
+    <string name="are_you_trying_to_find_secret">Prøver du å finne noe hemmelig?</string>
+    <string name="page_not_found">404 Finner ikke siden</string>
+    <string name="enter_your_user_name">Skriv inn brukernavnet ditt</string>
+    <string name="submit">Send inn</string>
+    <string name="sharing_app">Delingsprogram</string>
+    <string name="sharing_app_purpose">Overfør filer gratis</string>
+    <string name="available_downloads">Tilgjengelige nedlastninger</string>
+    <string name="there_is_a_secret">Det er noe hemmelig i dette programmet</string>
+    <string name="sharing_app_desc">Sharing er et fritt og enkelt program for gratis deling av data</string>
+    <string name="download">Last ned</string>
+    <string name="no_downloads_available">Ingen tilgjengelige nedlastninger</string>
+    <string name="download_all">Last ned alt</string>
+    <string name="uploading_is_disabled">Opplasting er avskrudd</string>
+    <string name="uploading_is_disabled_text">Du kan ikke sende filer til enheten din fra nettleseren med mindre du skrur det på i innstillingene</string>
+    <string name="no_js">Mangler du JavaScript? Bruk &lt;a href=/no-JS&gt;ren HTML&lt;/a&gt;</string>
+</resources>
