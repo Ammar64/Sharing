@@ -31,8 +31,7 @@
     <string name="no_user_connected">暂无用户连接</string>
     <string name="no_files_selected">未选择文件</string>
     <string name="warning">警告！！</string>
-    <string name="warning_details">这个应用程序不使用 https 来传输你的文件，这使得它容易受到中间人攻击。
-\n为安全起见，我建议在这台设备上激活一个安全热点，并确保只有其他想要的设备连接到它。</string>
+    <string name="warning_details">这个应用程序不使用 https 来传输你的文件，这使得它容易受到中间人攻击。 \n为安全起见，我建议在这台设备上激活一个安全热点，并确保只有其他想要的设备连接到它。</string>
     <string name="dont_show_again">不再显示这条消息</string>
     <string name="fast_share">快速分享</string>
     <string name="toggle_dark_mode">开关黑暗模式</string>
