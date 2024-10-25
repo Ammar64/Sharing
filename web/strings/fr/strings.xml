@@ -21,6 +21,12 @@
     <string name="update">Mettre à jour</string>
     <string name="uploading_is_disabled">Le téléchargement est désactivé</string>
     <string name="uploading_is_disabled_text">Vous ne pouvez pas envoyer de fichiers vers votre téléphone depuis le navigateur, sauf si vous l'activez dans les paramètres</string>
-    <string name="ok">Ok</string>
+    <string name="ok">D\'accord</string>
     <string name="no_js">Pas de JavaScript ? Utilisez &lt;a href="/no-JS"&gt;la page HTML uniquement&lt;/a&gt;</string>
+    <string name="download_all">Tout télécharger</string>
+    <string name="blocked">Bloqué</string>
+    <string name="your_are_blocked">Vous êtes bloqué</string>
+    <string name="page_not_found">404 Page non trouvée</string>
+    <string name="are_you_trying_to_find_secret">Êtes-vous entrain de chercher à trouver quelque chose de secret ?</string>
+    <string name="there_is_a_secret">Il y a un secret dans ce programme</string>
 </resources>
