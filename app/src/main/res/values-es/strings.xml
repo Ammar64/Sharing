@@ -25,7 +25,7 @@
     <string name="no_user_connected">No hay usuarios conectados</string>
     <string name="no_files_selected">Ningún archivo seleccionado</string>
     <string name="warning">¡Atención!</string>
-    <string name="warning_details">Esta aplicación no utiliza HTTPS para transferir tus archivos lo que la hace vulnerable a ataques de \'hombre en el medio\'.\nPara estar más seguro por ahora recomiendo activar un punto de acceso seguro en este dispositivo y asegurarte que los otros dispositivos deseados son los únicos dispositivos conectados a él.</string>
+    <string name="warning_details">Esta aplicación no utiliza HTTPS para transferir tus archivos lo que la hace vulnerable a ataques de \'hombre en el medio\'.\nPara estar más seguro, activa un punto de acceso seguro en este dispositivo y asegúrate que solo se conecten a él otros dispositivos deseados.</string>
     <string name="dont_show_again">No volver a mostrar este mensaje</string>
     <string name="fast_share">Compartir rápido</string>
     <string name="toggle_dark_mode">Alternar modo oscuro</string>
@@ -40,7 +40,7 @@
     <string name="apks_installer">Instalador de APKS</string>
     <string name="pls_choose_apks">Por favor, selecciona un archivo APKS</string>
     <string name="pick_apks_file">coger archivo APKS</string>
-    <string name="installer_note">Después de enviar con éxito el archivo APKS a otro dispositivo, envía esta aplicación a otro dispositivo remoto y abre esta página para instalar el archivo APKS.</string>
+    <string name="installer_note">Después de enviar con éxito un archivo APKS a otro dispositivo y enviar esta aplicación a otro dispositivo remoto y abrir esta página para instalar el archivo APKS.</string>
     <string name="initialising">Inicializando...</string>
     <string name="installing">Instalando</string>
     <string name="extracting_x">Extrayendo %1$s…</string>
@@ -101,5 +101,5 @@
     <string name="toggle_on_the_server">Por favor, enciende primero el servidor</string>
     <string name="select">Seleccionar</string>
     <string name="sort_by">Orderar por…</string>
-    <string name="show_drop_down">Mostrar lista desplegable</string>
+    <string name="show_drop_down">Mostrar menú de lista desplegable</string>
 </resources>
