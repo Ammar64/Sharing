@@ -110,14 +110,13 @@
     <string name="toggle_on_the_server">Please turn on the server first</string>
     <string name="select">Select</string>
     <string name="sort_by">Sort by…</string>
-    <string name="show_drop_down">Show drop down</string>
+    <string name="show_drop_down">Show dropdown menu</string>
     <string name="back">Back</string>
     <string name="no_web_browser_found">No web browser found</string>
     <string name="remove">Remove</string>
     <string name="no_data_attached">No data specified</string>
     <string name="something_went_wrong">Something went wrong!</string>
     <string name="error_no_files_added">No files were added to download</string>
-
     <!-- Language codes array don't translate -->
     <string-array name="lang_codes" translatable="false">
         <item>ar</item>
@@ -127,7 +126,6 @@
         <item>fr</item>
         <item>es</item>
     </string-array>
-
     <!-- These are original language names. It's how the language call itself -->
     <!-- Must be the same order and length as lang_codes -->
     <string-array name="lang_names_original" translatable="false">
@@ -138,7 +136,6 @@
         <item>Français</item>
         <item>Espagnol</item>
     </string-array>
-
     <!-- These are the translated language names. It's how the current language call other languages -->
     <!-- Must be the same order and length as lang_codes -->
     <string-array name="lang_names_translated">
