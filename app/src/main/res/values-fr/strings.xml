@@ -109,4 +109,6 @@
     <string name="changelog">Journal des changements</string>
     <string name="new_in_version">Nouveau dans %s</string>
     <string name="unsupported_data">Données non prises en charge</string>
+    <string name="download_all">Tout télécharger</string>
+    <string name="error_no_files_added">Aucun fichier n\'a été ajouté au téléchargement</string>
 </resources>
