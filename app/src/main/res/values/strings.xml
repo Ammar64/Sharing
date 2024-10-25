@@ -27,14 +27,14 @@
     <string name="milliSeconds">%d milliseconds</string>
     <!-- dialogs   -->
     <string name="connected_users">Connected users</string>
-    <string name="block">BLOCK</string>
-    <string name="unblock">UNBLOCK</string>
+    <string name="block">Block</string>
+    <string name="unblock">Unblock</string>
     <string name="user_default_name">User %1$d</string>
     <string name="choose_language">Choose language</string>
-    <string name="no_user_connected">No user connected</string>
+    <string name="no_user_connected">No users connected</string>
     <string name="no_files_selected">No files selected</string>
-    <string name="warning">Warning !!</string>
-    <string name="warning_details">This app doesn\'t use https to transfer your files which make it vulnerable to man in the middle attacks.\nTo be safer for now I recommend activating a secured hotspot on this device and make sure the other wanted devices are the only devices connected to it.</string>
+    <string name="warning">Warning!</string>
+    <string name="warning_details">This app doesn\'t use HTTPS to transfer your files which make it vulnerable to man-in-the-middle attacks.\nTo be safer, activate a secured hotspot on this device and ensure only other wanted devices are connected to it.</string>
     <string name="dont_show_again">Don\'t show this message again</string>
     <string name="fast_share">Fast share</string>
     <!-- Fragment Settings   -->
@@ -68,20 +68,20 @@
     <string name="no_files_found">No files were found</string>
     <!-- Activity Apks Installer -->
     <string name="apks_installer_experimental">APKS Installer (Experimental)</string>
-    <string name="apks_installer">Apks installer</string>
-    <string name="pls_choose_apks">Please choose an apks file</string>
+    <string name="apks_installer">APKS installer</string>
+    <string name="pls_choose_apks">Please choose an APKS file</string>
     <string name="pick_apks_file">pick APKS file</string>
-    <string name="installer_note">After sending an apks file to the other device successfully send this app to the other remote device and open this page to install the apks file.</string>
+    <string name="installer_note">After sending an APKS file to the other device and sending this app to the other remote device and opening this page to install the APKS file.</string>
     <string name="initialising">Initialising...</string>
     <string name="installing">Installing</string>
-    <string name="extracting_x">extracting %1$s</string>
+    <string name="extracting_x">Extracting %1$s …</string>
     <string name="extracting_done">Extracting done</string>
-    <string name="package_installed_success">Package installed successfully</string>
+    <string name="package_installed_success">Package installed</string>
     <string name="failed">Failed</string>
     <!-- Activity Fast Share -->
     <string name="please_choose_a_file">Please share a file</string>
     <!-- Activity Change Log -->
-    <string name="changelog">Change Log</string>
+    <string name="changelog">Changelog</string>
     <string name="new_in_version">New in %s</string>
     <string name="_continue">Continue</string>
     <!-- string name can't be continue because it's reserved java keyword -->
@@ -106,7 +106,7 @@
     <string name="svr_notification_message">Server is up on address %1$s:%2$s and accepts new requests</string>
     <string name="app_icon_acc_desc">App icon</string>
     <string name="tutorial">Tutorial</string>
-    <string name="connect_to_wifi_or_hotspot">Please activate wifi or hotspot to start sharing</string>
+    <string name="connect_to_wifi_or_hotspot">Please activate Wi-Fi or hotspot to start sharing</string>
     <string name="toggle_on_the_server">Please turn on the server first</string>
     <string name="select">Select</string>
     <string name="sort_by">Sort by…</string>
