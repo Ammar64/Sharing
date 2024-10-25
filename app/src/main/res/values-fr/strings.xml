@@ -100,7 +100,7 @@
     <string name="no_data_attached">Aucune donnée spécifiée</string>
     <string name="something_went_wrong">Quelque chose s\'est mal passé !</string>
     <string name="message_title">Messages</string>
-    <string name="send_message">Engoyer le message</string>
+    <string name="send_message">Envoyer le message</string>
     <string name="enter_message">Écrivez un message</string>
     <string name="no_downloads">Aucun téléchargement disponible</string>
     <string name="_continue">Continuer</string>
