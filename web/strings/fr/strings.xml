@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Code de langue à 2 lettres -->
     <string name="lang">fr</string>
     <!-- Direction de la langue -->
      <string name="dir">ltr</string>
-
     <string name="sharing">Partage</string>
-    <string name="username">Nom d'utilisateur</string>
+    <string name="username">Nom d\'utilisateur</string>
     <string name="enter_your_user_name">Entrez votre nom d'utilisateur</string>
     <string name="submit">Soumettre</string>
     <string name="current_username">Nom d'utilisateur actuel :</string>
