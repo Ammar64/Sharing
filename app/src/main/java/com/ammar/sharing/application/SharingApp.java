@@ -10,6 +10,7 @@ import android.os.Build;
 
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.utils.Utils;
+import com.ammar.sharing.R;
 
 import java.util.Locale;
 
@@ -22,8 +23,8 @@ public class SharingApp extends Application {
         super.onCreate();
         _isDebuggable =  ( 0 != ( getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) );
         Utils.setupUtils(this);
-        Consts.SystemLocale = Locale.getDefault();
-
+        Consts.systemLocale = Locale.getDefault();
+        Consts.langCodes = getResources().getStringArray(R.array.lang_codes);
 
         // make notification channel
         // Create a notification manager

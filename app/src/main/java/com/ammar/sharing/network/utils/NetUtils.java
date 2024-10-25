@@ -14,7 +14,7 @@ public class NetUtils {
             res.setContentType("text/html");
             String pageName = requestedPath.substring(requestedPath.lastIndexOf("/") + 1);
             String lang = Locale.getDefault().getLanguage();
-            if (!Consts.langsCode.contains(lang)) {
+            if (!Utils.isLangSupported(lang)) {
                 // default language
                 lang = "en";
             }

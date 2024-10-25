@@ -3,7 +3,9 @@ package com.ammar.sharing.custom.ui;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +25,16 @@ public class RoundDialog {
     private final CardView cardView;
     private View view;
     private final int maxHeight;
+    private final int maxWidth;
 
     public RoundDialog(Context context) {
         cardView = new CardView(context);
         alertDialog = new AlertDialog.Builder(context)
                 .setView(cardView)
                 .create();
-        maxHeight = context.getResources().getDisplayMetrics().heightPixels - MainActivity.systemBarsPaddings.top - MainActivity.systemBarsPaddings.bottom;
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        maxWidth = displayMetrics.widthPixels - MainActivity.systemBarsPaddings.right - MainActivity.systemBarsPaddings.left;
+        maxHeight = displayMetrics.heightPixels - MainActivity.systemBarsPaddings.top - MainActivity.systemBarsPaddings.bottom;
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
     }
 
@@ -61,13 +66,18 @@ public class RoundDialog {
         ViewGroup.LayoutParams childLayoutParams = child.getLayoutParams();
         int width = childLayoutParams.width;
         int height = childLayoutParams.height;
-        Log.d("HEIGHT", "Height: " + height + "     Max Height: " + maxHeight);
         if (height > maxHeight) {
             height = maxHeight;
             childLayoutParams.height = maxHeight;
             child.setLayoutParams(childLayoutParams);
         }
+        if (width > maxWidth) {
+            width = maxWidth;
+            childLayoutParams.width = maxWidth;
+            child.setLayoutParams(childLayoutParams);
+        }
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, height);
+        layoutParams.gravity = Gravity.CENTER;
         cardView.setLayoutParams(layoutParams);
     }
 

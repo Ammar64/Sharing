@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="8dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="@android:color/transparent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/RB_LanguageOption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="8dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:background="@android:color/transparent"
+            />
+
+        <com.ammar.sharing.custom.ui.AdaptiveTextView
+            android:id="@+id/TV_LanguageOptionOriginal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/RB_LanguageOption"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/TV_LanguageOptionNotTranslated"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:textSize="20sp"
+            app:darkModeColor="#eee"
+            android:textAlignment="viewStart"
+            android:includeFontPadding="false"
+            tools:text="العربية"/>
+
+        <com.ammar.sharing.custom.ui.AdaptiveTextView
+            android:id="@+id/TV_LanguageOptionNotTranslated"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:textAlignment="viewStart"
+            app:darkModeColor="#aaa"
+            app:layout_constraintBottom_toBottomOf="@+id/RB_LanguageOption"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/RB_LanguageOption"
+            app:layout_constraintTop_toBottomOf="@+id/TV_LanguageOptionOriginal"
+            tools:text="Arabic" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

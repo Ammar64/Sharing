@@ -136,7 +136,7 @@
             app:cardElevation="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/RL_SettingsLanguage"
+                android:id="@+id/CL_SettingsLanguage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"

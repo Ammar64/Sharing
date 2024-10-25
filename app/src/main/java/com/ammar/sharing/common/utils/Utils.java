@@ -405,7 +405,7 @@ public class Utils {
     public static void setLocale(Context context, String languageCode) {
         Locale locale;
         if (languageCode.isEmpty()) {
-            locale = Consts.SystemLocale;
+            locale = Consts.systemLocale;
         } else {
             locale = new Locale(languageCode);
         }
@@ -550,5 +550,13 @@ public class Utils {
         } catch (Exception e) {
             return "Couldn't get time";
         }
+    }
+
+    public static boolean isLangSupported(String lang) {
+        assert Consts.langCodes != null;
+        for(final String i : Consts.langCodes) {
+            if(i.equals(lang)) return true;
+        }
+        return false;
     }
 }
