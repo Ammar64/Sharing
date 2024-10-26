@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="lang">nb-rNO</string>
     <string name="link">Lenke</string>
     <string name="add_apps">Og programmer</string>
     <string name="connected_users">Tilkoblede brukere</string>

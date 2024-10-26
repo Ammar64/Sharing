@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="lang">fr</string>
     <!-- Activité principale   -->
     <string name="about_us">À propos de nous</string>
     <string name="no_app_found_to_handle">Aucune application trouvée pour gérer cette action</string>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- NOTE: You don't have to translate comments --><resources>
+<!-- NOTE: You don't have to translate comments -->
+<resources>
+    <string name="lang">en</string>
     <!-- Activity Main   -->
     <string name="about_us">About us</string>
     <string name="no_app_found_to_handle">No app found to handle this action</string>
@@ -123,7 +125,7 @@
         <item>ar</item>
         <item>en</item>
         <item>du</item>
-        <item>zh</item>
+        <item>zh-rCN</item>
         <item>fr</item>
         <item>es</item>
     </string-array>
@@ -141,12 +143,22 @@
 
     <!-- These are the translated language names. It's how the current language call other languages -->
     <!-- Must be the same order and length as lang_codes -->
-    <string-array name="lang_names_translated">
-        <item>Arabic</item>
-        <item>English</item>
-        <item>German</item>
-        <item>Chinese (simplified)</item>
-        <item>French</item>
-        <item>Spanish</item>
+    <string-array name="lang_names_translated" translatable="false">
+        <item>@string/arabic</item>
+        <item>@string/english</item>
+        <item>@string/german</item>
+        <item>@string/chinese_simplified</item>
+        <item>@string/french</item>
+        <item>@string/spanish</item>
     </string-array>
+
+    <!-- workaround for weblate -->
+
+    <string name="arabic">Arabic</string>
+    <string name="english">English</string>
+    <string name="german">German</string>
+    <string name="chinese_simplified">Chinese (simplified)</string>
+    <string name="french">French</string>
+    <string name="spanish">Spanish</string>
+
 </resources>
