@@ -19,7 +19,7 @@
     <string name="send">Enviar</string>
     <string name="download">Descargar</string>
     <string name="no_downloads_available">No hay descargas disponibles</string>
-    <string name="downloads_request_error_text">No se pudieron obtener las descargas disponibles. Es posible que se haya perdido la conexión</string>
+    <string name="downloads_request_error_text">No se pudieron obtener las descargas disponibles. Es posible que se haya perdido la conexión.</string>
     <string name="update">Actualizar</string>
     <string name="ok">De acuerdo</string>
     <string name="no_js">¿No tienes JavaScript? Utiliza &lt;a href=/no-JS&gt;HTML-only page&lt;/a&gt;</string>
