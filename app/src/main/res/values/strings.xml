@@ -123,9 +123,10 @@
         <item>ar</item>
         <item>en</item>
         <item>du</item>
-        <item>zh-rCN</item>
+        <item>zh-CN</item>
         <item>fr</item>
         <item>es</item>
+        <item>nb-NO</item>
     </string-array>
     <!-- These are original language names. It's how the language call itself -->
     <!-- Must be the same order and length as lang_codes -->
@@ -136,6 +137,7 @@
         <item>中文简体</item>
         <item>Français</item>
         <item>Espagnol</item>
+        <item>Norsk bokmål</item>
     </string-array>
     <!-- These are the translated language names. It's how the current language call other languages -->
     <!-- Must be the same order and length as lang_codes -->
@@ -146,6 +148,7 @@
         <item>@string/chinese_simplified</item>
         <item>@string/french</item>
         <item>@string/spanish</item>
+        <item>@string/norwegian</item>
     </string-array>
     <!-- workaround for weblate -->
 
@@ -155,4 +158,5 @@
     <string name="chinese_simplified">Chinese (simplified)</string>
     <string name="french">French</string>
     <string name="spanish">Spanish</string>
+    <string name="norwegian">Norwegian</string>
 </resources>
