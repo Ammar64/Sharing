@@ -103,10 +103,4 @@
     <string name="select">Seleccionar</string>
     <string name="sort_by">Orderar por…</string>
     <string name="show_drop_down">Mostrar menú de lista desplegable</string>
-    <string name="arabic"></string>
-    <string name="german"></string>
-    <string name="english"></string>
-    <string name="chinese_simplified"></string>
-    <string name="french"></string>
-    <string name="spanish"></string>
 </resources>
