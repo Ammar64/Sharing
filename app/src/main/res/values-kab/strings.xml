@@ -68,4 +68,5 @@
     <string name="app_icon_acc_desc">Tignit n usnas</string>
     <string name="permission_denied">Tettwagi tsiregt</string>
     <string name="svr_running">Yekker uqeddac</string>
+    <string name="lang">kab</string>
 </resources>
