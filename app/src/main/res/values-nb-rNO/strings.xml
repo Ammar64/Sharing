@@ -103,4 +103,10 @@
     <string name="show_drop_down">Vis rullegardinsmeny</string>
     <string name="warning_details">Programmet bruker ikke HTTPS til å overføre filer, noe som gjør det sårbart for mann-i-midten-angrep.\nAktiver en sikret trådløssonedeling på enheten og forsikre deg om at kun ønskede enheter er tilkoblet.</string>
     <string name="installer_note">Etter å ha sendt en APKS-fil til den andre enheten og dette programmet til den andre fjernenheten og åpnet denne siden for å installere APKS-filen.</string>
+    <string name="spanish"></string>
+    <string name="chinese_simplified"></string>
+    <string name="english"></string>
+    <string name="arabic"></string>
+    <string name="french"></string>
+    <string name="german"></string>
 </resources>
