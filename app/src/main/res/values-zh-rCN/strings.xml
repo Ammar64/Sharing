@@ -90,4 +90,22 @@
     <string name="no_data_attached">没有指定数据</string>
     <string name="something_went_wrong">出问题啦！</string>
     <string name="no_app_found_to_handle">找不到处理此操作的应用</string>
+    <string name="message_title"></string>
+    <string name="send_message"></string>
+    <string name="enter_message"></string>
+    <string name="download_all"></string>
+    <string name="downloads"></string>
+    <string name="french"></string>
+    <string name="german"></string>
+    <string name="chinese_simplified"></string>
+    <string name="spanish"></string>
+    <string name="languages_desc"></string>
+    <string name="arabic"></string>
+    <string name="toggle_on_the_server"></string>
+    <string name="new_in_version"></string>
+    <string name="english"></string>
+    <string name="no_downloads"></string>
+    <string name="error_no_files_added"></string>
+    <string name="_continue"></string>
+    <string name="unsupported_data"></string>
 </resources>
