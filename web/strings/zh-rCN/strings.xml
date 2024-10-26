@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="lang">zh</string>
+    <string name="lang">zh-Hans</string>
     <string name="dir">ltr</string>
     <string name="sharing">Sharing</string>
     <string name="username">User name</string>
