@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="lang">es</string>
     <string name="add_files">Añadir archivos</string>
     <string name="selected">Seleccionado</string>
     <string name="link">Enlazar</string>

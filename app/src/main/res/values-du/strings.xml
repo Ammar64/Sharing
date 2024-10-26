@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="lang">du</string>
     <!-- Activity Main   -->
     <string name="about_us">Über uns</string>
     <!-- Fragment Share   -->

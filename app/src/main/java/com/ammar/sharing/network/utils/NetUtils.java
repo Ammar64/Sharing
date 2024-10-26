@@ -1,5 +1,8 @@
 package com.ammar.sharing.network.utils;
 
+import android.util.Log;
+
+import com.ammar.sharing.R;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.network.Response;
@@ -13,9 +16,10 @@ public class NetUtils {
         if (depth == 2) {
             res.setContentType("text/html");
             String pageName = requestedPath.substring(requestedPath.lastIndexOf("/") + 1);
-            String lang = Locale.getDefault().getLanguage();
+            String lang = Utils.getRes().getString(R.string.lang);
+            Log.d("MYLOG", "Lang TAG: " + lang);
             if (!Utils.isLangSupported(lang)) {
-                // default language
+                // fall back to english
                 lang = "en";
             }
             return String.format(Locale.ENGLISH, "pages/%s/%s-%s.html", pageName, pageName, lang);

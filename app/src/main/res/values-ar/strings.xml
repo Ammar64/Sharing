@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="lang">ar</string>
     <!-- Activity Main   -->
     <string name="about_us">عنا</string>
     <string name="no_app_found_to_handle">لم يتم العثور على تطبيق لفتح الرابط</string>
@@ -119,4 +120,13 @@
         <item>الفرنسية</item>
         <item>الأسبانية</item>
     </string-array>
+</resources>
+
+    <string name="arabic">العربية</string>
+    <string name="english">الإنجليزية</string>
+    <string name="german">الألمانية</string>
+    <string name="chinese_simplified">الصينية المبسطة</string>
+    <string name="french">الفرنسية</string>
+    <string name="spanish">الأسبانية</string>
+
 </resources>
