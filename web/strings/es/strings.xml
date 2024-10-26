@@ -12,20 +12,20 @@
     <string name="done">Hecho</string>
     <string name="uploading_is_disabled">La carga está desactivada</string>
     <string name="sharing">Sharing</string>
-    <string name="username">Nombre de usuario</string>
+    <string name="username">nombre de usuario</string>
     <string name="submit">Enviar</string>
     <string name="current_username">Nombre de usuario actual:</string>
     <string name="sharing_app">Aplicación Sharing</string>
     <string name="send">Enviar</string>
     <string name="download">Descargar</string>
     <string name="no_downloads_available">No hay descargas disponibles</string>
-    <string name="downloads_request_error_text">falló la solicitud de descargas. desconectado remotamente</string>
+    <string name="downloads_request_error_text">No se pudieron obtener las descargas disponibles. Es posible que se haya perdido la conexión.</string>
     <string name="update">Actualizar</string>
     <string name="ok">De acuerdo</string>
     <string name="no_js">¿No tienes JavaScript? Utiliza &lt;a href=/no-JS&gt;HTML-only page&lt;/a&gt;</string>
     <string name="blocked">Bloquead@</string>
     <string name="your_are_blocked">Estas bloquead@</string>
     <string name="page_not_found">Error 404 página no encontrada</string>
-    <string name="are_you_trying_to_find_secret">¿Estás tratando de encontrar algo escondido?</string>
+    <string name="are_you_trying_to_find_secret">¿Estás tratando de descubrir algo escondido?</string>
     <string name="there_is_a_secret">Hay algo escondido en este programa</string>
 </resources>
