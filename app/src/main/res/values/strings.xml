@@ -74,7 +74,7 @@
     <string name="pick_apks_file">Pick an APKS file</string>
     <string name="installer_note">After sending an APKS file to the other device and sending this app to the other remote device and opening this page to install the APKS file.</string>
     <string name="initialising">Initialising...</string>
-    <string name="installing">Installing</string>
+    <string name="installing">Installing …</string>
     <string name="extracting_x">Extracting %1$s …</string>
     <string name="extracting_done">Extracting done</string>
     <string name="package_installed_success">Package installed</string>
