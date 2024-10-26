@@ -112,21 +112,10 @@
     <string name="enter_message">اكتب رسالة</string>
     <string name="error_no_files_added">لم يتم إضافة ملفات لتنزيلها</string>
     <string name="download_all">تنزيل الكل</string>
-    <string-array name="lang_names_translated">
-        <item>العربية</item>
-        <item>الإنجليزية</item>
-        <item>الألمانية</item>
-        <item>الصينية المبسطة</item>
-        <item>الفرنسية</item>
-        <item>الأسبانية</item>
-    </string-array>
-</resources>
-
     <string name="arabic">العربية</string>
     <string name="english">الإنجليزية</string>
     <string name="german">الألمانية</string>
     <string name="chinese_simplified">الصينية المبسطة</string>
     <string name="french">الفرنسية</string>
     <string name="spanish">الأسبانية</string>
-
 </resources>
