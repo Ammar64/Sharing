@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- NOTE: You don't have to translate comments -->
-<resources>
+<!-- NOTE: You don't have to translate comments --><resources>
     <string name="lang">en</string>
     <!-- Activity Main   -->
     <string name="about_us">About us</string>
@@ -41,8 +40,8 @@
     <string name="fast_share">Fast share</string>
     <!-- Fragment Settings   -->
     <string name="toggle_dark_mode">Toggle dark mode</string>
-    <string name="disable_browser_upload">Disable browser upload</string>
-    <string name="disable_browser_upload_desc">Prevent browsers from sending files to your device.</string>
+    <string name="disable_browser_upload">Turn off uploading via web browser</string>
+    <string name="disable_browser_upload_desc">Prevent web browsers from sending files to your device.</string>
     <string name="block_users">Block connected users</string>
     <string name="block_users_desc">Block users once they are connected to your device.</string>
     <string name="language">Languages</string>
@@ -66,13 +65,13 @@
     <string name="images">Images</string>
     <string name="videos">Videos</string>
     <string name="audio">Audio</string>
-    <string name="documents">documents</string>
+    <string name="documents">Documents</string>
     <string name="no_files_found">No files were found</string>
     <!-- Activity Apks Installer -->
     <string name="apks_installer_experimental">APKS Installer (Experimental)</string>
     <string name="apks_installer">APKS installer</string>
     <string name="pls_choose_apks">Please choose an APKS file</string>
-    <string name="pick_apks_file">pick APKS file</string>
+    <string name="pick_apks_file">Pick an APKS file</string>
     <string name="installer_note">After sending an APKS file to the other device and sending this app to the other remote device and opening this page to install the APKS file.</string>
     <string name="initialising">Initialising...</string>
     <string name="installing">Installing</string>
@@ -148,7 +147,6 @@
         <item>@string/french</item>
         <item>@string/spanish</item>
     </string-array>
-
     <!-- workaround for weblate -->
 
     <string name="arabic">Arabic</string>
@@ -157,5 +155,4 @@
     <string name="chinese_simplified">Chinese (simplified)</string>
     <string name="french">French</string>
     <string name="spanish">Spanish</string>
-
 </resources>
