@@ -12,12 +12,13 @@
     <link rel="stylesheet" href="style/queries.css" />
     <link rel="stylesheet" href="style/plane.css" />
     <link rel="stylesheet" href="style/mobile.css" media="only screen and (max-width: 525px)" />
-
+    <link rel="stylesheet" href="style/messages.css" />
+    <script defer type="text/javascript" src="scripts/ui.js"></script>
     <script defer type="text/javascript" src="scripts/utils.js"></script>
     <script defer type="text/javascript" src="scripts/dialogs.js"></script>
     <script defer type="text/javascript" src="scripts/upload.js"></script>
     <script defer type="text/javascript" src="scripts/main.js"></script>
-
+    <script defer type="text/javascript" src="scripts/ws.js"></script>
 </head>
 
 <body>
@@ -30,11 +31,15 @@
     <!-- Translations used by scripts -->
 
     <main id="main-content">
-        <button id="button-username" class="icon-button">
+        <button id="button-username" class="icon-text-button ripple-button">
             <img src="assets/user-regular.svg" />
             {username}
         </button>
 
+        <button id="button-messages" class="icon-text-button ripple-button">
+            <img src="assets/icon-message.svg" />
+            {messages}
+        </button>
         <div class="text">
             <h1>{sharing_app}</h1>
             <p>{sharing_app_purpose}</p>
@@ -127,8 +132,20 @@
         </div>
     </div>
 
+    <div id="messages-page" style="display: none;">
+        <div id="messages-top-bar">
+            <button id="go-back-button" class="icon-button ripple-button"><img src="assets/icon-back.svg"/></button>
+            <div id="messages-title">{messages}</div>
+        </div>
+        <div id="messages-container">
+        </div>
+        <div id="control-box">
+            <textarea placeholder="{enter_message}" id="message-input"></textarea>
+            <button id="send-message-button" class="icon-button ripple-button"><img src="assets/icon-send.svg"/></button>
+        </div>
+    </div>
     <div id="overlay"></div> <!-- Overlay div for covering the page -->
-    
+
 </body>
 
 </html>

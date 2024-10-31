@@ -30,4 +30,6 @@
     <string name="page_not_found">404 Page not found</string>
     <string name="are_you_trying_to_find_secret">Are you trying to find something secret?</string>
     <string name="there_is_a_secret">There is something secret in this program</string>
+    <string name="messages">Messages</string>
+    <string name="enter_message">Enter message</string>
 </resources>

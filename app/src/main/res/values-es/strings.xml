@@ -96,7 +96,7 @@
     <string name="changelog">Registro de cambios</string>
     <string name="new_in_version">Nuevo en %s</string>
     <string name="_continue">Continuar</string>
-    <string name="message_title">Mensajes</string>
+    <string name="messages">Mensajes</string>
     <string name="tutorial">Tutorial</string>
     <string name="connect_to_wifi_or_hotspot">Por favor, activa la red Wi-Fi o el punto de acceso para empezar a compartir</string>
     <string name="toggle_on_the_server">Por favor, enciende primero el servidor</string>

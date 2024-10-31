@@ -107,7 +107,7 @@
     <string name="changelog">سجل التغييرات</string>
     <string name="new_in_version">الجديد فى %s</string>
     <string name="_continue">متابعة</string>
-    <string name="message_title">الرسائل</string>
+    <string name="messages">الرسائل</string>
     <string name="send_message">أرسل رسالة</string>
     <string name="enter_message">اكتب رسالة</string>
     <string name="error_no_files_added">لم يتم إضافة ملفات لتنزيلها</string>

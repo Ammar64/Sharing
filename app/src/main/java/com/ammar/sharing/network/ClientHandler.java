@@ -9,12 +9,15 @@ import com.ammar.sharing.R;
 import com.ammar.sharing.common.utils.SecurityUtils;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.User;
+import com.ammar.sharing.network.exceptions.NotImplementedException;
 import com.ammar.sharing.network.sessions.base.HTTPSession;
 import com.ammar.sharing.network.utils.NetUtils;
+import com.ammar.sharing.network.websocket.WebSocket;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -28,7 +31,6 @@ public class ClientHandler implements Runnable {
 
     final Server server;
     private final Socket clientSocket;
-    private User user = null;
 
     public ClientHandler(Server server, Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -44,25 +46,23 @@ public class ClientHandler implements Runnable {
             boolean upgradeToWebSocket = false;
             while (request.readSocket()) {
                 // Check if it wants to upgrade to websocket
-                if ("Upgrade".equalsIgnoreCase(request.getHeader("connection"))) {
-                    if ("websocket".equalsIgnoreCase(request.getHeader("upgrade"))) {
-                        upgradeToWebSocket = true;
-                        break;
-                    } else {
-                        // Not implemented
-                        Response response = new Response(clientSocket);
-                        response.setStatusCode(501);
-                        response.sendResponse();
-                        response.close();
-                    }
+                if (isWebSocketUpgradeRequest(request)) {
+                    upgradeToWebSocket = true;
+                    Log.d("Websocket", "Upgrade to websocket");
+                    break;
                 } else {
                     handleNormalRequest(request);
                 }
             }
             if (upgradeToWebSocket) {
                 Log.d("MYLOG", "Upgraded to websocket");
-                //TODO: handleWebsocketUpgrade(request);
+                handleWebsocketUpgrade(request);
             }
+        } catch (NotImplementedException e) {
+            Response response = new Response(clientSocket);
+            response.setStatusCode(501);
+            response.setContentType("text/plain");
+            response.sendResponse(("" + e.getMessage()).getBytes());
         } catch (Exception e) {
             Utils.showErrorDialog("ClientHandler.run(). Exception: ", e.getMessage());
         } finally {
@@ -85,9 +85,8 @@ public class ClientHandler implements Runnable {
         response.setHeader("Keep-Alive", request.isKeepAlive() ? String.format(Locale.ENGLISH, "timeout=%d", (int) (timeout * 0.001)) : "close");
 
         String userAgent = request.getHeader("User-Agent");
-        if (userAgent != null)
-            user = User.RegisterUser(Utils.getSettings(), clientSocket, userAgent);
-        if (user != null && !user.isBlocked()) {
+        User user = User.RegisterUser(Utils.getSettings(), clientSocket, userAgent);
+        if (!user.isBlocked()) {
             Class<? extends HTTPSession> sessionClass = inferSessionFromPath(request.getPath());
             if (sessionClass == null) {
                 startSession(new NotFoundSession(user), request, response);
@@ -101,17 +100,41 @@ public class ClientHandler implements Runnable {
     }
 
     private void handleWebsocketUpgrade(Request request) {
-        // prove that we received websocket handshake
-        String wsKey = request.getHeader("Sec-WebSocket-Key").trim();
-        String wsKeyPlusGUID = wsKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
-        String wsAccept = SecurityUtils.textToSha1Base64(wsKeyPlusGUID);
+        try {
+            clientSocket.setSoTimeout(0);
+            String userAgent = request.getHeader("User-Agent");
+            User user = User.RegisterUser(Utils.getSettings(), clientSocket, userAgent);
+            // prove that we received websocket handshake
+            String wsKey = request.getHeader("Sec-WebSocket-Key").trim();
+            String wsKeyPlusGUID = wsKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+            String wsAccept = SecurityUtils.textToSha1Base64(wsKeyPlusGUID);
+            Response response = new Response(request.getClientSocket());
+            response.setHeader("Upgrade", "websocket");
+            response.setHeader("Connection", "Upgrade");
+            response.setHeader("Sec-WebSocket-Accept", wsAccept);
+            response.setStatusCode(101);
+            response.sendResponse();
 
-        Response response = new Response(request.getClientSocket());
-        response.setHeader("Upgrade", "websocket");
-        response.setHeader("Connection", "Upgrade");
-        response.setHeader("Sec-WebSocket-Accept", wsAccept);
-        response.setStatusCode(101);
-        response.sendResponse();
+            WebSocket ws = new WebSocket(clientSocket);
+            user.setWebSocket(ws);
+            ws.run();
+        } catch (SocketException e) {
+            Utils.showErrorDialog("ClientHandler.handleWebsocketUpgrade(): SocketException", e.getMessage());
+        }
+    }
+
+    private boolean isWebSocketUpgradeRequest(Request req) throws NotImplementedException {
+        String connection = req.getHeader("connection");
+        String[] connectionValues = connection.split(", ");
+        boolean isConnectionUpgrade = false;
+        for (String i : connectionValues) {
+            if ("Upgrade".equalsIgnoreCase(i)) isConnectionUpgrade = true;
+        }
+
+        String upgrade = req.getHeader("upgrade");
+        boolean isWebSocketUpgrade = "websocket".equals(upgrade);
+        if( !isWebSocketUpgrade && isConnectionUpgrade ) throw new NotImplementedException("Only supports websocket upgrade");
+        return isWebSocketUpgrade && isConnectionUpgrade;
     }
 
     private void startSession(HTTPSession session, Request req, Response res) {

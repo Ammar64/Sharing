@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
 import android.text.TextUtils
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -35,10 +36,16 @@ class MessageViewHolder(itemView: LinearLayout) : RecyclerView.ViewHolder(itemVi
                 }
             }
             // setup corners
-            val isRTL = when(TextUtils.getLayoutDirectionFromLocale(Locale.getDefault())) {
-                View.TEXT_DIRECTION_RTL -> true
-                else -> false
+            val config = context.resources.configuration;
+            val layoutDirection = config.layoutDirection;
+
+            val isRTL: Boolean
+            if( layoutDirection == View.LAYOUT_DIRECTION_RTL ){
+                isRTL = true
+            } else {
+                isRTL = false;
             }
+
             val bottomStartCorner: Float
             val bottomEndCorner: Float
 

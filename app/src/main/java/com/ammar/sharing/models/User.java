@@ -5,8 +5,10 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
+import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.MessagesAdapter;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
+import com.ammar.sharing.network.websocket.WebSocket;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -34,28 +36,31 @@ public class User {
 
         this.id = numUsers++;
         this.name = "User-" + getId();
-
-        if( userAgent.contains("Windows") ) {
-            this.OS = Consts.OS.WINDOWS;
-        } else if( userAgent.contains("Android") ) {
-            this.OS = Consts.OS.ANDROID;
-        } else if ( userAgent.contains("Linux") ) {
-            this.OS = Consts.OS.LINUX;
-        } else this.OS = Consts.OS.UNKNOWN;
+        if (userAgent != null) {
+            if (userAgent.contains("Windows")) {
+                this.OS = Consts.OS.WINDOWS;
+            } else if (userAgent.contains("Android")) {
+                this.OS = Consts.OS.ANDROID;
+            } else if (userAgent.contains("Linux")) {
+                this.OS = Consts.OS.LINUX;
+            } else this.OS = Consts.OS.UNKNOWN;
+        } else {
+            this.OS = Consts.OS.UNKNOWN;
+        }
     }
+
     // make new user if user exist return it.
     public static User RegisterUser(SharedPreferences prefs, Socket socket, String agent) {
         User registered_user = getUserBySockAddr(socket.getRemoteSocketAddress());
-        if( registered_user != null ) {
-            if( !registered_user.socketExists(socket) )
+        if (registered_user != null) {
+            if (!registered_user.socketExists(socket))
                 registered_user.addSocket(socket);
             return registered_user;
-        }
-        else {
+        } else {
             User new_user = new User(socket, agent);
             User.users.add(new_user);
             // block or not
-            new_user.block( prefs.getBoolean(Consts.PREF_FIELD_ARE_USER_BLOCKED, false) );
+            new_user.block(prefs.getBoolean(Consts.PREF_FIELD_ARE_USER_BLOCKED, false));
 
             // inform UI
             Bundle bundle = new Bundle();
@@ -74,10 +79,10 @@ public class User {
     public static User getUserBySockAddr(SocketAddress targetAddr) {
         String targetIp = targetAddr.toString();
         targetIp = targetIp.substring(1, targetIp.lastIndexOf(":"));
-        for( User i : users) {
+        for (User i : users) {
             String ip = i.getAddress().toString();
             ip = ip.substring(1, ip.lastIndexOf(":"));
-            if( ip.equals(targetIp) ) {
+            if (ip.equals(targetIp)) {
                 return i;
             }
         }
@@ -88,7 +93,7 @@ public class User {
         try {
             for (User user : users) {
                 Iterator<Socket> iterator = user.sockets.iterator();
-                while ( iterator.hasNext() ) {
+                while (iterator.hasNext()) {
                     Socket i = iterator.next();
                     i.getInputStream().close();
                     i.getOutputStream().close();
@@ -96,16 +101,19 @@ public class User {
                     iterator.remove();
                 }
             }
-        } catch (IOException ignore) {}
+        } catch (IOException ignore) {
+        }
 
     }
 
     public void addSocket(Socket s) {
         sockets.add(s);
     }
+
     public void removeSocket(Socket clientSocket) {
         sockets.remove(clientSocket);
     }
+
     public void setName(String name) {
         this.name = name;
 
@@ -114,6 +122,7 @@ public class User {
         bundle.putInt("index", getId());
         Data.usersListObserver.forcePostValue(bundle);
     }
+
     public void block(boolean b) {
         this._isBlocked = b;
     }
@@ -130,16 +139,44 @@ public class User {
         String ip = address.toString();
         return ip.substring(1, ip.lastIndexOf(":"));
     }
+
     private final Consts.OS OS;
+
     public Consts.OS getOS() {
         return OS;
     }
+
     public boolean isBlocked() {
         return this._isBlocked;
     }
+
     public String getName() {
         return name;
     }
 
+    public WebSocket ws = null;
+
+    public void setWebSocket(WebSocket ws) {
+        this.ws = ws;
+        this.ws.setOnReceiveText((message) -> {
+            synchronized (MessagesAdapter.messages) {
+                MessagesAdapter.messages.add(new Message(message, true));
+                // notify UI that a message was received
+                Data.messagesNotifier.forcePostValue(MessagesAdapter.messages.size()-1);
+            }
+        });
+    }
+
+    public boolean isConnectedViaWebSocket() {
+        if (ws != null) {
+            return ws.isNotClosed();
+        } else {
+            return false;
+        }
+    }
+
+    public WebSocket getWebSocket() {
+        return ws;
+    }
 
 }

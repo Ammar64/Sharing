@@ -51,6 +51,22 @@ button {
     margin-top: 1em;
     margin-right: 1em;
     margin-left: 1em;
+    width: 10em;
+    justify-content: center;
+    
+}
+
+#button-messages {
+    align-self: flex-end;
+    margin-top: 1em;
+    margin-right: 1em;
+    margin-left: 1em;
+    background-color: #1b43ae;
+    width: 10em;
+}
+
+#button-messages:hover {
+    background-color: #122c76;
 }
 
 .form-container {

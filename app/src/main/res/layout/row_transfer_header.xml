@@ -9,12 +9,12 @@
         android:id="@+id/B_AddApps"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginStart="32dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/circular_button_white"
         app:srcCompat="@drawable/icon_apps"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/B_AddFiles"/>
 
 
     <TextView
@@ -35,15 +35,15 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="@drawable/circular_button_white"
-        app:srcCompat="@drawable/icon_file_red"
-        app:tint="#c00"
-        app:layout_constraintEnd_toStartOf="@id/B_ShowSelected"
+        app:layout_constraintEnd_toStartOf="@+id/B_Messages"
         app:layout_constraintStart_toEndOf="@+id/B_AddApps"
-        app:layout_constraintTop_toTopOf="@+id/B_AddApps" />
+        app:layout_constraintTop_toTopOf="@+id/B_AddApps"
+        app:srcCompat="@drawable/icon_file_red"
+        app:tint="#c00" />
 
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/TV_TextAddFile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -54,15 +54,57 @@
         app:layout_constraintTop_toBottomOf="@+id/B_AddFiles"
         android:labelFor="@+id/B_AddFiles"/>
 
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/B_Messages"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/circular_button_white"
+        app:srcCompat="@drawable/icon_message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/B_AddApps"
+        app:layout_constraintStart_toEndOf="@id/B_AddFiles"/>
+
+    <TextView
+        android:id="@+id/TV_MessagesNumber"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintStart_toEndOf="@+id/B_Messages"
+        app:layout_constraintBottom_toTopOf="@id/B_Messages"
+        android:layout_marginBottom="@dimen/badge_pull_distance"
+        android:layout_marginStart="@dimen/badge_pull_distance"
+        android:background="@drawable/rounded_text_background"
+        app:backgroundTint="@color/red"
+        android:textAlignment="center"
+        android:textColor="@color/defaultTextColor"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:textSize="@dimen/small_text"
+        tools:text="5"/>
+
+    <TextView
+        android:id="@+id/TV_TextMessages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:labelFor="@+id/B_ShowSelected"
+        android:text="@string/messages"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/B_Messages"
+        app:layout_constraintStart_toStartOf="@+id/B_Messages"
+        app:layout_constraintTop_toBottomOf="@+id/B_Messages" />
+
+
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/B_ShowSelected"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginEnd="32dp"
         android:background="@drawable/circular_button_white"
-        app:srcCompat="@drawable/icon_check"
+        app:layout_constraintStart_toEndOf="@id/B_ShowUsers"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/B_AddApps" />
+        app:layout_constraintTop_toTopOf="@+id/B_ShowAddress"
+        app:srcCompat="@drawable/icon_check" />
 
     <TextView
         android:id="@+id/TV_NumberSelected"
@@ -82,7 +124,7 @@
         android:textSize="@dimen/small_text"
         tools:text="5"/>
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/TV_TextSelected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -108,7 +150,7 @@
         android:textSize="32sp"/>
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/TV_TextIP"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -126,7 +168,7 @@
         android:layout_height="60dp"
         android:background="@drawable/circular_button_white"
         app:srcCompat="@drawable/icon_user"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/B_ShowSelected"
         app:layout_constraintStart_toEndOf="@id/B_ShowAddress"
         app:layout_constraintTop_toTopOf="@+id/B_ShowAddress" />
 

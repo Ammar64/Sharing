@@ -11,7 +11,7 @@ public class SecurityUtils {
             MessageDigest crypt = MessageDigest.getInstance("SHA-1");
             crypt.reset();
             crypt.update(text.getBytes());
-            return Base64.encodeToString(crypt.digest(), Base64.DEFAULT);
+            return Base64.encodeToString(crypt.digest(), Base64.NO_WRAP);
         } catch (NoSuchAlgorithmException ignore) {
             throw new RuntimeException("SHA-1 hash is not supported on this device");
         }

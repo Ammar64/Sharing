@@ -34,6 +34,7 @@ import com.ammar.sharing.activities.AddAppsActivity.AddAppsActivity;
 import com.ammar.sharing.activities.AddFilesActivity.AddFilesActivity;
 import com.ammar.sharing.activities.MainActivity.MainActivity;
 import com.ammar.sharing.activities.MainActivity.fragments.ShareFragment;
+import com.ammar.sharing.activities.MessagesActivity.MessagesActivity;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.io.ProgressManager;
@@ -120,6 +121,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             this.fragment = fragment;
             ImageButton addAppsB = itemView.findViewById(R.id.B_AddApps);
             ImageButton addFilesB = itemView.findViewById(R.id.B_AddFiles);
+            ImageButton messagesB = itemView.findViewById(R.id.B_Messages);
             AppCompatButton QRCodeB = itemView.findViewById(R.id.B_ShowAddress);
 
             ImageButton showSelected = itemView.findViewById(R.id.B_ShowSelected);
@@ -140,6 +142,10 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             addAppsB.setOnClickListener((button) -> this.fragment.launcher.launch(new Intent(itemView.getContext(), AddAppsActivity.class)));
             addFilesB.setOnClickListener((button) -> this.fragment.mGetContent.launch(new Intent(this.fragment.requireContext(), AddFilesActivity.class)));
+            messagesB.setOnClickListener((button) -> {
+                Intent intent = new Intent(itemView.getContext(), MessagesActivity.class);
+                itemView.getContext().startActivity(intent);
+            });
 
             Resources res = itemView.getResources();
             // setup QR Code dialog

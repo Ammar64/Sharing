@@ -88,7 +88,7 @@
     <!-- string name can't be continue because it's reserved java keyword -->
 
     <!-- Activity Messages -->
-    <string name="message_title">Messages</string>
+    <string name="messages">Messages</string>
     <string name="send_message">Send message</string>
     <string name="enter_message">Enter message</string>
     <!-- /no-JS HTML -->

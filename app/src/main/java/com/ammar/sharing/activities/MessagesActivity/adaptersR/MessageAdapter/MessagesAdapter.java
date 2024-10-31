@@ -8,37 +8,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.viewHolders.MessageViewHolder;
+import com.ammar.sharing.custom.data.QueueMutableLiveData;
 import com.ammar.sharing.models.Message;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 
 public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
-    ArrayList<Message> messages = new ArrayList<>(10);
+    public static final ArrayList<Message> messages = new ArrayList<>(10);
 
     public MessagesAdapter() {
-        messages.add(new Message("Al Salam Alykom", true));
-        messages.add(new Message("Al Salam Alykom", true));
-        messages.add(new Message("Al Salam Alykom", true));
-        messages.add(new Message("Al Salam Alykom", true));
-        messages.add(new Message("Al Salam Alykom", true));
-        messages.add(new Message("Al Salam Alykom", true));
-        messages.add(new Message("Wa Alykom Al Salam", false));
-        messages.add(new Message("Wa Alykom Al Salam", false));
-        messages.add(new Message("Wa Alykom Al Salam", false));
-        messages.add(new Message("Al Salam Alykom", true));
-        messages.add(new Message("Wa Alykom Al Salam", false));
-        messages.add(new Message("Al Salam Alykom", true));
-        messages.add(new Message("Wa Alykom Al Salam", false));
-        messages.add(new Message("Wa Alykom Al Salam", false));
-        messages.add(new Message("Wa Alykom Al Salam", false));
-        messages.add(new Message("Wa Alykom Al Salam", false));
-        messages.add(new Message("Wa Alykom Al Salam", false));
-        messages.add(new Message("HAHAHAHAHAHAHHAHAHAHHAHAHAHAAHHAAhAHAHAHAHAHAH hahahahHAHAhaha Aaekfgmwejof venfgoawufngaiEV INGVW AHFI wei vi f vwi fwi e iveiEF", true));
-        messages.add(new Message("Wa Alykom Al Salam", false));
-        messages.add(new Message("How are you", true));
-        messages.add(new Message("Fine thank you", true));
     }
 
     public static final int VIEW_TYPE_NOT_REMOTE = 0;

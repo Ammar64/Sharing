@@ -52,7 +52,7 @@
     <string name="send_message">Send melding</string>
     <string name="settings">Innstillinger</string>
     <string name="app_icon_acc_desc">Programikon</string>
-    <string name="message_title">Meldinger</string>
+    <string name="messages">Meldinger</string>
     <string name="enter_message">Skriv inn melding</string>
     <string name="app_name">deling</string>
     <string name="done">ferdig</string>

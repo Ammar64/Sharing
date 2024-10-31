@@ -78,7 +78,7 @@ function makeDownloadItem(e: DownloadObject) {
     downloadItemSize.textContent = !e.hasSplits ? `(${getFormattedFileSize(e.size)})` : '(splits)'
 
     const downloadItemButton = document.createElement("a");
-    downloadItemButton.className = "button-download icon-button"
+    downloadItemButton.className = "button-download icon-text-button"
     downloadItemButton.setAttribute("download", "");
     downloadItemButton.href = `/download/${e.uuid}`
 
