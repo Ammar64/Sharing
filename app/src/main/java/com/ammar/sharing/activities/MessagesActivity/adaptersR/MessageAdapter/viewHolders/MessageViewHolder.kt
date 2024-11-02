@@ -4,8 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RoundRectShape
-import android.text.TextUtils
-import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -13,28 +12,25 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.get
 import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 import com.ammar.sharing.R
 import com.ammar.sharing.common.utils.Utils
-import java.util.Locale
 
-class MessageViewHolder(itemView: LinearLayout) : RecyclerView.ViewHolder(itemView) {
-    val textView = itemView[0] as TextView
+class MessageViewHolder private constructor(itemView: LinearLayout) : RecyclerView.ViewHolder(itemView) {
+    lateinit var contentTV: TextView
+    var authorTV: TextView? = null
+
     companion object {
-        fun constructNewMessageView(context: Context, isRemote: Boolean): LinearLayout {
+        fun constructNewMessageViewHolder(context: Context, isRemote: Boolean): MessageViewHolder {
 
             val cornerRadius = Utils.dpToPx(12F)
-            val messageView = TextView(context).apply {
+            val messageContainer = LinearLayout(context).apply {
+                orientation = LinearLayout.VERTICAL
                 val padding = Utils.dpToPx(8f).toInt()
                 setPadding(padding)
-                if(isRemote) {
-                    setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_color_dark, null))
-                } else {
-                    setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_color_light, null))
-                }
             }
+
             // setup corners
             val config = context.resources.configuration;
             val layoutDirection = config.layoutDirection;
@@ -76,8 +72,8 @@ class MessageViewHolder(itemView: LinearLayout) : RecyclerView.ViewHolder(itemVi
             val shape = RoundRectShape(radiuses, null, null)
             val shapeDrawable = ShapeDrawable(shape)
             shapeDrawable.paint.color = if(isRemote) Color.rgb(235, 235, 235) else ResourcesCompat.getColor(context.resources, R.color.colorSecondary, null)
-            messageView.background = shapeDrawable
-            messageView.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
+            messageContainer.background = shapeDrawable
+            messageContainer.layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
                 if( isRemote ) {
                     marginEnd = Utils.dpToPx(18f).toInt()
                     marginStart = Utils.dpToPx(4f).toInt()
@@ -87,15 +83,39 @@ class MessageViewHolder(itemView: LinearLayout) : RecyclerView.ViewHolder(itemVi
                 }
             }
 
+            val messageContentTV = TextView(context).apply {
+                if(isRemote) {
+                    setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_color_dark, null))
+                } else {
+                    setTextColor(ResourcesCompat.getColor(context.resources, R.color.text_color_light, null))
+                }
+                setTextIsSelectable(true)
+            }
+
+            messageContainer.addView(messageContentTV);
+
+
             val linearLayout = LinearLayout(context).apply {
                 layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT).apply {
                     bottomMargin = Utils.dpToPx(8f).toInt()
                 }
                 gravity = if( isRemote ) Gravity.END else Gravity.START
-                addView(messageView)
+                addView(messageContainer)
             }
 
-            return linearLayout;
+            return MessageViewHolder(linearLayout).apply {
+                contentTV = messageContentTV
+                // specify author
+                if( isRemote ) {
+                    val messageAuthorTV = TextView(context).apply {
+                        setTextSize(TypedValue.COMPLEX_UNIT_SP, 11f)
+                        setTextColor(0x77111111)
+                        gravity = Gravity.START
+                    }
+                    messageContainer.addView(messageAuthorTV)
+                    authorTV = messageAuthorTV
+                }
+            };
         }
     }
 }

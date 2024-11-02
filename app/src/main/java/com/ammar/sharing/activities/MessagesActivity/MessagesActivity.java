@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
+import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter;
 import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.MessagesAdapter;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.custom.ui.AdaptiveActivity;
@@ -34,8 +35,11 @@ public class MessagesActivity extends AdaptiveActivity {
     }
 
     private void initItems() {
+        ShareAdapter.HeaderViewHolder.unseenMessagesCount = 0;
         Toolbar toolbar = findViewById(R.id.TB_Toolbar);
+        toolbar.setNavigationIcon(R.drawable.icon_back);
         toolbar.setTitle(R.string.messages);
+        toolbar.setNavigationOnClickListener((v) -> finish());
 
         messagesRecyclerView = findViewById(R.id.RV_MessagesRecyclerView);
         messagesAdapter = new MessagesAdapter();
@@ -45,31 +49,28 @@ public class MessagesActivity extends AdaptiveActivity {
 
         sendButton = findViewById(R.id.B_MessageSend);
         sendButton.setOnClickListener((v) -> {
-            String message = messageInput.getText().toString();
+            String messageText = messageInput.getText().toString();
+            Message message = new Message(messageText, "admin",false);
             for( User i : User.users ){
                 if( i.isConnectedViaWebSocket() ) {
-                    i.getWebSocket().sendText(message);
+                    i.getWebSocket().sendText(message.toJSON());
                 }
             }
             synchronized (MessagesAdapter.messages) {
-                MessagesAdapter.messages.add(new Message(message, false));
-                boolean isLastVisible = isLastVisible();
+                MessagesAdapter.messages.add(message);
                 messagesAdapter.notifyItemInserted(MessagesAdapter.messages.size() - 1);
-                if( isLastVisible ) {
-                    scrollToBottom();
-                }
-                messageInput.setText("");
+                //FIXME: Scroll to bottom if user is already viewing the last message
+                scrollToBottom();
             }
+            messageInput.setText("");
         });
     }
 
     private void initObservers() {
-        Data.messagesNotifier.observe(this, (position) -> {
-            boolean isLastVisible = isLastVisible();
-            messagesAdapter.notifyItemInserted(position);
-            if( isLastVisible ) {
-                scrollToBottom();
-            }
+        Data.messagesNotifier.observe(this, (size) -> {
+            messagesAdapter.notifyItemInserted(size-1);
+            //FIXME: Scroll to bottom if user is already viewing the last message
+            scrollToBottom();
         });
     }
 
@@ -78,8 +79,9 @@ public class MessagesActivity extends AdaptiveActivity {
         messagesRecyclerView.smoothScrollToPosition(messagesAdapter.getItemCount()-1);
     }
 
-    boolean isLastVisible() {
-        return true;
+    @Override
+    protected void onPause() {
+        ShareAdapter.HeaderViewHolder.unseenMessagesCount = 0;
+        super.onPause();
     }
-
 }

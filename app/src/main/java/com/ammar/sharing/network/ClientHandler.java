@@ -101,23 +101,29 @@ public class ClientHandler implements Runnable {
 
     private void handleWebsocketUpgrade(Request request) {
         try {
-            clientSocket.setSoTimeout(0);
             String userAgent = request.getHeader("User-Agent");
             User user = User.RegisterUser(Utils.getSettings(), clientSocket, userAgent);
-            // prove that we received websocket handshake
-            String wsKey = request.getHeader("Sec-WebSocket-Key").trim();
-            String wsKeyPlusGUID = wsKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
-            String wsAccept = SecurityUtils.textToSha1Base64(wsKeyPlusGUID);
-            Response response = new Response(request.getClientSocket());
-            response.setHeader("Upgrade", "websocket");
-            response.setHeader("Connection", "Upgrade");
-            response.setHeader("Sec-WebSocket-Accept", wsAccept);
-            response.setStatusCode(101);
-            response.sendResponse();
+            if( !user.isBlocked() ) {
+                clientSocket.setSoTimeout(0);
+                // prove that we received websocket handshake
+                String wsKey = request.getHeader("Sec-WebSocket-Key").trim();
+                String wsKeyPlusGUID = wsKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+                String wsAccept = SecurityUtils.textToSha1Base64(wsKeyPlusGUID);
+                Response response = new Response(request.getClientSocket());
+                response.setHeader("Upgrade", "websocket");
+                response.setHeader("Connection", "Upgrade");
+                response.setHeader("Sec-WebSocket-Accept", wsAccept);
+                response.setStatusCode(101);
+                response.sendResponse();
 
-            WebSocket ws = new WebSocket(clientSocket);
-            user.setWebSocket(ws);
-            ws.run();
+                WebSocket ws = new WebSocket(clientSocket);
+                user.setWebSocket(ws);
+                ws.run();
+            } else {
+                Response response = new Response(request.getClientSocket());
+                response.setStatusCode(403);
+                response.sendResponse();
+            }
         } catch (SocketException e) {
             Utils.showErrorDialog("ClientHandler.handleWebsocketUpgrade(): SocketException", e.getMessage());
         }

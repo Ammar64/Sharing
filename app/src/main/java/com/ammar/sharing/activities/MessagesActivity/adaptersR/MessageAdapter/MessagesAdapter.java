@@ -1,17 +1,13 @@
 package com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter;
 
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.viewHolders.MessageViewHolder;
-import com.ammar.sharing.custom.data.QueueMutableLiveData;
 import com.ammar.sharing.models.Message;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 
@@ -33,13 +29,16 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
     @NonNull
     @Override
     public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LinearLayout linearLayout = MessageViewHolder.Companion.constructNewMessageView(parent.getContext(), viewType == VIEW_TYPE_REMOTE);
-        return new MessageViewHolder(linearLayout);
+        return MessageViewHolder.Companion.constructNewMessageViewHolder(parent.getContext(), viewType == VIEW_TYPE_REMOTE);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
-        holder.getTextView().setText(messages.get(position).getText());
+        Message message = messages.get(position);
+        holder.getContentTV().setText(message.getContent());
+        if( holder.getAuthorTV() != null ) {
+            holder.getAuthorTV().setText(message.getAuthor());
+        }
     }
 
     @Override

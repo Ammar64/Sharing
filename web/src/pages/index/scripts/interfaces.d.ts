@@ -4,3 +4,9 @@ export interface DownloadObject {
     hasSplits: boolean;
     size: number;
 }
+
+export interface Message {
+    type: string,
+    author: string,
+    content: string
+}

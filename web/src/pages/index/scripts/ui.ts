@@ -17,7 +17,7 @@ function createRipple(event: MouseEvent) {
     }
 
     button.appendChild(circle);
-    document.addEventListener("mouseup", function(event) {
+    document.addEventListener("mouseup", function (event) {
         removeRipple(button);
     }, { once: true });
 }
@@ -33,6 +33,14 @@ for (const button of buttons) {
 }
 
 const iconButtonsImages = document.querySelectorAll('.ripple-button>img');
-for( const image of iconButtonsImages ) {
+for (const image of iconButtonsImages) {
     image.setAttribute("draggable", "false");
+}
+
+const htmlDir = document.getElementsByTagName("html")[0].getAttribute("dir");
+if (htmlDir === "rtl") {
+    const rtlIcons = document.getElementsByClassName('rtl-icon');
+    for (const icon of rtlIcons) {
+        (icon as HTMLElement).style.transform = 'scaleX(-1)';
+    }
 }

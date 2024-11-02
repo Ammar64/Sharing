@@ -112,7 +112,7 @@ public class ServerService extends Service {
                 }
                 Bundle fb = new Bundle();
                 fb.putChar("action", 'A');
-                Data.filesListNotifier.postValue(fb);
+                Data.downloadsListNotifier.postValue(fb);
                 break;
             case Consts.ACTION_ADD_APPS_SHARABLES:
                 ArrayList<String> packages_name = intent.getStringArrayListExtra(Consts.EXTRA_APPS_NAMES);
@@ -127,7 +127,7 @@ public class ServerService extends Service {
                 }
                 Bundle ab = new Bundle();
                 ab.putChar("action", 'A');
-                Data.filesListNotifier.postValue(ab);
+                Data.downloadsListNotifier.postValue(ab);
                 break;
             case Consts.ACTION_ADD_URI_SHARABLES:
                 ArrayList<Uri> uris = intent.getParcelableArrayListExtra(Consts.EXTRA_URIS);
@@ -137,7 +137,7 @@ public class ServerService extends Service {
                 }
                 Bundle ub = new Bundle();
                 ub.putChar("action", 'A');
-                Data.filesListNotifier.postValue(ub);
+                Data.downloadsListNotifier.postValue(ub);
                 break;
             case Consts.ACTION_REMOVE_DOWNLOAD:
                 String uuid = intent.getStringExtra(Consts.EXTRA_DOWNLOAD_UUID);
@@ -153,7 +153,7 @@ public class ServerService extends Service {
                 Bundle remove_info = new Bundle();
                 remove_info.putChar("action", 'R');
                 remove_info.putInt("index", index);
-                Data.filesListNotifier.forcePostValue(remove_info);
+                Data.downloadsListNotifier.forcePostValue(remove_info);
                 break;
             case Consts.ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN:
                 if (!server.isRunning()) {

@@ -12,6 +12,19 @@
 }
 
 
+#disconnected {
+    color: #eee;
+    background-color: rgb(219, 16, 16);
+    padding: 2em 1em;
+    position: fixed;
+    top: 2em;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 15px;
+    box-shadow: 2px 3px 10px black;
+    z-index: 2000;
+}
+
 * {
     margin: 0;
     padding: 0;

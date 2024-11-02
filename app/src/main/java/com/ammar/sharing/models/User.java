@@ -5,10 +5,15 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
+import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter;
 import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.MessagesAdapter;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
+import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.network.websocket.WebSocket;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -158,11 +163,18 @@ public class User {
 
     public void setWebSocket(WebSocket ws) {
         this.ws = ws;
-        this.ws.setOnReceiveText((message) -> {
-            synchronized (MessagesAdapter.messages) {
-                MessagesAdapter.messages.add(new Message(message, true));
-                // notify UI that a message was received
-                Data.messagesNotifier.forcePostValue(MessagesAdapter.messages.size()-1);
+        this.ws.setOnReceiveText((data) -> {
+            Message message = Message.fromJSON(data, true);
+            if( message != null ) {
+                if( !getName().equals( message.getAuthor() ) ) {
+                    message.setAuthor(getName() + "!");
+                }
+                synchronized (MessagesAdapter.messages) {
+                    MessagesAdapter.messages.add(message);
+                    // notify UI that a message was received
+                    ShareAdapter.HeaderViewHolder.unseenMessagesCount++;
+                    Data.messagesNotifier.forcePostValue(MessagesAdapter.messages.size());
+                }
             }
         });
     }
@@ -179,4 +191,29 @@ public class User {
         return ws;
     }
 
+    public enum INFO {
+        AVAILABLE_DOWNLOADS_UPDATED
+    }
+    public static void informAllUsersThat(INFO info) {
+        try {
+            JSONObject infoJSON = new JSONObject();
+            infoJSON.put("type", "info");
+            switch (info) {
+                case AVAILABLE_DOWNLOADS_UPDATED:
+                    infoJSON.put("info", "update-downloads");
+                    break;
+            }
+
+
+            for( final User i : User.users ) {
+                if( i.isConnectedViaWebSocket() ) {
+                    i.getWebSocket().sendText(infoJSON.toString());
+                }
+            }
+        } catch (JSONException e) {
+            Utils.showErrorDialog("User.informAllUsersThat(). JSONException", "Error: " + e.getMessage());
+        } catch (Exception e) {
+            Utils.showErrorDialog("User.informAllUsersThat(). Exception", "Error: " + e.getMessage());
+        }
+    }
 }

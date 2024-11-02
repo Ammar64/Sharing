@@ -99,7 +99,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ((ProgressViewHolder) holder).setup(ProgressManager.progresses.get(position - 1));
                 break;
             case TYPE_HEADER:
-
+                ((HeaderViewHolder) holder).updateUnseenMessagesNum();
                 break;
         }
     }
@@ -116,6 +116,9 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         private final AppCompatTextView serverLinkTV;
         private final AdaptiveTextView QRCodeErrorText;
         private final ShareFragment fragment;
+        private final TextView messagesNumTV;
+
+        public static int unseenMessagesCount = 0;
         public HeaderViewHolder(@NonNull View itemView, ShareFragment fragment) {
             super(itemView);
             this.fragment = fragment;
@@ -126,10 +129,10 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             ImageButton showSelected = itemView.findViewById(R.id.B_ShowSelected);
             ImageButton showUsersB = itemView.findViewById(R.id.B_ShowUsers);
-
             // setup badges
             TextView usersNumTV = itemView.findViewById(R.id.TV_NumberUsers);
             TextView filesNumTV = itemView.findViewById(R.id.TV_NumberSelected);
+            messagesNumTV = itemView.findViewById(R.id.TV_NumberMessages);
 
             if (!Sharable.sharablesList.isEmpty()) {
                 filesNumTV.setText(String.valueOf(Sharable.sharablesList.size()));
@@ -145,6 +148,11 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             messagesB.setOnClickListener((button) -> {
                 Intent intent = new Intent(itemView.getContext(), MessagesActivity.class);
                 itemView.getContext().startActivity(intent);
+            });
+
+            updateUnseenMessagesNum();
+            Data.messagesNotifier.observe(this.fragment.getViewLifecycleOwner(), (messageCount) -> {
+                updateUnseenMessagesNum();
             });
 
             Resources res = itemView.getResources();
@@ -190,7 +198,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 chosenFilesRD.show();
             });
 
-            Data.filesListNotifier.observe(this.fragment.getViewLifecycleOwner(), info -> {
+            Data.downloadsListNotifier.observe(this.fragment.getViewLifecycleOwner(), info -> {
                 char action = info.getChar("action");
                 int size = Sharable.sharablesList.size();
                 if ('R' == action) {
@@ -206,6 +214,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     filesNumTV.setVisibility(View.VISIBLE);
                     noFilesTV.setVisibility(View.GONE);
                 }
+                User.informAllUsersThat(User.INFO.AVAILABLE_DOWNLOADS_UPDATED);
             });
 
             // setup users dialog
@@ -248,6 +257,17 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     noUserConnectedTV.setVisibility(View.GONE);
                 }
             });
+        }
+
+
+        protected void updateUnseenMessagesNum() {
+            if( unseenMessagesCount > 0 ) {
+                messagesNumTV.setVisibility(View.VISIBLE);
+                messagesNumTV.setText(String.valueOf(unseenMessagesCount));
+            } else {
+                messagesNumTV.setVisibility(View.GONE);
+                messagesNumTV.setText("0");
+            }
         }
 
         private void setupQrCode() {

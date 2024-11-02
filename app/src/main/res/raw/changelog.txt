@@ -3,24 +3,8 @@
 // lines that starts with # are rendered with bigger text size and the # is omitted
 
 # Features
-1- Add CLI support for curl & wget
-2- Add HTML only page on URL /no-JS
-3- It now tells you how much time it took to transfer files after complete
-4- Show upload speed in the browser as well when uploading
-5- Allow to download all files and apps with one click from the browser
+1- Ability to send and receive messages real time using websockets
+2- Using websockets to update available downloads list without clicking the update button
 
-# Fixed
-1- Fixed the black screen issue when finishing tutorial
-2- Fixed dialogs too big in landscape mode
-
-# Changed
-1- Changed the app icon
-2- Make most of the dialogs with round corners
-3- Update the web UI
-4- Change type of ServerService from SpecialUse to DataSync
-5- Remove FastShare activity and utilize the MainActivity for Share Intent
-6- It won't show you QR Code unless you turn on the sever first
-
-# Translations
-1- New French translation
-2- New Chinese translation
+# Improved
+1- Languages dialog improved

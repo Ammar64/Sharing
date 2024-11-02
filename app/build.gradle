@@ -53,8 +53,8 @@ android {
         applicationId "com.ammar.sharing"
         minSdk 21
         targetSdk 34
-        versionCode 21
-        versionName "v1.5.3"
+        versionCode 22
+        versionName "v1.5.4-alpha2"
 
         vectorDrawables.useSupportLibrary = true
         externalNativeBuild {

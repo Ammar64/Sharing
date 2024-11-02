@@ -44,12 +44,16 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.ApksInstallerActivity.ApksInstallerActivity;
 import com.ammar.sharing.activities.ChangeLogActivity.ChangeLogActivity;
+import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter;
+import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.MessagesAdapter;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.ui.AdaptiveDropDown;
 import com.ammar.sharing.custom.ui.AdaptiveTextView;
 import com.ammar.sharing.custom.ui.RoundDialog;
+import com.ammar.sharing.models.Message;
+import com.ammar.sharing.models.User;
 import com.ammar.sharing.services.ServerService;
 import com.ammar.sharing.BuildConfig;
 
@@ -126,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             settingsPref.edit()
                     .putBoolean(Consts.PREF_FIELD_IS_DARK, true)
                     .apply();
-            appInfoPref.edit().putBoolean(Consts.PREF_FIELD_IS_FIRST_RUN, false).apply();;
+            appInfoPref.edit().putBoolean(Consts.PREF_FIELD_IS_FIRST_RUN, false).apply();
         }
 
         int lastVerCode = appInfoPref.getInt(Consts.PREF_FIELD_LAST_VERCODE, 0);
@@ -300,16 +304,32 @@ public class MainActivity extends AppCompatActivity {
         startService(serviceIntent);
 
         if(Intent.ACTION_SEND.equals(getIntent().getAction()) ) {
-            Intent uriIntent = new Intent(this, ServerService.class);
-            uriIntent.setAction(Consts.ACTION_ADD_URI_SHARABLES);
-            ArrayList<Uri> uriArrayList = new ArrayList<>(1);
-            Uri uri = getIntent().getParcelableExtra(Intent.EXTRA_STREAM);
-            if( uri == null ) {
-                Toast.makeText(this, R.string.unsupported_data, Toast.LENGTH_SHORT).show();
+            if( "text/plain".equals(getIntent().getType()) ) {
+                String text = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+                Message message = new Message(text, "admin", false);
+                synchronized (MessagesAdapter.messages) {
+                    MessagesAdapter.messages.add(message);
+                    // notify UI that a message was received
+                    ShareAdapter.HeaderViewHolder.unseenMessagesCount++;
+                    Data.messagesNotifier.forcePostValue(MessagesAdapter.messages.size());
+                    for( User i : User.users ){
+                        if( i.isConnectedViaWebSocket() ) {
+                            i.getWebSocket().sendText(message.toJSON());
+                        }
+                    }
+                }
             } else {
-                uriArrayList.add(uri);
-                uriIntent.putParcelableArrayListExtra(Consts.EXTRA_URIS, uriArrayList);
-                startService(uriIntent);
+                Intent uriIntent = new Intent(this, ServerService.class);
+                uriIntent.setAction(Consts.ACTION_ADD_URI_SHARABLES);
+                ArrayList<Uri> uriArrayList = new ArrayList<>(1);
+                Uri uri = getIntent().getParcelableExtra(Intent.EXTRA_STREAM);
+                if (uri == null) {
+                    Toast.makeText(this, R.string.unsupported_data, Toast.LENGTH_SHORT).show();
+                } else {
+                    uriArrayList.add(uri);
+                    uriIntent.putParcelableArrayListExtra(Consts.EXTRA_URIS, uriArrayList);
+                    startService(uriIntent);
+                }
             }
         } else if (Intent.ACTION_SEND_MULTIPLE.equals(getIntent().getAction())) {
             Intent uriIntent = new Intent(this, ServerService.class);

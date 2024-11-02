@@ -134,18 +134,18 @@
 
     <div id="messages-page" style="display: none;">
         <div id="messages-top-bar">
-            <button id="go-back-button" class="icon-button ripple-button"><img src="assets/icon-back.svg"/></button>
+            <button id="go-back-button" class="icon-button ripple-button rtl-icon"><img src="assets/icon-back.svg"/></button>
             <div id="messages-title">{messages}</div>
         </div>
         <div id="messages-container">
         </div>
         <div id="control-box">
             <textarea placeholder="{enter_message}" id="message-input"></textarea>
-            <button id="send-message-button" class="icon-button ripple-button"><img src="assets/icon-send.svg"/></button>
+            <button id="send-message-button" class="icon-button ripple-button"><img class="rtl-icon" src="assets/icon-send.svg"/></button>
         </div>
     </div>
+    <div id="disconnected" style="display: none;">{remote_disconnected}<span id="reconnect_in_seconds">2</span></div>
     <div id="overlay"></div> <!-- Overlay div for covering the page -->
 
 </body>
-
 </html>

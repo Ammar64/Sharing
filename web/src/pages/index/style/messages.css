@@ -14,14 +14,14 @@
 #control-box {
     display: flex;
     align-items: end;
-    background-color: #595959;
+    background-color: #1C1C1C;
 }
 
 #message-input {
     width: 100%;
     height: min-content;
     color: #eee;
-    background-color: #595959;
+    background-color: #1C1C1C;
     min-height: 1.5em;
     font-size: x-large;
     padding: 7px;
@@ -33,7 +33,7 @@
 #send-message-button {
     width: 5em;
     height: 5em;
-    background-color: #595959;
+    background-color: #1C1C1C;
     color: #eee;
 }
 
@@ -74,6 +74,11 @@
     align-self: flex-end;
     word-break: break-all;
     word-wrap: break-word;
+}
+
+.message-author-text {
+    font-size: x-small;
+    color: #11111177;
 }
 
 #messages-top-bar {

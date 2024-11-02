@@ -32,4 +32,5 @@
     <string name="there_is_a_secret">There is something secret in this program</string>
     <string name="messages">Messages</string>
     <string name="enter_message">Enter message</string>
+    <string name="remote_disconnected">Can't connect to remote device retrying in </string>
 </resources>

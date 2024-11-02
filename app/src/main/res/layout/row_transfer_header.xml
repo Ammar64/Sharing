@@ -66,7 +66,7 @@
         app:layout_constraintStart_toEndOf="@id/B_AddFiles"/>
 
     <TextView
-        android:id="@+id/TV_MessagesNumber"
+        android:id="@+id/TV_NumberMessages"
         android:layout_width="20dp"
         android:layout_height="20dp"
         app:layout_constraintStart_toEndOf="@+id/B_Messages"

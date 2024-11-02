@@ -97,7 +97,7 @@ function makeDownloadItem(e: DownloadObject) {
     return downloadItem;
 }
 
-function requestAvailableDownloads() {
+function requestAvailableDownloads(): void {
     downloadsErrorSpan.style.display = "none";
     while (downloads.lastChild) {
         downloads.lastChild.remove();
@@ -135,27 +135,39 @@ function requestAvailableDownloads() {
 /* username field */
 const usernameForm = document.getElementById('usernameForm')!;
 
-// Check if username is already stored in localStorage
-let storedUsername = localStorage.getItem('username');
+let alreadyRequestedTheServer = false;
+async function getUsername(): Promise<string> {
+    // Check if username is already stored in localStorage
+    let storedUsername = localStorage.getItem("username");
 
-// if localStorage Empty ask server for default name. this could be "User-0" or "User-1"
-if (!storedUsername) {
-    fetch("/get-user-info", {
-        method: "GET"
-    }).then(function (res) {
-        if (res.status === 200) return res.json();
-        else throw "ERROR GETTING USER INFO";
-    }).then(function (res) {
-        userId = res.id;
-        document.querySelector('.current-username p')!.textContent = `${currentUsernameText} ${res.username}`;
-    }).catch(function (err) {
-        alert("Error getting username");
-    })
-} else { // else tell the server about the stored name
-    updateUsername(storedUsername);
+    // if localStorage Empty ask server for default name. this could be "User-0" or "User-1"
+    if (!storedUsername) {
+        try {
+            const response = await fetch("/get-user-info", {
+                method: "GET"
+            })
+            if (response.status == 200) {
+                const resJSON = await response.json();
+                userId = resJSON.id;
+                const username = resJSON.username;
+                document.querySelector('.current-username p')!.textContent = `${currentUsernameText} ${username}`;
+                return username;
+            } else {
+                throw "ERROR GETTING USER INFO";
+            }
+        } catch (e: any) {
+            alert("Error getting username: ".concat(e.message));
+            return "";
+        }
+    } else { // else tell the server about the stored name
+        if(!alreadyRequestedTheServer) {
+            updateUsername(storedUsername);
+            alreadyRequestedTheServer = true;
+        }
+        return storedUsername;
+    }
 }
-
-
+getUsername();
 usernameForm.addEventListener('submit', function (event) {
     event.preventDefault(); // Prevent default form submission
     const usernameInput = (document.getElementById('usernameInput') as HTMLInputElement).value.trim(); // Trim whitespace
@@ -166,9 +178,9 @@ usernameForm.addEventListener('submit', function (event) {
         return;
     }
 
-    updateUsername(usernameInput);
-    // Check if username has changed
+    let storedUsername = localStorage.getItem("username");
     if (usernameInput !== storedUsername) {
+        updateUsername(usernameInput);
         // Save updated username to localStorage
         localStorage.setItem('username', usernameInput);
         storedUsername = usernameInput; // Update storedUsername variable
@@ -216,7 +228,6 @@ function updateUsername(username: string) {
 
 function updateStoredUsername(username: string) {
     localStorage.setItem("username", username);
-    storedUsername = username;
     // Update the display of current username
     document.querySelector('.current-username p')!.textContent = `${currentUsernameText} ${username}`;
 }
