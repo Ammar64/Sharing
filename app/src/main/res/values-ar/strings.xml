@@ -45,7 +45,7 @@
     <string name="disable_browser_upload">تعطيل الإرسال من المتصفح</string>
     <string name="disable_browser_upload_desc">منع المتصفحات من إرسال ملفات إلى جهازك</string>
     <string name="block_users">حظر المستخدمين فورا</string>
-    <string name="block_users_desc">يحظر المستخديم فور إتصالهم بجهازك.</string>
+    <string name="block_users_desc">حظر المستخدمين فور إتصالهم بجهازك.</string>
     <string name="language">اللغة</string>
     <string name="languages_desc">تغيير لغة التطبيق</string>
     <string name="system_default_lang">لغة النظام</string>
