@@ -1,3 +1,6 @@
+# Development is paused until the end of july 2025.
+
+
 # <img src="https://github.com/Ammar64/Sharing/blob/master/fastlane/metadata/android/en-US/images/icon.png" height="30px"/> Sharing
 
 [![Reproducible builds](https://github.com/Ammar64/Sharing/actions/workflows/rb-verify.yml/badge.svg)](https://github.com/Ammar64/Sharing/actions/workflows/rb-verify.yml/)
