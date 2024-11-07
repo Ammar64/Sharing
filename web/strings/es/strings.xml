@@ -30,4 +30,5 @@
     <string name="there_is_a_secret">Hay algo escondido en este programa</string>
     <string name="messages">Mensajes</string>
     <string name="enter_message">Introducir mensaje</string>
+    <string name="remote_disconnected">No se puede conectar con el dispositivo remoto reintentando en</string>
 </resources>
