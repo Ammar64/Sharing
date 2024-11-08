@@ -76,5 +76,20 @@ height="80">](https://apt.izzysoft.de/fdroid/index/apk/com.ammar.sharing)
 الضغط على زر التعليمات بالتطبيق فى الإصدار 1.5 و أحدث سيفتح الرابط أعلاه<br>
 يمكنك المساهمة فى فرع ال[tutorial](https://github.com/Ammar64/Sharing/tree/tutorial)<br>
 
+الترخيص
+-------------
+
+<div align="left">
+     
+```
+ Copyright (C) 2024 Sharing authors
+
+ This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, version 3.
+
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+ You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
+```
+
 </div>
 </div>
