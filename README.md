@@ -1,22 +1,29 @@
+<div align="center">
+
+| [العربية](https://github.com/Ammar64/Sharing/blob/master/README_ar.md) | [English](https://github.com/Ammar64/Sharing/blob/master/README.md) |
+| - | - |
+
+</div>
+
+
 # Development is paused until the end of july 2025.
 
 
 # <img src="https://github.com/Ammar64/Sharing/blob/master/fastlane/metadata/android/en-US/images/icon.png" height="30px"/> Sharing
 
-[![Reproducible builds](https://github.com/Ammar64/Sharing/actions/workflows/rb-verify.yml/badge.svg)](https://github.com/Ammar64/Sharing/actions/workflows/rb-verify.yml/)
+[![Reproducible builds](https://github.com/Ammar64/Sharing/actions/workflows/rb-verify.yml/badge.svg)](https://github.com/Ammar64/Sharing/actions/workflows/rb-verify.yml/) ![حالة الترجمة](https://hosted.weblate.org/widget/sharing/svg-badge.svg)
 
 Share files and apps over HTTP.
 You need the other device to be connected to the same network. just toggle on the server and scan the QR Code on other device and you're good to go.
 Files sent from browser to the app can be found in Sharing/ folder in your internal storage.
 You can always disable uploads in the app settings. 
 
-[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"
-alt="Get it on IzzyOnDroid"
-height="80">](https://apt.izzysoft.de/fdroid/index/apk/com.ammar.sharing)
-
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
      height="80">](https://f-droid.org/packages/com.ammar.sharing/)
+ [<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"
+alt="Get it on IzzyOnDroid"
+height="80">](https://apt.izzysoft.de/fdroid/index/apk/com.ammar.sharing)
 
 Or download the latest APK from the [Releases Section](https://github.com/Ammar64/Sharing/releases/latest).
 
