@@ -27,7 +27,7 @@
     <string name="please_choose_a_file">Txil-k·m bḍu afaylu</string>
     <string name="apks_installer">Amesbedday n APK</string>
     <string name="package_installed_success">Yettwasbedd ukemmus</string>
-    <string name="pick_apks_file">fren ifuyla APK</string>
+    <string name="pick_apks_file">Fren ifuyla APK</string>
     <string name="pls_choose_apks">Txil fren afaylu APK</string>
     <string name="app_name">beṭṭu</string>
     <string name="settings">Iγewwaṛen</string>
@@ -56,7 +56,7 @@
     <string name="warning">Ɣur-k!</string>
     <string name="images">Tugniwin</string>
     <string name="audio">Imesli</string>
-    <string name="installing">Asbeddi</string>
+    <string name="installing">Asbeddi…</string>
     <string name="stop">Ḥbes</string>
     <string name="block">Sewḥel</string>
     <string name="unblock">Serreḥ-as</string>
@@ -69,4 +69,27 @@
     <string name="permission_denied">Tettwagi tsiregt</string>
     <string name="svr_running">Yekker uqeddac</string>
     <string name="lang">kab</string>
+    <string name="milliSeconds">%d millitasinin</string>
+    <string name="dark_mode">Askar ubrik</string>
+    <string name="light_mode">Askar aceɛlal</string>
+    <string name="no_app_found_to_handle">Ulac asnas i d-yufraren i uselḥu n tigawt-a</string>
+    <string name="unsupported_data">Isefka ur ttwasefraken ara</string>
+    <string name="sending_to_user">Tuzzna ɣer %1$s</string>
+    <string name="sending_to_user_stopped">Teḥbes tuzna ɣer %1$s</string>
+    <string name="receiving_from_user">Tuṭṭfa sɣur %1$s</string>
+    <string name="receiving_from_user_stopped">Teḥbes tuṭṭfa sɣur %1$s</string>
+    <string name="sending_to_user_done">Yettwazen i %1$s deg %2$s</string>
+    <string name="block_users">Sewḥel iseqdacen yeqqnen</string>
+    <string name="block_users_desc">Sewḥel iseqdacen ticki qqnen ɣer yibenk-ik.</string>
+    <string name="selected_num">Ttwafranen %1$d</string>
+    <string name="internal_storage">Aḥraz adigan</string>
+    <string name="extracting_done">Asefsu immed</string>
+    <string name="extracting_x">Asefsi n %1$s…</string>
+    <string name="no_data_attached">Ulac isefka i d-yettunefken</string>
+    <string name="something_went_wrong">Yella kra n wugur ay d-yeḍran!</string>
+    <string name="no_web_browser_found">Ulac iminig web yettwafen</string>
+    <string name="error_no_files_added">Ulac ifuyla i yettwarnan i usider</string>
+    <string name="svr_notification_message">Aqeddac ha-t-an yekker deg tansa %1$s:%2$s u iqebbel issutren imaynuten</string>
+    <string name="chinese_simplified">Tacinwatt (taḥerfit)</string>
+    <string name="disable_browser_upload">Sexsi asali s yiminig web</string>
 </resources>
