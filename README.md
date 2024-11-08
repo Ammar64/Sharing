@@ -1,6 +1,6 @@
 <div align="center">
 
-| [العربية](https://github.com/Ammar64/Sharing/blob/master/README_ar.md) | [English](https://github.com/Ammar64/Sharing/blob/master/README.md) |
+| [العربية](README_ar.md) | [English](README.md) |
 | - | - |
 
 </div>
