@@ -1,7 +1,7 @@
 <div align="right">
 <div align="center">
 
-| [العربية](https://github.com/Ammar64/Sharing/blob/master/README_ar.md) | [اﻹنجليزية](https://github.com/Ammar64/Sharing/blob/master/README.md) |
+| [العربية](README_ar.md) | [اﻹنجليزية](README.md) |
 | - | - |
 
 </div>
