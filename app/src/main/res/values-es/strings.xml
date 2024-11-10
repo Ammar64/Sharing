@@ -30,7 +30,7 @@
     <string name="dont_show_again">No volver a mostrar este mensaje</string>
     <string name="fast_share">Compartir rápido</string>
     <string name="toggle_dark_mode">Alternar modo oscuro</string>
-    <string name="disable_browser_upload">Desactivar la carga desde el navegador</string>
+    <string name="disable_browser_upload">Desactive la carga a través del navegador web</string>
     <string name="disable_browser_upload_desc">Evitar que los navegadores envíen archivos a tu dispositivo.</string>
     <string name="block_users">Bloquear a los usuarios conectados</string>
     <string name="block_users_desc">Bloquear a los usuarios una vez se hayan conectado a tu dispositivo.</string>
@@ -40,10 +40,10 @@
     <string name="apks_installer_experimental">Instalador de APKS (Experimental)</string>
     <string name="apks_installer">Instalador de APKS</string>
     <string name="pls_choose_apks">Por favor, selecciona un archivo APKS</string>
-    <string name="pick_apks_file">coger archivo APKS</string>
+    <string name="pick_apks_file">Seleccione un archivo APKS</string>
     <string name="installer_note">Después de enviar con éxito un archivo APKS a otro dispositivo y enviar esta aplicación a otro dispositivo remoto y abrir esta página para instalar el archivo APKS.</string>
     <string name="initialising">Inicializando...</string>
-    <string name="installing">Instalando</string>
+    <string name="installing">Instalando…</string>
     <string name="extracting_x">Extrayendo %1$s…</string>
     <string name="extracting_done">Extraccion completa</string>
     <string name="package_installed_success">Paquete instalado</string>
@@ -89,7 +89,7 @@
     <string name="images">Imágenes</string>
     <string name="videos">Vídeos</string>
     <string name="audio">Audio</string>
-    <string name="documents">documentos</string>
+    <string name="documents">Documentos</string>
     <string name="no_files_found">No se encontraron archivos</string>
     <string name="failed">Fallido</string>
     <string name="please_choose_a_file">Por favor, comparte un archivo</string>
@@ -103,4 +103,11 @@
     <string name="select">Seleccionar</string>
     <string name="sort_by">Orderar por…</string>
     <string name="show_drop_down">Mostrar menú de lista desplegable</string>
+    <string name="arabic">Árabe</string>
+    <string name="french">Francés</string>
+    <string name="spanish">Español</string>
+    <string name="norwegian">Noruego</string>
+    <string name="english">Inglés</string>
+    <string name="german">Alemán</string>
+    <string name="chinese_simplified">Chino (simplificado)</string>
 </resources>

@@ -27,20 +27,20 @@
     <string name="milliSeconds">%d millisecondes</string>
     <!-- dialogues   -->
     <string name="connected_users">Utilisateurs connectés</string>
-    <string name="block">BLOQUER</string>
-    <string name="unblock">DÉBLOQUER</string>
+    <string name="block">Bloquer</string>
+    <string name="unblock">Débloquer</string>
     <string name="user_default_name">Utilisateur %1$d</string>
     <string name="choose_language">Choisissez la langue</string>
     <string name="no_user_connected">Aucun utilisateur connecté</string>
     <string name="no_files_selected">Aucun fichier sélectionné</string>
     <string name="warning">Avertissement !</string>
-    <string name="warning_details">Cette application n\'utilise pas https pour transférer vos fichiers, ce qui la rend vulnérable aux attaques de type « homme du milieu ». \nPour être plus en sécurité, je recommande d\'activer un point d\'accès sécurisé sur cet appareil et de vous assurer que les autres appareils souhaités sont les seuls à y être connectés.</string>
+    <string name="warning_details">Cette application n\'utilise pas HTTPS pour transférer vos fichiers, ce qui la rend vulnérable aux attaques de type « homme du milieu ». \nPour être plus en sécurité, activez un point d\'accès sécurisé sur cet appareil et de vous assurer que les autres appareils souhaités sont les seuls à s\'y connecter.</string>
     <string name="dont_show_again">Ne plus afficher ce message</string>
     <string name="fast_share">Partage rapide</string>
     <!-- Fragment Paramètres   -->
     <string name="toggle_dark_mode">Activer/désactiver le mode sombre</string>
-    <string name="disable_browser_upload">Désactiver le téléchargement par navigateur</string>
-    <string name="disable_browser_upload_desc">Empêche les navigateurs d\'envoyer des fichiers vers votre appareil.</string>
+    <string name="disable_browser_upload">Désactiver l\'envoi par navigateur</string>
+    <string name="disable_browser_upload_desc">Empêche les navigateurs web d\'envoyer des fichiers vers votre appareil.</string>
     <string name="block_users">Bloquer les utilisateurs connectés</string>
     <string name="block_users_desc">Bloquer les utilisateurs une fois qu\'ils sont connectés à votre appareil.</string>
     <string name="language">Langues</string>
@@ -64,19 +64,19 @@
     <string name="images">Images</string>
     <string name="videos">Vidéos</string>
     <string name="audio">Audio</string>
-    <string name="documents">documents</string>
+    <string name="documents">Documents</string>
     <string name="no_files_found">Aucun fichier trouvé</string>
     <!-- Activité Installeur d'APKs -->
     <string name="apks_installer_experimental">Installeur d\'APKS (Expérimental)</string>
-    <string name="apks_installer">Installeur d\'APKS</string>
-    <string name="pls_choose_apks">Veuillez choisir un fichier apks</string>
-    <string name="pick_apks_file">choisir un fichier apks</string>
+    <string name="apks_installer">Installateur d\'APKS</string>
+    <string name="pls_choose_apks">Veuillez choisir un fichier APKS</string>
+    <string name="pick_apks_file">Choisissez un fichier APKS</string>
     <string name="installer_note">Après avoir envoyé un fichier apks avec succès à l\'autre appareil, envoyez cette application à l\'autre appareil distant et ouvrez cette page pour installer le fichier apks.</string>
     <string name="initialising">Initialisation…</string>
-    <string name="installing">Installation</string>
-    <string name="extracting_x">extraction de %1$s</string>
+    <string name="installing">Installation …</string>
+    <string name="extracting_x">Extraction de %1$s …</string>
     <string name="extracting_done">Extraction terminée</string>
-    <string name="package_installed_success">Package installé avec succès</string>
+    <string name="package_installed_success">Paquet installé</string>
     <string name="failed">Échoué</string>
     <!-- Activité Partage rapide -->
     <string name="please_choose_a_file">Veuillez partager un fichier</string>
