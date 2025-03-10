@@ -13,6 +13,50 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/CV_ServerPort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="#66555555"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/CL_ServerPort"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ripple_item"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp">
+
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
+                    android:id="@+id/TV_ServerPort"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/change_server_port"
+                    android:textSize="@dimen/settings_big_text"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lightModeColor="#fff" />
+
+                <com.ammar.sharing.custom.ui.AdaptiveTextView
+                    android:id="@+id/TV_ServerPortSub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/change_server_port_desc"
+                    android:textSize="@dimen/small_text"
+                    app:layout_constraintStart_toStartOf="@id/TV_ServerPort"
+                    app:layout_constraintTop_toBottomOf="@id/TV_ServerPort"
+                    app:lightModeColor="#fff" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
 
         <androidx.cardview.widget.CardView
             android:id="@+id/CV_UploadDisable"
@@ -26,7 +70,7 @@
             app:cardElevation="0dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/RL_UploadDisable"
+                android:id="@+id/CL_UploadDisable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ripple_item"
@@ -35,12 +79,15 @@
 
                 <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsUploadAllow"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/disable_browser_upload"
                     android:textSize="@dimen/settings_big_text"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/SC_UploadAllowToggle"
                     app:lightModeColor="#fff" />
 
                 <com.ammar.sharing.custom.ui.AdaptiveTextView
@@ -90,12 +137,15 @@
 
                 <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsUserBlock"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:text="@string/block_users"
                     android:textSize="@dimen/settings_big_text"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    app:layout_constraintEnd_toStartOf="@+id/SC_UsersBlockToggle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:lightModeColor="#fff" />
 
                 <com.ammar.sharing.custom.ui.AdaptiveTextView
@@ -139,18 +189,21 @@
                 android:id="@+id/CL_SettingsLanguage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
+                android:background="@drawable/ripple_item"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="8dp">
 
                 <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsLanguage"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:text="@string/language"
                     android:textSize="@dimen/settings_big_text"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:lightModeColor="#fff" />
 
                 <com.ammar.sharing.custom.ui.AdaptiveTextView
@@ -194,12 +247,15 @@
 
                 <com.ammar.sharing.custom.ui.AdaptiveTextView
                     android:id="@+id/TV_SettingsDebugMode"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:text="@string/debug_mode"
                     android:textSize="@dimen/settings_big_text"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    app:layout_constraintEnd_toStartOf="@+id/SC_DebugModeToggle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:lightModeColor="#fff" />
 
                 <com.ammar.sharing.custom.ui.AdaptiveTextView

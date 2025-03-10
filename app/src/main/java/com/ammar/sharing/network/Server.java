@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 public class Server {
 
-    public static final int PORT_NUMBER = 2999;
+    public static int PORT_NUMBER;
 
     private ServerSocket serverSocket;
     private Thread serverThread;

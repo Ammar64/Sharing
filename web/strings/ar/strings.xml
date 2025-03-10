@@ -28,4 +28,5 @@
     <string name="your_are_blocked">أنت محظور</string>
     <string name="there_is_a_secret">يوجد سر مخبأ بالتطبيق</string>
     <string name="are_you_trying_to_find_secret">هل تحاول العثور على شيء ما مخفي ؟</string>
+    <string name="messages">الرسائل</string>
 </resources>

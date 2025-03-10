@@ -39,7 +39,9 @@
         tools:targetApi="34">
 
         <activity android:name=".activities.MainActivity.MainActivity"
-            android:exported="true" >
+            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -59,15 +61,19 @@
         </activity-alias>
 
         <activity android:name=".activities.AddAppsActivity.AddAppsActivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
             android:exported="false" />
 
         <activity android:name=".activities.AddFilesActivity.AddFilesActivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
             android:exported="false"/>
 
         <activity android:name=".activities.ApksInstallerActivity.ApksInstallerActivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
             android:exported="false" />
 
         <activity android:name=".activities.MessagesActivity.MessagesActivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
             android:windowSoftInputMode="adjustResize"
             android:exported="true" />
 

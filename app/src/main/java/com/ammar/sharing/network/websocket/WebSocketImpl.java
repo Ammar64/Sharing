@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 import kotlin.collections.ArraysKt;
 
@@ -34,8 +36,8 @@ public abstract class WebSocketImpl {
     };
 
     private Thread closeThread;
-    protected OnReceiveTextListener onReceiveTextCallable = null;
-    protected OnReceiveBinListener onReceiveBinCallable = null;
+    protected final ArrayList<OnReceiveTextListener> onReceiveTextCallables = new ArrayList<>();
+    protected final ArrayList<OnReceiveBinListener> onReceiveBinCallables = new ArrayList<>();
     private boolean isCloseSent = false;
     public WebSocketImpl(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -162,12 +164,12 @@ public abstract class WebSocketImpl {
                     byte[] rawWSF = constructWebSocketFrame(wsf.payloadData, PONG);
                     clientSocket.getOutputStream().write(rawWSF);
                 } else if( wsf.isTextFrame() ) {
-                    if( onReceiveTextCallable != null ) {
-                        onReceiveTextCallable.apply(new String(wsf.payloadData, StandardCharsets.UTF_8));
+                    for( OnReceiveTextListener i : onReceiveTextCallables ) {
+                        i.apply(new String(wsf.payloadData, StandardCharsets.UTF_8));
                     }
                 } else if (wsf.isBinaryFrame()) {
-                    if( onReceiveBinCallable != null ) {
-                        onReceiveBinCallable.apply(wsf.payloadData);
+                    for( OnReceiveBinListener i : onReceiveBinCallables ) {
+                        i.apply(wsf.payloadData);
                     }
                 }
             } catch (WebSocketException e) {

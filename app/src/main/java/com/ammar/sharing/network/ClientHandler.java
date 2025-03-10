@@ -131,6 +131,7 @@ public class ClientHandler implements Runnable {
 
     private boolean isWebSocketUpgradeRequest(Request req) throws NotImplementedException {
         String connection = req.getHeader("connection");
+        if( connection == null ) return false;
         String[] connectionValues = connection.split(", ");
         boolean isConnectionUpgrade = false;
         for (String i : connectionValues) {

@@ -8,6 +8,7 @@ object Consts {
     const val ACTION_TOGGLE_SERVER: String = "com.ammar.sharing.services.TOGGLE_SERVER"
     const val ACTION_STOP_SERVICE: String = "com.ammar.sharing.services.STOP_SERVICE"
     const val ACTION_GET_SERVER_STATUS: String = "com.ammar.sharing.services.GET_SERVER_STATUS"
+    const val ACTION_RESTART_SERVER: String = "ACTION_RESTART_SERVER"
     const val ACTION_UPDATE_NOTIFICATION_TEXT: String =
         "com.ammar.sharing.services.UPDATE_NOTIFICATION_STRING"
     const val ACTION_REMOVE_DOWNLOAD: String = "ACTION_REMOVE_DOWNLOAD"
@@ -34,6 +35,7 @@ object Consts {
 
     const val PREF_SETTINGS: String = "SettingsPref"
 
+    const val PREF_FIELD_SERVER_PORT = "SERVER_PORT"
     const val PREF_FIELD_IS_DARK: String = "IS_DARK_MODE"
     const val PREF_FIELD_IS_UPLOAD_DISABLED: String = "UPLOAD_DISABLE"
     const val PREF_FIELD_ARE_USER_BLOCKED: String = "USERS_BLOCK"
@@ -41,8 +43,10 @@ object Consts {
     const val PREF_FIELD_DEBUG_MODE: String = "DEBUG_MODE"
     const val PREF_FIELD_LAST_VERCODE: String = "LAST_VERCODE"
 
-    const val serverNotificationChannelID: String = "com.ammar.sharing.SERVER_NOTIFICATION_CHANNEL"
+    const val SERVER_NOTIFICATION_CHANNEL_ID: String = "SERVER_NOTIFICATION_CHANNEL_ID"
+    const val PROGRESS_NOTIFICATION_CHANNEL_ID: String = "PROGRESS_NOTIFICATION_CHANNEL_ID"
 
+    const val PROGRESS_NOTIFICATION_GROUP: String = "PROGRESS_NOTIFICATION_GROUP"
     @JvmField
     val Sharing: File = File(Environment.getExternalStorageDirectory(), "Sharing")
     @JvmField

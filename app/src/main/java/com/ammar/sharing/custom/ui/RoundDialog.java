@@ -1,7 +1,10 @@
 package com.ammar.sharing.custom.ui;
 
+import static com.ammar.sharing.activities.MainActivity.MainActivity.darkMode;
+
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -14,7 +17,9 @@ import android.widget.FrameLayout;
 import androidx.annotation.ColorInt;
 import androidx.annotation.LayoutRes;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.res.ResourcesCompat;
 
+import com.ammar.sharing.R;
 import com.ammar.sharing.activities.MainActivity.MainActivity;
 
 public class RoundDialog {
@@ -23,11 +28,13 @@ public class RoundDialog {
     // used for round corners
     private final AlertDialog alertDialog;
     private final CardView cardView;
+    private final Context context;
     private View view;
     private final int maxHeight;
     private final int maxWidth;
 
     public RoundDialog(Context context) {
+        this.context = context;
         cardView = new CardView(context);
         alertDialog = new AlertDialog.Builder(context)
                 .setView(cardView)
@@ -61,6 +68,9 @@ public class RoundDialog {
     }
 
     public void show() {
+        Resources res = context.getResources();
+        int color = ResourcesCompat.getColor(res, darkMode ? R.color.dialogColorDark : R.color.dialogColorLight, null);
+        setBackgroundColor(color);
         alertDialog.show();
         View child = cardView.getChildAt(0);
         ViewGroup.LayoutParams childLayoutParams = child.getLayoutParams();

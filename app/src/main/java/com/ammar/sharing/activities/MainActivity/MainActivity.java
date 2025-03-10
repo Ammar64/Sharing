@@ -44,7 +44,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.ApksInstallerActivity.ApksInstallerActivity;
 import com.ammar.sharing.activities.ChangeLogActivity.ChangeLogActivity;
-import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter;
+import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.viewHolders.HeaderViewHolder;
 import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.MessagesAdapter;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
@@ -306,15 +306,15 @@ public class MainActivity extends AppCompatActivity {
         if(Intent.ACTION_SEND.equals(getIntent().getAction()) ) {
             if( "text/plain".equals(getIntent().getType()) ) {
                 String text = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-                Message message = new Message(text, "admin", false);
+                Message message = new Message(text);
                 synchronized (MessagesAdapter.messages) {
                     MessagesAdapter.messages.add(message);
                     // notify UI that a message was received
-                    ShareAdapter.HeaderViewHolder.unseenMessagesCount++;
+                    HeaderViewHolder.unseenMessagesCount++;
                     Data.messagesNotifier.forcePostValue(MessagesAdapter.messages.size());
                     for( User i : User.users ){
                         if( i.isConnectedViaWebSocket() ) {
-                            i.getWebSocket().sendText(message.toJSON());
+                            i.getWebSocket().sendText(message.toJSON().toString());
                         }
                     }
                 }

@@ -119,4 +119,14 @@
     <string name="french">الفرنسية</string>
     <string name="spanish">الأسبانية</string>
     <string name="norwegian">النرويجية</string>
+    <string name="set_number">اختر رقما</string>
+    <string name="server_port">منفذ الخادم</string>
+    <string name="port">المنفذ</string>
+    <string name="change_server_port">تعيين منفذ الخادم</string>
+    <string name="change_server_port_desc">عين منفذ الخادم. استعمل هذا الإعداد إذا كان الخادم لا يعمل</string>
+    <string name="min_value_error">يحب ألا يقل الرقم عن %d</string>
+    <string name="max_value_error">يجب ألا يزيد الرقم عن %d</string>
+    <string name="server_port_changed">تم تغيير المنفذ إلى %d</string>
+
+
 </resources>

@@ -11,6 +11,7 @@ import com.ammar.sharing.network.exceptions.WebSocketException;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 
 public class WebSocket extends WebSocketImpl {
 
@@ -36,11 +37,19 @@ public class WebSocket extends WebSocketImpl {
         }).start();
     }
 
-    public void setOnReceiveText(OnReceiveTextListener onReceive) {
-        super.onReceiveTextCallable = onReceive;
+    public int addOnReceiveText(OnReceiveTextListener onReceive) {
+        synchronized (onReceiveTextCallables) {
+            int index = super.onReceiveTextCallables.size();
+            super.onReceiveTextCallables.add(onReceive);
+            return index;
+        }
     }
 
-    public void setOnReceiveBin(OnReceiveBinListener onReceive) {
-        super.onReceiveBinCallable = onReceive;
+    public int addOnReceiveBin(OnReceiveBinListener onReceive) {
+        synchronized (onReceiveBinCallables) {
+            int index = super.onReceiveBinCallables.size();
+            super.onReceiveBinCallables.add(onReceive);
+            return index;
+        }
     }
 }

@@ -6,7 +6,9 @@ export interface DownloadObject {
 }
 
 export interface Message {
-    type: string,
-    author: string,
-    content: string
+    type: string;
+    author: string;
+    authorID: number;
+    content: string;
+    remote: boolean;
 }

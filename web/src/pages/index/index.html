@@ -7,12 +7,13 @@
     <base href="/pages/index/" />
     <title>{sharing}</title>
     <link rel="icon" type="image/x-icon" href="/common/favicon" />
-    <link rel="stylesheet" href="style/blocks.css" />
+    <link rel="stylesheet" href="/common/style/common.css" />
+    <link rel="stylesheet" href="/common/style/blocks.css" />
     <link rel="stylesheet" href="style/style.css" />
     <link rel="stylesheet" href="style/queries.css" />
     <link rel="stylesheet" href="style/plane.css" />
     <link rel="stylesheet" href="style/mobile.css" media="only screen and (max-width: 525px)" />
-    <link rel="stylesheet" href="style/messages.css" />
+    <script defer type="text/javascript" src="/common/scripts/username.js"></script>
     <script defer type="text/javascript" src="scripts/ui.js"></script>
     <script defer type="text/javascript" src="scripts/utils.js"></script>
     <script defer type="text/javascript" src="scripts/dialogs.js"></script>
@@ -36,10 +37,10 @@
             {username}
         </button>
 
-        <button id="button-messages" class="icon-text-button ripple-button">
+        <a href="/pages/messages" id="button-messages" class="icon-text-button ripple-button">
             <img src="assets/icon-message.svg" />
             {messages}
-        </button>
+        </a>
         <div class="text">
             <h1>{sharing_app}</h1>
             <p>{sharing_app_purpose}</p>
@@ -132,18 +133,6 @@
         </div>
     </div>
 
-    <div id="messages-page" style="display: none;">
-        <div id="messages-top-bar">
-            <button id="go-back-button" class="icon-button ripple-button rtl-icon"><img src="assets/icon-back.svg"/></button>
-            <div id="messages-title">{messages}</div>
-        </div>
-        <div id="messages-container">
-        </div>
-        <div id="control-box">
-            <textarea placeholder="{enter_message}" id="message-input"></textarea>
-            <button id="send-message-button" class="icon-button ripple-button"><img class="rtl-icon" src="assets/icon-send.svg"/></button>
-        </div>
-    </div>
     <div id="disconnected" style="display: none;">{remote_disconnected}<span id="reconnect_in_seconds">2</span></div>
     <div id="overlay"></div> <!-- Overlay div for covering the page -->
 

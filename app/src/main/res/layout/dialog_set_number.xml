@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/TV_TitleDialogSetNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        tools:text="Title"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/TIL_SetNumber"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        app:boxBackgroundColor="@android:color/transparent"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="14dp"
+        app:boxCornerRadiusBottomStart="14dp"
+        app:boxCornerRadiusTopEnd="14dp"
+        app:boxCornerRadiusTopStart="14dp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/TIET_SetNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            tools:hint="port" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/TV_InputError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:visibility="gone"
+        tools:text="Error Error Error Error Error Error"
+        android:textColor="@color/red"/>
+
+    <android.widget.Button
+        android:id="@+id/B_DialogSetNumberOk"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="end"
+        android:background="@drawable/button_ok_bg"
+        android:text="@android:string/ok"
+        android:textColor="@color/colorPrimary" />
+</LinearLayout>

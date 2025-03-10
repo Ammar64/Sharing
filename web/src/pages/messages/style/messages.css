@@ -1,15 +1,12 @@
-#messages-page {
-    position: fixed;
+body {
     width: 100dvw;
     height: 100dvh;
     top: 0px;
     left: 0px;
-    z-index: 100;
     background: linear-gradient(to right, #010c14, #2e012e);
     display: flex;
     flex-direction: column;
 }
-
 
 #control-box {
     display: flex;

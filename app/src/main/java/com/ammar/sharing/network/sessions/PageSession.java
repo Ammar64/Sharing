@@ -107,8 +107,8 @@ public class PageSession extends HTTPSession {
             pageBuilder.append(noDownloadsText);
         }
         for (Sharable i : Sharable.sharablesList) {
-            final String downloadLink = "/download/" + i.getUUID();
-            final String iconSrc = "/get-icon/" + i.getUUID();
+            final String downloadLink = "/download/" + i.getUUID().toString();
+            final String iconSrc = "/get-icon/" + i.getUUID().toString();
             final String downloadElement = String.format(Locale.ENGLISH, "<tr><td><img src=\"%s\" width=\"40px\" /></td><td><a download href=\"%s\">%s</a><br><span dir=\"ltr\">%s</span></td></tr>\n", iconSrc, downloadLink, i.getName(), (i instanceof SharableApp a && (a.hasSplits()) ? "(splits)" : Utils.getFormattedSize(i.getSize())));
 
             pageBuilder.append(downloadElement);

@@ -40,11 +40,13 @@ public class CLISession extends HTTPSession {
     private void listDownloads(Request req, Response res) {
         res.setHeader("Content-Type", "text/plain");
         StringBuilder listedDownloadsString = new StringBuilder();
-        for (Sharable i : Sharable.sharablesList) {
+        if (Sharable.sharablesList.isEmpty()) {
+            listedDownloadsString.append(Utils.getRes().getString(R.string.no_downloads)).append("\n");
+        } else for (Sharable i : Sharable.sharablesList) {
             listedDownloadsString
                     .append("Name: ").append(i.getName()).append("\n")
                     .append("Size: ").append(Utils.getFormattedSize(i.getSize())).append("\n")
-                    .append("URL:\n").append("http://").append(req.getHeader("Host")).append("/dl/").append(i.getUUID())
+                    .append("URL:\n").append("http://").append(req.getHeader("Host")).append("/dl/").append(i.getUUID().toString())
                     .append("\n\n");
         }
         res.sendResponse(listedDownloadsString.toString().getBytes(StandardCharsets.UTF_8));
@@ -62,18 +64,16 @@ public class CLISession extends HTTPSession {
 
                 // app base.apk must be the first file because it will be the name of the zip.
                 app_files[0] = app;
-                for (int i = 1; i < app_files.length; i++) {
-                    app_files[i] = app_splits[i - 1];
-                }
-                res.sendZippedFilesResponse(app_files, app.getName() + "apks", user);
+                System.arraycopy(app_splits, 0, app_files, 1, app_files.length - 1);
+                res.sendApksFileResponse(app_files, user);
             } else {
                 res.sendFileResponse(app, user);
             }
-        }Sharable.sharablesList.toArray(new Sharable[0]);
+        }
     }
 
     private void sendAllSharables(Response res) {
-        if( Sharable.sharablesList.isEmpty() ) {
+        if (Sharable.sharablesList.isEmpty()) {
             res.setStatusCode(500);
             res.setContentType("text/plain; charset=UTF-8");
             String errorText = Utils.getRes().getString(R.string.error_no_files_added);

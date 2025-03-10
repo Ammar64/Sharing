@@ -10,6 +10,7 @@ import com.ammar.sharing.models.User;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class ProgressManager {
 
@@ -23,7 +24,7 @@ public class ProgressManager {
 
     private final OP op;
 
-    // if loaded is -1 it's completed.
+    // if `loaded` is -1 it's completed.
     private long loaded;
     // total file size
     private long total;
@@ -34,31 +35,27 @@ public class ProgressManager {
     private long totalFinishTime = -1;
 
     private int index;
-    private String uuid = null;
+    private final UUID uuid;
+    private UUID fileUUID = null;
 
     private void setIndex(int index) {
         this.index = index;
         this.progress_info.putInt("index", index);
     }
-
     public int getIndex() { return index; }
-
     public static ArrayList<ProgressManager> progresses = new ArrayList<>();
-
     public static void removeProgress(int index) {
         for (int i = index + 1; i < progresses.size(); i++) {
             progresses.get(i).setIndex(progresses.get(i).index - 1);
         }
         progresses.remove(index);
-
         Bundle b = new Bundle();
         b.putChar("action", 'R');
         b.putInt("index", index);
         Data.filesSendNotifier.forcePostValue(b);
     }
-
-
     public ProgressManager(Sharable sharable, Socket socket, long total, User user, OP opType) {
+        this.uuid = UUID.randomUUID();
         this.sharable = sharable;
         this.socket = socket;
         this.total = total;
@@ -68,8 +65,6 @@ public class ProgressManager {
         index = progresses.lastIndexOf(this);
 
         // notify the UI item is added
-
-
         Bundle info_add = new Bundle();
         info_add.putChar("action", 'A');
         info_add.putInt("index", index);
@@ -77,7 +72,6 @@ public class ProgressManager {
         // set action to P for later use
         progress_info.putChar("action", 'P');
         progress_info.putInt("index", index);
-
         startTime = System.currentTimeMillis();
     }
 
@@ -110,10 +104,13 @@ public class ProgressManager {
         return loaded;
     }
 
-    public String getUUID() {
-        return uuid;
+    public UUID getFileUUID() {
+        return this.fileUUID;
     }
 
+    public UUID getProgressUUID() {
+        return this.uuid;
+    }
     long transferSpeed = 0;
 
     public long getSpeed() {
@@ -155,8 +152,8 @@ public class ProgressManager {
         return totalFinishTime;
     }
 
-    public void setUUID(String uuid) {
-        this.uuid = uuid;
+    public void setFileUUID(UUID uuid) {
+        this.fileUUID = uuid;
     }
 
     private long lastTime = 0;

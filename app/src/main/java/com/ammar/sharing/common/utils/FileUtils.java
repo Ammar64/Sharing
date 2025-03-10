@@ -1,6 +1,7 @@
 package com.ammar.sharing.common.utils;
 
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -180,6 +181,7 @@ public class FileUtils {
         return inSampleSize;
     }
 
+    @SuppressLint("Range")
     public static String getFileName(ContentResolver resolver, Uri uri) {
         String result = null;
         if ("content".equals(uri.getScheme())) {

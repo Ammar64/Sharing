@@ -1,6 +1,7 @@
 package com.ammar.sharing.services;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -25,6 +27,7 @@ import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Server;
 import com.ammar.sharing.network.sessions.CLISession;
 import com.ammar.sharing.network.sessions.DownloadSession;
+import com.ammar.sharing.network.sessions.MessagesSession;
 import com.ammar.sharing.network.sessions.PageSession;
 import com.ammar.sharing.network.sessions.RedirectSession;
 import com.ammar.sharing.network.sessions.UploadSession;
@@ -42,12 +45,7 @@ import java.util.Locale;
  * @noinspection unused
  */
 public class ServerService extends Service {
-
-
     private final int FOREGROUND_NOTIFICATION_ID = 1;
-    public static final int PORT_NUMBER = 2999;
-
-
     private final Server server = new Server(this);
     final Intent serverStatusIntent = new Intent(Consts.ACTION_GET_SERVER_STATUS);
 
@@ -76,6 +74,7 @@ public class ServerService extends Service {
         server.addPath("/dl/(.*)", CLISession.class);
         server.addPath("/da", CLISession.class);
 
+        server.addPath("/get-all-messages", MessagesSession.class);
         server.addPaths(RedirectSession.redirectMap.keySet(), RedirectSession.class);
     }
 
@@ -100,6 +99,10 @@ public class ServerService extends Service {
                 stopSelf();
             case Consts.ACTION_GET_SERVER_STATUS:
                 Data.serverStatusObserver.postValue(server.isRunning());
+                break;
+            case Consts.ACTION_RESTART_SERVER:
+                restartServer();
+                Toast.makeText(this, getResources().getString(R.string.server_port_changed, Server.PORT_NUMBER), Toast.LENGTH_SHORT).show();
                 break;
             case Consts.ACTION_UPDATE_NOTIFICATION_TEXT:
                 startForeground(FOREGROUND_NOTIFICATION_ID, buildNotification(this));
@@ -141,10 +144,9 @@ public class ServerService extends Service {
                 break;
             case Consts.ACTION_REMOVE_DOWNLOAD:
                 String uuid = intent.getStringExtra(Consts.EXTRA_DOWNLOAD_UUID);
-
                 int index = 0;
                 for (Sharable i : Sharable.sharablesList) {
-                    if (i.getUUID().equals(uuid)) {
+                    if (i.getUUID().toString().equals(uuid)) {
                         Sharable.sharablesList.remove(index);
                         break;
                     }
@@ -178,8 +180,16 @@ public class ServerService extends Service {
         toggleForegroundAndReportToActivity();
     }
 
-    private boolean isRunningFirstTime = true;
+    private void restartServer() {
+        if (server.isRunning()) {
+            User.closeAllSockets();
+            server.Stop();
+            server.Start();
+        }
+        toggleForegroundAndReportToActivity();
+    }
 
+    private boolean isRunningFirstTime = true;
     private void toggleForegroundAndReportToActivity() {
         boolean isServerRunning = server.isRunning();
 
@@ -187,6 +197,11 @@ public class ServerService extends Service {
         if (isServerRunning && isRunningFirstTime) {
             startForeground(FOREGROUND_NOTIFICATION_ID, buildNotification(this));
             isRunningFirstTime = false;
+        } else if(isServerRunning) {
+            // update notification
+            Notification notification = buildNotification(this);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.notify(FOREGROUND_NOTIFICATION_ID, notification);
         } else {
             stopForegroundAndNotification();
             isRunningFirstTime = true;
@@ -200,7 +215,7 @@ public class ServerService extends Service {
         String address = ServerService.getIpAddress();
         if (address == null) address = "localhost";
         // Build the notification
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Consts.serverNotificationChannelID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Consts.SERVER_NOTIFICATION_CHANNEL_ID)
                 .setContentTitle(getResources().getString(R.string.svr_running))
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
@@ -212,7 +227,7 @@ public class ServerService extends Service {
 
         return new NotificationCompat
                 .BigTextStyle(builder)
-                .bigText(getResources().getString(R.string.svr_notification_message, address, String.format(Locale.ENGLISH, "%d", PORT_NUMBER)))
+                .bigText(getResources().getString(R.string.svr_notification_message, address, String.format(Locale.ENGLISH, "%d", Server.PORT_NUMBER)))
                 .build();
     }
 

@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter;
+import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.viewHolders.HeaderViewHolder;
 import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.MessagesAdapter;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
@@ -163,16 +163,16 @@ public class User {
 
     public void setWebSocket(WebSocket ws) {
         this.ws = ws;
-        this.ws.setOnReceiveText((data) -> {
-            Message message = Message.fromJSON(data, true);
+        this.ws.addOnReceiveText((data) -> {
+            Message message = Message.fromJSON(data, this);
             if( message != null ) {
-                if( !getName().equals( message.getAuthor() ) ) {
-                    message.setAuthor(getName() + "!");
+                if( !getName().equals( message.getAuthorName() ) ) {
+                    message.setAuthorName(getName() + "!");
                 }
                 synchronized (MessagesAdapter.messages) {
                     MessagesAdapter.messages.add(message);
                     // notify UI that a message was received
-                    ShareAdapter.HeaderViewHolder.unseenMessagesCount++;
+                    HeaderViewHolder.unseenMessagesCount++;
                     Data.messagesNotifier.forcePostValue(MessagesAdapter.messages.size());
                 }
             }

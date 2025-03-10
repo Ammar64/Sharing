@@ -1,4 +1,4 @@
-import { DownloadObject } from './interfaces'
+import { DownloadObject } from '../../../common/scripts/interfaces'
 
 const sendBtn = document.getElementById("sendBtn")!;
 const recieveBtn = document.getElementById("recieveBtn")!;
@@ -15,8 +15,6 @@ const currentUsernameText = document.getElementById('current-user-text')!.textCo
 const downloadText = document.getElementById('download-text')!.textContent!;
 const noDownloadsAvailableText = document.getElementById('no-downloads-text')!.textContent!;
 const downloadsRequestErrorText = document.getElementById('downloads-request-error-text')!.textContent!;
-
-let userId = -1;
 
 sendBtn.onclick = function () {
     fetch("/check-upload-allowed", {
@@ -37,11 +35,11 @@ sendBtn.onclick = function () {
 
 recieveBtn.onclick = () => {
     openDownloadBubble(downloadBubble);
-    requestAvailableDownloads();
+    updateAvailableDownloads();
 };
 
 updateBtn.onclick = () => {
-    requestAvailableDownloads();
+    updateAvailableDownloads();
 }
 
 downloadsBubbleOkButton.onclick = () => {
@@ -97,7 +95,7 @@ function makeDownloadItem(e: DownloadObject) {
     return downloadItem;
 }
 
-function requestAvailableDownloads(): void {
+function updateAvailableDownloads(): void {
     downloadsErrorSpan.style.display = "none";
     while (downloads.lastChild) {
         downloads.lastChild.remove();
@@ -135,39 +133,11 @@ function requestAvailableDownloads(): void {
 /* username field */
 const usernameForm = document.getElementById('usernameForm')!;
 
-let alreadyRequestedTheServer = false;
-async function getUsername(): Promise<string> {
-    // Check if username is already stored in localStorage
-    let storedUsername = localStorage.getItem("username");
 
-    // if localStorage Empty ask server for default name. this could be "User-0" or "User-1"
-    if (!storedUsername) {
-        try {
-            const response = await fetch("/get-user-info", {
-                method: "GET"
-            })
-            if (response.status == 200) {
-                const resJSON = await response.json();
-                userId = resJSON.id;
-                const username = resJSON.username;
-                document.querySelector('.current-username p')!.textContent = `${currentUsernameText} ${username}`;
-                return username;
-            } else {
-                throw "ERROR GETTING USER INFO";
-            }
-        } catch (e: any) {
-            alert("Error getting username: ".concat(e.message));
-            return "";
-        }
-    } else { // else tell the server about the stored name
-        if(!alreadyRequestedTheServer) {
-            updateUsername(storedUsername);
-            alreadyRequestedTheServer = true;
-        }
-        return storedUsername;
-    }
-}
-getUsername();
+getUsername().then(function (user) {
+    document.querySelector('.current-username p')!.textContent = `${currentUsernameText} ${user}`;
+});
+
 usernameForm.addEventListener('submit', function (event) {
     event.preventDefault(); // Prevent default form submission
     const usernameInput = (document.getElementById('usernameInput') as HTMLInputElement).value.trim(); // Trim whitespace
@@ -191,46 +161,6 @@ usernameForm.addEventListener('submit', function (event) {
 
 });
 
-/**
- * @param {string} username 
- */
-function updateUsername(username: string) {
-    fetch('/update-user-name', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username: username })
-    })
-        .then(response => {
-            if (response.status !== 200) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Username updated successfully:', data);
-            if (data.changed) {
-                if (data.username) {
-                    updateStoredUsername(data.username);
-                } else {
-                    throw new Error()
-                }
-            }
-            closeBubbles([usernameBubble]); // Assuming closeBubbles accepts an array
-        })
-        .catch(error => {
-            console.error('Error updating username:', error);
-            // Handle error scenarios
-            alert('Failed to update username');
-        });
-}
-
-function updateStoredUsername(username: string) {
-    localStorage.setItem("username", username);
-    // Update the display of current username
-    document.querySelector('.current-username p')!.textContent = `${currentUsernameText} ${username}`;
-}
 /*  */
 function setVhProperty() {
     var vh = window.innerHeight * 0.01;

@@ -40,9 +40,7 @@ public class DownloadSession extends HTTPSession {
 
                         // app base.apk must be the first file because it will be the name of the zip.
                         app_files[0] = app;
-                        for (int i = 1; i < app_files.length; i++) {
-                            app_files[i] = app_splits[i - 1];
-                        }
+                        System.arraycopy(app_splits, 0, app_files, 1, app_files.length - 1);
                         res.sendApksFileResponse(app_files ,user);
                     } else {
                         long start = req.getStartRange();

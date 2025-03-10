@@ -49,12 +49,20 @@ android {
     sourceSets {
         main.assets.srcDirs += webBuildDir
     }
+
+    dependenciesInfo {
+        // Disables dependency metadata when building APKs.
+        includeInApk = false
+        // Disables dependency metadata when building Android App Bundles.
+        includeInBundle = false
+    }
+
     defaultConfig {
         applicationId "com.ammar.sharing"
         minSdk 21
         targetSdk 34
-        versionCode 22
-        versionName "v1.5.4-alpha2"
+        versionCode 23
+        versionName "v1.5.4-alpha3"
 
         vectorDrawables.useSupportLibrary = true
         externalNativeBuild {
