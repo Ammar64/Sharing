@@ -34,6 +34,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class AddFilesActivity extends AppCompatActivity {
+    public static final String ACTION_GET_FILES = "ACTION_GET_FILES";
+    public static final String EXTRA_ROOT_DIR = "EXTRA_ROOT_DIR";
+    public static final String EXTRA_FILES_PATHS = "EXTRA_FILES_PATHS";
+
     public Toolbar appBar;
     private View selectV;
     private View sortByV;
@@ -94,7 +98,7 @@ public class AddFilesActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
-        storageAdapter = new StorageAdapter(this);
+        storageAdapter = new StorageAdapter(this, getIntent().getStringExtra(EXTRA_ROOT_DIR));
         recyclerView.setAdapter(storageAdapter);
 
     }
@@ -110,8 +114,8 @@ public class AddFilesActivity extends AppCompatActivity {
 
             new Thread(() -> saveFilesToRecent(selectedFilesPath.toArray(new String[0]))).start();
 
-            Intent intent = new Intent(Consts.ACTION_ADD_FILES);
-            intent.putStringArrayListExtra(Consts.EXTRA_FILES_PATH, selectedFilesPath);
+            Intent intent = new Intent(AddFilesActivity.ACTION_GET_FILES);
+            intent.putStringArrayListExtra(AddFilesActivity.EXTRA_FILES_PATHS, selectedFilesPath);
             setResult(RESULT_OK, intent);
             finish();
         });

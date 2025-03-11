@@ -77,6 +77,9 @@
             android:windowSoftInputMode="adjustResize"
             android:exported="true" />
 
+        <activity android:name=".activities.AddAppsAndFilesActivity.AddAppsAndFilesActivity"
+            android:exported="true"/>
+        
         <activity android:name=".activities.ChangeLogActivity.ChangeLogActivity"
             android:exported="false" />
 

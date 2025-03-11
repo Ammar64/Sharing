@@ -169,4 +169,13 @@
     <string name="spanish">Spanish</string>
     <string name="norwegian">Norwegian</string>
     <string name="server_port_changed">Server port is now %d</string>
+    <string name="browse_internal_storage">Add files</string>
+    <string name="browse_internal_storage_desc">Add files using android files app</string>
+    <string name="browse_internal_storage_builtin">Add files builtin</string>
+    <string name="browse_internal_storage_desc_builtin">Add files using builtin files browser\n</string>
+    <string name="browse_sd_card_builtin">Add files from %s</string>
+    <string name="browse_sd_card_builtin_desc">Add files from SD card using builtin files browser</string>
+    <string name="files">Files</string>
+    <string name="apps">Apps</string>
+    <string name="add_items">Add items</string>
 </resources>

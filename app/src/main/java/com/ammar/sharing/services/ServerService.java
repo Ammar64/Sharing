@@ -14,6 +14,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
@@ -47,7 +48,28 @@ import java.util.Locale;
 public class ServerService extends Service {
     private final int FOREGROUND_NOTIFICATION_ID = 1;
     private final Server server = new Server(this);
-    final Intent serverStatusIntent = new Intent(Consts.ACTION_GET_SERVER_STATUS);
+    final Intent serverStatusIntent = new Intent(ServerService.ACTION_GET_SERVER_STATUS);
+
+    // actions
+    public static final String ACTION_MULTIPLE_ACTIONS = "ACTION_MULTIPLE_ACTIONS";
+    public static final String ACTION_TOGGLE_SERVER = "ACTION_TOGGLE_SERVER";
+    public static final String ACTION_STOP_SERVICE = "ACTION_STOP_SERVICE";
+    public static final String ACTION_GET_SERVER_STATUS = "ACTION_GET_SERVER_STATUS";
+    public static final String ACTION_RESTART_SERVER = "ACTION_RESTART_SERVER";
+    public static final String ACTION_UPDATE_NOTIFICATION_TEXT = "ACTION_UPDATE_NOTIFICATION_TEXT";
+    public static final String ACTION_ADD_FILES_PATHS = "ACTION_ADD_FILES_PATHS";
+    public static final String ACTION_ADD_APPS_PACKAGES_NAMES = "ACTION_ADD_APPS_PACKAGES_NAMES";
+    public static final String ACTION_ADD_URIS = "ACTION_ADD_URIS";
+    public static final String ACTION_REMOVE_DOWNLOAD = "ACTION_REMOVE_DOWNLOAD";
+    public static final String ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN = "ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN";
+
+    // extras
+    public static final String EXTRA_FILES_PATHS = "EXTRA_FILES_PATHS";
+    public static final String EXTRA_APPS_PACKAGES = "EXTRA_APPS_PACKAGES";
+    public static final String EXTRA_URIS = "EXTRA_URIS";
+    public static final String EXTRA_DOWNLOAD_UUID = "EXTRA_DOWNLOAD_UUID";
+    public static final String EXTRA_ACTIONS = "EXTRA_ACTIONS";
+
 
     @Override
     public void onCreate() {
@@ -91,24 +113,37 @@ public class ServerService extends Service {
         }
         String actionReceived = intent.getAction();
         String action = actionReceived != null ? actionReceived : "";
+        if( ServerService.ACTION_MULTIPLE_ACTIONS.equals(action) ) {
+            ArrayList<String> actions = intent.getStringArrayListExtra(ServerService.EXTRA_ACTIONS);
+            assert actions != null;
+            for(String i : actions) {
+                performAction(i, intent);
+            }
+        } else {
+            performAction(action, intent);
+        }
+        return START_STICKY;
+    }
+
+    public void performAction(@NonNull String action, Intent intent) {
         switch (action) {
-            case Consts.ACTION_TOGGLE_SERVER:
+            case ServerService.ACTION_TOGGLE_SERVER:
                 toggleServer();
                 break;
-            case Consts.ACTION_STOP_SERVICE:
+            case ServerService.ACTION_STOP_SERVICE:
                 stopSelf();
-            case Consts.ACTION_GET_SERVER_STATUS:
+            case ServerService.ACTION_GET_SERVER_STATUS:
                 Data.serverStatusObserver.postValue(server.isRunning());
                 break;
-            case Consts.ACTION_RESTART_SERVER:
+            case ServerService.ACTION_RESTART_SERVER:
                 restartServer();
                 Toast.makeText(this, getResources().getString(R.string.server_port_changed, Server.PORT_NUMBER), Toast.LENGTH_SHORT).show();
                 break;
-            case Consts.ACTION_UPDATE_NOTIFICATION_TEXT:
+            case ServerService.ACTION_UPDATE_NOTIFICATION_TEXT:
                 startForeground(FOREGROUND_NOTIFICATION_ID, buildNotification(this));
                 break;
-            case Consts.ACTION_ADD_FILE_SHARABLES:
-                ArrayList<String> filePaths = intent.getStringArrayListExtra(Consts.EXTRA_FILES_PATH);
+            case ServerService.ACTION_ADD_FILES_PATHS:
+                ArrayList<String> filePaths = intent.getStringArrayListExtra(ServerService.EXTRA_FILES_PATHS);
                 assert filePaths != null;
                 for (String i : filePaths) {
                     Sharable.sharablesList.add(new Sharable(i));
@@ -117,8 +152,8 @@ public class ServerService extends Service {
                 fb.putChar("action", 'A');
                 Data.downloadsListNotifier.postValue(fb);
                 break;
-            case Consts.ACTION_ADD_APPS_SHARABLES:
-                ArrayList<String> packages_name = intent.getStringArrayListExtra(Consts.EXTRA_APPS_NAMES);
+            case ServerService.ACTION_ADD_APPS_PACKAGES_NAMES:
+                ArrayList<String> packages_name = intent.getStringArrayListExtra(ServerService.EXTRA_APPS_PACKAGES);
                 if (packages_name != null) {
                     for (String i : packages_name) {
                         try {
@@ -132,8 +167,8 @@ public class ServerService extends Service {
                 ab.putChar("action", 'A');
                 Data.downloadsListNotifier.postValue(ab);
                 break;
-            case Consts.ACTION_ADD_URI_SHARABLES:
-                ArrayList<Uri> uris = intent.getParcelableArrayListExtra(Consts.EXTRA_URIS);
+            case ServerService.ACTION_ADD_URIS:
+                ArrayList<Uri> uris = intent.getParcelableArrayListExtra(ServerService.EXTRA_URIS);
                 assert uris != null;
                 for (Uri i : uris) {
                     Sharable.sharablesList.add(new Sharable(getContentResolver(), i));
@@ -142,8 +177,8 @@ public class ServerService extends Service {
                 ub.putChar("action", 'A');
                 Data.downloadsListNotifier.postValue(ub);
                 break;
-            case Consts.ACTION_REMOVE_DOWNLOAD:
-                String uuid = intent.getStringExtra(Consts.EXTRA_DOWNLOAD_UUID);
+            case ServerService.ACTION_REMOVE_DOWNLOAD:
+                String uuid = intent.getStringExtra(ServerService.EXTRA_DOWNLOAD_UUID);
                 int index = 0;
                 for (Sharable i : Sharable.sharablesList) {
                     if (i.getUUID().toString().equals(uuid)) {
@@ -157,7 +192,7 @@ public class ServerService extends Service {
                 remove_info.putInt("index", index);
                 Data.downloadsListNotifier.forcePostValue(remove_info);
                 break;
-            case Consts.ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN:
+            case ServerService.ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN:
                 if (!server.isRunning()) {
                     Log.d("MYLOG", "Stopping App process");
                     int pid = android.os.Process.myPid();
@@ -166,8 +201,6 @@ public class ServerService extends Service {
             default:
                 break;
         }
-
-        return START_STICKY;
     }
 
     private void toggleServer() {

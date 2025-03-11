@@ -112,5 +112,8 @@ dependencies {
 
     // I don't like the new library catalog declaration it makes you write more stuff :)
     implementation 'com.github.zcweng:switch-button:0.0.3@aar'
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.github.hendrawd:StorageUtil:1.1.0'
     implementation libs.core.ktx
 }

@@ -320,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             } else {
                 Intent uriIntent = new Intent(this, ServerService.class);
-                uriIntent.setAction(Consts.ACTION_ADD_URI_SHARABLES);
+                uriIntent.setAction(Consts.ACTION_ADD_URIS);
                 ArrayList<Uri> uriArrayList = new ArrayList<>(1);
                 Uri uri = getIntent().getParcelableExtra(Intent.EXTRA_STREAM);
                 if (uri == null) {
@@ -333,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } else if (Intent.ACTION_SEND_MULTIPLE.equals(getIntent().getAction())) {
             Intent uriIntent = new Intent(this, ServerService.class);
-            uriIntent.setAction(Consts.ACTION_ADD_URI_SHARABLES);
+            uriIntent.setAction(Consts.ACTION_ADD_URIS);
             ArrayList<Uri> uriArrayList = getIntent().getParcelableArrayListExtra(Intent.EXTRA_STREAM);
             if( uriArrayList == null ) {
                 Toast.makeText(this, R.string.unsupported_data, Toast.LENGTH_SHORT).show();

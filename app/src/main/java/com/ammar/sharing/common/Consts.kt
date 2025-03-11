@@ -12,9 +12,9 @@ object Consts {
     const val ACTION_UPDATE_NOTIFICATION_TEXT: String =
         "com.ammar.sharing.services.UPDATE_NOTIFICATION_STRING"
     const val ACTION_REMOVE_DOWNLOAD: String = "ACTION_REMOVE_DOWNLOAD"
-    const val ACTION_ADD_FILE_SHARABLES: String = "ACTION_ADD_FILE_SHARABLES"
-    const val ACTION_ADD_APPS_SHARABLES: String = "ACTION_ADD_APPS_SHARABLES"
-    const val ACTION_ADD_URI_SHARABLES: String = "ACTION_ADD_URI_SHARABLES"
+    const val ACTION_ADD_FILES_PATHS: String = "ACTION_ADD_FILE_SHARABLES"
+    const val ACTION_ADD_APPS_PACKAGES_NAMES: String = "ACTION_ADD_APPS_SHARABLES"
+    const val ACTION_ADD_URIS: String = "ACTION_ADD_URI_SHARABLES"
     const val ACTION_ADD_FILES: String = "ACTION_ADD_FILES"
     const val ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN: String =
         "ACTION_STOP_APP_PROCESS_IF_SERVER_DOWN"
@@ -24,7 +24,7 @@ object Consts {
     const val ACTION_STOP_INSTALLER: String = "ACTION_STOP_INSTALLER"
 
     const val EXTRA_FILES_PATH: String = "com.ammar.sharing.services.FILE_PATHS"
-    const val EXTRA_APPS_NAMES: String = "com.ammar.sharing.services.APPS_NAME"
+    const val EXTRA_APPS_PACKAGES: String = "com.ammar.sharing.services.APPS_NAME"
     const val EXTRA_URIS: String = "com.ammar.sharing.services.EXTRA_URIS"
     const val EXTRA_DOWNLOAD_UUID: String = "EXTRA_DOWNLOAD_UUID"
     const val EXTRA_INTENT_PATHS: String = "com.ammar.sharing.EXTRA_INTENT_PATHS"

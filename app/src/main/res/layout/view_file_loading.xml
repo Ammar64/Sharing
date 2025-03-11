@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    app:cardCornerRadius="12dp"
+    android:layout_marginVertical="8dp"
+    android:layout_marginHorizontal="8dp"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="#44000000"
+    app:cardElevation="0dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Space
+            android:id="@+id/IV_FileImage"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:padding="40dp" />
+
+        <LinearLayout
+            android:id="@+id/LL_FileInfo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/IV_FileImage"
+            android:paddingHorizontal="4dp">
+            <View
+                android:id="@+id/V_Line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#AAFFFFFF"/>
+
+            <View
+                android:id="@+id/TV_FileName"
+                android:layout_width="150dp"
+                android:layout_height="25dp"
+                android:background="#44000000"
+                />
+
+            <View
+                android:id="@+id/TV_FileSize"
+                android:layout_width="24dp"
+                android:layout_height="11dp"
+                android:background="#44000000"
+                android:layout_marginTop="2dp"
+                />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

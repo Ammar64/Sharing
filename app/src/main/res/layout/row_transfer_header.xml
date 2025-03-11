@@ -16,22 +16,23 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/B_AddApps"
+                android:id="@+id/B_AddItems"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@drawable/circular_button_white"
-                app:srcCompat="@drawable/icon_apps" />
+                app:srcCompat="@drawable/ic_plus"
+                app:tint="@color/green"/>
 
             <TextView
-                android:id="@+id/TV_AddApps"
+                android:id="@+id/TV_AddItems"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textAlignment="center"
-                android:labelFor="@+id/B_AddApps"
-                android:text="@string/add_apps"
+                android:labelFor="@+id/B_AddItems"
+                android:text="@string/add_items"
                 android:textColor="@color/white" />
         </LinearLayout>
 
@@ -221,7 +222,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/icon_check" />
+                app:srcCompat="@drawable/ic_check_box" />
 
             <TextView
                 android:id="@+id/TV_NumberSelected"

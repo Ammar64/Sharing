@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddAppsActivity.AddAppsActivity;
+import com.ammar.sharing.activities.AddAppsAndFilesActivity.AddAppsAndFilesActivity;
 import com.ammar.sharing.activities.AddFilesActivity.AddFilesActivity;
 import com.ammar.sharing.activities.MainActivity.MainActivity;
 import com.ammar.sharing.activities.MainActivity.adaptersR.ChosenFilesAdapter;
@@ -47,7 +48,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
     public HeaderViewHolder(@NonNull View itemView, ShareFragment fragment) {
         super(itemView);
         this.fragment = fragment;
-        ImageButton addAppsB = itemView.findViewById(R.id.B_AddApps);
+        ImageButton addItemsB = itemView.findViewById(R.id.B_AddItems);
         ImageButton addFilesB = itemView.findViewById(R.id.B_AddFiles);
         ImageButton messagesB = itemView.findViewById(R.id.B_Messages);
         AppCompatButton QRCodeB = itemView.findViewById(R.id.B_ShowAddress);
@@ -68,7 +69,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
             usersNumTV.setVisibility(View.VISIBLE);
         }
 
-        addAppsB.setOnClickListener((button) -> this.fragment.launcher.launch(new Intent(itemView.getContext(), AddAppsActivity.class)));
+        addItemsB.setOnClickListener((button) -> this.fragment.launcher.launch(new Intent(itemView.getContext(), AddAppsAndFilesActivity.class)));
         addFilesB.setOnClickListener((button) -> this.fragment.mGetContent.launch(new Intent(this.fragment.requireContext(), AddFilesActivity.class)));
         messagesB.setOnClickListener((button) -> {
             Intent intent = new Intent(itemView.getContext(), MessagesActivity.class);

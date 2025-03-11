@@ -1,5 +1,6 @@
 package com.ammar.sharing.common.utils;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -56,11 +57,13 @@ public class Utils {
     private static Resources res;
     private static SharedPreferences settings;
     private static PackageManager pm;
+    private static ContentResolver cr;
     public static void setupUtils(Context ctx) {
         Utils.res = ctx.getResources();
         Utils.assetManager = ctx.getAssets();
         Utils.settings = ctx.getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
         Utils.pm = ctx.getPackageManager();
+        Utils.cr = ctx.getContentResolver();
     }
 
     public static float dpToPx(float dp) {
@@ -293,8 +296,7 @@ public class Utils {
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
-        Bitmap bitmap = null;
-
+        Bitmap bitmap;
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
             if (bitmapDrawable.getBitmap() != null) {
@@ -427,5 +429,9 @@ public class Utils {
             if(i.equals(lang)) return true;
         }
         return false;
+    }
+
+    public static ContentResolver getCR() {
+        return cr;
     }
 }
