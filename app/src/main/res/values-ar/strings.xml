@@ -84,7 +84,7 @@
     <!-- Activity Fast Share -->
     <string name="please_choose_a_file">رجاء شارك ملف</string>
     <!-- common   -->
-    <string name="app_name">شارك</string>
+    <string name="app_name">Sharing</string>
     <string name="settings">الإعدادات</string>
     <string name="done">تم</string>
     <string name="ok">حسنا</string>
