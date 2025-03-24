@@ -71,7 +71,7 @@
     <string name="apks_installer">Installateur d\'APKS</string>
     <string name="pls_choose_apks">Veuillez choisir un fichier APKS</string>
     <string name="pick_apks_file">Choisissez un fichier APKS</string>
-    <string name="installer_note">Après avoir envoyé un fichier apks avec succès à l\'autre appareil, envoyez cette application à l\'autre appareil distant et ouvrez cette page pour installer le fichier apks.</string>
+    <string name="installer_note">Après avoir envoyé un fichier APKS à l\'autre appareil, envoyez cette application à l\'autre appareil distant et ouvrez cette page pour installer le fichier APKS.</string>
     <string name="initialising">Initialisation…</string>
     <string name="installing">Installation …</string>
     <string name="extracting_x">Extraction de %1$s …</string>
@@ -81,7 +81,7 @@
     <!-- Activité Partage rapide -->
     <string name="please_choose_a_file">Veuillez partager un fichier</string>
     <!-- commun   -->
-    <string name="app_name">partage</string>
+    <string name="app_name">Sharing</string>
     <string name="settings">Paramètres</string>
     <string name="done">terminé</string>
     <string name="ok">D\'accord</string>
@@ -91,7 +91,7 @@
     <string name="svr_notification_message">Le serveur est actif à l\'adresse %1$s:%2$s et accepte de nouvelles demandes</string>
     <string name="app_icon_acc_desc">Icône de l\'application</string>
     <string name="tutorial">Tutoriel</string>
-    <string name="connect_to_wifi_or_hotspot">Veuillez activer le wifi ou le point d\'accès pour commencer le partage</string>
+    <string name="connect_to_wifi_or_hotspot">Veuillez activer le Wi-Fi ou le point d\'accès pour commencer le partage</string>
     <string name="select">Sélectionner</string>
     <string name="sort_by">Trier par…</string>
     <string name="show_drop_down">Afficher le menu déroulant</string>
@@ -111,4 +111,12 @@
     <string name="unsupported_data">Données non prises en charge</string>
     <string name="download_all">Tout télécharger</string>
     <string name="error_no_files_added">Aucun fichier n\'a été ajouté au téléchargement</string>
+    <string name="arabic">Arabe</string>
+    <string name="english">Anglais</string>
+    <string name="german">Allemand</string>
+    <string name="chinese_simplified">Chinois (simplifié)</string>
+    <string name="french">Français</string>
+    <string name="spanish">Espagnol</string>
+    <string name="norwegian">Norvégien</string>
+    <string name="toggle_on_the_server">Veuillez d\'abord activer le serveur</string>
 </resources>
