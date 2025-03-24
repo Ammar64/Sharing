@@ -2,7 +2,7 @@
 <resources>
     <string name="lang">ar</string>
     <string name="dir">rtl</string>
-    <string name="sharing">شارك</string>
+    <string name="sharing">Sharing</string>
     <string name="username">اسم المستخدم</string>
     <string name="enter_your_user_name">أدخل اسم المستخدم</string>
     <string name="submit">تسليم</string>
