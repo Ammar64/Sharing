@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/> <!-- A notification is required for foreground service -->
     <!--___________________________________________-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION"/>
+
 
     <!-- Read files to send -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
@@ -27,6 +29,9 @@
     <!-- used to install apks files. you need to send this app to the other device to install apks files -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 
+    <uses-feature    android:name="android.hardware.camera" android:required="false"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <application
         android:name=".application.SharingApp"
         android:requestLegacyExternalStorage="true"
@@ -75,13 +80,17 @@
         <activity android:name=".activities.MessagesActivity.MessagesActivity"
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
             android:windowSoftInputMode="adjustResize"
-            android:exported="true" />
+            android:exported="false" />
 
         <activity android:name=".activities.AddAppsAndFilesActivity.AddAppsAndFilesActivity"
-            android:exported="true"/>
-        
+            android:exported="false"/>
+
+        <activity android:name=".activities.StreamingActivity.StreamingActivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+            android:exported="false"/>
+
         <activity android:name=".activities.ChangeLogActivity.ChangeLogActivity"
-            android:exported="false" />
+            android:exported="true" />
 
         <service android:name=".services.ServerService"
             android:exported="false"
@@ -90,6 +99,9 @@
         <service android:name=".services.PackageInstallerService"
             android:exported="false" />
 
+        <service android:name=".services.ScreenCapturerService"
+            android:foregroundServiceType="mediaProjection"
+            android:exported="false"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

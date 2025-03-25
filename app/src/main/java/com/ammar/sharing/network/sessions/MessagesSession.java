@@ -5,7 +5,6 @@ import com.ammar.sharing.models.Message;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
-import com.ammar.sharing.network.sessions.base.HTTPSession;
 
 import java.nio.charset.StandardCharsets;
 

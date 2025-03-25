@@ -8,7 +8,6 @@ import com.ammar.sharing.models.SharableApp;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
-import com.ammar.sharing.network.sessions.base.HTTPSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -178,4 +178,12 @@
     <string name="files">Files</string>
     <string name="apps">Apps</string>
     <string name="add_items">Add items</string>
+    <string name="stream_camera">stream camera</string>
+    <string name="stream_screen">stream screen</string>
+    <string name="stream_audio">stream audio</string>
+    <string name="streaming">Streaming</string>
+    <string name="camera_permission_title">Camera Permission</string>
+    <string name="camera_permission_explanation">We need camera permission to stream video from your camera to the other device</string>
+    <string name="record_audio_permission_title">Record audio permission</string>
+    <string name="record_audio_permission_explanation">We need permission to access your mic to stream audio to the other device.</string>
 </resources>

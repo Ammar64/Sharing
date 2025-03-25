@@ -76,8 +76,8 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         public void setFileListener(Sharable file) {
             removeB.setOnClickListener(v -> {
                 Intent serviceIntent = new Intent(itemView.getContext(), ServerService.class);
-                serviceIntent.setAction(Consts.ACTION_REMOVE_DOWNLOAD);
-                serviceIntent.putExtra(Consts.EXTRA_DOWNLOAD_UUID, file.getUUID().toString());
+                serviceIntent.setAction(ServerService.ACTION_REMOVE_DOWNLOAD);
+                serviceIntent.putExtra(ServerService.EXTRA_DOWNLOAD_UUID, file.getUUID().toString());
                 itemView.getContext().startService(serviceIntent);
             });
         }

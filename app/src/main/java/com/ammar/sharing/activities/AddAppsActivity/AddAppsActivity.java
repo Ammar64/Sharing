@@ -96,9 +96,6 @@ public class AddAppsActivity extends AppCompatActivity {
         }).start();
     }
 
-    public void setToolbarTitle(String title) {
-        setTitle(title);
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_select, menu);

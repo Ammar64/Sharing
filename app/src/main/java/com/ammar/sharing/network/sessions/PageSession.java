@@ -7,14 +7,12 @@ import android.view.View;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.ammar.sharing.R;
-import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
-import com.ammar.sharing.network.sessions.base.HTTPSession;
 import com.ammar.sharing.network.utils.NetUtils;
 
 import java.io.IOException;

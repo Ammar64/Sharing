@@ -34,4 +34,6 @@
     <string name="enter_message">Enter message</string>
     <string name="remote_disconnected">Can't connect to remote device retrying in </string>
     <string name="messages">Messages</string>
+    <string name="video-stream">Video stream</string>
+    <string name="audio-stream">Audio stream</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.ammar.sharing.activities.AddAppsAndFilesActivity;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
@@ -11,7 +10,7 @@ import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddAppsAndFilesActivity.fragments.AddAppsFragment;
 import com.ammar.sharing.activities.AddAppsAndFilesActivity.fragments.AddImagesFragment;
 import com.ammar.sharing.activities.AddAppsAndFilesActivity.fragments.AddVideosFragment;
-import com.ammar.sharing.activities.AddAppsAndFilesActivity.fragments.DefaultFragment;
+import com.ammar.sharing.activities.AddAppsAndFilesActivity.fragments.FilesFragment;
 import com.ammar.sharing.common.utils.Utils;
 
 public class AddAppsAndFilesViewPagerAdapter extends FragmentStateAdapter {
@@ -20,7 +19,7 @@ public class AddAppsAndFilesViewPagerAdapter extends FragmentStateAdapter {
 
     public AddAppsAndFilesViewPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
-        fragments = new Fragment[]{new DefaultFragment(), new AddAppsFragment(), new AddImagesFragment(), new AddVideosFragment()};
+        fragments = new Fragment[]{new FilesFragment(), new AddAppsFragment(), new AddImagesFragment(), new AddVideosFragment()};
         tabsText = new String[] {
                 Utils.getRes().getString(R.string.files),
                 Utils.getRes().getString(R.string.apps),

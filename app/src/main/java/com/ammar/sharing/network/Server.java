@@ -2,15 +2,22 @@ package com.ammar.sharing.network;
 
 import android.util.Log;
 
-import com.ammar.sharing.network.sessions.base.HTTPSession;
+import com.ammar.sharing.common.utils.Utils;
+import com.ammar.sharing.network.sessions.HTTPSession;
+import com.ammar.sharing.network.websocket.sessions.WebSocketSession;
 import com.ammar.sharing.services.ServerService;
 
 import org.intellij.lang.annotations.RegExp;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketOption;
+import java.net.SocketOptions;
+import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -23,7 +30,9 @@ public class Server {
 
     private boolean running = false;
     final ServerService service;
+
     final HashMap<String, Class<? extends HTTPSession>> pathsMap = new HashMap<>();
+    final HashMap<String, Class<? extends WebSocketSession>> wsPathsMap = new HashMap<>();
 
     public Server(ServerService service) {
         this.service = service;
@@ -32,12 +41,12 @@ public class Server {
     public void Start() {
 
         try {
-            serverSocket = new ServerSocket(PORT_NUMBER);
+            serverSocket = new ServerSocket(Server.PORT_NUMBER);
             serverThread = new Thread(this::Accept);
             serverThread.start();
             running = true;
         } catch (IOException e) {
-            Log.e("MYLOG", "Server.Start(): " + e.getMessage());
+            Utils.showErrorDialog("Server.Start(). Exception: ", e.getMessage());
         }
     }
 
@@ -46,25 +55,32 @@ public class Server {
             serverSocket.close();
             running = false;
         } catch (IOException e) {
-            Log.e("MYLOG","Server.Stop(). IOException: " + e.getMessage());
+            Utils.showErrorDialog("Server.Stop(). Exception: ", e.getMessage());
         } finally {
 
             try {
                 serverThread.join();
             } catch (InterruptedException e) {
-                Log.d("MYLOG", "Server.Stop(). InterruptedException:  " + e.getMessage());
+                Utils.showErrorDialog("Server.Stop(). Exception", "Server.Stop(). InterruptedException:  " + e.getMessage());
             }
         }
     }
 
+    /// @param pathPattern regex is supported
     public void addPath(@RegExp String pathPattern, Class<? extends HTTPSession> sessionClass) {
         pathsMap.put(pathPattern, sessionClass);
     }
 
+    /// @param paths regex is supported
     public void addPaths(Collection<String> paths, Class<? extends HTTPSession> sessionClass) {
         for( @RegExp String i : paths ) {
             addPath(i, sessionClass);
         }
+    }
+
+    /// @param path regex is NOT supported
+    public void addWebsocketPath(String path, Class<? extends WebSocketSession> wsSessionClass) {
+        wsPathsMap.put(path, wsSessionClass);
     }
 
     private void Accept() {
@@ -80,7 +96,7 @@ public class Server {
         } catch (SocketException e) {
             // TODO: Socket probably closed   
         } catch (IOException e) {
-            Log.e("MYLOG", "Server.Accept(). IOException: " + e.getMessage());
+            Utils.showErrorDialog("IOException", "Server.Accept(). IOException: " + e.getMessage());
         }
     }
 

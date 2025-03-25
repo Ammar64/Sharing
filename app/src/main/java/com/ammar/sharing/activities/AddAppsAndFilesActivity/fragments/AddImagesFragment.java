@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
-import com.ammar.sharing.activities.AddAppsAndFilesActivity.adaptersR.FileRecyclerAdapterPlaceholder;
+import com.ammar.sharing.activities.AddAppsAndFilesActivity.adaptersR.MediaRecyclerAdapterPlaceholder;
 import com.ammar.sharing.activities.AddAppsAndFilesActivity.adaptersR.MediaRecyclerAdapter;
 import com.ammar.sharing.activities.AddAppsAndFilesActivity.viewModels.ImagesViewModel;
 import com.ammar.sharing.common.utils.Utils;
@@ -50,7 +50,7 @@ public class AddImagesFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(requireContext(), mSpanCount);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(gridLayoutManager);
-        mRecyclerView.setAdapter(new FileRecyclerAdapterPlaceholder());
+        mRecyclerView.setAdapter(new MediaRecyclerAdapterPlaceholder());
 
         mShimmerContainer.startShimmer();
     }

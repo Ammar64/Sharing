@@ -54,6 +54,7 @@ import com.ammar.sharing.custom.ui.AdaptiveTextView;
 import com.ammar.sharing.custom.ui.RoundDialog;
 import com.ammar.sharing.models.Message;
 import com.ammar.sharing.models.User;
+import com.ammar.sharing.network.websocket.sessions.MessagesWSSession;
 import com.ammar.sharing.services.ServerService;
 import com.ammar.sharing.BuildConfig;
 
@@ -270,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
 
         serverButton.setOnClickListener((button) -> {
             Intent serviceIntent = new Intent(this, ServerService.class);
-            serviceIntent.setAction(Consts.ACTION_TOGGLE_SERVER);
+            serviceIntent.setAction(ServerService.ACTION_TOGGLE_SERVER);
             startService(serviceIntent);
         });
 
@@ -300,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         Intent serviceIntent = new Intent(this, ServerService.class);
-        serviceIntent.setAction(Consts.ACTION_GET_SERVER_STATUS);
+        serviceIntent.setAction(ServerService.ACTION_GET_SERVER_STATUS);
         startService(serviceIntent);
 
         if(Intent.ACTION_SEND.equals(getIntent().getAction()) ) {
@@ -313,32 +314,32 @@ public class MainActivity extends AppCompatActivity {
                     HeaderViewHolder.unseenMessagesCount++;
                     Data.messagesNotifier.forcePostValue(MessagesAdapter.messages.size());
                     for( User i : User.users ){
-                        if( i.isConnectedViaWebSocket() ) {
-                            i.getWebSocket().sendText(message.toJSON().toString());
+                        if( i.isWebSokcetConnected(MessagesWSSession.path) ) {
+                            i.getWebSocket(MessagesWSSession.path).sendText(message.toJSON().toString());
                         }
                     }
                 }
             } else {
                 Intent uriIntent = new Intent(this, ServerService.class);
-                uriIntent.setAction(Consts.ACTION_ADD_URIS);
+                uriIntent.setAction(ServerService.ACTION_ADD_URIS);
                 ArrayList<Uri> uriArrayList = new ArrayList<>(1);
                 Uri uri = getIntent().getParcelableExtra(Intent.EXTRA_STREAM);
                 if (uri == null) {
                     Toast.makeText(this, R.string.unsupported_data, Toast.LENGTH_SHORT).show();
                 } else {
                     uriArrayList.add(uri);
-                    uriIntent.putParcelableArrayListExtra(Consts.EXTRA_URIS, uriArrayList);
+                    uriIntent.putParcelableArrayListExtra(ServerService.EXTRA_URIS, uriArrayList);
                     startService(uriIntent);
                 }
             }
         } else if (Intent.ACTION_SEND_MULTIPLE.equals(getIntent().getAction())) {
             Intent uriIntent = new Intent(this, ServerService.class);
-            uriIntent.setAction(Consts.ACTION_ADD_URIS);
+            uriIntent.setAction(ServerService.ACTION_ADD_URIS);
             ArrayList<Uri> uriArrayList = getIntent().getParcelableArrayListExtra(Intent.EXTRA_STREAM);
             if( uriArrayList == null ) {
                 Toast.makeText(this, R.string.unsupported_data, Toast.LENGTH_SHORT).show();
             } else {
-                uriIntent.putParcelableArrayListExtra(Consts.EXTRA_URIS, uriArrayList);
+                uriIntent.putParcelableArrayListExtra(ServerService.EXTRA_URIS, uriArrayList);
                 startService(uriIntent);
             }
         }

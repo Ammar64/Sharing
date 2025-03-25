@@ -16,6 +16,7 @@ import com.ammar.sharing.common.Data;
 import com.ammar.sharing.custom.ui.AdaptiveActivity;
 import com.ammar.sharing.models.Message;
 import com.ammar.sharing.models.User;
+import com.ammar.sharing.network.websocket.sessions.MessagesWSSession;
 
 public class MessagesActivity extends AdaptiveActivity {
 
@@ -50,8 +51,8 @@ public class MessagesActivity extends AdaptiveActivity {
             if( messageText.isEmpty() ) return;
             Message message = new Message(messageText);
             for( User i : User.users ){
-                if( i.isConnectedViaWebSocket() ) {
-                    i.getWebSocket().sendText(message.toJSON().toString());
+                if( i.isWebSokcetConnected(MessagesWSSession.path) ) {
+                    i.getWebSocket(MessagesWSSession.path).sendText(message.toJSON().toString());
                 }
             }
             synchronized (MessagesAdapter.messages) {

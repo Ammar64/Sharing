@@ -126,19 +126,6 @@ public class ShareFragment extends Fragment {
         }
     });
 
-
-    public ActivityResultLauncher<Intent> mGetContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), (result) -> {
-        Intent intent = result.getData();
-        if ( result.getResultCode() == Activity.RESULT_OK && intent != null && Consts.ACTION_ADD_FILES.equals( intent.getAction())) {
-           ArrayList<String> filesPath = intent.getStringArrayListExtra(Consts.EXTRA_FILES_PATH);
-           Intent serviceIntent = new Intent(requireContext(), ServerService.class);
-           serviceIntent.setAction(Consts.ACTION_ADD_FILES_PATHS);
-           serviceIntent.putStringArrayListExtra(Consts.EXTRA_FILES_PATH, filesPath);
-           requireContext().startService(serviceIntent);
-        }
-    });
-
-
     /**
      * @param progress_index the index of the progress manager in ProgressManager.progresses
      */

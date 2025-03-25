@@ -14,6 +14,7 @@ import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.R;
 import com.ammar.sharing.network.Server;
 
+import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -24,7 +25,7 @@ public class SharingApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        _isDebuggable =  ( 0 != ( getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE ) );
+        _isDebuggable = (0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
         Utils.setupUtils(this);
         Consts.systemLocale = Locale.getDefault();
         Consts.langCodes = getResources().getStringArray(R.array.lang_codes);
@@ -55,5 +56,8 @@ public class SharingApp extends Application {
         SharedPreferences settingsPref = getSharedPreferences(Consts.PREF_SETTINGS, MODE_PRIVATE);
         Server.PORT_NUMBER = settingsPref.getInt(Consts.PREF_FIELD_SERVER_PORT, 2999);
     }
-    public static boolean isDebuggable() { return _isDebuggable; }
+
+    public static boolean isDebuggable() {
+        return _isDebuggable;
+    }
 }

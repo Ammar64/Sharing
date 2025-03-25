@@ -110,7 +110,7 @@ public class ApksInstallerActivity extends AppCompatActivity {
         installerButton.setText(android.R.string.cancel);
         installerButton.setOnClickListener((view) -> {
             Intent intent = new Intent(this, PackageInstallerService.class);
-            intent.setAction(Consts.ACTION_STOP_INSTALLER);
+            intent.setAction(PackageInstallerService.ACTION_STOP_INSTALLER);
             startService(intent);
             installerDialog.dismiss();
         });
@@ -119,7 +119,7 @@ public class ApksInstallerActivity extends AppCompatActivity {
 
 
         Intent intent = new Intent(this, PackageInstallerService.class);
-        intent.setAction(Consts.ACTION_TRIGGER_APKS_INSTALL);
+        intent.setAction(PackageInstallerService.ACTION_TRIGGER_APKS_INSTALL);
         intent.setData(result);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startService(intent);

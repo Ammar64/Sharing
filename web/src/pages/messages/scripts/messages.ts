@@ -51,7 +51,7 @@ function messagesPage() {
     })
 
     function startWebSocket() {
-        var webSocket = new WebSocket("/ws");
+        var webSocket = new WebSocket("/messages");
         webSocket.addEventListener("open", function () {
             disconnectedDiv.style.display = "none";
         });

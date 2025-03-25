@@ -45,23 +45,23 @@
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/B_AddFiles"
+                android:id="@+id/B_Stream"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@drawable/circular_button_white"
-                app:srcCompat="@drawable/icon_file_red"
+                app:srcCompat="@drawable/ic_ondemand_video"
                 app:tint="#c00" />
 
             <TextView
-                android:id="@+id/TV_TextAddFile"
+                android:id="@+id/TV_TextStream"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textAlignment="center"
                 android:layout_marginTop="4dp"
-                android:labelFor="@+id/B_AddFiles"
-                android:text="@string/add_files"
+                android:labelFor="@+id/B_Stream"
+                android:text="@string/streaming"
                 android:textColor="@color/white" />
         </LinearLayout>
 

@@ -12,3 +12,9 @@ export interface Message {
     content: string;
     remote: boolean;
 }
+
+export interface RTCOffer {
+    type: string;
+    sdp:  string;
+    sdptype: string;
+}

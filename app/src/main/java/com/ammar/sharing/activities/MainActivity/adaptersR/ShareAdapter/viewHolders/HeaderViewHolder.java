@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
-import com.ammar.sharing.activities.AddAppsActivity.AddAppsActivity;
 import com.ammar.sharing.activities.AddAppsAndFilesActivity.AddAppsAndFilesActivity;
 import com.ammar.sharing.activities.AddFilesActivity.AddFilesActivity;
 import com.ammar.sharing.activities.MainActivity.MainActivity;
@@ -26,6 +25,7 @@ import com.ammar.sharing.activities.MainActivity.adaptersR.ChosenFilesAdapter;
 import com.ammar.sharing.activities.MainActivity.adaptersR.UsersAdapter;
 import com.ammar.sharing.activities.MainActivity.fragments.ShareFragment;
 import com.ammar.sharing.activities.MessagesActivity.MessagesActivity;
+import com.ammar.sharing.activities.StreamingActivity.StreamingActivity;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.ui.AdaptiveTextView;
@@ -49,7 +49,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         this.fragment = fragment;
         ImageButton addItemsB = itemView.findViewById(R.id.B_AddItems);
-        ImageButton addFilesB = itemView.findViewById(R.id.B_AddFiles);
+        ImageButton streamingB = itemView.findViewById(R.id.B_Stream);
         ImageButton messagesB = itemView.findViewById(R.id.B_Messages);
         AppCompatButton QRCodeB = itemView.findViewById(R.id.B_ShowAddress);
 
@@ -70,7 +70,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
         }
 
         addItemsB.setOnClickListener((button) -> this.fragment.launcher.launch(new Intent(itemView.getContext(), AddAppsAndFilesActivity.class)));
-        addFilesB.setOnClickListener((button) -> this.fragment.mGetContent.launch(new Intent(this.fragment.requireContext(), AddFilesActivity.class)));
+        streamingB.setOnClickListener((button) -> itemView.getContext().startActivity(new Intent(itemView.getContext(), StreamingActivity.class)));
         messagesB.setOnClickListener((button) -> {
             Intent intent = new Intent(itemView.getContext(), MessagesActivity.class);
             itemView.getContext().startActivity(intent);

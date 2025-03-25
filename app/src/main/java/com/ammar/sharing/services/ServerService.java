@@ -33,6 +33,8 @@ import com.ammar.sharing.network.sessions.PageSession;
 import com.ammar.sharing.network.sessions.RedirectSession;
 import com.ammar.sharing.network.sessions.UploadSession;
 import com.ammar.sharing.network.sessions.UserSession;
+import com.ammar.sharing.network.websocket.sessions.InfoWSSession;
+import com.ammar.sharing.network.websocket.sessions.MessagesWSSession;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -98,6 +100,9 @@ public class ServerService extends Service {
 
         server.addPath("/get-all-messages", MessagesSession.class);
         server.addPaths(RedirectSession.redirectMap.keySet(), RedirectSession.class);
+
+        server.addWebsocketPath(MessagesWSSession.path, MessagesWSSession.class);
+        server.addWebsocketPath(InfoWSSession.path, InfoWSSession.class);
     }
 
     @Nullable

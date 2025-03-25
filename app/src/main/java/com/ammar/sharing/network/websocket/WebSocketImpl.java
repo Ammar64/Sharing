@@ -8,6 +8,7 @@ import androidx.core.util.Function;
 import com.ammar.sharing.common.utils.TypesUtils;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.network.exceptions.WebSocketException;
+import com.ammar.sharing.network.websocket.sessions.WebSocketSession;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +27,7 @@ public abstract class WebSocketImpl {
     public static final byte CLOSE = 0x8;
     public static final byte PING = 0x9;
     public static final byte PONG = 0xa;
+
     private static final byte[] ALLOWED_OPCODES = new byte[]{
             0x0, // continuation frame
             0x1, // text frame
@@ -36,21 +38,21 @@ public abstract class WebSocketImpl {
     };
 
     private Thread closeThread;
-    protected final ArrayList<OnReceiveTextListener> onReceiveTextCallables = new ArrayList<>();
-    protected final ArrayList<OnReceiveBinListener> onReceiveBinCallables = new ArrayList<>();
     private boolean isCloseSent = false;
+
     public WebSocketImpl(Socket clientSocket) {
         this.clientSocket = clientSocket;
         closeThread = new Thread(() -> {
             try {
                 Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                return;
+            } catch (InterruptedException ignore) {
             }
+
             running = false;
             try {
                 clientSocket.close();
-            } catch (IOException ignore) {}
+            } catch (IOException ignore) {
+            }
 
         });
     }
@@ -148,29 +150,29 @@ public abstract class WebSocketImpl {
 
     protected native byte[] constructWebSocketFrame(byte[] data, byte opCode);
 
+    abstract protected void onStringReceived(String data);
+
+    abstract protected void onBinaryReceived(byte[] data);
+
     public void run() {
         while (running) {
             try {
                 WebSocketFrame wsf = readWebSocketFrame();
-                if( wsf.isCloseFrame() ) {
-                    if( !isCloseSent ) {
-                        sendControlFrame(CLOSE, null);
-                    } else {
+                if (wsf.isCloseFrame()) {
+                    if (isCloseSent) {
                         closeThread.interrupt();
+                    } else {
+                        sendControlFrame(CLOSE, null);
                     }
                     running = false;
                     Log.d("Websocket", "Socket closed");
-                } else if( wsf.isPing() ) {
+                } else if (wsf.isPing()) {
                     byte[] rawWSF = constructWebSocketFrame(wsf.payloadData, PONG);
                     clientSocket.getOutputStream().write(rawWSF);
-                } else if( wsf.isTextFrame() ) {
-                    for( OnReceiveTextListener i : onReceiveTextCallables ) {
-                        i.apply(new String(wsf.payloadData, StandardCharsets.UTF_8));
-                    }
+                } else if (wsf.isTextFrame()) {
+                    onStringReceived(new String(wsf.payloadData, StandardCharsets.UTF_8));
                 } else if (wsf.isBinaryFrame()) {
-                    for( OnReceiveBinListener i : onReceiveBinCallables ) {
-                        i.apply(wsf.payloadData);
-                    }
+                    onBinaryReceived(wsf.payloadData);
                 }
             } catch (WebSocketException e) {
                 sendControlFrame(CLOSE, null);
@@ -198,7 +200,7 @@ public abstract class WebSocketImpl {
         OutputStream out = null;
         try {
             out = clientSocket.getOutputStream();
-            byte[] closeFrameRaw = constructWebSocketFrame(payload, (byte)0x8);
+            byte[] closeFrameRaw = constructWebSocketFrame(payload, (byte) 0x8);
             out.write(closeFrameRaw);
         } catch (IOException ignore) {
         }

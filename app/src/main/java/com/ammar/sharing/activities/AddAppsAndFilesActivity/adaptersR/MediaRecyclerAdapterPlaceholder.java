@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddAppsAndFilesActivity.adaptersR.viewHolders.EmptyViewHolder;
 
-public class FileRecyclerAdapterPlaceholder extends RecyclerView.Adapter<EmptyViewHolder> {
+public class MediaRecyclerAdapterPlaceholder extends RecyclerView.Adapter<EmptyViewHolder> {
     @NonNull
     @Override
     public EmptyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

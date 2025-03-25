@@ -7,6 +7,7 @@ import androidx.core.util.Function;
 
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.network.exceptions.WebSocketException;
+import com.ammar.sharing.network.websocket.sessions.WebSocketSession;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -15,8 +16,10 @@ import java.util.Collection;
 
 public class WebSocket extends WebSocketImpl {
 
-    public WebSocket(Socket clientSocket) {
+    private final WebSocketSession session;
+    public WebSocket(Socket clientSocket, WebSocketSession session) {
         super(clientSocket);
+        this.session = session;
     }
 
     public void sendText(String data) {
@@ -28,7 +31,7 @@ public class WebSocket extends WebSocketImpl {
         }).start();
     }
 
-    public void sendBinary(byte[] data) throws IOException {
+    public void sendBinary(byte[] data) {
         new Thread(() -> {
             try {
                 byte[] wsFrame = constructWebSocketFrame(data, (byte) 0x2);
@@ -37,19 +40,13 @@ public class WebSocket extends WebSocketImpl {
         }).start();
     }
 
-    public int addOnReceiveText(OnReceiveTextListener onReceive) {
-        synchronized (onReceiveTextCallables) {
-            int index = super.onReceiveTextCallables.size();
-            super.onReceiveTextCallables.add(onReceive);
-            return index;
-        }
+    @Override
+    protected void onStringReceived(String data) {
+        session.onMessage(this, data);
     }
 
-    public int addOnReceiveBin(OnReceiveBinListener onReceive) {
-        synchronized (onReceiveBinCallables) {
-            int index = super.onReceiveBinCallables.size();
-            super.onReceiveBinCallables.add(onReceive);
-            return index;
-        }
+    @Override
+    protected void onBinaryReceived(byte[] data) {
+        session.onMessage(this, data);
     }
 }

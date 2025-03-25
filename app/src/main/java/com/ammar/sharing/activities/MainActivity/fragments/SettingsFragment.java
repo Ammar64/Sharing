@@ -69,7 +69,7 @@ public class SettingsFragment extends Fragment {
                     Server.PORT_NUMBER = port;
                     settingsPref.edit().putInt(Consts.PREF_FIELD_SERVER_PORT, port).apply();
                     Intent intent = new Intent(requireContext(), ServerService.class);
-                    intent.setAction(Consts.ACTION_RESTART_SERVER);
+                    intent.setAction(ServerService.ACTION_RESTART_SERVER);
                     requireContext().startService(intent);
                 })
                 .create();

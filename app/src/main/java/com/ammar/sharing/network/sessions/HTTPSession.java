@@ -1,11 +1,8 @@
-package com.ammar.sharing.network.sessions.base;
+package com.ammar.sharing.network.sessions;
 
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public abstract class HTTPSession {
 

@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddAppsAndFilesActivity.AddAppsAndFilesActivity;
-import com.ammar.sharing.activities.AddAppsAndFilesActivity.adaptersR.DefaultFragmentRecyclerAdapter;
+import com.ammar.sharing.activities.AddAppsAndFilesActivity.adaptersR.FilesFragmentRecyclerAdapter;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
-public class DefaultFragment extends Fragment {
+public class FilesFragment extends Fragment {
 
     View root;
 
@@ -33,7 +33,7 @@ public class DefaultFragment extends Fragment {
         ((ShimmerFrameLayout)root.findViewById(R.id.SFL_RecyclerContainer)).hideShimmer();
         mRecyclerView = root.findViewById(R.id.RV_AddAppsAndFiles);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        mRecyclerView.setAdapter(new DefaultFragmentRecyclerAdapter(this, ((AddAppsAndFilesActivity)requireActivity())));
+        mRecyclerView.setAdapter(new FilesFragmentRecyclerAdapter(this, ((AddAppsAndFilesActivity)requireActivity())));
     }
 
 }

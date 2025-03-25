@@ -3,9 +3,8 @@ declare function updateAvailableDownloads(): void;
 const disconnectedDiv = document.getElementById("disconnected")! as HTMLDivElement;
 const retryInSpan = document.getElementById("reconnect_in_seconds")! as HTMLSpanElement;
 
-
 function startWebSocket() {
-    var webSocket = new WebSocket("/ws");
+    var webSocket = new WebSocket("/info");
     webSocket.addEventListener("open", function() {
         disconnectedDiv.style.display = "none";
     });
@@ -16,11 +15,16 @@ function startWebSocket() {
             case "message":
                 // TODO: Indicate message received
                 break;
-            case "info":
-                if (data.info === "update-downloads") {
-                    updateAvailableDownloads();
-                }
+            case "update-downloads":
+                updateAvailableDownloads();
                 break;
+            case "go-to-video-page":
+                window.location.pathname = "/pages/video-stream"
+                break;
+            case "go-to-audio-page":
+                window.location.pathname = "/pages/audio-stream"
+                break;
+    
         }
 
     })
