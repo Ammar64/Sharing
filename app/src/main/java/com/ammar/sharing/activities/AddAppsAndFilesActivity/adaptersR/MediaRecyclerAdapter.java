@@ -52,7 +52,7 @@ public class MediaRecyclerAdapter extends SearchableRecyclerAdapter<RecyclerView
                 view = inflater.inflate(R.layout.view_search, parent, false);
                 return new SearchBarViewHolder(view, this);
             case TYPE_MEDIA:
-                view = inflater.inflate(R.layout.row_file, parent, false);
+                view = inflater.inflate(R.layout.view_file, parent, false);
                 return new ImageViewHolder(view);
             case TYPE_SPACE:
                 return SpaceViewHolder.MakeSpaceViewHolder(parent.getContext(), (int) Utils.dpToPx(140));

@@ -89,13 +89,13 @@ public class Sharable {
         if (mimeType.startsWith("image/")) {
             imageBM = FileUtils.decodeSampledSharableImage(this, 256, 256);
         } else if (mimeType.startsWith("video/")) {
-            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_video, null));
+            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.ic_video, null));
         } else if (mimeType.startsWith("audio/")) {
-            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_audio, null));
+            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.ic_audio, null));
         } else if("application/pdf".equals(mimeType)) {
-            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_pdf, null));
+            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.ic_pdf, null));
         } else if (Utils.isDocumentType(mimeType)) {
-            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_document, null));
+            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.ic_document, null));
         } else if ("application/vnd.android.package-archive".equals(mimeType)) {
             if(isUri) {
                 return Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_archive, null));
@@ -112,7 +112,7 @@ public class Sharable {
                 }
             }
         } else {
-            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_file, null));
+            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.ic_file, null));
         }
         return imageBM;
     }

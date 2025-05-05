@@ -4,5 +4,5 @@
       <solid android:color="#11ee11"/>
     </shape>
   </item>
-  <item android:drawable="@drawable/icon_file"/>
+  <item android:drawable="@drawable/ic_file"/>
 </layer-list>

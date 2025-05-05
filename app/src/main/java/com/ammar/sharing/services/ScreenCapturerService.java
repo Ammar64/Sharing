@@ -60,7 +60,7 @@ public class ScreenCapturerService extends Service {
         Notification notification =
                 notificationBuilder
                         .setOngoing(true)
-                        .setSmallIcon(R.drawable.icon_image)
+                        .setSmallIcon(R.drawable.ic_image)
                         .setContentTitle("ScreenCapturerService is running in the foreground")
                         .setPriority(NotificationManager.IMPORTANCE_MIN)
                         .setCategory(Notification.CATEGORY_SERVICE)

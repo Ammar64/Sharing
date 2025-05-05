@@ -67,7 +67,7 @@
                 android:background="#AAFFFFFF"/>
 
             <com.ammar.sharing.custom.ui.AdaptiveTextView
-                android:id="@+id/TV_FileName"
+                android:id="@+id/TV_DirName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxLines="1"

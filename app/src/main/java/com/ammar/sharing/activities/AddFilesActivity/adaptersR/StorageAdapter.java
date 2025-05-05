@@ -153,7 +153,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_directory, parent, false);
                 return new DirectoryViewHolder(this, view);
             case TYPE_FILE:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_file, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_file, parent, false);
                 return new FileViewHolder(view);
             case TYPE_SPACE:
                 view = new Space(parent.getContext());
@@ -506,10 +506,10 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             FileType.allInstances = new ArrayList<>(5);
             FileType recent = new FileType(adapter, R.string.recent, R.drawable.icon_recent, -1);
-            new FileType(adapter, R.string.images, R.drawable.icon_image, FileUtils.FILE_TYPE_IMAGE);
-            new FileType(adapter, R.string.videos, R.drawable.icon_video, FileUtils.FILE_TYPE_VIDEO);
-            new FileType(adapter, R.string.audio, R.drawable.icon_audio, FileUtils.FILE_TYPE_AUDIO);
-            new FileType(adapter, R.string.documents, R.drawable.icon_document, FileUtils.FILE_TYPE_DOCUMENT);
+            new FileType(adapter, R.string.images, R.drawable.ic_image, FileUtils.FILE_TYPE_IMAGE);
+            new FileType(adapter, R.string.videos, R.drawable.ic_video, FileUtils.FILE_TYPE_VIDEO);
+            new FileType(adapter, R.string.audio, R.drawable.ic_audio, FileUtils.FILE_TYPE_AUDIO);
+            new FileType(adapter, R.string.documents, R.drawable.ic_document, FileUtils.FILE_TYPE_DOCUMENT);
 
             adapter.setOnGoBack(() -> {
                 for (FileType i : FileType.allInstances) {
@@ -649,7 +649,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(itemView);
             fileImageIV = itemView.findViewById(R.id.IV_FileImage);
             lineV = itemView.findViewById(R.id.V_Line);
-            fileNameTV = itemView.findViewById(R.id.TV_FileName);
+            fileNameTV = itemView.findViewById(R.id.TV_DirName);
             fileSizeTV = itemView.findViewById(R.id.TV_FileSize);
             fileTypeNameTV = itemView.findViewById(R.id.TV_FileTypeName);
             fileCB = itemView.findViewById(R.id.CB_SelectFile);

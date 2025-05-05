@@ -21,8 +21,11 @@ import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.ammar.sharing.R;
+import com.ammar.sharing.custom.glide.OverlayTransformation;
 import com.ammar.sharing.models.Sharable;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
@@ -65,7 +68,7 @@ public class FileUtils {
         img.setScaleType(ImageView.ScaleType.FIT_CENTER);
         switch (ext) {
             case "pdf":
-                img.setImageResource(R.drawable.icon_pdf);
+                img.setImageResource(R.drawable.ic_pdf);
                 return false;
             case "apk":
                 PackageManager pm = img.getContext().getApplicationContext().getPackageManager();
@@ -89,10 +92,10 @@ public class FileUtils {
                             img.getViewTreeObserver().removeOnPreDrawListener(this);
                             int iW = img.getMeasuredWidth();
                             int iH = img.getMeasuredHeight();
-                            fileTypeNameTV.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, ResourcesCompat.getDrawable(img.getResources(), isImage ? R.drawable.icon_image : R.drawable.icon_video, null), null);
+                            fileTypeNameTV.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, ResourcesCompat.getDrawable(img.getResources(), isImage ? R.drawable.ic_image : R.drawable.ic_video, null), null);
                             Glide.with(img.getContext())
                                     .load(file)
-                                    .error(isImage ? R.drawable.icon_image : R.drawable.icon_video)
+                                    .error(isImage ? R.drawable.ic_image : R.drawable.ic_video)
                                     .addListener(new RequestListener<Drawable>() {
                                         @Override
                                         public boolean onLoadFailed(@Nullable GlideException e, @Nullable Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
@@ -117,23 +120,62 @@ public class FileUtils {
                     return true;
                 } else if (mime.startsWith("audio/")) {
                     Glide.with(img.getContext())
-                            .load(R.drawable.icon_audio)
+                            .load(R.drawable.ic_audio)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(img);
                     return false;
                 } else if (Utils.isDocumentType(mime)) {
                     Glide.with(img.getContext())
-                            .load(R.drawable.icon_document)
+                            .load(R.drawable.ic_document)
                             .diskCacheStrategy(DiskCacheStrategy.NONE)
                             .into(img);
                 }
                 break;
         }
         Glide.with(img.getContext())
-                .load(R.drawable.icon_file)
+                .load(R.drawable.ic_file)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(img);
         return false;
+    }
+
+    public static void inferFileIcon(ImageView imageView, File file) {
+        String fileName = file.getName();
+        String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
+        int imageSize = (int) Utils.dpToPx(50);
+
+        RequestManager requestManager = Glide.with(imageView);
+        RequestBuilder<Drawable> requestBuilder;
+        switch (ext) {
+            case "pdf":
+                requestBuilder = requestManager
+                        .load(R.drawable.ic_pdf);
+                break;
+            case "apk":
+                requestBuilder = requestManager
+                        .load(R.drawable.ic_apk_install);
+                break;
+            default:
+                String mime = Utils.getMimeType(fileName, false);
+                boolean isVideo = mime.startsWith("video/");
+                boolean isAudio = mime.startsWith("audio/");
+                if( isVideo ) {
+                    requestBuilder = requestManager
+                            .load(file)
+                            .transform(new OverlayTransformation(imageView.getContext(), R.drawable.ic_video_play));
+                } else if(isAudio) {
+                    requestBuilder = requestManager
+                            .load(R.drawable.ic_audio);
+                } else {
+                    requestBuilder = requestManager
+                            .load(R.drawable.ic_file);
+                }
+                break;
+        }
+        requestBuilder
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .override(imageSize)
+                .into(imageView);
     }
 
     public static Bitmap decodeSampledSharableImage(Sharable file, int iW, int iH) {

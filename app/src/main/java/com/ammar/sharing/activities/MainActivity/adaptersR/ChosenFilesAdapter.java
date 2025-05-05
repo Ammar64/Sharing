@@ -16,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
-import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
@@ -107,9 +106,9 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
             } else if (mimeType.startsWith("image/")) {
                 builder = request.load(file.isUri() ? file.getUri() : file.getFile());
             } else if(mimeType.startsWith("audio/")) {
-                builder = request.load(R.drawable.icon_audio);
+                builder = request.load(R.drawable.ic_audio);
             } else if(mimeType.startsWith("video/")) {
-                builder = request.load(R.drawable.icon_video);
+                builder = request.load(R.drawable.ic_video);
             } else if ("application/vnd.android.package-archive".equals(mimeType)) {
                 Drawable appIcon = appsIconCache.get(pos);
                 if (appIcon == null) {
@@ -134,7 +133,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
                     builder = request.load(appIcon);
                 }
             } else {
-                builder = request.load(R.drawable.icon_file);
+                builder = request.load(R.drawable.ic_file);
             }
 
 

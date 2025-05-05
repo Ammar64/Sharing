@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.ammar.sharing.R;
 
-public class ThemeActivity extends AppCompatActivity {
+public class DefaultActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

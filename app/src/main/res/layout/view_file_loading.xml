@@ -41,7 +41,7 @@
                 android:background="#AAFFFFFF"/>
 
             <View
-                android:id="@+id/TV_FileName"
+                android:id="@+id/TV_DirName"
                 android:layout_width="150dp"
                 android:layout_height="25dp"
                 android:background="#44000000"

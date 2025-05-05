@@ -186,4 +186,6 @@
     <string name="camera_permission_explanation">We need camera permission to stream video from your camera to the other device</string>
     <string name="record_audio_permission_title">Record audio permission</string>
     <string name="record_audio_permission_explanation">We need permission to access your mic to stream audio to the other device.</string>
+    <string name="screenshots">Screen shots</string>
+    <string name="camera">Camera</string>
 </resources>

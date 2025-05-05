@@ -26,7 +26,7 @@ public class ImageViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         fileImageIV = itemView.findViewById(R.id.IV_FileImage);
         lineV = itemView.findViewById(R.id.V_Line);
-        fileNameTV = itemView.findViewById(R.id.TV_FileName);
+        fileNameTV = itemView.findViewById(R.id.TV_DirName);
         fileSizeTV = itemView.findViewById(R.id.TV_FileSize);
         fileTypeNameTV = itemView.findViewById(R.id.TV_FileTypeName);
         fileCB = itemView.findViewById(R.id.CB_SelectFile);

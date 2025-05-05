@@ -92,6 +92,9 @@
         <activity android:name=".activities.ChangeLogActivity.ChangeLogActivity"
             android:exported="true" />
 
+        <activity android:name=".activities.GetFilesActivity.GetFilesActivity"
+            android:exported="true" />
+
         <service android:name=".services.ServerService"
             android:exported="false"
             android:foregroundServiceType="dataSync"/>

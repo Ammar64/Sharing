@@ -1,0 +1,29 @@
+body {
+    background: #000;
+    width: 100dvw;
+    height: 100dvh;
+}
+
+#audio-stream-app-bar{
+    display: none;
+}
+
+#play-audio-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    background-color: #8a2be2;
+    color: white;
+    font-weight: bold;
+    font-size: 2em;
+    cursor: pointer;
+    padding: 15px;
+}
+
+#play-audio-button:hover {
+    background-color: #791ad1;
+}

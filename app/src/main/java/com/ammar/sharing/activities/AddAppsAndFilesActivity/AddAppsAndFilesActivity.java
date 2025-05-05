@@ -3,10 +3,8 @@ package com.ammar.sharing.activities.AddAppsAndFilesActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
@@ -17,14 +15,14 @@ import com.ammar.sharing.activities.AddAppsAndFilesActivity.data.MediaData;
 import com.ammar.sharing.activities.AddAppsAndFilesActivity.viewModels.AppsViewModel;
 import com.ammar.sharing.activities.AddAppsAndFilesActivity.viewModels.ImagesViewModel;
 import com.ammar.sharing.activities.AddAppsAndFilesActivity.viewModels.VideosViewModel;
-import com.ammar.sharing.custom.ui.ThemeActivity;
+import com.ammar.sharing.custom.ui.DefaultActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.ArrayList;
 
-public class AddAppsAndFilesActivity extends ThemeActivity {
+public class AddAppsAndFilesActivity extends DefaultActivity {
 
     // bool extras
     public static final String EXTRA_APPS_SHARED = "EXTRA_APPS_SHARED";
