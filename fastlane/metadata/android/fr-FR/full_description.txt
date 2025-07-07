@@ -1,0 +1,7 @@
+Partagez des fichiers et des applications en utilisant le navigateur. Vous devez connecter l'autre appareil au même réseau.
+Les fichiers envoyés du navigateur à l'application se trouvent dans le dossier Sharing/ de votre stockage interne.
+Vous devrez envoyer cette application à l'autre appareil si vous avez envoyé une application avec des fichiers apk fractionnés.
+Assurez-vous d'utiliser le point d'accès pour obtenir des vitesses de transfert de fichiers plus rapides.
+
+Tous les remerciements vont à Hamdy El-Menshawy pour la conception de l'interface utilisateur, en particulier du côté web.
+Application réalisée par Ammar64

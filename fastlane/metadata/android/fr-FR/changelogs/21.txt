@@ -1,0 +1,17 @@
+# Fonctionnalités
+1- Ajouter le support CLI pour curl & wget
+2- Ajouter une page HTML uniquement sur l'URL /no-JS
+3- Il vous indique maintenant combien de temps il a fallu pour transférer les fichiers après avoir terminé
+4- Afficher la vitesse de téléchargement dans le navigateur lors du téléchargement
+5- Permettre de télécharger tous les fichiers et applications en un clic depuis le navigateur
+
+# Corrigé
+1- Correction du problème d'écran noir à la fin du tutoriel
+
+# Modifié
+1- Icône de l'application modifiée
+2- Rendre la plupart des dialogues avec des coins arrondis
+3- Mettre à jour l'interface utilisateur du site web
+
+# Traductions
+1- Ajout de traductions en français et en chinois
