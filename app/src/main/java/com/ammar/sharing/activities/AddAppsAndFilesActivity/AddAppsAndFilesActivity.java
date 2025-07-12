@@ -56,7 +56,7 @@ public class AddAppsAndFilesActivity extends DefaultActivity {
 
         mAppBar = findViewById(R.id.TB_Toolbar);
         setSupportActionBar(mAppBar);
-        mAppBar.setNavigationIcon(R.drawable.icon_back);
+        mAppBar.setNavigationIcon(R.drawable.ic_back);
 
         mTabLayout = findViewById(R.id.TL_AppsAndFiles);
 

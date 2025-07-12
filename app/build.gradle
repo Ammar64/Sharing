@@ -118,4 +118,5 @@ dependencies {
     implementation 'com.github.hendrawd:StorageUtil:1.1.0'
     implementation 'io.getstream:stream-webrtc-android:1.3.8'
 
+    testImplementation "junit:junit:4.13.2"
 }

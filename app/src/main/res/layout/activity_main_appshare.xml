@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="@drawable/gradient_background_dark">
+
+    <ImageView
+        android:id="@+id/IV_SharingAppIcon"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="64dp"
+        app:srcCompat="@mipmap/ic_launcher_foreground"
+        android:scaleX="2"
+        android:scaleY="2" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/B_Send"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/white"
+        android:text="@string/send"
+        android:textColor="@color/colorSecondary"
+        app:cornerRadius="25dp"
+        app:layout_constraintBottom_toTopOf="@id/B_Receive"
+        app:layout_constraintEnd_toEndOf="@+id/IV_SharingAppIcon"
+        app:layout_constraintStart_toStartOf="@+id/IV_SharingAppIcon"
+        app:layout_constraintTop_toBottomOf="@+id/IV_SharingAppIcon"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="0.2"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/B_Receive"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:backgroundTint="@color/white"
+        android:text="@string/receive"
+        android:textColor="@color/colorSecondary"
+        app:cornerRadius="25dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/IV_SharingAppIcon"
+        app:layout_constraintStart_toStartOf="@+id/IV_SharingAppIcon"
+        app:layout_constraintTop_toBottomOf="@+id/B_Send" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

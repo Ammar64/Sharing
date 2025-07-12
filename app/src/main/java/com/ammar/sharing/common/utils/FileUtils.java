@@ -311,4 +311,23 @@ public class FileUtils {
     public static void zipFilesToOutStream(OutputStream out, Sharable[] sharables) {
 
     }
+
+    public static int getFileDepthInDir(File dir, File file) {
+        if(!file.getAbsolutePath().startsWith(dir.getAbsolutePath())) {
+            return -1; // file is not a child in that dir
+        }
+        if( dir == file ) {
+            return 0;
+        }
+        int start = dir.getAbsolutePath().length();
+        String fileAbsPath = file.getAbsolutePath();
+        int depth = 0;
+        for(int i = start ; i < file.getAbsolutePath().length(); i++) {
+            char character = fileAbsPath.charAt(i);
+            if( character == '/'){
+                depth++;
+            }
+        }
+        return depth;
+    }
 }

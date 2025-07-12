@@ -95,6 +95,10 @@
         <activity android:name=".activities.GetFilesActivity.GetFilesActivity"
             android:exported="true" />
 
+        <activity android:name=".activities.SettingsActivity.SettingsActivity"
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+            android:windowSoftInputMode="adjustPan" />
+
         <service android:name=".services.ServerService"
             android:exported="false"
             android:foregroundServiceType="dataSync"/>

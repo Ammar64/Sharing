@@ -46,6 +46,7 @@ import com.ammar.sharing.activities.ApksInstallerActivity.ApksInstallerActivity;
 import com.ammar.sharing.activities.ChangeLogActivity.ChangeLogActivity;
 import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.viewHolders.HeaderViewHolder;
 import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.MessagesAdapter;
+import com.ammar.sharing.activities.SettingsActivity.SettingsActivity;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.utils.Utils;
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private View changeThemeMI;
     private View threeDotsMI;
     private View tutorialTV;
+    private View settingsTV;
     private View apksInstallerTV;
     private FloatingActionButton serverButton;
     private ViewPager2 viewPager;
@@ -165,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
         dropDown.setAnchorView(threeDotsMI);
 
         tutorialTV = dropDown.addItem(R.string.tutorial, R.drawable.icon_tutorial);
+        settingsTV = dropDown.addItem(R.string.settings, R.drawable.icon_settings);
         apksInstallerTV = dropDown.addItem(R.string.apks_installer, R.drawable.icon_download);
 
         bottomAppBar = findViewById(R.id.BAB_BottomAppBar);
@@ -242,14 +245,14 @@ public class MainActivity extends AppCompatActivity {
                 bottomNavigationView.getMenu().getItem(position).setChecked(true);
                 prevMenuItem = bottomNavigationView.getMenu().getItem(position);
 
-                // share is 0, settings is 2, 1 is nothing
+                // app share is 0, browser share is 2, 1 is nothing
                 // set title
                 switch (position) {
                     case 0:
-                        toolbar.setTitle(R.string.share);
+                        toolbar.setTitle(R.string.app_name);
                         break;
                     case 2:
-                        toolbar.setTitle(R.string.settings);
+                        toolbar.setTitle(R.string.share);
                         break;
                 }
             }
@@ -259,10 +262,10 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
-            if (id == R.id.B_Share) {
+            if (id == R.id.B_AppShare) {
                 viewPager.setCurrentItem(0);
                 return true;
-            } else if (id == R.id.B_Settings) {
+            } else if (id == R.id.B_Share) {
                 viewPager.setCurrentItem(1);
                 return true;
             }
@@ -284,6 +287,10 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, R.string.no_app_found_to_handle, Toast.LENGTH_SHORT).show();
             }
+        });
+
+        settingsTV.setOnClickListener((view) -> {
+            startActivity(new Intent(this, SettingsActivity.class));
         });
 
         apksInstallerTV.setOnClickListener((view) -> {

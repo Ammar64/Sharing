@@ -82,7 +82,7 @@ public class NavFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Toolbar appBar = view.findViewById(R.id.TB_Toolbar);
-        appBar.setNavigationIcon(R.drawable.icon_back);
+        appBar.setNavigationIcon(R.drawable.ic_back);
         appBar.setTitle(R.string.streaming);
         appBar.setNavigationOnClickListener((v) -> {
             requireActivity().getOnBackPressedDispatcher().onBackPressed();

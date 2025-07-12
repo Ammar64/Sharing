@@ -64,7 +64,7 @@
             android:insetRight="0dp"
             android:insetBottom="0dp"
             app:cornerRadius="25dp"
-            app:icon="@drawable/icon_send"
+            app:icon="@drawable/ic_paper_plane"
             app:iconGravity="textStart"
             app:iconPadding="0dp"
             app:iconTint="#ddd"

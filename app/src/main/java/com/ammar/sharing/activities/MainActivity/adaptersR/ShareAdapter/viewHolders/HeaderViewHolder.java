@@ -19,11 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddAppsAndFilesActivity.AddAppsAndFilesActivity;
-import com.ammar.sharing.activities.AddFilesActivity.AddFilesActivity;
 import com.ammar.sharing.activities.MainActivity.MainActivity;
 import com.ammar.sharing.activities.MainActivity.adaptersR.ChosenFilesAdapter;
 import com.ammar.sharing.activities.MainActivity.adaptersR.UsersAdapter;
-import com.ammar.sharing.activities.MainActivity.fragments.ShareFragment;
+import com.ammar.sharing.activities.MainActivity.fragments.BrowserShareFragment;
 import com.ammar.sharing.activities.MessagesActivity.MessagesActivity;
 import com.ammar.sharing.activities.StreamingActivity.StreamingActivity;
 import com.ammar.sharing.common.Data;
@@ -40,12 +39,12 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
     private final ImageView QRImageIV;
     private final AppCompatTextView serverLinkTV;
     private final AdaptiveTextView QRCodeErrorText;
-    private final ShareFragment fragment;
+    private final BrowserShareFragment fragment;
     private final TextView messagesNumTV;
 
     public static int unseenMessagesCount = 0;
 
-    public HeaderViewHolder(@NonNull View itemView, ShareFragment fragment) {
+    public HeaderViewHolder(@NonNull View itemView, BrowserShareFragment fragment) {
         super(itemView);
         this.fragment = fragment;
         ImageButton addItemsB = itemView.findViewById(R.id.B_AddItems);

@@ -22,7 +22,7 @@
     <string name="connected_users">Verbundene Benutzer</string>
     <string name="block">BLOCKIEREN</string>
     <string name="unblock">ENTBLOCKIEREN</string>
-    <string name="user_default_name">Benutzer %1$s</string>
+    <string name="user_default_name">Benutzer %1$d</string>
     <string name="choose_language">Sprache wählen</string>
     <!-- Fragment Settings   -->
     <string name="dark_mode">Dunkelmodus</string>

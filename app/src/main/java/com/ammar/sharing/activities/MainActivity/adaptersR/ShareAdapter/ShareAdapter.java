@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.viewHolders.HeaderViewHolder;
 import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.viewHolders.ProgressViewHolder;
-import com.ammar.sharing.activities.MainActivity.fragments.ShareFragment;
+import com.ammar.sharing.activities.MainActivity.fragments.BrowserShareFragment;
 import com.ammar.sharing.custom.io.ProgressManager;
 
 // this adapter for the recycler view you see when you open the app
@@ -22,9 +22,9 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int TYPE_PROGRESS = 2;
     private static final int TYPE_FOOTER = 3;
 
-    private final ShareFragment fragment;
+    private final BrowserShareFragment fragment;
 
-    public ShareAdapter(ShareFragment fragment) {
+    public ShareAdapter(BrowserShareFragment fragment) {
         this.fragment = fragment;
     }
 

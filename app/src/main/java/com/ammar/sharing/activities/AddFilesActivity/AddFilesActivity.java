@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddFilesActivity.adaptersR.StorageAdapter;
-import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.utils.FileUtils;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.ui.AdaptiveDropDown;
@@ -74,7 +73,7 @@ public class AddFilesActivity extends AppCompatActivity {
 
         appBar = findViewById(R.id.TB_Toolbar);
         appBar.inflateMenu(R.menu.menu_select);
-        appBar.setNavigationIcon(R.drawable.icon_back);
+        appBar.setNavigationIcon(R.drawable.ic_back);
         appBar.setNavigationContentDescription(R.string.back);
         appBar.setTitle(R.string.select_files);
 

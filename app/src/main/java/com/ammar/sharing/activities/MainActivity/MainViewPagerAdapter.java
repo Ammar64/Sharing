@@ -6,17 +6,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.ammar.sharing.activities.MainActivity.fragments.SettingsFragment;
-import com.ammar.sharing.activities.MainActivity.fragments.ShareFragment;
+import com.ammar.sharing.activities.MainActivity.fragments.AppShareFragment;
+import com.ammar.sharing.activities.MainActivity.fragments.BrowserShareFragment;
 
 public class MainViewPagerAdapter extends FragmentStateAdapter {
     private final Fragment[] fragments;
 
     public MainViewPagerAdapter(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle) {
         super(fragmentManager, lifecycle);
-        fragments = new Fragment[]{new ShareFragment(), new SettingsFragment()};
+        fragments = new Fragment[]{new AppShareFragment(), new BrowserShareFragment()};
     }
-
 
     @NonNull
     @Override

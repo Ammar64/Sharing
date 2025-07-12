@@ -1,8 +1,12 @@
 package com.ammar.sharing.activities.GetFilesActivity.adapterR
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.FileProvider
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.ammar.sharing.R
 import com.ammar.sharing.activities.GetFilesActivity.CheckableFile
@@ -11,6 +15,7 @@ import com.ammar.sharing.activities.GetFilesActivity.adapterR.viewHolders.Direct
 import com.ammar.sharing.activities.GetFilesActivity.adapterR.viewHolders.FileViewHolder
 import com.ammar.sharing.common.utils.FileUtils
 import com.ammar.sharing.common.utils.Utils
+
 
 @SuppressLint("NotifyDataSetChanged")
 class GetFilesAdapter(val activity: GetFilesActivity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -32,6 +37,15 @@ class GetFilesAdapter(val activity: GetFilesActivity) : RecyclerView.Adapter<Rec
     var selectMode: Int = ONE_FILE_SELECT_MODE
         set(value) {
             field = value
+            if( value == ONE_FILE_SELECT_MODE ) {
+                activity.mAppBar?.menu?.clear()
+                activity.mAppBar?.setNavigationIcon(R.drawable.ic_menu)
+                activity.mGetFilesDL?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            } else if(value == MULTIPLE_FILES_SELECT_MODE) {
+                activity.mAppBar?.inflateMenu(R.menu.menu_select)
+                activity.mAppBar?.setNavigationIcon(null)
+                activity.mGetFilesDL?.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            }
             notifyDataSetChanged()
         }
 
@@ -59,7 +73,11 @@ class GetFilesAdapter(val activity: GetFilesActivity) : RecyclerView.Adapter<Rec
         }
     }
 
-    var selectCount = 0;
+    var selectCount = 0
+        set(value) {
+            field = if( value < 0 ) 0 else value
+        }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val viewType = getItemViewType(position)
         when(viewType) {
@@ -67,7 +85,9 @@ class GetFilesAdapter(val activity: GetFilesActivity) : RecyclerView.Adapter<Rec
                 val dirHolder = holder as DirectoryViewHolder
                 dirHolder.dirName.text = mFiles[position].file.name
                 dirHolder.itemView.setOnClickListener {
-                    activity.changeDirectory(mFiles[position].file)
+                    if( selectMode == ONE_FILE_SELECT_MODE ) {
+                        activity.changeDirectory(mFiles[position].file)
+                    }
                 }
             }
             FILE_VIEW_TYPE -> {
@@ -76,7 +96,17 @@ class GetFilesAdapter(val activity: GetFilesActivity) : RecyclerView.Adapter<Rec
                 fileHolder.fileName.text = file.file.name
                 fileHolder.fileSize.text = Utils.getFormattedSize(file.file.length())
                 FileUtils.inferFileIcon(fileHolder.fileIcon, file.file)
-                fileHolder.fileViewOrSelectViewSwitcher.displayedChild = selectMode
+
+                fileHolder.viewSwitcher.displayedChild = selectMode
+                fileHolder.checkBox.isChecked = file.isChecked
+                if(file.isChecked) {
+                    fileHolder.itemView.setBackgroundColor(0x404790d8)
+                } else {
+                    val value = TypedValue()
+                    activity.theme.resolveAttribute(android.R.attr.selectableItemBackground, value, true)
+                    fileHolder.itemView.setBackgroundColor(value.data)
+                }
+
                 fileHolder.itemView.setOnClickListener {
                     if( selectMode == MULTIPLE_FILES_SELECT_MODE ) {
                         if( !file.isChecked ) {
@@ -90,10 +120,29 @@ class GetFilesAdapter(val activity: GetFilesActivity) : RecyclerView.Adapter<Rec
                             selectMode = ONE_FILE_SELECT_MODE
                         }
                     }
+                    notifyItemChanged(position)
                 }
                 fileHolder.itemView.setOnLongClickListener {
-                    selectMode = MULTIPLE_FILES_SELECT_MODE
+                    if(selectMode != MULTIPLE_FILES_SELECT_MODE) {
+                        file.isChecked = true
+                        selectCount++
+                        selectMode = MULTIPLE_FILES_SELECT_MODE
+                    }
                     true
+                }
+                fileHolder.viewBtn.setOnClickListener {
+                    val uri =
+                        FileProvider.getUriForFile(
+                             activity,
+                            activity.getApplicationContext()
+                                .getPackageName() + ".provider",
+                            file.file
+                        )
+                    val intent = Intent()
+                    intent.setAction(Intent.ACTION_VIEW)
+                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    intent.setDataAndType(uri, Utils.getMimeType(file.file.name, true))
+                    activity.startActivity(intent)
                 }
             }
         }

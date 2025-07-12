@@ -49,7 +49,7 @@ public class AddAppsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_apps);
         appBar = findViewById(R.id.TB_Toolbar);
         setSupportActionBar(appBar);
-        appBar.setNavigationIcon(R.drawable.icon_back);
+        appBar.setNavigationIcon(R.drawable.ic_back);
 
         appsRecycler = findViewById(R.id.RV_AppsRecycler);
         setTitle(R.string.select_apps);

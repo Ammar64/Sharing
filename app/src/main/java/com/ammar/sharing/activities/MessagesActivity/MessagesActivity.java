@@ -35,7 +35,7 @@ public class MessagesActivity extends AdaptiveActivity {
     private void initItems() {
         HeaderViewHolder.unseenMessagesCount = 0;
         Toolbar toolbar = findViewById(R.id.TB_Toolbar);
-        toolbar.setNavigationIcon(R.drawable.icon_back);
+        toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setTitle(R.string.messages);
         toolbar.setNavigationOnClickListener((v) -> finish());
 

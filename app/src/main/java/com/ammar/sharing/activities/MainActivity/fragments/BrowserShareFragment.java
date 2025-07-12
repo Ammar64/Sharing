@@ -36,7 +36,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 
-public class ShareFragment extends Fragment {
+public class BrowserShareFragment extends Fragment {
     private View v;
     private RecyclerView filesSendRV;
     private ShareAdapter adapter;
@@ -56,7 +56,7 @@ public class ShareFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_share, container, false);
+        v = inflater.inflate(R.layout.activity_main_browsershare, container, false);
         initItems();
         setItemsListener();
         initObservers();

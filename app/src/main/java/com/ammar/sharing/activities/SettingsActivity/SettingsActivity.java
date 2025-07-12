@@ -1,37 +1,40 @@
-package com.ammar.sharing.activities.MainActivity.fragments;
+package com.ammar.sharing.activities.SettingsActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
-import com.ammar.sharing.activities.MainActivity.MainActivity;
 import com.ammar.sharing.activities.MainActivity.adaptersR.LanguagesAdapter.LanguagesAdapter;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.utils.Utils;
+import com.ammar.sharing.custom.ui.DefaultActivity;
 import com.ammar.sharing.custom.ui.NumberDialog;
 import com.ammar.sharing.custom.ui.RoundDialog;
 import com.ammar.sharing.network.Server;
 import com.ammar.sharing.services.ServerService;
 import com.suke.widget.SwitchButton;
 
-public class SettingsFragment extends Fragment {
-    private View v;
+public class SettingsActivity extends DefaultActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
+        initItems();
+        setItemsListeners();
+    }
 
+    private Toolbar appBarTB;
     private ConstraintLayout serverPortCL;
     private CardView uploadDisableCV;
     private CardView usersBlockCV;
@@ -46,20 +49,15 @@ public class SettingsFragment extends Fragment {
 
     private NumberDialog serverPortND;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v = inflater.inflate(R.layout.fragment_settings, container, false);
-        initItems();
-        setItemsListeners();
-        return v;
-    }
-
     private void initItems() {
-        settingsPref = requireContext().getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
+        appBarTB = findViewById(R.id.TB_Toolbar);
+        setSupportActionBar(appBarTB);
+        appBarTB.setNavigationIcon(R.drawable.ic_back);
+        setTitle(R.string.settings);
 
-        serverPortCL = v.findViewById(R.id.CL_ServerPort);
-        serverPortND = new NumberDialog(requireContext())
+        settingsPref = getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
+        serverPortCL = findViewById(R.id.CL_ServerPort);
+        serverPortND = new NumberDialog(this)
                 .setTitle(R.string.server_port)
                 .setHint(R.string.port)
                 .setMinValue(1024)
@@ -68,28 +66,28 @@ public class SettingsFragment extends Fragment {
                 .setOnResult((port) -> {
                     Server.PORT_NUMBER = port;
                     settingsPref.edit().putInt(Consts.PREF_FIELD_SERVER_PORT, port).apply();
-                    Intent intent = new Intent(requireContext(), ServerService.class);
+                    Intent intent = new Intent(this, ServerService.class);
                     intent.setAction(ServerService.ACTION_RESTART_SERVER);
-                    requireContext().startService(intent);
+                    startService(intent);
                 })
                 .create();
 
-        uploadDisableCV = v.findViewById(R.id.CV_UploadDisable);
-        usersBlockCV = v.findViewById(R.id.CV_UserBlock);
-        debugModeCV = v.findViewById(R.id.CV_DebugMode);
+        uploadDisableCV = findViewById(R.id.CV_UploadDisable);
+        usersBlockCV = findViewById(R.id.CV_UserBlock);
+        debugModeCV = findViewById(R.id.CV_DebugMode);
 
-        uploadDisableS = v.findViewById(R.id.SC_UploadAllowToggle);
+        uploadDisableS = findViewById(R.id.SC_UploadAllowToggle);
         uploadDisableS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_IS_UPLOAD_DISABLED, false));
-        usersBlockS = v.findViewById(R.id.SC_UsersBlockToggle);
+        usersBlockS = findViewById(R.id.SC_UsersBlockToggle);
         usersBlockS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_ARE_USER_BLOCKED, false));
 
-        debugModeS = v.findViewById(R.id.SC_DebugModeToggle);
+        debugModeS = findViewById(R.id.SC_DebugModeToggle);
         debugModeS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_DEBUG_MODE, false));
 
-        languageCL = v.findViewById(R.id.CL_SettingsLanguage);
+        languageCL = findViewById(R.id.CL_SettingsLanguage);
 
         //String lang = settingsPref.getString(Consts.PREF_FIELD_LANG, "");
-        languagesRD = new RoundDialog(requireActivity());
+        languagesRD = new RoundDialog(this);
         languagesRD.setView(R.layout.dialog_langauges);
         languagesRD.setCornerRadius((int) Utils.dpToPx(18));
 
@@ -97,7 +95,7 @@ public class SettingsFragment extends Fragment {
         RecyclerView langsRecycler = languagesDialogView.findViewById(R.id.RV_LanguagesRecycler);
         Button langsDialogOkButton = languagesDialogView.findViewById(R.id.B_LanguagesOkButton);
 
-        LanguagesAdapter languagesAdapter = new LanguagesAdapter((MainActivity) requireActivity());
+        LanguagesAdapter languagesAdapter = new LanguagesAdapter(this);
         langsRecycler.setAdapter(languagesAdapter);
         langsRecycler.setItemAnimator(null);
 
@@ -105,11 +103,11 @@ public class SettingsFragment extends Fragment {
             languagesRD.dismiss();
             String langCode = languagesAdapter.getSelectedLanguageCode();
             if( langCode != null ) {
-                Utils.setLocale(requireActivity(), langCode);
+                Utils.setLocale(this, langCode);
                 settingsPref.edit()
                         .putString(Consts.PREF_FIELD_LANG, langCode)
                         .apply();
-                requireActivity().recreate();
+                recreate();
             }
         });
     }
@@ -148,10 +146,10 @@ public class SettingsFragment extends Fragment {
 
         debugModeS.setOnCheckedChangeListener((view, isChecked) -> {
             if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_DEBUG_MODE, isChecked).commit()) {
-                Toast.makeText(requireContext(), "Debug mode failed to toggle", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Debug mode failed to toggle", Toast.LENGTH_SHORT).show();
                 debugModeS.setChecked(!isChecked);
             }
-            requireActivity().recreate();
+           recreate();
         });
 
         languageCL.setOnClickListener(view -> {

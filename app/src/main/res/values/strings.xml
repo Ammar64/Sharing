@@ -188,4 +188,7 @@
     <string name="record_audio_permission_explanation">We need permission to access your mic to stream audio to the other device.</string>
     <string name="screenshots">Screen shots</string>
     <string name="camera">Camera</string>
+    <string name="send">Send</string>
+    <string name="receive">Receive</string>
+    <string name="folder_doesnt_exist">Folder doesn\'t exist</string>
 </resources>

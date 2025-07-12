@@ -30,7 +30,7 @@
     <string name="connected_users">المستخدمون المتصلون</string>
     <string name="block">حظر</string>
     <string name="unblock">إلغاء الحظر</string>
-    <string name="user_default_name">المستخدم %1$s</string>
+    <string name="user_default_name">المستخدم %1$d</string>
     <string name="choose_language">اختر لغة</string>
     <string name="no_user_connected">لم يتصل أى مستخدم بعد</string>
     <string name="no_files_selected">لم يتم تحديد ملف</string>
