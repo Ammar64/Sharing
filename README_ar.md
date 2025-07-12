@@ -6,11 +6,9 @@
 
 </div>
 
-# تطوير التطبيق متوقف و سيتم استكماله نهاية يوليو 2025 إن شاء الله
-
 # <img src="https://github.com/Ammar64/Sharing/blob/master/fastlane/metadata/android/en-US/images/icon.png" height="30px"/> شارك
 
-[![البناء القابل للتكرار](https://github.com/Ammar64/Sharing/actions/workflows/rb-verify.yml/badge.svg)](https://github.com/Ammar64/Sharing/actions/workflows/rb-verify.yml/) ![حالة الترجمة](https://hosted.weblate.org/widget/sharing/-/ar/svg-badge.svg)
+[![البناء القابل للتكرار](https://github.com/Ammar64/Sharing/actions/workflows/rb-verify.yml/badge.svg)](https://github.com/Ammar64/Sharing/actions/workflows/rb-verify.yml/) [![حالة الترجمة](https://hosted.weblate.org/widget/sharing/-/ar/svg-badge.svg)](https://hosted.weblate.org/engage/sharing)
 
 شارك الملفات و التطبيقات و أرسل الرسائل باستعمال الشبكة المحلية.  
 يجب أن يكون كلا الجهازين على نفس الشبكة ، فعل الخادم و امسح رمز QR و سيمكنك المشاركة عبر المتصفح.  
