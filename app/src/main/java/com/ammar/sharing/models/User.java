@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
+import com.ammar.sharing.common.enums.OS;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.network.websocket.WebSocket;
 import com.ammar.sharing.network.websocket.sessions.MessagesWSSession;
@@ -43,14 +44,14 @@ public class User {
         this.name = "User-" + getId();
         if (userAgent != null) {
             if (userAgent.contains("Windows")) {
-                this.OS = Consts.OS.WINDOWS;
+                this.OS = com.ammar.sharing.common.enums.OS.WINDOWS;
             } else if (userAgent.contains("Android")) {
-                this.OS = Consts.OS.ANDROID;
+                this.OS = com.ammar.sharing.common.enums.OS.ANDROID;
             } else if (userAgent.contains("Linux")) {
-                this.OS = Consts.OS.LINUX;
-            } else this.OS = Consts.OS.UNKNOWN;
+                this.OS = com.ammar.sharing.common.enums.OS.LINUX;
+            } else this.OS = com.ammar.sharing.common.enums.OS.UNKNOWN;
         } else {
-            this.OS = Consts.OS.UNKNOWN;
+            this.OS = com.ammar.sharing.common.enums.OS.UNKNOWN;
         }
     }
 
@@ -141,9 +142,9 @@ public class User {
         return ip.substring(1, ip.lastIndexOf(":"));
     }
 
-    private final Consts.OS OS;
+    private final OS OS;
 
-    public Consts.OS getOS() {
+    public OS getOS() {
         return OS;
     }
 

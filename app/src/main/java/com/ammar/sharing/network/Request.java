@@ -150,7 +150,7 @@ public class Request {
                 clientInput.read(buff);
                 return new String(buff);
             } else
-                throw new BadRequestException("Max POST request is 4MB unless it's a file upload");
+                throw new BadRequestException("Max JSON POST request is 4MB");
         }
         throw new RuntimeException("Request.getBody() called with unsupported Content-Type. Supported type are application/json for now");
     }

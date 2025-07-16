@@ -42,8 +42,4 @@ object Consts {
     var langCodes: Array<String>? = null
     @JvmField
     var systemLocale: Locale? = null
-
-    enum class OS {
-        LINUX, WINDOWS, ANDROID, IOS, MAC, UNKNOWN
-    }
 }
