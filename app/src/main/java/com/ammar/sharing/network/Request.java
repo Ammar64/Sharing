@@ -8,6 +8,8 @@ import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.network.exceptions.BadRequestException;
 import com.ammar.sharing.network.exceptions.NotImplementedException;
 
+import org.jetbrains.annotations.TestOnly;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -18,7 +20,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.TreeMap;
 
 public class Request {
     private final Socket clientSocket;
@@ -32,13 +33,21 @@ public class Request {
         } catch (IOException e) {
             throw new RuntimeException("IOException in Request constructor");
         }
-        this.headers = new HashMap<>();
     }
 
-    public boolean readSocket() {
+    // TEST Constructor
+    @TestOnly
+    public Request() {
+        clientSocket = null;
+        clientInput = null;
+        params = new HashMap<>();
+    }
+
+
+        public boolean readSocket() {
         if (_connClose) return false;
         try {
-            params = new TreeMap<>();
+            params = new HashMap<>();
             parseHTTPHeader();
 
             String connection = getHeader("Connection");
@@ -126,7 +135,7 @@ public class Request {
 
             // if string doesn't contain a value throw error.
             if (!st.hasMoreElements()) throw new BadRequestException("param only contains a key");
-            String val = st.nextToken("=").substring(1);
+            String val = st.nextToken("=");
 
             if (st.hasMoreElements())
                 throw new BadRequestException("param contains more than a value");
@@ -168,8 +177,8 @@ public class Request {
     private String method;
     private String path;
     private String version;
-    private final Map<String, String> headers;
-    private Map<String, String> params;
+    private final HashMap<String, String> headers = new HashMap<>();
+    private HashMap<String, String> params;
     private long content_length;
 
     /**

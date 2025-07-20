@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class FileUtils {
     public static final int FILE_TYPE_IMAGE = 0;
@@ -330,4 +331,13 @@ public class FileUtils {
         }
         return depth;
     }
+
+    private static final Pattern VALID_FILENAME_PATTERN = Pattern.compile("^[a-zA-Z0-9_.-]+$");
+    public static boolean isValidFileName(String fileName) {
+        if (fileName.isEmpty() || fileName.length() > 255) {
+            return false;
+        }
+        return VALID_FILENAME_PATTERN.matcher(fileName).matches();
+    }
+
 }

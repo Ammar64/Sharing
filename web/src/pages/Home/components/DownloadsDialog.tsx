@@ -1,8 +1,9 @@
 import { Button, Container, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { useState, forwardRef, useImperativeHandle, Ref, useEffect, JSX } from "react";
+import { useState, forwardRef, useImperativeHandle, Ref, useEffect, JSX, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import DownloadItem, { DownloadItemSkeleton } from "./DownloadItem";
 import { ApiError, Downloadable, getAvailableDownloads } from "../api/downloads";
+import DownloadAllDialog from "./DownloadAllDialog";
 
 export interface DownloadsDialogRef {
     setDialogOpen: (open: boolean) => void
@@ -14,6 +15,8 @@ function DownloadsDialog(_: unknown, ref: Ref<DownloadsDialogRef>) {
 
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+    const downloadAllRef = useRef<DownloadsDialogRef>(null);
 
     useImperativeHandle(ref, () => {
         return {
@@ -42,10 +45,10 @@ function DownloadsDialog(_: unknown, ref: Ref<DownloadsDialogRef>) {
     }, [open]);
 
     let dialogContent: JSX.Element;
-    
+
     if (isLoading) {
         dialogContent = (<>
-            {([...Array(4)].map((e, i) => {return <DownloadItemSkeleton key={i} />}))}
+            {([...Array(4)].map((e, i) => { return <DownloadItemSkeleton key={i} /> }))}
         </>);
     } else if (isError) {
         dialogContent = (<Container>
@@ -84,14 +87,17 @@ function DownloadsDialog(_: unknown, ref: Ref<DownloadsDialogRef>) {
                     {dialogContent}
                 </Stack>
             </DialogContent>
-            <DialogActions>
-                <Button autoFocus>
-                    {t('download_all')}
-                </Button>
+            <DialogActions> 
+                {(!isLoading && !isError && downloads !== undefined && downloads.length >= 2) &&
+                    <Button autoFocus onClick={() => downloadAllRef.current?.setDialogOpen(true)}>
+                        {t('download_all')}
+                    </Button>
+                }
                 <Button autoFocus onClick={() => setOpen(false)}>
                     {t('done')}
                 </Button>
             </DialogActions>
+            <DownloadAllDialog ref={downloadAllRef} />
         </Dialog>
     );
 }

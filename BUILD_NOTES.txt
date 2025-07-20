@@ -1,0 +1,10 @@
+To build you first need to install web dependencies in the web/ directory
+use the following command:
+
+$ npm install --prefix web/
+
+Every time you build this app, it builds the web part of the app.
+if you want to disable web rebuild to save some time you can do the following.
+
+1- create a file named local_project_options.json in the rootDir of the project
+2- add the following key-value pair {"force_rebuild_web", false}

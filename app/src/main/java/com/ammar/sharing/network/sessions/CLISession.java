@@ -1,6 +1,9 @@
 package com.ammar.sharing.network.sessions;
 
+import android.util.Log;
+
 import com.ammar.sharing.R;
+import com.ammar.sharing.common.utils.FileUtils;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.SharableApp;
@@ -31,7 +34,14 @@ public class CLISession extends HTTPSession {
                 res.sendResponse("Download doesn't exist.\nMake sure you've typed the URL correctly.\n".getBytes(StandardCharsets.UTF_8));
             }
         } else if ("/da".equals(path)) {
-            sendAllSharables(res);
+            String file_name = req.getParam("file_name");
+            if(file_name == null || !FileUtils.isValidFileName(file_name)) {
+                file_name = "default_file_name.zip";
+            }
+            if( !file_name.endsWith(".zip") ) {
+                file_name += ".zip";
+            }
+            sendAllSharables(res, file_name);
         }
     }
 
@@ -71,7 +81,7 @@ public class CLISession extends HTTPSession {
         }
     }
 
-    private void sendAllSharables(Response res) {
+    private void sendAllSharables(Response res, String file_name) {
         if (Sharable.sharablesList.isEmpty()) {
             res.setStatusCode(500);
             res.setContentType("text/plain; charset=UTF-8");
@@ -79,7 +89,7 @@ public class CLISession extends HTTPSession {
             res.sendResponse(errorText.getBytes(StandardCharsets.UTF_8));
         } else {
             Sharable[] sharables = Sharable.sharablesList.toArray(new Sharable[0]);
-            res.sendZippedFilesResponse(sharables, "files.zip", user);
+            res.sendZippedFilesResponse(sharables, file_name, user);
         }
     }
 }

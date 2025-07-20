@@ -33,5 +33,8 @@
     "remote_disconnected": "Can't connect to remote device retrying in ",
     "play": "Play",
     "stream": "Stream",
-    "splits": "splits"
+    "splits": "splits",
+    "file_name": "file name",
+    "cancel": "cancel",
+    "all_files_download_info": "All files added to the downloads list will be compressed in a zip file and sent to this device"
 }
