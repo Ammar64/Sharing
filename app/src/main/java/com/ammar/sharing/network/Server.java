@@ -1,7 +1,5 @@
 package com.ammar.sharing.network;
 
-import android.util.Log;
-
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.network.sessions.HTTPSession;
 import com.ammar.sharing.network.websocket.sessions.WebSocketSession;
@@ -10,14 +8,9 @@ import com.ammar.sharing.services.ServerService;
 import org.intellij.lang.annotations.RegExp;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.SocketOption;
-import java.net.SocketOptions;
-import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.HashMap;
 

@@ -28,8 +28,9 @@ import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Server;
 import com.ammar.sharing.network.sessions.CLISession;
 import com.ammar.sharing.network.sessions.DownloadSession;
+import com.ammar.sharing.network.sessions.DynamicAssetsSession;
 import com.ammar.sharing.network.sessions.MessagesSession;
-import com.ammar.sharing.network.sessions.PageSession;
+import com.ammar.sharing.network.sessions.NoJSSession;
 import com.ammar.sharing.network.sessions.RedirectSession;
 import com.ammar.sharing.network.sessions.UploadSession;
 import com.ammar.sharing.network.sessions.UserSession;
@@ -76,14 +77,10 @@ public class ServerService extends Service {
     @Override
     public void onCreate() {
         // PageSession
-        server.addPath("/", PageSession.class);
-        server.addPath("/no-JS", PageSession.class);
-        server.addPath("/pages/(.*)", PageSession.class);
-        server.addPath("/common/(.*)", PageSession.class);
+        server.addPath("/no-JS", NoJSSession.class);
         // DownloadSession
         server.addPath("/download/(.*)", DownloadSession.class);
         server.addPath("/available-downloads", DownloadSession.class);
-        server.addPath("/get-icon/(.*)", DownloadSession.class);
 
         // UploadSession
         server.addPath("/upload/(.*)", UploadSession.class);
@@ -97,6 +94,10 @@ public class ServerService extends Service {
         server.addPath("/ls", CLISession.class);
         server.addPath("/dl/(.*)", CLISession.class);
         server.addPath("/da", CLISession.class);
+
+        //DynamicAssetsSession
+        server.addPath("/get-icon/(.*)", DynamicAssetsSession.class);
+        server.addPath("/favicon.ico", DynamicAssetsSession.class);
 
         server.addPath("/get-all-messages", MessagesSession.class);
         server.addPaths(RedirectSession.redirectMap.keySet(), RedirectSession.class);

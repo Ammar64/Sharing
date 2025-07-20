@@ -13,6 +13,7 @@ import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.R;
 import com.ammar.sharing.network.Server;
+import com.ammar.sharing.network.utils.WebAppUtils;
 
 import java.net.InetSocketAddress;
 import java.util.Arrays;
@@ -27,6 +28,7 @@ public class SharingApp extends Application {
         super.onCreate();
         _isDebuggable = (0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
         Utils.setupUtils(this);
+        WebAppUtils.init();
         Consts.systemLocale = Locale.getDefault();
         Consts.langCodes = getResources().getStringArray(R.array.lang_codes);
 

@@ -1,0 +1,20 @@
+plugins {
+    id "com.android.library"
+}
+android {
+    defaultConfig {
+        namespace = "com.ammar.sharing.web"
+        compileSdk = 34
+        versionCode 1
+        versionName "1.0"
+    }
+    sourceSets {
+        main.assets.srcDirs += "dist"
+    }
+}
+
+tasks.register('buildWeb', Exec) {
+    commandLine 'npm', 'run', 'build'
+}
+
+preBuild.dependsOn buildWeb

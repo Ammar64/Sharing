@@ -51,9 +51,6 @@ public class DownloadSession extends HTTPSession {
             } else if (req.getPath().equals("/available-downloads")) {
                 byte[] available = getFilesJson();
                 res.sendResponse(available);
-            } else if (req.getPath().startsWith("/get-icon/")) {
-                Sharable file = Sharable.getFileWithUUID(requestedUUID);
-                res.sendBitmapResponse(file.getBitmapIcon());
             }
         }
         catch (RuntimeException e) {

@@ -58,6 +58,8 @@ public class Utils {
     private static SharedPreferences settings;
     private static PackageManager pm;
     private static ContentResolver cr;
+    private static AssetManager assetManager;
+
     public static void setupUtils(Context ctx) {
         Utils.res = ctx.getResources();
         Utils.assetManager = ctx.getAssets();
@@ -316,20 +318,6 @@ public class Utils {
         return bitmap;
     }
 
-    private static AssetManager assetManager;
-
-    public static byte[] readFileFromWebAssets(String filepath) throws IOException {
-        InputStream input = assetManager.open("web_app/" + filepath);
-        int size = input.available();
-        byte[] content = new byte[size];
-        int numBytes = input.read(content);
-        input.close();
-        if (numBytes != size) {
-            throw new RuntimeException("Error reading file");
-        }
-        return content;
-    }
-
     public static byte[] readRawRes(@RawRes int id) throws IOException {
         try (InputStream in = res.openRawResource(id)) {
             int size = in.available();
@@ -369,6 +357,8 @@ public class Utils {
         return res;
     }
     public static PackageManager getPm() {return pm;}
+
+    public static AssetManager getAssetManager() { return assetManager; }
     public static String getFormattedTime(long milliSeconds) {
         long x = milliSeconds / 1000;
         final long seconds = x % 60;

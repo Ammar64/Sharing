@@ -1,55 +1,14 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
 }
 
-// a wrapper closure around executing a string
-// can take either a string or a list of strings (for arguments with spaces)
-// prints all output, complains and halts on error
-def runCommand = { strList ->
-    if( strList instanceof GString ) strList = strList.toString()
-    assert ( strList instanceof String ||
-            ( strList instanceof List && strList.each{ it instanceof String } ) \
-)
-    def proc = strList.execute()
-    proc.in.eachLine { line -> println line }
-    proc.out.close()
-    proc.waitFor()
-
-    print "[INFO] ( "
-    if(strList instanceof List) {
-        strList.each { print "${it} " }
-    } else {
-        print strList
-    }
-    println " )"
-
-    if (proc.exitValue()) {
-        println "gave the following error: "
-        println "[ERROR] ${proc.getErrorStream()}"
-    }
-    assert !proc.exitValue()
-}
-
 android {
-    def webDir = new File( rootDir, 'web' ).absolutePath
-    def webBuildDir = new File( webDir, 'build' ).absolutePath
-
-    def buildWeb = tasks.register('buildWeb', Copy) {
-        group = 'Build'
-        description = 'Builds the web side of the app and put it in the assets'
-        println 'Building the web'
-        runCommand("npm run build --prefix $webDir")
-    }
-
-    preBuild.dependsOn buildWeb
-    namespace 'com.ammar.sharing'
-    compileSdk 34
-
-    sourceSets {
-        main.assets.srcDirs += webBuildDir
-    }
-
+    namespace = 'com.ammar.sharing'
+    //noinspection GradleDependency
+    compileSdk = 34
     dependenciesInfo {
         // Disables dependency metadata when building APKs.
         includeInApk = false
@@ -58,11 +17,12 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.ammar.sharing"
-        minSdk 21
-        targetSdk 34
-        versionCode 24
-        versionName "v1.5.5-alpha3"
+        applicationId = "com.ammar.sharing"
+        minSdk = 21
+        //noinspection OldTargetApi
+        targetSdk = 34
+        versionCode = 24
+        versionName = "v1.5.5-alpha3"
 
         vectorDrawables.useSupportLibrary = true
         externalNativeBuild {
@@ -74,30 +34,32 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
-            vcsInfo.include false
+            minifyEnabled = true
+            shrinkResources = true
+            vcsInfo.include = false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
     buildFeatures {
-        prefab true
+        prefab = true
         buildConfig = true
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     externalNativeBuild {
         cmake {
-            path file('src/main/jni/CMakeLists.txt')
-            version '3.22.1'
+            path = file('src/main/jni/CMakeLists.txt')
+            version = '3.22.1'
         }
     }
-    kotlinOptions {
-        jvmTarget = '17'
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_17
+        }
     }
 }
 
@@ -118,8 +80,10 @@ dependencies {
     implementation 'com.github.hendrawd:StorageUtil:1.1.0'
     implementation 'io.getstream:stream-webrtc-android:1.3.8'
 
-    implementation "androidx.navigation:navigation-fragment:2.9.1"
-    implementation "androidx.navigation:navigation-ui:2.9.1"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.9.2"
+    implementation "androidx.navigation:navigation-ui-ktx:2.9.2"
+
+    implementation project(":web")
 
     testImplementation "junit:junit:4.13.2"
 }

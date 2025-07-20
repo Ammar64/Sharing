@@ -1,25 +1,35 @@
 {
-  "dependencies": {
-    "@types/node": "^22.5.5",
-    "typescript": "^5.6.2",
-    "undici-types": "^6.19.8"
-  },
-  "name": "sharing-web",
-  "version": "1.6.0",
-  "description": "The web side of Sharing app",
+  "name": "parcel-react-client-starter",
+  "private": true,
+  "version": "0.0.0",
+  "source": "src/index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "python3 translate-html.py && tsc && rsync -av --exclude '*.html' --exclude '*.ts' --exclude '*.tsx' src/ build/web_app"
+    "start": "parcel --dist-dir ./dist/web_app",
+    "build": "parcel build --no-source-maps --dist-dir ./dist/web_app && python list_web_files.py"
   },
-  "keywords": [
-    "sharing",
-    "android",
-    "file-sharing"
-  ],
-  "author": "Ammar64",
-  "license": "GPL-3.0-or-later",
-  "bugs": {
-    "url": "https://github.com/Ammar64/Sharing/issues"
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^7.2.0",
+    "i18next": "^25.3.2",
+    "i18next-http-backend": "^3.0.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-i18next": "^15.6.0",
+    "react-router": "^7.7.0"
   },
-  "homepage": "https://github.com/Ammar64/Sharing#readme"
+  "devDependencies": {
+    "@types/css-modules": "^1.0.5",
+    "@types/i18next": "^12.1.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/react-i18next": "^7.8.3",
+    "parcel": "^2.14.0",
+    "parcel-plugin-clean-dist": "^0.0.6",
+    "parcel-reporter-static-files-copy": "^1.5.3"
+  },
+  "staticFiles": {
+    "staticPath": "src/locales",
+    "staticOutPath": "locales"
+  }
 }
