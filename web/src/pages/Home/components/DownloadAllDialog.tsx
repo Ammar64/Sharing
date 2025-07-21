@@ -20,7 +20,8 @@ function DownloadAllDialog(_: unknown, ref: Ref<DownloadAllDialogRef>) {
     return (
 
         <Dialog
-            open={open} // TODO: Changed temporary for debuging
+            open={open}
+            onClose={() => setOpen(false)}
         >
             <DialogTitle>{t("download_all")}</DialogTitle>
             <DialogContent>

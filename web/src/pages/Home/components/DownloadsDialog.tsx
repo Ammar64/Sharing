@@ -4,19 +4,16 @@ import { useTranslation } from "react-i18next";
 import DownloadItem, { DownloadItemSkeleton } from "./DownloadItem";
 import { ApiError, Downloadable, getAvailableDownloads } from "../api/downloads";
 import DownloadAllDialog from "./DownloadAllDialog";
+import { DialogRef } from "common/dialog";
 
-export interface DownloadsDialogRef {
-    setDialogOpen: (open: boolean) => void
-}
-
-function DownloadsDialog(_: unknown, ref: Ref<DownloadsDialogRef>) {
+function DownloadsDialog(_: unknown, ref: Ref<DialogRef>) {
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
 
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const downloadAllRef = useRef<DownloadsDialogRef>(null);
+    const downloadAllRef = useRef<DialogRef>(null);
 
     useImperativeHandle(ref, () => {
         return {
@@ -77,7 +74,8 @@ function DownloadsDialog(_: unknown, ref: Ref<DownloadsDialogRef>) {
         <Dialog
             open={open}
             fullScreen={fullScreen}
-            fullWidth={true}>
+            fullWidth={true}
+            onClose={() => setOpen(false)}>
 
             <DialogTitle>
                 {t('available_downloads')}
@@ -102,4 +100,4 @@ function DownloadsDialog(_: unknown, ref: Ref<DownloadsDialogRef>) {
     );
 }
 
-export default forwardRef<DownloadsDialogRef, unknown>(DownloadsDialog);
+export default forwardRef<DialogRef, unknown>(DownloadsDialog);

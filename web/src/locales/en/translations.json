@@ -36,5 +36,19 @@
     "splits": "splits",
     "file_name": "file name",
     "cancel": "cancel",
-    "all_files_download_info": "All files added to the downloads list will be compressed in a zip file and sent to this device"
+    "all_files_download_info": "All files added to the downloads list will be compressed in a zip file and sent to this device",
+    "second": "second",
+    "seconds": "seconds",
+    "minute": "minute",
+    "minutes": "minutes",
+    "hour": "hour",
+    "hours": "hours",
+    "one_second": "1 second",
+    "two_seconds": "2 seconds",
+    "one_minute": "1 minute",
+    "two_minutes": "2 minutes",
+    "one_hour": "1 hour",
+    "two_hours": "2 hours",
+    "no_uploads_yet": "No files uploaded yet",
+    "close": "Close"
 }

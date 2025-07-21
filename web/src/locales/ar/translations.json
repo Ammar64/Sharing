@@ -36,5 +36,19 @@
     "splits": "تقسيمات",
     "file_name": "اسم الملف",
     "cancel": "إلغاء",
-    "all_files_download_info": "كل الملفات التي في القائمة ستُضغط في ملف zip و تُرسل إلى هذا الجهاز"
+    "all_files_download_info": "كل الملفات التي في القائمة ستُضغط في ملف zip و تُرسل إلى هذا الجهاز",
+    "second": "ثانية",
+    "seconds": "ثواني",
+    "minute": "دقيقة",
+    "minutes": "دقائق",
+    "hour": "ساعة",
+    "hours": "ساعات",
+    "one_seconds": "ثانية واحدة",
+    "two_seconds": "ثانيتان",
+    "one_minutes": "دقيقة واحدة",
+    "two_minutes": "دقيقتان",
+    "one_hours": "ساعة واحدة",
+    "two_hours": "ساعتان",
+    "no_uploads_yet": "لم ترفع ملفات حتى الآن",
+    "close": "إغلاق"
 }

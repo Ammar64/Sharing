@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
-import { Avatar, Button, Link, Skeleton, Typography } from "@mui/material";
+import { Avatar, Button, Link, Skeleton } from "@mui/material";
+import EllipsisTypography from "common/components/EllipsisTypography";
 import { useTranslation } from "react-i18next";
-import { getFormattedFileSize } from "../../../utils/utils";
+import { getFormattedFileSize } from "utils/utils";
 
 interface DownloadItemProps {
     name: string,
@@ -20,13 +21,6 @@ const DownloadItemGridBox = styled('div')({
     gridTemplateColumns: "min-content auto min-content min-content",
     gridTemplateRows: "1fr 1fr"
 });
-
-const EllipsisTypography = styled(Typography)({
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-});
-
 
 function DownloadItem(props: DownloadItemProps) {
     const { t } = useTranslation();
