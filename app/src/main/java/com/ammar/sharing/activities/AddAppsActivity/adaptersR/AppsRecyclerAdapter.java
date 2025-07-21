@@ -1,5 +1,6 @@
 package com.ammar.sharing.activities.AddAppsActivity.adaptersR;
 
+import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,13 +34,13 @@ import java.util.LinkedList;
 public class AppsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final App[] apps;
     private App[] displayedApps;
-    private final AddAppsActivity activity;
+    private final Activity activity;
     LinkedList<String> selectedApps;
 
     private static final int TYPE_SEARCH_BAR = 0;
     private static final int TYPE_APP = 1;
 
-    public AppsRecyclerAdapter(AddAppsActivity activity, ArrayList<ApplicationInfo> appsInfo, LinkedList<String> selectedApps) {
+    public AppsRecyclerAdapter(Activity activity, ArrayList<ApplicationInfo> appsInfo, LinkedList<String> selectedApps) {
         this.activity = activity;
         this.selectedApps = selectedApps;
         PackageManager pm = this.activity.getPackageManager();
@@ -101,7 +103,6 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 view = inflater.inflate(R.layout.view_add_apps_app, parent, false);
                 return new AppViewHolder(view);
         }
-
         // It's impossible to reach this
         throw new RuntimeException("");
     }
@@ -131,7 +132,7 @@ public class AppsRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     selectedApps.remove(displayedApps[position].packageName);
                 }
                 this.displayedApps[position].isChecked = !isChecked;
-                activity.setToolbarTitle(activity.getString(R.string.selected_num, selectedApps.size()));
+                activity.setTitle(activity.getString(R.string.selected_num, selectedApps.size()));
             });
         }
 

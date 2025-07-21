@@ -8,7 +8,6 @@ import com.ammar.sharing.models.SharableApp;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
-import com.ammar.sharing.network.sessions.base.HTTPSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,9 +39,7 @@ public class DownloadSession extends HTTPSession {
 
                         // app base.apk must be the first file because it will be the name of the zip.
                         app_files[0] = app;
-                        for (int i = 1; i < app_files.length; i++) {
-                            app_files[i] = app_splits[i - 1];
-                        }
+                        System.arraycopy(app_splits, 0, app_files, 1, app_files.length - 1);
                         res.sendApksFileResponse(app_files ,user);
                     } else {
                         long start = req.getStartRange();
@@ -54,9 +51,6 @@ public class DownloadSession extends HTTPSession {
             } else if (req.getPath().equals("/available-downloads")) {
                 byte[] available = getFilesJson();
                 res.sendResponse(available);
-            } else if (req.getPath().startsWith("/get-icon/")) {
-                Sharable file = Sharable.getFileWithUUID(requestedUUID);
-                res.sendBitmapResponse(file.getBitmapIcon());
             }
         }
         catch (RuntimeException e) {

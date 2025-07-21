@@ -62,8 +62,9 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int SORT_NAME = 0;
     private static final int SORT_LAST_MODIFIED = 1;
 
-    private final File internalStorage = Environment.getExternalStorageDirectory();
-    private File currentDir = internalStorage;
+    // the root which this activity browse files at
+    private final File rootDir;
+    private File currentDir;
     private File[] files;
     private File[] displayedFiles;
 
@@ -80,8 +81,14 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private final AlertDialog loadingDialog;
     private final int loadingSize = (int) Utils.dpToPx(60);
 
-    public StorageAdapter(AddFilesActivity act) {
+    public StorageAdapter(AddFilesActivity act, String rootPath) {
         this.act = act;
+        if( rootPath != null ) {
+            rootDir = new File(rootPath);
+        } else {
+            rootDir = Environment.getExternalStorageDirectory();
+        }
+        currentDir = rootDir;
         viewDirectorySync(currentDir);
 
         act.getOnBackPressedDispatcher().addCallback(act, new OnBackPressedCallback(true) {
@@ -146,7 +153,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_directory, parent, false);
                 return new DirectoryViewHolder(this, view);
             case TYPE_FILE:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_file, parent, false);
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_file, parent, false);
                 return new FileViewHolder(view);
             case TYPE_SPACE:
                 view = new Space(parent.getContext());
@@ -200,7 +207,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         if (this.displayedFiles.length == 0) {
             displayFolderIsEmptyMessage(R.string.folder_is_empty);
         } else act.folderEmptyTV.setVisibility(View.GONE);
-        if (internalStorage.compareTo(dir) == 0) {
+        if (rootDir.compareTo(dir) == 0) {
             act.appBar.setTitle(R.string.internal_storage);
         } else {
             act.appBar.setTitle(dir.getName());
@@ -255,7 +262,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
                 filesChanged();
 
-                if (internalStorage.compareTo(dir) == 0) {
+                if (rootDir.compareTo(dir) == 0) {
                     act.appBar.setTitle(R.string.internal_storage);
                 } else {
                     act.appBar.setTitle(dir.getName());
@@ -289,7 +296,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         fileType.setInProgress(true);
         new Thread(() -> {
             ArrayList<File> filesList = new ArrayList<>();
-            FileUtils.findFilesTypesRecursively(Environment.getExternalStorageDirectory(), filesList, fileType.fileType);
+            FileUtils.findFilesTypesRecursively(rootDir, filesList, fileType.fileType);
             currentDir = null;
             this.files = filesList.toArray(new File[0]);
             sortFiles(files, SORT_LAST_MODIFIED);
@@ -371,8 +378,8 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void goBack() {
         if (onGoBack != null) onGoBack.run();
         if (currentDir == null) {
-            viewDirectory(internalStorage, true);
-        } else if (currentDir.compareTo(internalStorage) != 0) {
+            viewDirectory(rootDir, true);
+        } else if (currentDir.compareTo(rootDir) != 0) {
             viewDirectory(currentDir.getParentFile(), true);
         } else {
             act.setResult(Activity.RESULT_CANCELED);
@@ -499,10 +506,10 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             FileType.allInstances = new ArrayList<>(5);
             FileType recent = new FileType(adapter, R.string.recent, R.drawable.icon_recent, -1);
-            new FileType(adapter, R.string.images, R.drawable.icon_image, FileUtils.FILE_TYPE_IMAGE);
-            new FileType(adapter, R.string.videos, R.drawable.icon_video, FileUtils.FILE_TYPE_VIDEO);
-            new FileType(adapter, R.string.audio, R.drawable.icon_audio, FileUtils.FILE_TYPE_AUDIO);
-            new FileType(adapter, R.string.documents, R.drawable.icon_document, FileUtils.FILE_TYPE_DOCUMENT);
+            new FileType(adapter, R.string.images, R.drawable.ic_image, FileUtils.FILE_TYPE_IMAGE);
+            new FileType(adapter, R.string.videos, R.drawable.ic_video, FileUtils.FILE_TYPE_VIDEO);
+            new FileType(adapter, R.string.audio, R.drawable.ic_audio, FileUtils.FILE_TYPE_AUDIO);
+            new FileType(adapter, R.string.documents, R.drawable.ic_document, FileUtils.FILE_TYPE_DOCUMENT);
 
             adapter.setOnGoBack(() -> {
                 for (FileType i : FileType.allInstances) {
@@ -642,7 +649,7 @@ public class StorageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(itemView);
             fileImageIV = itemView.findViewById(R.id.IV_FileImage);
             lineV = itemView.findViewById(R.id.V_Line);
-            fileNameTV = itemView.findViewById(R.id.TV_FileName);
+            fileNameTV = itemView.findViewById(R.id.TV_DirName);
             fileSizeTV = itemView.findViewById(R.id.TV_FileSize);
             fileTypeNameTV = itemView.findViewById(R.id.TV_FileTypeName);
             fileCB = itemView.findViewById(R.id.CB_SelectFile);

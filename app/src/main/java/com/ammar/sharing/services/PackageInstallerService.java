@@ -22,6 +22,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class PackageInstallerService extends Service {
+    public static final String ACTION_TRIGGER_APKS_INSTALL = "ACTION_TRIGGER_APKS_INSTALL";
+    public static final String ACTION_PACKAGE_INSTALLER = "PACKAGE_INSTALLER_ACTION";
+    public static final String ACTION_STOP_INSTALLER = "ACTION_STOP_INSTALLER";
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -41,7 +45,7 @@ public class PackageInstallerService extends Service {
         String act = intent.getAction();
         if (act == null) return START_NOT_STICKY;
         switch (act) {
-            case Consts.ACTION_TRIGGER_APKS_INSTALL:
+            case ACTION_TRIGGER_APKS_INSTALL:
                 if (intent.getData() == null || worker != null) {
                     stopSelf();
                     return START_NOT_STICKY;
@@ -60,7 +64,7 @@ public class PackageInstallerService extends Service {
                 worker.start();
                 break;
 
-            case Consts.ACTION_PACKAGE_INSTALLER:
+            case ACTION_PACKAGE_INSTALLER:
                 Bundle extras = intent.getExtras();
                 int status = extras.getInt(PackageInstaller.EXTRA_STATUS);
                 String message = extras.getString(PackageInstaller.EXTRA_STATUS_MESSAGE);
@@ -99,7 +103,7 @@ public class PackageInstallerService extends Service {
                                 Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case Consts.ACTION_STOP_INSTALLER:
+            case ACTION_STOP_INSTALLER:
                 if (session != null) session.abandon();
                 if (worker != null) worker.interrupt();
                 session = null;
@@ -153,7 +157,7 @@ public class PackageInstallerService extends Service {
             session = installer.openSession(sessionId);
             extractApksToSession(in, session);
             Intent intent = new Intent(this, PackageInstallerService.class);
-            intent.setAction(Consts.ACTION_PACKAGE_INSTALLER);
+            intent.setAction(PackageInstallerService.ACTION_PACKAGE_INSTALLER);
             PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_MUTABLE);
             IntentSender statusReceiver = pendingIntent.getIntentSender();
 

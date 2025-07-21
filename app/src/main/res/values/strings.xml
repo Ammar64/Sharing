@@ -38,9 +38,14 @@
     <string name="warning_details">This app doesn\'t use HTTPS to transfer your files which make it vulnerable to man-in-the-middle attacks.\nTo be safer, activate a secured hotspot on this device and ensure only other wanted devices are connected to it.</string>
     <string name="dont_show_again">Don\'t show this message again</string>
     <string name="fast_share">Fast share</string>
+    <string name="min_value_error">The minimum value is %d</string>
+    <string name="max_value_error">The maximum value is %d</string>
+
     <!-- Fragment Settings   -->
     <string name="toggle_dark_mode">Toggle dark mode</string>
-    <string name="disable_browser_upload">Turn off uploading via web browser</string>
+    <string name="change_server_port">Set server port</string>
+    <string name="change_server_port_desc">Set the port to which the server listens to. Use this setting when the server is not turning on.</string>
+    <string name="disable_browser_upload">Disable uploading from browsers</string>
     <string name="disable_browser_upload_desc">Prevent web browsers from sending files to your device.</string>
     <string name="block_users">Block connected users</string>
     <string name="block_users_desc">Block users once they are connected to your device.</string>
@@ -49,6 +54,10 @@
     <string name="system_default_lang">System default</string>
     <string name="debug_mode">Debug Mode</string>
     <string name="debug_mode_desc">displays some errors it when occurs</string>
+    <string name="set_number">Set number</string>
+    <string name="server_port">Server port</string>
+    <string name="port">port</string>
+
     <!-- Activity Add Apps   -->
     <string name="loading_apps">Loading Apps…</string>
     <string name="select_apps">Select Apps</string>
@@ -159,4 +168,27 @@
     <string name="french">French</string>
     <string name="spanish">Spanish</string>
     <string name="norwegian">Norwegian</string>
+    <string name="server_port_changed">Server port is now %d</string>
+    <string name="browse_internal_storage">Add files</string>
+    <string name="browse_internal_storage_desc">Add files using android files app</string>
+    <string name="browse_internal_storage_builtin">Add files builtin</string>
+    <string name="browse_internal_storage_desc_builtin">Add files using builtin files browser\n</string>
+    <string name="browse_sd_card_builtin">Add files from %s</string>
+    <string name="browse_sd_card_builtin_desc">Add files from SD card using builtin files browser</string>
+    <string name="files">Files</string>
+    <string name="apps">Apps</string>
+    <string name="add_items">Add items</string>
+    <string name="stream_camera">stream camera</string>
+    <string name="stream_screen">stream screen</string>
+    <string name="stream_audio">stream audio</string>
+    <string name="streaming">Streaming</string>
+    <string name="camera_permission_title">Camera Permission</string>
+    <string name="camera_permission_explanation">We need camera permission to stream video from your camera to the other device</string>
+    <string name="record_audio_permission_title">Record audio permission</string>
+    <string name="record_audio_permission_explanation">We need permission to access your mic to stream audio to the other device.</string>
+    <string name="screenshots">Screen shots</string>
+    <string name="camera">Camera</string>
+    <string name="send">Send</string>
+    <string name="receive">Receive</string>
+    <string name="folder_doesnt_exist">Folder doesn\'t exist</string>
 </resources>

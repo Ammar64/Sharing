@@ -21,3 +21,4 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class com.ammar.sharing.network.sessions.* { *; }
+-keep class com.ammar.sharing.network.websocket.sessions.* { *; }

@@ -2,19 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <item
-        android:id="@+id/B_Share"
-        android:icon="@drawable/icon_share"
-        android:title="@string/share" />
+        android:id="@+id/B_AppShare"
+        android:icon="@mipmap/ic_launcher_foreground"
+        app:iconTint="#555"
+        android:title="@string/app_name" />
 
     <item
         android:enabled="false"
         android:title="" />
 
     <item
-        android:id="@+id/B_Settings"
-        android:icon="@drawable/icon_settings"
-        android:title="@string/settings" />
+        android:id="@+id/B_Share"
+        android:icon="@drawable/icon_share"
+        android:title="@string/share" />
+
 
 </menu>

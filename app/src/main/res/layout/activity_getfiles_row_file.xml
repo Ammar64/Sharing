@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="8dp"
+    android:background="?attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/IV_FileIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="4dp"
+        tools:src="@drawable/ic_file" />
+
+    <TextView
+        android:id="@+id/TV_FileName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/IV_FileIcon"
+        app:layout_constraintBottom_toTopOf="@id/TV_FileSize"
+        app:layout_constraintStart_toEndOf="@id/IV_FileIcon"
+        app:layout_constraintEnd_toStartOf="@id/VS_ActionsContainer"
+        android:textAlignment="viewStart"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="4dp"
+        android:textSize="18sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        tools:text="File name example"/>
+
+    <TextView
+        android:id="@id/TV_FileSize"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/TV_FileName"
+        app:layout_constraintEnd_toEndOf="@id/TV_FileName"
+        app:layout_constraintTop_toBottomOf="@id/TV_FileName"
+        app:layout_constraintBottom_toBottomOf="@id/IV_FileIcon"
+        android:textAlignment="viewStart"
+        android:textSize="12sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        tools:text="12 MB"/>
+
+    <ViewSwitcher
+        android:id="@+id/VS_ActionsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="0dp">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/MB_ViewFile"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        app:backgroundTint="@android:color/transparent"
+        app:cornerRadius="20dp"
+        app:icon="@drawable/ic_zoom_out"
+        app:iconTint="#ddd"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:insetLeft="0dp"
+        android:insetRight="0dp"
+        app:iconPadding="0dp"
+        android:padding="0dp"
+        app:iconGravity="textStart"
+        android:layout_gravity="center" />
+
+        <CheckBox
+            android:id="@+id/CB_FileSelection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:background="?android:attr/listChoiceIndicatorMultiple"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_gravity="center"
+            android:clickable="false"
+            android:focusable="false" />
+    </ViewSwitcher>
+</androidx.constraintlayout.widget.ConstraintLayout>

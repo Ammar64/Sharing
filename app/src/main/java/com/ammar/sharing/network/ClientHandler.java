@@ -10,9 +10,11 @@ import com.ammar.sharing.common.utils.SecurityUtils;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.exceptions.NotImplementedException;
-import com.ammar.sharing.network.sessions.base.HTTPSession;
-import com.ammar.sharing.network.utils.NetUtils;
+import com.ammar.sharing.network.sessions.HTTPSession;
+import com.ammar.sharing.network.sessions.MainSession;
+import com.ammar.sharing.network.utils.WebAppUtils;
 import com.ammar.sharing.network.websocket.WebSocket;
+import com.ammar.sharing.network.websocket.sessions.WebSocketSession;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -87,23 +89,30 @@ public class ClientHandler implements Runnable {
         String userAgent = request.getHeader("User-Agent");
         User user = User.RegisterUser(Utils.getSettings(), clientSocket, userAgent);
         if (!user.isBlocked()) {
-            Class<? extends HTTPSession> sessionClass = inferSessionFromPath(request.getPath());
-            if (sessionClass == null) {
-                startSession(new NotFoundSession(user), request, response);
-            } else {
-                HTTPSession session = sessionClass.getDeclaredConstructor(User.class).newInstance(user);
-                startSession(session, request, response);
-            }
+            Class<? extends HTTPSession> sessionClass = getSessionFromPath(request.getPath());
+            HTTPSession session = sessionClass.getDeclaredConstructor(User.class).newInstance(user);
+            startSession(session, request, response);
         } else { // if user is blocked redirect to blocked page
             startSession(new BlockedSession(user), request, response);
         }
     }
 
-    private void handleWebsocketUpgrade(Request request) {
+    private void handleWebsocketUpgrade(Request request) throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException {
         try {
             String userAgent = request.getHeader("User-Agent");
             User user = User.RegisterUser(Utils.getSettings(), clientSocket, userAgent);
-            if( !user.isBlocked() ) {
+            if (!user.isBlocked()) {
+                String path = request.getPath();
+                Class<? extends WebSocketSession> wsSessionClass = getWebsocketSessionFromPath(path);
+                if (wsSessionClass == null) {
+                    Response response = new Response(request.getClientSocket());
+                    response.setStatusCode(404);
+                    response.sendResponse();
+                    return;
+                }
+
+                WebSocketSession session = wsSessionClass.getDeclaredConstructor(User.class).newInstance(user);
+
                 clientSocket.setSoTimeout(0);
                 // prove that we received websocket handshake
                 String wsKey = request.getHeader("Sec-WebSocket-Key").trim();
@@ -116,8 +125,8 @@ public class ClientHandler implements Runnable {
                 response.setStatusCode(101);
                 response.sendResponse();
 
-                WebSocket ws = new WebSocket(clientSocket);
-                user.setWebSocket(ws);
+                WebSocket ws = new WebSocket(clientSocket, session);
+                user.addWebsocket(path, ws);
                 ws.run();
             } else {
                 Response response = new Response(request.getClientSocket());
@@ -131,6 +140,7 @@ public class ClientHandler implements Runnable {
 
     private boolean isWebSocketUpgradeRequest(Request req) throws NotImplementedException {
         String connection = req.getHeader("connection");
+        if (connection == null) return false;
         String[] connectionValues = connection.split(", ");
         boolean isConnectionUpgrade = false;
         for (String i : connectionValues) {
@@ -139,8 +149,9 @@ public class ClientHandler implements Runnable {
 
         String upgrade = req.getHeader("upgrade");
         boolean isWebSocketUpgrade = "websocket".equals(upgrade);
-        if( !isWebSocketUpgrade && isConnectionUpgrade ) throw new NotImplementedException("Only supports websocket upgrade");
-        return isWebSocketUpgrade && isConnectionUpgrade;
+        if (!isWebSocketUpgrade && isConnectionUpgrade)
+            throw new NotImplementedException("Only supports websocket upgrade");
+        return isConnectionUpgrade && isWebSocketUpgrade;
     }
 
     private void startSession(HTTPSession session, Request req, Response res) {
@@ -151,16 +162,19 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    private Class<? extends HTTPSession> inferSessionFromPath(String path) {
+    private Class<? extends HTTPSession> getSessionFromPath(String path) {
         for (Map.Entry<String, Class<? extends HTTPSession>> i : server.pathsMap.entrySet()) {
             String pathPattern = i.getKey();
             if (Pattern.matches(pathPattern, path)) {
                 return i.getValue();
             }
         }
-        return null;
+        return MainSession.class;
     }
 
+    private Class<? extends WebSocketSession> getWebsocketSessionFromPath(String path) {
+        return server.wsPathsMap.get(path);
+    }
 
     // special sessions
     private static class BlockedSession extends HTTPSession {
@@ -182,47 +196,20 @@ public class ClientHandler implements Runnable {
                     } catch (IOException e) {
                         Utils.showErrorDialog("PagesSession.GET(). IOException.", "Note: error happened when reading raw resources\n" + e.getMessage());
                     }
-                } else if (!"/pages/blocked".equals(req.getPath())) {
+                } else if (!"/blocked.html".equals(req.getPath())) {
                     res.setStatusCode(302);
                     res.setHeader("Content-Length", "0");
-                    res.setHeader("Location", "/pages/blocked");
+                    res.setHeader("Location", "/blocked.html");
                     res.sendResponse();
                 } else {
                     res.setStatusCode(403);
                     res.setHeader("Content-Type", "text/html");
-                    String assetsPath = NetUtils.getCorrespondingAssetsPath("/pages/blocked", res);
-                    res.sendResponse(Utils.readFileFromWebAssets(assetsPath));
+                    // TODO: Make blocked.html
+                    res.sendResponse("You're blocked".getBytes());
                     res.close();
                 }
             } catch (IOException e) {
                 Utils.showErrorDialog("BlockedSession.GET(). IOException", "Failed to read from assets");
-            }
-        }
-    }
-
-    private static class NotFoundSession extends HTTPSession {
-        public NotFoundSession(User user) {
-            super(user);
-        }
-
-        @Override
-        public void GET(Request req, Response res) {
-            sendRes(res);
-        }
-
-        @Override
-        public void POST(Request req, Response res) {
-            sendRes(res);
-        }
-
-        private void sendRes(Response res) {
-            res.setStatusCode(404);
-            res.setHeader("Content-Type", "text/html");
-            String assetsPath = NetUtils.getCorrespondingAssetsPath("/pages/404", res);
-            try {
-                res.sendResponse(Utils.readFileFromWebAssets(assetsPath));
-            } catch (IOException e) {
-                Utils.showErrorDialog("NotFoundSession.GET(). IOException", "Failed to read from assets");
             }
         }
     }

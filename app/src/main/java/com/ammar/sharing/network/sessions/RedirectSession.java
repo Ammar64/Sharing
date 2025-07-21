@@ -2,13 +2,11 @@ package com.ammar.sharing.network.sessions;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
-import com.ammar.sharing.network.sessions.base.HTTPSession;
 
 public class RedirectSession extends HTTPSession {
     public static final HashMap<String, String> redirectMap = new HashMap<>();

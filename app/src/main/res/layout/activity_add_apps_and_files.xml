@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include layout="@layout/toolbar"/>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/TL_AppsAndFiles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/TB_Toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@android:color/transparent"
+        app:tabBackground="@android:color/transparent"
+        app:tabTextColor="@color/white"
+        app:tabSelectedTextColor="@color/colorSecondary"
+        app:tabIndicatorColor="@color/colorSecondary"
+        app:tabRippleColor="@color/colorSecondary"/>
+
+    <View
+        android:id="@+id/V_Border"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="8dp"
+        android:background="@color/toolbar_bottom_color"
+        app:layout_constraintTop_toBottomOf="@id/TL_AppsAndFiles"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/VP2_AddAppsAndFiles"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TL_AppsAndFiles"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/FAB_PickingAppsAndFilesDone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_check"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:maxImageSize="40dp"
+        app:fabCustomSize="60dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

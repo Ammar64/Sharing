@@ -1,5 +1,6 @@
 package com.ammar.sharing.activities.MainActivity.adaptersR.LanguagesAdapter;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.view.ViewGroup;
 
@@ -7,10 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
-import com.ammar.sharing.activities.MainActivity.MainActivity;
 import com.ammar.sharing.activities.MainActivity.adaptersR.LanguagesAdapter.viewHolders.LanguageViewHolder;
 import com.ammar.sharing.common.Consts;
-import com.ammar.sharing.common.utils.Utils;
 
 import java.util.Locale;
 
@@ -21,12 +20,12 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
 
     private final String[] originalLanguagesNames;
     private final String[] translatedLanguagesNames;
-    private final MainActivity context;
+    private final Context context;
 
     private String languageCode = null;
     private int selectedIndex;
 
-    public LanguagesAdapter(MainActivity context) {
+    public LanguagesAdapter(Context context) {
         this.context = context;
         Resources res = this.context.getResources();
         originalLanguagesNames = res.getStringArray(R.array.lang_names_original);

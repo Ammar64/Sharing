@@ -1,5 +1,6 @@
 package com.ammar.sharing.common.utils;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -56,11 +57,15 @@ public class Utils {
     private static Resources res;
     private static SharedPreferences settings;
     private static PackageManager pm;
+    private static ContentResolver cr;
+    private static AssetManager assetManager;
+
     public static void setupUtils(Context ctx) {
         Utils.res = ctx.getResources();
         Utils.assetManager = ctx.getAssets();
         Utils.settings = ctx.getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
         Utils.pm = ctx.getPackageManager();
+        Utils.cr = ctx.getContentResolver();
     }
 
     public static float dpToPx(float dp) {
@@ -293,8 +298,7 @@ public class Utils {
     }
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
-        Bitmap bitmap = null;
-
+        Bitmap bitmap;
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
             if (bitmapDrawable.getBitmap() != null) {
@@ -312,20 +316,6 @@ public class Utils {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
-    }
-
-    private static AssetManager assetManager;
-
-    public static byte[] readFileFromWebAssets(String filepath) throws IOException {
-        InputStream input = assetManager.open("web_app/" + filepath);
-        int size = input.available();
-        byte[] content = new byte[size];
-        int numBytes = input.read(content);
-        input.close();
-        if (numBytes != size) {
-            throw new RuntimeException("Error reading file");
-        }
-        return content;
     }
 
     public static byte[] readRawRes(@RawRes int id) throws IOException {
@@ -367,6 +357,8 @@ public class Utils {
         return res;
     }
     public static PackageManager getPm() {return pm;}
+
+    public static AssetManager getAssetManager() { return assetManager; }
     public static String getFormattedTime(long milliSeconds) {
         long x = milliSeconds / 1000;
         final long seconds = x % 60;
@@ -427,5 +419,9 @@ public class Utils {
             if(i.equals(lang)) return true;
         }
         return false;
+    }
+
+    public static ContentResolver getCR() {
+        return cr;
     }
 }

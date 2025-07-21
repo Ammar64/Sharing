@@ -28,7 +28,7 @@ import java.util.UUID;
 public class Sharable {
 
     public static final LinkedList<Sharable> sharablesList = new LinkedList<>();
-    protected String uuid;
+    protected UUID uuid;
     protected File file;
     protected Uri uri;
 
@@ -39,7 +39,7 @@ public class Sharable {
 
     public Sharable(String path) {
         this.file = new File(path);
-        this.uuid = UUID.randomUUID().toString();
+        this.uuid = UUID.randomUUID();
         fileName = file.getName();
         fileSize = file.length();
         this.mimeType = Utils.getMimeType(fileName);
@@ -50,7 +50,7 @@ public class Sharable {
     public Sharable(ContentResolver resolver, Uri uri) {
         this.uri = uri;
         this.resolver = resolver;
-        this.uuid = UUID.randomUUID().toString();
+        this.uuid = UUID.randomUUID();
         fileName = FileUtils.getFileName(resolver, uri);
         try (AssetFileDescriptor assetFileDescriptor = resolver.openAssetFileDescriptor(uri, "r")) {
             fileSize = assetFileDescriptor.getLength();
@@ -89,13 +89,13 @@ public class Sharable {
         if (mimeType.startsWith("image/")) {
             imageBM = FileUtils.decodeSampledSharableImage(this, 256, 256);
         } else if (mimeType.startsWith("video/")) {
-            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_video, null));
+            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.ic_video, null));
         } else if (mimeType.startsWith("audio/")) {
-            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_audio, null));
+            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.ic_audio, null));
         } else if("application/pdf".equals(mimeType)) {
-            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_pdf, null));
+            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.ic_pdf, null));
         } else if (Utils.isDocumentType(mimeType)) {
-            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_document, null));
+            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.ic_document, null));
         } else if ("application/vnd.android.package-archive".equals(mimeType)) {
             if(isUri) {
                 return Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_archive, null));
@@ -112,14 +112,14 @@ public class Sharable {
                 }
             }
         } else {
-            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.icon_file, null));
+            imageBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.drawable.ic_file, null));
         }
         return imageBM;
     }
 
     protected String mimeType;
 
-    public String getUUID() {
+    public UUID getUUID() {
         return uuid;
     }
 
@@ -129,7 +129,7 @@ public class Sharable {
 
     public JSONObject getJSON() throws JSONException {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("uuid", getUUID());
+        jsonObject.put("uuid", getUUID().toString());
         jsonObject.put("name", getName());
         jsonObject.put("size", getSize());
 
@@ -164,7 +164,7 @@ public class Sharable {
 
     public static Sharable getFileWithUUID(String uuid) throws RuntimeException {
         for (Sharable i : sharablesList) {
-            if (uuid.equals(i.getUUID())) {
+            if (uuid.equals(i.getUUID().toString())) {
                 return i;
             }
         }
@@ -173,7 +173,7 @@ public class Sharable {
 
     public static boolean sharableUUIDExists(String uuid) {
         for (Sharable i : sharablesList) {
-            if (i.getUUID().equals(uuid)) return true;
+            if (i.getUUID().toString().equals(uuid)) return true;
         }
         return false;
     }

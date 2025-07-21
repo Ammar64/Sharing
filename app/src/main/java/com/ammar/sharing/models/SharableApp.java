@@ -34,7 +34,7 @@ public class SharableApp extends Sharable {
         app_name = appInfo.loadLabel(pm).toString();
         // construct base class
         fileName = app_name + ".apk";
-        super.uuid = UUID.randomUUID().toString();
+        super.uuid = UUID.randomUUID();
 
         // check for splits
         String[] splitsDirs = null;
@@ -94,7 +94,7 @@ public class SharableApp extends Sharable {
 
     public Sharable getSplitWithUUID(String uuid) {
         for (Sharable i : splits) {
-            if (uuid.equals(i.getUUID())) {
+            if (uuid.equals(i.getUUID().toString())) {
                 return i;
             }
         }

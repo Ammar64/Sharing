@@ -44,8 +44,9 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.ApksInstallerActivity.ApksInstallerActivity;
 import com.ammar.sharing.activities.ChangeLogActivity.ChangeLogActivity;
-import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter;
+import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.viewHolders.HeaderViewHolder;
 import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.MessagesAdapter;
+import com.ammar.sharing.activities.SettingsActivity.SettingsActivity;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.utils.Utils;
@@ -54,6 +55,7 @@ import com.ammar.sharing.custom.ui.AdaptiveTextView;
 import com.ammar.sharing.custom.ui.RoundDialog;
 import com.ammar.sharing.models.Message;
 import com.ammar.sharing.models.User;
+import com.ammar.sharing.network.websocket.sessions.MessagesWSSession;
 import com.ammar.sharing.services.ServerService;
 import com.ammar.sharing.BuildConfig;
 
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private View changeThemeMI;
     private View threeDotsMI;
     private View tutorialTV;
+    private View settingsTV;
     private View apksInstallerTV;
     private FloatingActionButton serverButton;
     private ViewPager2 viewPager;
@@ -164,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
         dropDown.setAnchorView(threeDotsMI);
 
         tutorialTV = dropDown.addItem(R.string.tutorial, R.drawable.icon_tutorial);
+        settingsTV = dropDown.addItem(R.string.settings, R.drawable.icon_settings);
         apksInstallerTV = dropDown.addItem(R.string.apks_installer, R.drawable.icon_download);
 
         bottomAppBar = findViewById(R.id.BAB_BottomAppBar);
@@ -241,14 +245,14 @@ public class MainActivity extends AppCompatActivity {
                 bottomNavigationView.getMenu().getItem(position).setChecked(true);
                 prevMenuItem = bottomNavigationView.getMenu().getItem(position);
 
-                // share is 0, settings is 2, 1 is nothing
+                // app share is 0, browser share is 2, 1 is nothing
                 // set title
                 switch (position) {
                     case 0:
-                        toolbar.setTitle(R.string.share);
+                        toolbar.setTitle(R.string.app_name);
                         break;
                     case 2:
-                        toolbar.setTitle(R.string.settings);
+                        toolbar.setTitle(R.string.share);
                         break;
                 }
             }
@@ -258,10 +262,10 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
-            if (id == R.id.B_Share) {
+            if (id == R.id.B_AppShare) {
                 viewPager.setCurrentItem(0);
                 return true;
-            } else if (id == R.id.B_Settings) {
+            } else if (id == R.id.B_Share) {
                 viewPager.setCurrentItem(1);
                 return true;
             }
@@ -270,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
 
         serverButton.setOnClickListener((button) -> {
             Intent serviceIntent = new Intent(this, ServerService.class);
-            serviceIntent.setAction(Consts.ACTION_TOGGLE_SERVER);
+            serviceIntent.setAction(ServerService.ACTION_TOGGLE_SERVER);
             startService(serviceIntent);
         });
 
@@ -283,6 +287,10 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, R.string.no_app_found_to_handle, Toast.LENGTH_SHORT).show();
             }
+        });
+
+        settingsTV.setOnClickListener((view) -> {
+            startActivity(new Intent(this, SettingsActivity.class));
         });
 
         apksInstallerTV.setOnClickListener((view) -> {
@@ -300,45 +308,45 @@ public class MainActivity extends AppCompatActivity {
 
 
         Intent serviceIntent = new Intent(this, ServerService.class);
-        serviceIntent.setAction(Consts.ACTION_GET_SERVER_STATUS);
+        serviceIntent.setAction(ServerService.ACTION_GET_SERVER_STATUS);
         startService(serviceIntent);
 
         if(Intent.ACTION_SEND.equals(getIntent().getAction()) ) {
             if( "text/plain".equals(getIntent().getType()) ) {
                 String text = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-                Message message = new Message(text, "admin", false);
+                Message message = new Message(text);
                 synchronized (MessagesAdapter.messages) {
                     MessagesAdapter.messages.add(message);
                     // notify UI that a message was received
-                    ShareAdapter.HeaderViewHolder.unseenMessagesCount++;
+                    HeaderViewHolder.unseenMessagesCount++;
                     Data.messagesNotifier.forcePostValue(MessagesAdapter.messages.size());
                     for( User i : User.users ){
-                        if( i.isConnectedViaWebSocket() ) {
-                            i.getWebSocket().sendText(message.toJSON());
+                        if( i.isWebSokcetConnected(MessagesWSSession.path) ) {
+                            i.getWebSocket(MessagesWSSession.path).sendText(message.toJSON().toString());
                         }
                     }
                 }
             } else {
                 Intent uriIntent = new Intent(this, ServerService.class);
-                uriIntent.setAction(Consts.ACTION_ADD_URI_SHARABLES);
+                uriIntent.setAction(ServerService.ACTION_ADD_URIS);
                 ArrayList<Uri> uriArrayList = new ArrayList<>(1);
                 Uri uri = getIntent().getParcelableExtra(Intent.EXTRA_STREAM);
                 if (uri == null) {
                     Toast.makeText(this, R.string.unsupported_data, Toast.LENGTH_SHORT).show();
                 } else {
                     uriArrayList.add(uri);
-                    uriIntent.putParcelableArrayListExtra(Consts.EXTRA_URIS, uriArrayList);
+                    uriIntent.putParcelableArrayListExtra(ServerService.EXTRA_URIS, uriArrayList);
                     startService(uriIntent);
                 }
             }
         } else if (Intent.ACTION_SEND_MULTIPLE.equals(getIntent().getAction())) {
             Intent uriIntent = new Intent(this, ServerService.class);
-            uriIntent.setAction(Consts.ACTION_ADD_URI_SHARABLES);
+            uriIntent.setAction(ServerService.ACTION_ADD_URIS);
             ArrayList<Uri> uriArrayList = getIntent().getParcelableArrayListExtra(Intent.EXTRA_STREAM);
             if( uriArrayList == null ) {
                 Toast.makeText(this, R.string.unsupported_data, Toast.LENGTH_SHORT).show();
             } else {
-                uriIntent.putParcelableArrayListExtra(Consts.EXTRA_URIS, uriArrayList);
+                uriIntent.putParcelableArrayListExtra(ServerService.EXTRA_URIS, uriArrayList);
                 startService(uriIntent);
             }
         }

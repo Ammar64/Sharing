@@ -5,7 +5,6 @@ import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
 import com.ammar.sharing.network.exceptions.BadRequestException;
-import com.ammar.sharing.network.sessions.base.HTTPSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +44,7 @@ public class UserSession extends HTTPSession {
                 JSONObject jsonRes = new JSONObject();
                 jsonRes.put("changed", true);
                 jsonRes.put("username", user.getName());
+                jsonRes.put("userID", user.getId());
                 res.sendResponse(jsonRes.toString().getBytes());
             }
         } catch (BadRequestException e) {

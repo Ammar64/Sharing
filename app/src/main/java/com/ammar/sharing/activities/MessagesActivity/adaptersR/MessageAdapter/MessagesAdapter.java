@@ -37,7 +37,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessageViewHolder> {
         Message message = messages.get(position);
         holder.getContentTV().setText(message.getContent());
         if( holder.getAuthorTV() != null ) {
-            holder.getAuthorTV().setText(message.getAuthor());
+            holder.getAuthorTV().setText(message.getAuthorName());
         }
     }
 

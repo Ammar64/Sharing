@@ -3,6 +3,7 @@
     <color name="defaultTextColor">#E6E6E6</color>
     <color name="black">#FF000000</color>
     <color name="white">#e0e0e0</color>
+    <color name="purple">#C93EC9</color>
     <color name="colorPrimary">#2196f3</color>
     <color name="colorSecondary">#e91e63</color>
     <color name="colorSecondaryTransparent">#38e91e62</color>
@@ -33,4 +34,6 @@
     <color name="text_color_dark">#111</color>
     <color name="text_color_light">#fff</color>
     <color name="checked_card">#771B5C78</color>
+
+    <color name="placeholder">#7a373737</color>
 </resources>

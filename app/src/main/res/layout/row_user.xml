@@ -13,7 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="8dp"
-        tools:src="@drawable/icon_android" />
+        tools:src="@drawable/ic_android" />
 
     <com.ammar.sharing.custom.ui.AdaptiveTextView
         android:id="@+id/TV_Username"

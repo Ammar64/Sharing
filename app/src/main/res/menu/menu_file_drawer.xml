@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <group android:id="@+id/MG_StorageGroup">
+        <item
+            android:id="@+id/MI_InternalStorage"
+            android:title="@string/internal_storage"
+            />
+    </group>
+
+    <group android:id="@+id/MI_Media">
+            <item android:id="@+id/MI_Camera"
+                android:title="@string/camera"
+                android:icon="@drawable/ic_camera"/>
+
+            <item android:id="@+id/MI_Screenshots"
+                android:title="@string/screenshots"/>
+
+            <item android:id="@+id/MI_Images"
+                android:title="@string/images"
+                android:icon="@drawable/ic_image"/>
+
+            <item android:id="@+id/MI_Videos"
+                android:title="@string/videos"
+                android:icon="@drawable/ic_video"/>
+
+            <item android:id="@+id/MI_Audio"
+                android:title="@string/audio"
+                android:icon="@drawable/ic_audio"/>
+
+            <item android:id="@+id/MI_Documents"
+                android:title="@string/documents"
+                android:icon="@drawable/ic_document"/>
+    </group>
+
+    <group android:id="@+id/MI_Special">
+            <item android:id="@+id/MI_Downloads"
+                android:title="@string/downloads"
+                android:icon="@drawable/ic_folder"/>
+
+            <item android:id="@+id/MI_SharingDirectory"
+                android:title="@string/app_name" />
+    </group>
+</menu>

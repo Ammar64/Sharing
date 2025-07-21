@@ -5,12 +5,12 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter;
-import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.MessagesAdapter;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
+import com.ammar.sharing.common.enums.OS;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.network.websocket.WebSocket;
+import com.ammar.sharing.network.websocket.sessions.MessagesWSSession;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -26,13 +27,13 @@ public class User {
     public static final ArrayList<User> users = new ArrayList<>();
 
     private final int id;
+
     public final LinkedList<Socket> sockets = new LinkedList<>();
+    private final HashMap<String, WebSocket> wsMap = new HashMap<>();
+
     private final SocketAddress address;
     private boolean _isBlocked = false;
-
-
     private String name;
-
     private static int numUsers = 0;
 
     private User(Socket socket, String userAgent) {
@@ -43,14 +44,14 @@ public class User {
         this.name = "User-" + getId();
         if (userAgent != null) {
             if (userAgent.contains("Windows")) {
-                this.OS = Consts.OS.WINDOWS;
+                this.OS = com.ammar.sharing.common.enums.OS.WINDOWS;
             } else if (userAgent.contains("Android")) {
-                this.OS = Consts.OS.ANDROID;
+                this.OS = com.ammar.sharing.common.enums.OS.ANDROID;
             } else if (userAgent.contains("Linux")) {
-                this.OS = Consts.OS.LINUX;
-            } else this.OS = Consts.OS.UNKNOWN;
+                this.OS = com.ammar.sharing.common.enums.OS.LINUX;
+            } else this.OS = com.ammar.sharing.common.enums.OS.UNKNOWN;
         } else {
-            this.OS = Consts.OS.UNKNOWN;
+            this.OS = com.ammar.sharing.common.enums.OS.UNKNOWN;
         }
     }
 
@@ -115,10 +116,6 @@ public class User {
         sockets.add(s);
     }
 
-    public void removeSocket(Socket clientSocket) {
-        sockets.remove(clientSocket);
-    }
-
     public void setName(String name) {
         this.name = name;
 
@@ -145,9 +142,9 @@ public class User {
         return ip.substring(1, ip.lastIndexOf(":"));
     }
 
-    private final Consts.OS OS;
+    private final OS OS;
 
-    public Consts.OS getOS() {
+    public OS getOS() {
         return OS;
     }
 
@@ -159,27 +156,12 @@ public class User {
         return name;
     }
 
-    public WebSocket ws = null;
-
-    public void setWebSocket(WebSocket ws) {
-        this.ws = ws;
-        this.ws.setOnReceiveText((data) -> {
-            Message message = Message.fromJSON(data, true);
-            if( message != null ) {
-                if( !getName().equals( message.getAuthor() ) ) {
-                    message.setAuthor(getName() + "!");
-                }
-                synchronized (MessagesAdapter.messages) {
-                    MessagesAdapter.messages.add(message);
-                    // notify UI that a message was received
-                    ShareAdapter.HeaderViewHolder.unseenMessagesCount++;
-                    Data.messagesNotifier.forcePostValue(MessagesAdapter.messages.size());
-                }
-            }
-        });
+    public void addWebsocket(String path, WebSocket ws) {
+        wsMap.put(path, ws);
     }
 
-    public boolean isConnectedViaWebSocket() {
+    public boolean isWebSokcetConnected(String path) {
+        WebSocket ws = wsMap.get(path);
         if (ws != null) {
             return ws.isNotClosed();
         } else {
@@ -187,8 +169,20 @@ public class User {
         }
     }
 
-    public WebSocket getWebSocket() {
-        return ws;
+    public WebSocket getWebSocket(String path) {
+        return wsMap.get(path);
+    }
+
+    public void sendWebSocketMessage(String wsPath, String message) {
+        WebSocket ws = wsMap.get(wsPath);
+        if(ws == null || !ws.isNotClosed()) return;
+        ws.sendText(message);
+    }
+
+    public void sendWebSocketMessage(String wsPath, byte[] message) {
+        WebSocket ws = wsMap.get(wsPath);
+        if(ws == null || !ws.isNotClosed()) return;
+        ws.sendBinary(message);
     }
 
     public enum INFO {
@@ -206,8 +200,11 @@ public class User {
 
 
             for( final User i : User.users ) {
-                if( i.isConnectedViaWebSocket() ) {
-                    i.getWebSocket().sendText(infoJSON.toString());
+                if( i.isWebSokcetConnected(MessagesWSSession.path) ) {
+                    WebSocket ws = i.getWebSocket(MessagesWSSession.path);
+                    if( ws != null ) {
+                        ws.sendText(infoJSON.toString());
+                    }
                 }
             }
         } catch (JSONException e) {

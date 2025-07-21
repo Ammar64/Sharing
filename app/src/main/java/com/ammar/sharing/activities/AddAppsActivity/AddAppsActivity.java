@@ -49,7 +49,7 @@ public class AddAppsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_apps);
         appBar = findViewById(R.id.TB_Toolbar);
         setSupportActionBar(appBar);
-        appBar.setNavigationIcon(R.drawable.icon_back);
+        appBar.setNavigationIcon(R.drawable.ic_back);
 
         appsRecycler = findViewById(R.id.RV_AppsRecycler);
         setTitle(R.string.select_apps);
@@ -96,9 +96,6 @@ public class AddAppsActivity extends AppCompatActivity {
         }).start();
     }
 
-    public void setToolbarTitle(String title) {
-        setTitle(title);
-    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_select, menu);

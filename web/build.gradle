@@ -1,0 +1,53 @@
+import groovy.json.JsonSlurper
+
+plugins {
+    id "com.android.library"
+}
+android {
+    defaultConfig {
+        namespace = "com.ammar.sharing.web"
+        compileSdk = 34
+        versionCode 1
+        versionName "1.0"
+    }
+    sourceSets {
+        main.assets.srcDirs += "dist"
+
+    }
+}
+
+def jsonFileLocalProjectOptions = file("${rootDir}/local_project_options.json")
+def localProjectOptions
+if( jsonFileLocalProjectOptions.exists() ) {
+    localProjectOptions = new JsonSlurper().parseText(jsonFileLocalProjectOptions.text)
+} else {
+    localProjectOptions = new JsonSlurper().parseText("{}")
+}
+
+tasks.register('buildWeb', Exec) {
+    doFirst {
+        println 'Running buildWeb task...'
+
+        println 'Removing .parcel-cache/ if exists'
+        file(".parcel-cache").deleteDir()
+
+        println 'Removing dist/ if exists'
+        file("dist").deleteDir()
+    }
+
+    commandLine 'npm', 'run', 'build'
+    outputs.upToDateWhen {
+        if(localProjectOptions.force_rebuild_web === null) {
+            localProjectOptions.force_rebuild_web = true
+        }
+        return !(localProjectOptions.force_rebuild_web)
+    }
+}
+
+tasks.preBuild {
+    doFirst {
+        println 'Running preBuild task...'
+    }
+
+    dependsOn tasks.buildWeb
+}

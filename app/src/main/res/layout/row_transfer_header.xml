@@ -1,204 +1,258 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:useDefaultMargins="true"
+    android:padding="8dp"
+    android:columnCount="3">
+        <LinearLayout
+            android:paddingTop="8dp"
+            android:clipToPadding="false"
+            android:layout_gravity="fill"
+            android:gravity="center_horizontal"
+            android:layout_columnWeight="1"
+            android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/B_AddApps"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/circular_button_white"
-        app:srcCompat="@drawable/icon_apps"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/B_AddFiles"/>
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/B_AddItems"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/circular_button_white"
+                app:srcCompat="@drawable/ic_plus"
+                app:tint="@color/green"/>
 
+            <TextView
+                android:id="@+id/TV_AddItems"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textAlignment="center"
+                android:labelFor="@+id/B_AddItems"
+                android:text="@string/add_items"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/TV_AddApps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:labelFor="@+id/B_AddApps"
-        android:text="@string/add_apps"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/B_AddApps"
-        app:layout_constraintStart_toStartOf="@+id/B_AddApps"
-        app:layout_constraintTop_toBottomOf="@+id/B_AddApps" />
+        <LinearLayout
+            android:layout_gravity="fill"
+            android:paddingTop="8dp"
+            android:clipToPadding="false"
+            android:gravity="center_horizontal"
+            android:layout_columnWeight="1"
+            android:orientation="vertical">
 
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/B_Stream"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/circular_button_white"
+                app:srcCompat="@drawable/ic_ondemand_video"
+                app:tint="#c00" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/B_AddFiles"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/circular_button_white"
-        app:layout_constraintEnd_toStartOf="@+id/B_Messages"
-        app:layout_constraintStart_toEndOf="@+id/B_AddApps"
-        app:layout_constraintTop_toTopOf="@+id/B_AddApps"
-        app:srcCompat="@drawable/icon_file_red"
-        app:tint="#c00" />
+            <TextView
+                android:id="@+id/TV_TextStream"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textAlignment="center"
+                android:layout_marginTop="4dp"
+                android:labelFor="@+id/B_Stream"
+                android:text="@string/streaming"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:clipToPadding="false"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1">
 
-    <TextView
-        android:id="@+id/TV_TextAddFile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="@string/add_files"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/B_AddFiles"
-        app:layout_constraintStart_toStartOf="@+id/B_AddFiles"
-        app:layout_constraintTop_toBottomOf="@+id/B_AddFiles"
-        android:labelFor="@+id/B_AddFiles"/>
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/B_Messages"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/circular_button_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/icon_message"
+                android:contentDescription="@string/messages"/>
 
+            <TextView
+                android:id="@+id/TV_NumberMessages"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="@dimen/badge_pull_distance"
+                android:layout_marginBottom="@dimen/badge_pull_distance"
+                android:background="@drawable/rounded_text_background"
+                android:textAlignment="center"
+                android:textColor="@color/defaultTextColor"
+                android:textSize="@dimen/small_text"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:backgroundTint="@color/red"
+                app:layout_constraintBottom_toTopOf="@id/B_Messages"
+                app:layout_constraintStart_toEndOf="@+id/B_Messages"
+                tools:text="5"
+                tools:visibility="visible" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/B_Messages"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/circular_button_white"
-        app:srcCompat="@drawable/icon_message"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/B_AddApps"
-        app:layout_constraintStart_toEndOf="@id/B_AddFiles"/>
+            <TextView
+                android:id="@+id/TV_TextMessages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textAlignment="center"
+                android:layout_marginTop="4dp"
+                android:labelFor="@+id/B_ShowSelected"
+                android:text="@string/messages"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/B_Messages" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="fill"
+            android:paddingTop="8dp"
+            android:clipToPadding="false"
+            android:gravity="center_horizontal"
+            android:layout_columnWeight="1"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/TV_NumberMessages"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        app:layout_constraintStart_toEndOf="@+id/B_Messages"
-        app:layout_constraintBottom_toTopOf="@id/B_Messages"
-        android:layout_marginBottom="@dimen/badge_pull_distance"
-        android:layout_marginStart="@dimen/badge_pull_distance"
-        android:background="@drawable/rounded_text_background"
-        app:backgroundTint="@color/red"
-        android:textAlignment="center"
-        android:textColor="@color/defaultTextColor"
-        android:textStyle="bold"
-        android:visibility="gone"
-        tools:visibility="visible"
-        android:textSize="@dimen/small_text"
-        tools:text="5"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/B_ShowAddress"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/circular_button_white"
+                android:text="IP"
+                android:textColor="@color/black"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/B_ShowUsers"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/TV_TextMessages"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:labelFor="@+id/B_ShowSelected"
-        android:text="@string/messages"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/B_Messages"
-        app:layout_constraintStart_toStartOf="@+id/B_Messages"
-        app:layout_constraintTop_toBottomOf="@+id/B_Messages" />
+            <TextView
+                android:id="@+id/TV_TextIP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textAlignment="center"
+                android:layout_marginTop="4dp"
+                android:labelFor="@+id/B_ShowUsers"
+                android:text="@string/link"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@+id/B_ShowAddress"
+                app:layout_constraintStart_toStartOf="@+id/B_ShowAddress"
+                app:layout_constraintTop_toBottomOf="@+id/B_ShowAddress" />
+        </LinearLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:clipToPadding="false"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1">
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/B_ShowSelected"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/circular_button_white"
-        app:layout_constraintStart_toEndOf="@id/B_ShowUsers"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/B_ShowAddress"
-        app:srcCompat="@drawable/icon_check" />
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/B_ShowUsers"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/circular_button_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/icon_user" />
 
-    <TextView
-        android:id="@+id/TV_NumberSelected"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        app:layout_constraintStart_toEndOf="@+id/B_ShowSelected"
-        app:layout_constraintBottom_toTopOf="@id/B_ShowSelected"
-        android:layout_marginBottom="@dimen/badge_pull_distance"
-        android:layout_marginStart="@dimen/badge_pull_distance"
-        android:background="@drawable/rounded_text_background"
-        app:backgroundTint="@color/red"
-        android:textAlignment="center"
-        android:textColor="@color/defaultTextColor"
-        android:textStyle="bold"
-        android:visibility="gone"
-        tools:visibility="visible"
-        android:textSize="@dimen/small_text"
-        tools:text="5"/>
-    <TextView
-        android:id="@+id/TV_TextSelected"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:labelFor="@+id/B_ShowSelected"
-        android:text="@string/selected"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/B_ShowSelected"
-        app:layout_constraintStart_toStartOf="@+id/B_ShowSelected"
-        app:layout_constraintTop_toBottomOf="@+id/B_ShowSelected" />
+            <TextView
+                android:id="@+id/TV_NumberUsers"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="@dimen/badge_pull_distance"
+                android:layout_marginBottom="@dimen/badge_pull_distance"
+                android:background="@drawable/rounded_text_background"
+                android:textAlignment="center"
+                android:textColor="@color/defaultTextColor"
+                android:textSize="@dimen/small_text"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:backgroundTint="@color/red"
+                app:layout_constraintBottom_toTopOf="@+id/B_ShowUsers"
+                app:layout_constraintStart_toEndOf="@+id/B_ShowUsers"
+                tools:text="5"
+                tools:visibility="visible" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/B_ShowAddress"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/circular_button_white"
-        app:layout_constraintEnd_toStartOf="@id/B_ShowUsers"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TV_AddApps"
-        android:layout_marginTop="8dp"
-        android:text="IP"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="32sp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textAlignment="center"
+                android:layout_marginTop="4dp"
+                android:labelFor="@+id/B_ShowUsers"
+                android:text="@string/users"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@+id/B_ShowUsers"
+                app:layout_constraintStart_toStartOf="@+id/B_ShowUsers"
+                app:layout_constraintTop_toBottomOf="@+id/B_ShowUsers" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/TV_TextIP"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:labelFor="@+id/B_ShowUsers"
-        android:text="@string/link"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/B_ShowAddress"
-        app:layout_constraintStart_toStartOf="@+id/B_ShowAddress"
-        app:layout_constraintTop_toBottomOf="@+id/B_ShowAddress" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:clipToPadding="false"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1">
 
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/B_ShowSelected"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/circular_button_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_check_box" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/B_ShowUsers"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/circular_button_white"
-        app:srcCompat="@drawable/icon_user"
-        app:layout_constraintEnd_toStartOf="@id/B_ShowSelected"
-        app:layout_constraintStart_toEndOf="@id/B_ShowAddress"
-        app:layout_constraintTop_toTopOf="@+id/B_ShowAddress" />
-
-    <TextView
-        android:id="@+id/TV_NumberUsers"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        app:layout_constraintStart_toEndOf="@+id/B_ShowUsers"
-        app:layout_constraintBottom_toTopOf="@+id/B_ShowUsers"
-        android:layout_marginBottom="@dimen/badge_pull_distance"
-        android:layout_marginStart="@dimen/badge_pull_distance"
-        android:background="@drawable/rounded_text_background"
-        app:backgroundTint="@color/red"
-        android:textAlignment="center"
-        android:textColor="@color/defaultTextColor"
-        android:textStyle="bold"
-        android:visibility="gone"
-        android:textSize="@dimen/small_text"
-        tools:visibility="visible"
-        tools:text="5"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:labelFor="@+id/B_ShowUsers"
-        android:text="@string/users"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/B_ShowUsers"
-        app:layout_constraintStart_toStartOf="@+id/B_ShowUsers"
-        app:layout_constraintTop_toBottomOf="@+id/B_ShowUsers" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/TV_NumberSelected"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="@dimen/badge_pull_distance"
+                android:layout_marginBottom="@dimen/badge_pull_distance"
+                android:background="@drawable/rounded_text_background"
+                android:textAlignment="center"
+                android:textColor="@color/defaultTextColor"
+                android:textSize="@dimen/small_text"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:backgroundTint="@color/red"
+                app:layout_constraintBottom_toTopOf="@id/B_ShowSelected"
+                app:layout_constraintStart_toEndOf="@+id/B_ShowSelected"
+                tools:text="5"
+                tools:visibility="visible" />
+            <TextView
+                android:id="@+id/TV_TextSelected"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textAlignment="center"
+                android:layout_marginTop="4dp"
+                android:labelFor="@+id/B_ShowSelected"
+                android:text="@string/selected"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/B_ShowSelected" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+</GridLayout>

@@ -60,7 +60,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                     os_icon_res = R.drawable.icon_windows_10;
                     break;
                 case ANDROID:
-                    os_icon_res = R.drawable.icon_android;
+                    os_icon_res = R.drawable.ic_android;
                     break;
                 case LINUX:
                     os_icon_res = R.drawable.icon_linux;

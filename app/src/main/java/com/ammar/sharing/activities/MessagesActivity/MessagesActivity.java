@@ -7,18 +7,16 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
-import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter;
+import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.viewHolders.HeaderViewHolder;
 import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.MessagesAdapter;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.custom.ui.AdaptiveActivity;
 import com.ammar.sharing.models.Message;
 import com.ammar.sharing.models.User;
-
-import java.lang.ref.WeakReference;
+import com.ammar.sharing.network.websocket.sessions.MessagesWSSession;
 
 public class MessagesActivity extends AdaptiveActivity {
 
@@ -35,9 +33,9 @@ public class MessagesActivity extends AdaptiveActivity {
     }
 
     private void initItems() {
-        ShareAdapter.HeaderViewHolder.unseenMessagesCount = 0;
+        HeaderViewHolder.unseenMessagesCount = 0;
         Toolbar toolbar = findViewById(R.id.TB_Toolbar);
-        toolbar.setNavigationIcon(R.drawable.icon_back);
+        toolbar.setNavigationIcon(R.drawable.ic_back);
         toolbar.setTitle(R.string.messages);
         toolbar.setNavigationOnClickListener((v) -> finish());
 
@@ -50,10 +48,11 @@ public class MessagesActivity extends AdaptiveActivity {
         sendButton = findViewById(R.id.B_MessageSend);
         sendButton.setOnClickListener((v) -> {
             String messageText = messageInput.getText().toString();
-            Message message = new Message(messageText, "admin",false);
+            if( messageText.isEmpty() ) return;
+            Message message = new Message(messageText);
             for( User i : User.users ){
-                if( i.isConnectedViaWebSocket() ) {
-                    i.getWebSocket().sendText(message.toJSON());
+                if( i.isWebSokcetConnected(MessagesWSSession.path) ) {
+                    i.getWebSocket(MessagesWSSession.path).sendText(message.toJSON().toString());
                 }
             }
             synchronized (MessagesAdapter.messages) {
@@ -81,7 +80,7 @@ public class MessagesActivity extends AdaptiveActivity {
 
     @Override
     protected void onPause() {
-        ShareAdapter.HeaderViewHolder.unseenMessagesCount = 0;
+        HeaderViewHolder.unseenMessagesCount = 0;
         super.onPause();
     }
 }

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:background="@color/dialogColorDark">
+
+    <com.ammar.sharing.custom.ui.AdaptiveTextView
+        android:id="@+id/TV_PermissionExplanationDialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="6dp"
+        android:textSize="24sp"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        tools:text="Permission Title"/>
+
+    <com.ammar.sharing.custom.ui.AdaptiveTextView
+        android:id="@+id/TV_PermissionExplanation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/TV_PermissionExplanationDialogTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"
+        android:textAlignment="center"
+        tools:text="Permission explanation Permission explanation Permission explanation Permission explanation Permission explanationPermission explanationPermission explanation"/>
+
+    <android.widget.Button
+        android:id="@+id/B_PermissionExplanationDialogOk"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TV_PermissionExplanation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/button_ok_bg"
+        android:text="@android:string/ok"
+        android:textColor="@color/colorPrimary" />
+
+    <android.widget.Button
+        android:id="@+id/B_PermissionExplanationDialogCancel"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        app:layout_constraintEnd_toStartOf="@id/B_PermissionExplanationDialogOk"
+        app:layout_constraintTop_toTopOf="@id/B_PermissionExplanationDialogOk"
+        app:layout_constraintBottom_toBottomOf="@id/B_PermissionExplanationDialogOk"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/button_ok_bg"
+        android:text="@android:string/cancel"
+        android:textColor="@color/red" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

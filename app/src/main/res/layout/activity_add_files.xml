@@ -26,8 +26,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/V_Border"
-        tools:itemCount="0"
-        tools:listitem="@layout/row_file" />
+        tools:itemCount="5"
+        tools:listitem="@layout/view_file" />
 
     <com.ammar.sharing.custom.ui.AdaptiveTextView
         android:id="@+id/TV_FolderEmpty"

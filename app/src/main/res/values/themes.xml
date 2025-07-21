@@ -5,6 +5,8 @@
         <item name="android:fontFamily">@raw/almarai_regular</item>
         <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
         <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/white</item>
         <item name="android:actionMenuTextColor">@color/defaultTextColor</item>
         <item name="popupMenuBackground">@color/black</item>
     </style>
@@ -13,6 +15,8 @@
         <item name="android:fontFamily">@raw/almarai_regular</item>
         <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
         <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorOnSecondary">@color/white</item>
         <item name="android:actionMenuTextColor">@color/defaultTextColor</item>
         <item name="popupMenuBackground">@color/white</item>
     </style>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    app:cardCornerRadius="12dp"
+    android:layout_marginVertical="8dp"
+    android:layout_marginHorizontal="8dp"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="#44000000"
+    app:cardElevation="0dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/IV_FileImage"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:padding="40dp" />
+
+        <CheckBox
+            android:id="@+id/CB_SelectFile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
+            android:clickable="false"
+            android:focusable="false"
+            android:background="@null"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.ammar.sharing.custom.ui.AdaptiveTextView
+            android:id="@+id/TV_FileTypeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/IV_FileImage"
+            app:layout_constraintStart_toStartOf="@id/IV_FileImage"
+            android:layout_marginStart="4dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:drawablePadding="6dp"
+            android:elevation="5dp"
+            app:lightModeColor="#FFF"
+            tools:text="Zip file" />
+
+        <LinearLayout
+            android:id="@+id/LL_FileInfo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/IV_FileImage"
+            android:paddingHorizontal="4dp">
+            <View
+                android:id="@+id/V_Line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#AAFFFFFF"/>
+
+            <com.ammar.sharing.custom.ui.AdaptiveTextView
+                android:id="@+id/TV_DirName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textSize="18sp"
+                android:layout_marginTop="-4dp"
+                app:lightModeColor="#FFF"
+                tools:text="Filename.txt"/>
+
+            <com.ammar.sharing.custom.ui.AdaptiveTextView
+                android:id="@+id/TV_FileSize"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/small_text"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:includeFontPadding="false"
+                android:textColor="#AAFFFFFF"
+                app:lightModeColor="#FFF"
+                tools:text="10MB"/>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

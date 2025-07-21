@@ -23,7 +23,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 
 import com.ammar.sharing.R;
-import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.utils.FileUtils;
 import com.ammar.sharing.custom.ui.AdaptiveTextView;
 import com.ammar.sharing.services.PackageInstallerService;
@@ -54,7 +53,7 @@ public class ApksInstallerActivity extends AppCompatActivity {
     private void initItems() {
         Toolbar appBar = findViewById(R.id.TB_Toolbar);
         setSupportActionBar(appBar);
-        appBar.setNavigationIcon(R.drawable.icon_back);
+        appBar.setNavigationIcon(R.drawable.ic_back);
 
         pickFileB = findViewById(R.id.B_InstallerFilePick);
     }
@@ -110,7 +109,7 @@ public class ApksInstallerActivity extends AppCompatActivity {
         installerButton.setText(android.R.string.cancel);
         installerButton.setOnClickListener((view) -> {
             Intent intent = new Intent(this, PackageInstallerService.class);
-            intent.setAction(Consts.ACTION_STOP_INSTALLER);
+            intent.setAction(PackageInstallerService.ACTION_STOP_INSTALLER);
             startService(intent);
             installerDialog.dismiss();
         });
@@ -119,7 +118,7 @@ public class ApksInstallerActivity extends AppCompatActivity {
 
 
         Intent intent = new Intent(this, PackageInstallerService.class);
-        intent.setAction(Consts.ACTION_TRIGGER_APKS_INSTALL);
+        intent.setAction(PackageInstallerService.ACTION_TRIGGER_APKS_INSTALL);
         intent.setData(result);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startService(intent);

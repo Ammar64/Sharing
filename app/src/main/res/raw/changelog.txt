@@ -5,6 +5,10 @@
 # Features
 1- Ability to send and receive messages real time using websockets
 2- Using websockets to update available downloads list without clicking the update button
+3- Now you can change server port
 
 # Improved
 1- Languages dialog improved
+
+# Fixed
+1- Fixed server sending empty response to curl in 1.5.4-alpha2

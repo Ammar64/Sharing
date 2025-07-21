@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardPreventCornerOverlap="true"
+    app:cardBackgroundColor="#66555555"
+    app:cardCornerRadius="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginHorizontal="12dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="6dp"
+        android:paddingHorizontal="8dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/CIV_FilesBrowseOptionIcon"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:src="@color/green"/>
+
+        <TextView
+            android:id="@+id/TV_FilesBrowseOptionTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textAlignment="viewStart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/CIV_FilesBrowseOptionIcon"
+            app:layout_constraintTop_toTopOf="@id/CIV_FilesBrowseOptionIcon"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="svowrjiowovjsojvsviofsvv" />
+
+        <TextView
+            android:id="@+id/TV_FilesBrowseOptionDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/white"
+            android:textAlignment="viewStart"
+            app:layout_constraintBottom_toBottomOf="@id/CIV_FilesBrowseOptionIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/CIV_FilesBrowseOptionIcon"
+            app:layout_constraintTop_toBottomOf="@id/TV_FilesBrowseOptionTitle"
+            tools:text="svowrjiowovjsojvsviofsvv" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

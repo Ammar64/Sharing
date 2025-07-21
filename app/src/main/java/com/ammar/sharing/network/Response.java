@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -39,7 +40,7 @@ public class Response {
         if (progress) {
             progressManager = new ProgressManager(file, clientSocket, file.getSize(), user, ProgressManager.OP.DOWNLOAD);
             progressManager.setDisplayName(file.getName());
-            progressManager.setUUID(file.getUUID());
+            progressManager.setFileUUID(file.getUUID());
         }
 
         try {
@@ -80,7 +81,7 @@ public class Response {
         // get the stopped progress manager
         ProgressManager progressManager = null;
         for (ProgressManager i : ProgressManager.progresses) {
-            if (file.getUUID().equals(i.getUUID())) {
+            if (file.getUUID().equals(i.getFileUUID())) {
                 progressManager = i;
                 break;
             }
@@ -121,8 +122,19 @@ public class Response {
     }
 
     public void sendZippedFilesResponse(Sharable[] files, String filename, User user) {
-        ProgressManager progressManager = new ProgressManager(files[0], clientSocket, -1, user, ProgressManager.OP.DOWNLOAD);
-        progressManager.setUUID(files[0].getUUID());
+        long totalSize = 0;
+        for(Sharable i : files) {
+            if( i instanceof SharableApp && ((SharableApp) i).hasSplits() ) {
+                Sharable[] splits = ((SharableApp) i).getSplits();
+                for (Sharable j : splits) {
+                    totalSize += j.getSize();
+                }
+            }
+            totalSize += i.getSize();
+        }
+
+        ProgressManager progressManager = new ProgressManager(files[0], clientSocket, totalSize, user, ProgressManager.OP.DOWNLOAD);
+        progressManager.setFileUUID(files[0].getUUID());
         progressManager.setDisplayName(filename);
         try {
             OutputStream out = clientSocket.getOutputStream();
@@ -183,8 +195,13 @@ public class Response {
     }
 
     public void sendApksFileResponse(Sharable[] files, User user) {
-        ProgressManager progressManager = new ProgressManager(files[0], clientSocket, -1, user, ProgressManager.OP.DOWNLOAD);
-        progressManager.setUUID(files[0].getUUID());
+        long totalSize = 0;
+        for(Sharable i : files) {
+            totalSize += i.getSize();
+        }
+
+        ProgressManager progressManager = new ProgressManager(files[0], clientSocket, totalSize, user, ProgressManager.OP.DOWNLOAD);
+        progressManager.setFileUUID(files[0].getUUID());
         progressManager.setDisplayName(files[0].getName());
         try {
             OutputStream out = clientSocket.getOutputStream();
@@ -204,7 +221,7 @@ public class Response {
                 zout.putNextEntry(zipEntry);
 
                 FileInputStream fin = new FileInputStream(i.getFilePath());
-                byte[] buffer = new byte[2048];
+                byte[] buffer = new byte[8192];
                 int bytesRead;
                 while ((bytesRead = fin.read(buffer)) != -1) {
                     zout.write(buffer, 0, bytesRead);
