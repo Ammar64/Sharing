@@ -6,16 +6,12 @@
         android:id="@+id/B_AppShare"
         android:icon="@mipmap/ic_launcher_foreground"
         app:iconTint="#555"
-        android:title="@string/app_name" />
+        android:title="@string/app_share" />
 
     <item
-        android:enabled="false"
-        android:title="" />
-
-    <item
-        android:id="@+id/B_Share"
+        android:id="@+id/B_BrowserShare"
         android:icon="@drawable/icon_share"
-        android:title="@string/share" />
+        android:title="@string/browser_share" />
 
 
 </menu>

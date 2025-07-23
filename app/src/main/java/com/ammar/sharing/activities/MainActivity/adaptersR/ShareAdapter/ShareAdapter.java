@@ -52,7 +52,6 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 TypedValue out = new TypedValue();
                 parent.getContext().getTheme().resolveAttribute(android.R.attr.actionBarSize, out, true);
                 int size = TypedValue.complexToDimensionPixelSize(out.data, parent.getContext().getResources().getDisplayMetrics());
-                size += fragment.requireActivity().findViewById(R.id.FAB_ServerButton).getMeasuredHeight();
                 ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(0, size);
                 space.setLayoutParams(params);
                 return new RecyclerView.ViewHolder(space) {

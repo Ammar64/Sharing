@@ -3,17 +3,22 @@ package com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.viewHol
 import static com.ammar.sharing.activities.MainActivity.MainActivity.darkMode;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.view.ViewCompat;
+import androidx.lifecycle.ViewTreeLifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,13 +31,23 @@ import com.ammar.sharing.activities.MainActivity.fragments.BrowserShareFragment;
 import com.ammar.sharing.activities.MessagesActivity.MessagesActivity;
 import com.ammar.sharing.activities.StreamingActivity.StreamingActivity;
 import com.ammar.sharing.common.Data;
+import com.ammar.sharing.common.SharedInfo;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.ui.AdaptiveTextView;
 import com.ammar.sharing.custom.ui.RoundDialog;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.User;
+import com.ammar.sharing.network.SSLServerSocketManager;
 import com.ammar.sharing.network.Server;
 import com.ammar.sharing.services.ServerService;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateEncodingException;
+import java.security.cert.X509Certificate;
+import java.util.Objects;
 
 // This is just the first row in the recycler view
 public class HeaderViewHolder extends RecyclerView.ViewHolder {
@@ -58,6 +73,49 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
         TextView usersNumTV = itemView.findViewById(R.id.TV_NumberUsers);
         TextView filesNumTV = itemView.findViewById(R.id.TV_NumberSelected);
         messagesNumTV = itemView.findViewById(R.id.TV_NumberMessages);
+
+        Button toggleServerButton = itemView.findViewById(R.id.B_ToggleServer);
+        toggleServerButton.setOnClickListener((button) -> {
+            Intent serviceIntent = new Intent(itemView.getContext(), ServerService.class);
+            serviceIntent.setAction(ServerService.ACTION_TOGGLE_SERVER);
+            itemView.getContext().startService(serviceIntent);
+        });
+        Data.serverStatusObserver.observe(fragment.getViewLifecycleOwner(), running -> {
+            if (running) {
+                ViewCompat.setBackgroundTintList(toggleServerButton, ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.status_on)));
+                toggleServerButton.setText(R.string.turn_off_server);
+            } else {
+                ViewCompat.setBackgroundTintList(toggleServerButton, ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.status_off)));
+                toggleServerButton.setText(R.string.turn_on_server);
+            }
+            SharedInfo.sIsWebServerOn = running;
+        });
+
+        Button viewCert = itemView.findViewById(R.id.B_ViewCert);
+        RoundDialog certInfoDialog = new RoundDialog(itemView.getContext());
+        certInfoDialog.setView(R.layout.dialog_cert_info);
+        certInfoDialog.setCornerRadius((int) Utils.dpToPx(18));
+        View certInfoDialogLayout = certInfoDialog.getView();
+
+        viewCert.setOnClickListener((view) -> {
+            SSLServerSocketManager sslServerSocketManager = SSLServerSocketManager.getInstance();
+            if( sslServerSocketManager == null ) {
+                Toast.makeText(itemView.getContext(), R.string.cert_not_created, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            boolean isCertCreated = sslServerSocketManager.isCertCreated();
+            if (!isCertCreated) {
+                Toast.makeText(itemView.getContext(), R.string.cert_not_created, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            TextView certSHA256TV = certInfoDialogLayout.findViewById(R.id.TV_CertSHA256Fingerprint);
+            TextView pubKeySHA256TV = certInfoDialogLayout.findViewById(R.id.TV_PublicKeySHA256Fingerprint);
+
+            SSLServerSocketManager.CertificateInfo certInfo = sslServerSocketManager.getCertInfo();
+            certSHA256TV.setText(certInfo.certSha256fingerprint);
+            pubKeySHA256TV.setText(certInfo.publicKeySha256fingerprint);
+            certInfoDialog.show();
+        });
 
         if (!Sharable.sharablesList.isEmpty()) {
             filesNumTV.setText(String.valueOf(Sharable.sharablesList.size()));
@@ -198,7 +256,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
     private void setupQrCode() {
         String ip = ServerService.getIpAddress();
         MainActivity activity = (MainActivity) fragment.requireActivity();
-        if (!activity.isServerOn) {
+        if (!SharedInfo.sIsWebServerOn) {
             QRCodeErrorText.setText(R.string.toggle_on_the_server);
             QRCodeErrorText.setVisibility(View.VISIBLE);
             serverLinkTV.setVisibility(View.GONE);

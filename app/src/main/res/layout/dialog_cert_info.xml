@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.ammar.sharing.custom.ui.AdaptiveTextView
+        android:id="@+id/TV_DialogCertInfoTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cert_info_title"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1"
+        android:paddingHorizontal="12dp"
+        app:layout_constraintTop_toBottomOf="@id/TV_DialogCertInfoTitle"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TableRow>
+            <com.ammar.sharing.custom.ui.AdaptiveTextView
+                android:id="@+id/TV_SHA256FingerprintTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/sha256_fingerprint" />
+        </TableRow>
+
+        <TableRow>
+            <com.ammar.sharing.custom.ui.AdaptiveTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="viewStart"
+                android:text="@string/certificate" />
+
+            <com.ammar.sharing.custom.ui.AdaptiveTextView
+                android:id="@+id/TV_CertSHA256Fingerprint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="viewEnd"
+                tools:text="Ammar Ramadan is someone cool and good and this text layout is annoying"/>
+        </TableRow>
+        <TableRow>
+            <com.ammar.sharing.custom.ui.AdaptiveTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="viewStart"
+                android:text="@string/public_key" />
+
+            <com.ammar.sharing.custom.ui.AdaptiveTextView
+                android:id="@+id/TV_PublicKeySHA256Fingerprint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="viewEnd"
+                android:layout_weight="1"
+                tools:text="Ammar Ramadan is someone cool and good and this text layout is annoying"/>
+        </TableRow>
+    </TableLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

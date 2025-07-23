@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Sharing</string>
-    <string name="warning_details">Это приложение не использует HTTPS для передачи ваших файлов, которые делают его уязвимым для атаки Человек по середине.\nЧтобы обезопасится, активируйте защищённую точку на этом устройстве и убедитесь, что к нему подключены только другие нужные устройства.</string>
     <string name="downloads">Скачанное</string>
     <string name="lang">ru</string>
     <string name="add_apps">Добавить приложения</string>
@@ -23,7 +22,6 @@
     <string name="unblock">Разблокирововать</string>
     <string name="user_default_name">Пользователь %1$d</string>
     <string name="no_files_selected">Не выбраны файлы</string>
-    <string name="warning">Внимание!</string>
     <string name="dont_show_again">Не показывать это сообщение снова</string>
     <string name="fast_share">Поделиться быстро</string>
     <string name="folder_is_empty">Папка пуста</string>

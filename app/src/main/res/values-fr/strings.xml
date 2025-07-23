@@ -33,8 +33,6 @@
     <string name="choose_language">Choisissez la langue</string>
     <string name="no_user_connected">Aucun utilisateur connecté</string>
     <string name="no_files_selected">Aucun fichier sélectionné</string>
-    <string name="warning">Avertissement !</string>
-    <string name="warning_details">Cette application n\'utilise pas HTTPS pour transférer vos fichiers, ce qui la rend vulnérable aux attaques de type « homme du milieu ». \nPour être plus en sécurité, activez un point d\'accès sécurisé sur cet appareil et de vous assurer que les autres appareils souhaités sont les seuls à s\'y connecter.</string>
     <string name="dont_show_again">Ne plus afficher ce message</string>
     <string name="fast_share">Partage rapide</string>
     <!-- Fragment Paramètres   -->

@@ -34,11 +34,12 @@ public class SettingsActivity extends DefaultActivity {
         setItemsListeners();
     }
 
-    private Toolbar appBarTB;
     private ConstraintLayout serverPortCL;
+    private CardView enableHTTPSCV;
     private CardView uploadDisableCV;
     private CardView usersBlockCV;
     private CardView debugModeCV;
+    private SwitchButton enableHTTPSS;
     private SwitchButton uploadDisableS;
     private SwitchButton usersBlockS;
     private SwitchButton debugModeS;
@@ -50,7 +51,7 @@ public class SettingsActivity extends DefaultActivity {
     private NumberDialog serverPortND;
 
     private void initItems() {
-        appBarTB = findViewById(R.id.TB_Toolbar);
+        Toolbar appBarTB = findViewById(R.id.TB_Toolbar);
         setSupportActionBar(appBarTB);
         appBarTB.setNavigationIcon(R.drawable.ic_back);
         setTitle(R.string.settings);
@@ -72,14 +73,19 @@ public class SettingsActivity extends DefaultActivity {
                 })
                 .create();
 
+        enableHTTPSCV = findViewById(R.id.CV_EnableHTTPS);
         uploadDisableCV = findViewById(R.id.CV_UploadDisable);
         usersBlockCV = findViewById(R.id.CV_UserBlock);
         debugModeCV = findViewById(R.id.CV_DebugMode);
 
+        enableHTTPSS = findViewById(R.id.SC_EnableHTTPSToggle);
+        enableHTTPSS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_IS_HTTPS, true));
+
         uploadDisableS = findViewById(R.id.SC_UploadAllowToggle);
         uploadDisableS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_IS_UPLOAD_DISABLED, false));
+
         usersBlockS = findViewById(R.id.SC_UsersBlockToggle);
-        usersBlockS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_ARE_USER_BLOCKED, false));
+        usersBlockS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_ARE_USERS_BLOCKED, false));
 
         debugModeS = findViewById(R.id.SC_DebugModeToggle);
         debugModeS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_DEBUG_MODE, false));
@@ -118,42 +124,39 @@ public class SettingsActivity extends DefaultActivity {
             serverPortND.show();
         });
 
-        uploadDisableCV.setOnClickListener((view) -> {
-            uploadDisableS.toggle();
+        enableHTTPSCV.setOnClickListener((view) -> enableHTTPSS.toggle());
+        enableHTTPSS.setOnCheckedChangeListener((view, isChecked) -> {
+            if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_HTTPS, isChecked).commit()) {
+                Log.e("MYLOG", "Failed to change IS_HTTPS value");
+                enableHTTPSS.setChecked(!isChecked);
+            }
         });
 
+        uploadDisableCV.setOnClickListener((view) -> uploadDisableS.toggle());
         uploadDisableS.setOnCheckedChangeListener(((view, isChecked) -> {
             if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_UPLOAD_DISABLED, isChecked).commit()) {
-                Log.e("MYLOG", "Failed to change dark mode");
+                Log.e("MYLOG", "Failed to change IS_UPLOAD_DISABLED value");
                 uploadDisableS.setChecked(!isChecked);
             }
         }));
 
-        usersBlockCV.setOnClickListener((view) -> {
-            usersBlockS.toggle();
-        });
-
+        usersBlockCV.setOnClickListener((view) -> usersBlockS.toggle());
         usersBlockS.setOnCheckedChangeListener(((view, isChecked) -> {
-            if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_ARE_USER_BLOCKED, isChecked).commit()) {
-                Log.e("MYLOG", "Failed to change dark mode");
+            if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_ARE_USERS_BLOCKED, isChecked).commit()) {
+                Log.e("MYLOG", "Failed to change ARE_USERS_BLOCKED value");
                 usersBlockS.setChecked(!isChecked);
             }
         }));
 
-        debugModeCV.setOnClickListener((view) -> {
-            debugModeS.toggle();
-        });
-
+        debugModeCV.setOnClickListener((view) -> debugModeS.toggle());
         debugModeS.setOnCheckedChangeListener((view, isChecked) -> {
             if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_DEBUG_MODE, isChecked).commit()) {
-                Toast.makeText(this, "Debug mode failed to toggle", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Failed to change DEBUG_MODE value", Toast.LENGTH_SHORT).show();
                 debugModeS.setChecked(!isChecked);
             }
            recreate();
         });
 
-        languageCL.setOnClickListener(view -> {
-            languagesRD.show();
-        });
+        languageCL.setOnClickListener(view -> languagesRD.show());
     }
 }

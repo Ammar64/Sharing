@@ -6,15 +6,21 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +31,7 @@ import com.ammar.sharing.activities.MainActivity.MainActivity;
 import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.ShareAdapter;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
+import com.ammar.sharing.common.SharedInfo;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.io.ProgressManager;
 import com.ammar.sharing.services.ServerService;
@@ -63,7 +70,6 @@ public class BrowserShareFragment extends Fragment {
         return v;
     }
 
-
     private void initItems() {
         filesSendRV = v.findViewById(R.id.RV_FilesSend);
         adapter = new ShareAdapter(this);
@@ -77,7 +83,6 @@ public class BrowserShareFragment extends Fragment {
     }
 
     private void initObservers() {
-
         Data.filesSendNotifier.observe( requireActivity(), info -> {
             char action = info.getChar("action");
             int index = info.getInt("index");

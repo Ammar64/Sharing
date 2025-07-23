@@ -66,7 +66,7 @@ public class User {
             User new_user = new User(socket, agent);
             User.users.add(new_user);
             // block or not
-            new_user.block(prefs.getBoolean(Consts.PREF_FIELD_ARE_USER_BLOCKED, false));
+            new_user.block(prefs.getBoolean(Consts.PREF_FIELD_ARE_USERS_BLOCKED, false));
 
             // inform UI
             Bundle bundle = new Bundle();

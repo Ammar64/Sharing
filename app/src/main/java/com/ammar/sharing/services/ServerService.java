@@ -50,7 +50,7 @@ import java.util.Locale;
  */
 public class ServerService extends Service {
     private final int FOREGROUND_NOTIFICATION_ID = 1;
-    private final Server server = new Server(this);
+    private Server server;
     final Intent serverStatusIntent = new Intent(ServerService.ACTION_GET_SERVER_STATUS);
 
     // actions
@@ -73,43 +73,15 @@ public class ServerService extends Service {
     public static final String EXTRA_DOWNLOAD_UUID = "EXTRA_DOWNLOAD_UUID";
     public static final String EXTRA_ACTIONS = "EXTRA_ACTIONS";
 
-
-    @Override
-    public void onCreate() {
-        // PageSession
-        server.addPath("/no-JS", NoJSSession.class);
-        // DownloadSession
-        server.addPath("/download/(.*)", DownloadSession.class);
-        server.addPath("/available-downloads", DownloadSession.class);
-
-        // UploadSession
-        server.addPath("/upload/(.*)", UploadSession.class);
-        server.addPath("/check-upload-allowed", UploadSession.class);
-
-        // UserSession
-        server.addPath("/get-user-info", UserSession.class);
-        server.addPath("/update-user-name", UserSession.class);
-
-        // CLI Session
-        server.addPath("/ls", CLISession.class);
-        server.addPath("/dl/(.*)", CLISession.class);
-        server.addPath("/da", CLISession.class);
-
-        //DynamicAssetsSession
-        server.addPath("/get-icon/(.*)", DynamicAssetsSession.class);
-        server.addPath("/favicon.ico", DynamicAssetsSession.class);
-
-        server.addPath("/get-all-messages", MessagesSession.class);
-        server.addPaths(RedirectSession.redirectMap.keySet(), RedirectSession.class);
-
-        server.addWebsocketPath(MessagesWSSession.path, MessagesWSSession.class);
-        server.addWebsocketPath(InfoWSSession.path, InfoWSSession.class);
-    }
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    @Override
+    public void onCreate() {
+        server = new Server(this);
     }
 
     @Override

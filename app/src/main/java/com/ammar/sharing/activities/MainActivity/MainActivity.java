@@ -21,9 +21,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
-import android.widget.CheckBox;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -38,7 +37,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.core.widget.ImageViewCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.ammar.sharing.R;
@@ -61,7 +59,6 @@ import com.ammar.sharing.BuildConfig;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -77,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
     private View tutorialTV;
     private View settingsTV;
     private View apksInstallerTV;
-    private FloatingActionButton serverButton;
     private ViewPager2 viewPager;
     private BottomAppBar bottomAppBar;
     private BottomNavigationView bottomNavigationView;
@@ -92,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     public static Insets systemBarsPaddings;
     public final int REQUEST_CODE_STORAGE_PERMISSION = 2;
     public final int REQUEST_CODE_NOTIFICATION_PERMISSION = 3;
-    public boolean isServerOn = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         prepareActivity();
@@ -137,14 +133,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         int lastVerCode = appInfoPref.getInt(Consts.PREF_FIELD_LAST_VERCODE, 0);
-        if(BuildConfig.VERSION_CODE > lastVerCode) {
+        if (BuildConfig.VERSION_CODE > lastVerCode) {
             appInfoPref.edit().putInt(Consts.PREF_FIELD_LAST_VERCODE, BuildConfig.VERSION_CODE).apply();
             startActivity(new Intent(this, ChangeLogActivity.class));
         }
     }
 
 
-    private static boolean warningShown = false;
+    private static boolean httpsDialogShown = false;
+
     private void initItems() {
         layout = findViewById(R.id.CL_MainLayout);
         ViewCompat.setOnApplyWindowInsetsListener(layout, (v, insets) -> {
@@ -153,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(0, paddings.top, 0, 0);
 
             // round dialog needs systemBarsPaddings to be set that's why we call here
-            showWarningIfUserWantsToSeeIt();
+            showHTTPSDialogIfNotShownBefore();
             return insets;
         });
 
@@ -172,9 +169,8 @@ public class MainActivity extends AppCompatActivity {
 
         bottomAppBar = findViewById(R.id.BAB_BottomAppBar);
         bottomNavigationView = findViewById(R.id.BottomNavView);
-        serverButton = findViewById(R.id.FAB_ServerButton);
         viewPager = findViewById(R.id.MainActivityFragmentContainer);
-        bottomNavigationView.setSelectedItemId(R.id.B_Share);
+        bottomNavigationView.setSelectedItemId(R.id.B_AppShare);
 
         MainViewPagerAdapter viewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
         viewPager.setAdapter(viewPagerAdapter);
@@ -185,35 +181,39 @@ public class MainActivity extends AppCompatActivity {
                 .create();
     }
 
-    private void showWarningIfUserWantsToSeeIt() {
+    private void showHTTPSDialogIfNotShownBefore() {
         // show warning if user didn't choose to not show it again
-        final boolean isUserWantsWarning = appInfoPref.getBoolean(Consts.PREF_FIELD_IS_USER_WANTS_WARNING, true);
-        if (isUserWantsWarning && !warningShown) {
-            RoundDialog warningDialogRD = new RoundDialog(this);
-            warningDialogRD.setView(R.layout.dialog_warning);
-            warningDialogRD.setCornerRadius((int)Utils.dpToPx(18));
+        final boolean httpsDialogShownBefore = appInfoPref.getBoolean(Consts.PREF_FIELD_HTTPS_DIALOG_SHOWN, true);
+        if (httpsDialogShownBefore && !httpsDialogShown) {
+            RoundDialog enableHTTPSDialog = new RoundDialog(this);
+            enableHTTPSDialog.setView(R.layout.dialog_enable_https);
+            enableHTTPSDialog.setCornerRadius((int) Utils.dpToPx(18));
 
-            View warningDialogLayout = warningDialogRD.getView();
-            CheckBox dontShowAgainCB = warningDialogLayout.findViewById(R.id.CB_DialogWarningDontShowAgain);
-            TextView dontShowAgainTV = warningDialogLayout.findViewById(R.id.TB_DialogWarningDontShowAgainTV);
+            View enableHTTPSDialogLayout = enableHTTPSDialog.getView();
 
-            dontShowAgainTV.setOnClickListener((view) -> {
-                dontShowAgainCB.toggle();
+            enableHTTPSDialog.getInternalAlertDialog().setOnDismissListener((d) -> {
+                appInfoPref.edit().putBoolean(Consts.PREF_FIELD_HTTPS_DIALOG_SHOWN, true).apply();
             });
 
-            warningDialogRD.getInternalAlertDialog().setOnDismissListener((d) -> {
-                boolean showAgain = !dontShowAgainCB.isChecked();
-                appInfoPref.edit().putBoolean(Consts.PREF_FIELD_IS_USER_WANTS_WARNING, showAgain).apply();
+            enableHTTPSDialogLayout.findViewById(R.id.B_EncryptionYESButton).setOnClickListener((v) -> {
+                if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_HTTPS, true).commit()) {
+                    Log.e("MYLOG", "Failed to change IS_HTTPS value");
+                }
+                enableHTTPSDialog.dismiss();
             });
-            warningDialogLayout.findViewById(R.id.B_WarningOkButton).setOnClickListener((v) -> {
-                warningDialogRD.dismiss();
+            enableHTTPSDialogLayout.findViewById(R.id.B_EncryptionNOButton).setOnClickListener((v) -> {
+                if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_HTTPS, false).commit()) {
+                    Log.e("MYLOG", "Failed to change IS_HTTPS value");
+                }
+                enableHTTPSDialog.dismiss();
             });
+
             // set dialog bg color
-            warningDialogRD.setBackgroundColor(getResources().getColor(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight));
+            enableHTTPSDialog.setBackgroundColor(getResources().getColor(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight));
 
             // show dialog
-            warningDialogRD.show();
-            warningShown = true;
+            enableHTTPSDialog.show();
+            httpsDialogShown = true;
         }
     }
 
@@ -240,18 +240,17 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     bottomNavigationView.getMenu().getItem(0).setChecked(false);
                 }
-                if (position == 1) position = 2;
                 Log.d("page", "onPageSelected: " + position);
                 bottomNavigationView.getMenu().getItem(position).setChecked(true);
                 prevMenuItem = bottomNavigationView.getMenu().getItem(position);
 
-                // app share is 0, browser share is 2, 1 is nothing
+                // app share is 0, browser share is 1
                 // set title
                 switch (position) {
                     case 0:
                         toolbar.setTitle(R.string.app_name);
                         break;
-                    case 2:
+                    case 1:
                         toolbar.setTitle(R.string.share);
                         break;
                 }
@@ -265,24 +264,16 @@ public class MainActivity extends AppCompatActivity {
             if (id == R.id.B_AppShare) {
                 viewPager.setCurrentItem(0);
                 return true;
-            } else if (id == R.id.B_Share) {
+            } else if (id == R.id.B_BrowserShare) {
                 viewPager.setCurrentItem(1);
                 return true;
             }
             return false;
         });
 
-        serverButton.setOnClickListener((button) -> {
-            Intent serviceIntent = new Intent(this, ServerService.class);
-            serviceIntent.setAction(ServerService.ACTION_TOGGLE_SERVER);
-            startService(serviceIntent);
-        });
-
-
-
         tutorialTV.setOnClickListener((view) -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW ,Uri.parse("https://ammar64.github.io/Sharing/Tutorial"));
-            if(intent.resolveActivity(getPackageManager()) != null) {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ammar64.github.io/Sharing/Tutorial"));
+            if (intent.resolveActivity(getPackageManager()) != null) {
                 startActivity(intent);
             } else {
                 Toast.makeText(this, R.string.no_app_found_to_handle, Toast.LENGTH_SHORT).show();
@@ -311,8 +302,8 @@ public class MainActivity extends AppCompatActivity {
         serviceIntent.setAction(ServerService.ACTION_GET_SERVER_STATUS);
         startService(serviceIntent);
 
-        if(Intent.ACTION_SEND.equals(getIntent().getAction()) ) {
-            if( "text/plain".equals(getIntent().getType()) ) {
+        if (Intent.ACTION_SEND.equals(getIntent().getAction())) {
+            if ("text/plain".equals(getIntent().getType())) {
                 String text = getIntent().getStringExtra(Intent.EXTRA_TEXT);
                 Message message = new Message(text);
                 synchronized (MessagesAdapter.messages) {
@@ -320,8 +311,8 @@ public class MainActivity extends AppCompatActivity {
                     // notify UI that a message was received
                     HeaderViewHolder.unseenMessagesCount++;
                     Data.messagesNotifier.forcePostValue(MessagesAdapter.messages.size());
-                    for( User i : User.users ){
-                        if( i.isWebSokcetConnected(MessagesWSSession.path) ) {
+                    for (User i : User.users) {
+                        if (i.isWebSokcetConnected(MessagesWSSession.path)) {
                             i.getWebSocket(MessagesWSSession.path).sendText(message.toJSON().toString());
                         }
                     }
@@ -343,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
             Intent uriIntent = new Intent(this, ServerService.class);
             uriIntent.setAction(ServerService.ACTION_ADD_URIS);
             ArrayList<Uri> uriArrayList = getIntent().getParcelableArrayListExtra(Intent.EXTRA_STREAM);
-            if( uriArrayList == null ) {
+            if (uriArrayList == null) {
                 Toast.makeText(this, R.string.unsupported_data, Toast.LENGTH_SHORT).show();
             } else {
                 uriIntent.putParcelableArrayListExtra(ServerService.EXTRA_URIS, uriArrayList);
@@ -353,15 +344,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void observeStates() {
-        Data.serverStatusObserver.observe(this, running -> {
-            if (running) {
-                ImageViewCompat.setImageTintList(serverButton, ColorStateList.valueOf(getResources().getColor(R.color.status_on)));
-            } else {
-                ImageViewCompat.setImageTintList(serverButton, ColorStateList.valueOf(getResources().getColor(R.color.status_off)));
-            }
-            this.isServerOn = running;
-        });
-
         if (settingsPref.getBoolean(Consts.PREF_FIELD_DEBUG_MODE, false))
             Data.alertNotifier.observe(this, info -> {
                 errorDialogAD.setTitle(info.getString("title"));
@@ -445,10 +427,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void setNavbarTheme(boolean dark) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             View view = getWindow().getDecorView();
-            getWindow().setNavigationBarColor( dark ? Color.BLACK : Color.WHITE );
-            view.setSystemUiVisibility( dark ? View.SYSTEM_UI_FLAG_LAYOUT_STABLE : View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+            getWindow().setNavigationBarColor(dark ? Color.BLACK : Color.WHITE);
+            view.setSystemUiVisibility(dark ? View.SYSTEM_UI_FLAG_LAYOUT_STABLE : View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
     }
 

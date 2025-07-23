@@ -5,7 +5,9 @@
     <string name="about_us">About us</string>
     <string name="no_app_found_to_handle">No app found to handle this action</string>
     <string name="unsupported_data">Unsupported data</string>
-    <!-- Fragment Share   -->
+    <string name="app_share">App share</string>
+    <string name="browser_share">Browser share</string>
+    <!-- Fragment Browser Share   -->
     <string name="share">Share</string>
     <string name="add_apps">Add apps</string>
     <string name="add_files">Add files</string>
@@ -26,6 +28,9 @@
     <string name="minutes">%d minutes</string>
     <string name="seconds">%d seconds</string>
     <string name="milliSeconds">%d milliseconds</string>
+    <string name="turn_on_server">Turn on the server</string>
+    <string name="turn_off_server">Server off the server</string>
+    <string name="view_https_certificate">view cert</string>
     <!-- dialogs   -->
     <string name="connected_users">Connected users</string>
     <string name="block">Block</string>
@@ -34,8 +39,8 @@
     <string name="choose_language">Choose language</string>
     <string name="no_user_connected">No users connected</string>
     <string name="no_files_selected">No files selected</string>
-    <string name="warning">Warning!</string>
-    <string name="warning_details">This app doesn\'t use HTTPS to transfer your files which make it vulnerable to man-in-the-middle attacks.\nTo be safer, activate a secured hotspot on this device and ensure only other wanted devices are connected to it.</string>
+    <string name="encryption_dialog_title">Do you want HTTPS?</string>
+    <string name="encryption_dialog_details">You can enable HTTPS to ensure that the traffic is encrypted.\nThis app uses a self-signed certificate generated randomly the first time you toggle on the server.\nThe browser will show you a warning about the certificate because it can\'t verify that the certificate came from you.\nYou can still verify the certificate manually by comparing the certificate SHA256 fingerprint in the browser and the app</string>
     <string name="dont_show_again">Don\'t show this message again</string>
     <string name="fast_share">Fast share</string>
     <string name="min_value_error">The minimum value is %d</string>
@@ -45,6 +50,8 @@
     <string name="toggle_dark_mode">Toggle dark mode</string>
     <string name="change_server_port">Set server port</string>
     <string name="change_server_port_desc">Set the port to which the server listens to. Use this setting when the server is not turning on.</string>
+    <string name="enable_https">Enable HTTPS</string>
+    <string name="enable_https_desc">Enable HTTPS to encrypt files transfer. It uses self-signed certificate so browser will show warning about it. You can still verify the cert manually by viewing the SHA256 fingerprint</string>
     <string name="disable_browser_upload">Disable uploading from browsers</string>
     <string name="disable_browser_upload_desc">Prevent web browsers from sending files to your device.</string>
     <string name="block_users">Block connected users</string>
@@ -191,4 +198,11 @@
     <string name="send">Send</string>
     <string name="receive">Receive</string>
     <string name="folder_doesnt_exist">Folder doesn\'t exist</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="cert_info_title">Certificate info</string>
+    <string name="sha256_fingerprint">SHA256 fingerprint:</string>
+    <string name="certificate">Certificate</string>
+    <string name="public_key">Public key</string>
+    <string name="cert_not_created">Certificate is not created. Toggle on the server to create the cert.</string>
 </resources>

@@ -60,10 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             app:contentInsetEnd="0dp"
-            app:contentInsetStart="0dp"
-            app:fabCradleMargin="10dp"
-            app:fabCradleRoundedCornerRadius="50dp">
-
+            app:contentInsetStart="0dp">
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/BottomNavView"
                 android:layout_width="match_parent"
@@ -73,19 +70,6 @@
                 app:menu="@menu/bottom_bar_send" />
 
         </com.google.android.material.bottomappbar.BottomAppBar>
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/FAB_ServerButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:backgroundTint="@android:color/transparent"
-            app:borderWidth="0dp"
-            app:elevation="0dp"
-            app:layout_anchor="@+id/BAB_BottomAppBar"
-            app:maxImageSize="50dp"
-            app:pressedTranslationZ="0dp"
-            app:srcCompat="@drawable/icon_power"
-            app:tint="@color/status_off" />
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </FrameLayout>

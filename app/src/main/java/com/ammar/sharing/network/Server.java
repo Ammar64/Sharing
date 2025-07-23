@@ -1,24 +1,41 @@
 package com.ammar.sharing.network;
 
+import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.utils.Utils;
+import com.ammar.sharing.network.sessions.CLISession;
+import com.ammar.sharing.network.sessions.DownloadSession;
+import com.ammar.sharing.network.sessions.DynamicAssetsSession;
 import com.ammar.sharing.network.sessions.HTTPSession;
+import com.ammar.sharing.network.sessions.MessagesSession;
+import com.ammar.sharing.network.sessions.NoJSSession;
+import com.ammar.sharing.network.sessions.RedirectSession;
+import com.ammar.sharing.network.sessions.UploadSession;
+import com.ammar.sharing.network.sessions.UserSession;
+import com.ammar.sharing.network.websocket.sessions.InfoWSSession;
+import com.ammar.sharing.network.websocket.sessions.MessagesWSSession;
 import com.ammar.sharing.network.websocket.sessions.WebSocketSession;
 import com.ammar.sharing.services.ServerService;
 
 import org.intellij.lang.annotations.RegExp;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Collection;
 import java.util.HashMap;
 
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
+
 public class Server {
 
     public static int PORT_NUMBER;
-
     private ServerSocket serverSocket;
+    private SSLServerSocket sslServerSocket;
+    private SSLServerSocketManager sslServerSocketManager;
     private Thread serverThread;
 
     private boolean running = false;
@@ -29,14 +46,22 @@ public class Server {
 
     public Server(ServerService service) {
         this.service = service;
+        handleSessionsData();
+        sslServerSocketManager = new SSLServerSocketManager(service);
     }
 
     public void Start() {
-
         try {
-            serverSocket = new ServerSocket(Server.PORT_NUMBER);
-            serverThread = new Thread(this::Accept);
-            serverThread.start();
+            boolean isHTTPS = Utils.getSettings().getBoolean(Consts.PREF_FIELD_IS_HTTPS, true);
+            if( isHTTPS ) {
+                sslServerSocket = sslServerSocketManager.generateSSLServerSocket();
+                serverThread = new Thread(this::AcceptSSL);
+                serverThread.start();
+            } else {
+                serverSocket = new ServerSocket(Server.PORT_NUMBER);
+                serverThread = new Thread(this::Accept);
+                serverThread.start();
+            }
             running = true;
         } catch (IOException e) {
             Utils.showErrorDialog("Server.Start(). Exception: ", e.getMessage());
@@ -45,12 +70,16 @@ public class Server {
 
     public void Stop() {
         try {
-            serverSocket.close();
+            if( sslServerSocket != null ) {
+                sslServerSocket.close();
+            }
+            if( serverSocket != null ) {
+                serverSocket.close();
+            }
             running = false;
         } catch (IOException e) {
             Utils.showErrorDialog("Server.Stop(). Exception: ", e.getMessage());
         } finally {
-
             try {
                 serverThread.join();
             } catch (InterruptedException e) {
@@ -66,7 +95,7 @@ public class Server {
 
     /// @param paths regex is supported
     public void addPaths(Collection<String> paths, Class<? extends HTTPSession> sessionClass) {
-        for( @RegExp String i : paths ) {
+        for (@RegExp String i : paths) {
             addPath(i, sessionClass);
         }
     }
@@ -93,9 +122,55 @@ public class Server {
         }
     }
 
-
+    private void AcceptSSL() {
+        try {
+            while (!sslServerSocket.isClosed()) {
+                Socket clientSocket = sslServerSocket.accept();
+                ClientHandler clientHandler = new ClientHandler(this, clientSocket);
+                clientSocket.setKeepAlive(true);
+                clientSocket.setSoTimeout(ClientHandler.timeout);
+                Thread clientThread = new Thread(clientHandler);
+                clientThread.start();
+            }
+        } catch (SocketException e) {
+            // TODO: Socket probably closed
+        } catch (IOException e) {
+            Utils.showErrorDialog("IOException", "Server.AcceptSSL(). IOException: " + e.getMessage());
+        }
+    }
 
     public boolean isRunning() {
         return running;
+    }
+
+    void handleSessionsData() {
+        // NoJS
+        this.addPath("/no-JS", NoJSSession.class);
+        // DownloadSession
+        this.addPath("/download/(.*)", DownloadSession.class);
+        this.addPath("/available-downloads", DownloadSession.class);
+
+        // UploadSession
+        this.addPath("/upload/(.*)", UploadSession.class);
+        this.addPath("/check-upload-allowed", UploadSession.class);
+
+        // UserSession
+        this.addPath("/get-user-info", UserSession.class);
+        this.addPath("/update-user-name", UserSession.class);
+
+        // CLI Session
+        this.addPath("/ls", CLISession.class);
+        this.addPath("/dl/(.*)", CLISession.class);
+        this.addPath("/da", CLISession.class);
+
+        //DynamicAssetsSession
+        this.addPath("/get-icon/(.*)", DynamicAssetsSession.class);
+        this.addPath("/favicon.ico", DynamicAssetsSession.class);
+
+        this.addPath("/get-all-messages", MessagesSession.class);
+        this.addPaths(RedirectSession.redirectMap.keySet(), RedirectSession.class);
+
+        this.addWebsocketPath(MessagesWSSession.path, MessagesWSSession.class);
+        this.addWebsocketPath(InfoWSSession.path, InfoWSSession.class);
     }
 }

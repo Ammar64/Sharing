@@ -7,14 +7,15 @@ import java.util.Locale
 object Consts {
     const val PREF_APP_INFO: String = "AppInfoPref"
     const val PREF_FIELD_IS_FIRST_RUN: String = "IS_FIRST_RUN"
-    const val PREF_FIELD_IS_USER_WANTS_WARNING: String = "IS_USER_WANTS_WARNING"
+    const val PREF_FIELD_HTTPS_DIALOG_SHOWN: String = "IS_USER_WANTS_WARNING"
 
     const val PREF_SETTINGS: String = "SettingsPref"
 
     const val PREF_FIELD_SERVER_PORT = "SERVER_PORT"
+    const val PREF_FIELD_IS_HTTPS: String = "IS_HTTPS"
     const val PREF_FIELD_IS_DARK: String = "IS_DARK_MODE"
     const val PREF_FIELD_IS_UPLOAD_DISABLED: String = "UPLOAD_DISABLE"
-    const val PREF_FIELD_ARE_USER_BLOCKED: String = "USERS_BLOCK"
+    const val PREF_FIELD_ARE_USERS_BLOCKED: String = "USERS_BLOCK"
     const val PREF_FIELD_LANG: String = "LANGUAGE"
     const val PREF_FIELD_DEBUG_MODE: String = "DEBUG_MODE"
     const val PREF_FIELD_LAST_VERCODE: String = "LAST_VERCODE"

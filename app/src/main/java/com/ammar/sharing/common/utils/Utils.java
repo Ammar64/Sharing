@@ -171,65 +171,38 @@ public class Utils {
     }
 
     private static String getExtraTypes(String ext) {
-        switch (ext) {
-            case "html":
-                return "text/html";
-            case "apk":
-                return "application/vnd.android.package-archive";
-            case "doc":
-            case "dot":
-                return "application/msword";
-            case "docx":
-                return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-            case "dotx":
-                return "application/vnd.openxmlformats-officedocument.wordprocessingml.template";
-            case "docm":
-                return "application/vnd.ms-word.document.macroEnabled.12";
-            case "dotm":
-                return "application/vnd.ms-word.template.macroEnabled.12";
-            case "xls":
-            case "xlt":
-            case "xla":
-                return "application/vnd.ms-excel";
-            case "xlsx":
-                return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            case "xltx":
-                return "application/vnd.openxmlformats-officedocument.spreadsheetml.template";
-            case "xlsm":
-                return "application/vnd.ms-excel.sheet.macroEnabled.12";
-            case "xltm":
-                return "application/vnd.ms-excel.template.macroEnabled.12";
-            case "xlam":
-                return "application/vnd.ms-excel.addin.macroEnabled.12";
-            case "xlsb":
-                return "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
-            case "ppt":
-                return "application/vnd.ms-powerpoint";
-            case "pot":
-                return "application/vnd.ms-powerpoint";
-            case "pps":
-                return "application/vnd.ms-powerpoint";
-            case "ppa":
-                return "application/vnd.ms-powerpoint";
-            case "pptx":
-                return "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-            case "potx":
-                return "application/vnd.openxmlformats-officedocument.presentationml.template";
-            case "ppsx":
-                return "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
-            case "ppam":
-                return "application/vnd.ms-powerpoint.addin.macroEnabled.12";
-            case "pptm":
-                return "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
-            case "potm":
-                return "application/vnd.ms-powerpoint.template.macroEnabled.12";
-            case "ppsm":
-                return "application/vnd.ms-powerpoint.slideshow.macroEnabled.12";
-            case "mdb":
-                return "application/vnd.ms-access";
-            default:
-                return "*/*";
-        }
+        return switch (ext) {
+            case "html" -> "text/html";
+            case "apk" -> "application/vnd.android.package-archive";
+            case "doc", "dot" -> "application/msword";
+            case "docx" ->
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            case "dotx" ->
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.template";
+            case "docm" -> "application/vnd.ms-word.document.macroEnabled.12";
+            case "dotm" -> "application/vnd.ms-word.template.macroEnabled.12";
+            case "xls", "xlt", "xla" -> "application/vnd.ms-excel";
+            case "xlsx" -> "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            case "xltx" -> "application/vnd.openxmlformats-officedocument.spreadsheetml.template";
+            case "xlsm" -> "application/vnd.ms-excel.sheet.macroEnabled.12";
+            case "xltm" -> "application/vnd.ms-excel.template.macroEnabled.12";
+            case "xlam" -> "application/vnd.ms-excel.addin.macroEnabled.12";
+            case "xlsb" -> "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
+            case "ppt" -> "application/vnd.ms-powerpoint";
+            case "pot" -> "application/vnd.ms-powerpoint";
+            case "pps" -> "application/vnd.ms-powerpoint";
+            case "ppa" -> "application/vnd.ms-powerpoint";
+            case "pptx" ->
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+            case "potx" -> "application/vnd.openxmlformats-officedocument.presentationml.template";
+            case "ppsx" -> "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
+            case "ppam" -> "application/vnd.ms-powerpoint.addin.macroEnabled.12";
+            case "pptm" -> "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
+            case "potm" -> "application/vnd.ms-powerpoint.template.macroEnabled.12";
+            case "ppsm" -> "application/vnd.ms-powerpoint.slideshow.macroEnabled.12";
+            case "mdb" -> "application/vnd.ms-access";
+            default -> "*/*";
+        };
     }
 
     public static boolean isDocumentType(String mimeType) {
@@ -282,6 +255,7 @@ public class Utils {
         } else {
             locale = Locale.forLanguageTag(languageTag);
         }
+        assert locale != null;
         Locale.setDefault(locale);
         Resources appRes = context.getApplicationContext().getResources();
         Resources actRes = context.getResources();
@@ -299,8 +273,7 @@ public class Utils {
 
     public static Bitmap drawableToBitmap(Drawable drawable) {
         Bitmap bitmap;
-        if (drawable instanceof BitmapDrawable) {
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+        if (drawable instanceof BitmapDrawable bitmapDrawable) {
             if (bitmapDrawable.getBitmap() != null) {
                 return bitmapDrawable.getBitmap();
             }
@@ -419,6 +392,12 @@ public class Utils {
             if(i.equals(lang)) return true;
         }
         return false;
+    }
+
+    public static String bytesToHex(byte[] bytes) {
+        StringBuilder result = new StringBuilder();
+        for (byte b : bytes) result.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+        return result.toString();
     }
 
     public static ContentResolver getCR() {

@@ -34,8 +34,6 @@
     <string name="choose_language">اختر لغة</string>
     <string name="no_user_connected">لم يتصل أى مستخدم بعد</string>
     <string name="no_files_selected">لم يتم تحديد ملف</string>
-    <string name="warning">تنبيه!</string>
-    <string name="warning_details">هذا التطبيق لا ينقل الملفات باستعمال بروتوكول HTTPS مما يجعله عرضه لهجمات الرجل فى المنتصف.\nلتكون أكثر أمانا قم بتشغيل نقطة اتصال آمنة على هذا الجهاز و تأكد أن الأجهزة الأخرى المرغوبة هى الوحيدة المتصلة بها.</string>
     <string name="dont_show_again">لا تظهر هذه الرسالة مرة أخرى</string>
     <string name="connect_to_wifi_or_hotspot">الرجاء تفعيل نقطة اتصال أو الاتصال بشبكة واى-فاى</string>
     <string name="toggle_on_the_server">رجاء فعل الخادم أولا</string>

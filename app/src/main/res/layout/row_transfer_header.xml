@@ -255,4 +255,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/B_ShowSelected" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="3">
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/B_ToggleServer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:cornerRadius="18dp"
+            android:backgroundTint="@color/status_off"
+            android:text="@string/turn_on_server"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/B_ViewCert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cornerRadius="18dp"
+            android:text="@string/view_https_certificate"/>
+    </com.google.android.material.button.MaterialButtonToggleGroup>
 </GridLayout>

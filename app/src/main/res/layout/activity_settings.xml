@@ -47,6 +47,7 @@
                         android:textSize="@dimen/settings_big_text"
                         android:maxLines="1"
                         android:ellipsize="end"
+                        android:textAlignment="viewStart"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:lightModeColor="#fff" />
@@ -57,10 +58,70 @@
                         android:layout_height="wrap_content"
                         android:text="@string/change_server_port_desc"
                         android:textSize="@dimen/small_text"
+                        android:textAlignment="viewStart"
                         app:layout_constraintStart_toStartOf="@id/TV_ServerPort"
                         app:layout_constraintTop_toBottomOf="@id/TV_ServerPort"
                         app:lightModeColor="#fff" />
 
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/CV_EnableHTTPS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="#66555555"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/CL_EnableHTTPS"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple_item"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp">
+
+                    <com.ammar.sharing.custom.ui.AdaptiveTextView
+                        android:id="@+id/TV_EnableHTTPS"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/enable_https"
+                        android:textSize="@dimen/settings_big_text"
+                        android:textAlignment="viewStart"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/SC_EnableHTTPSToggle"
+                        app:lightModeColor="#fff" />
+
+                    <com.ammar.sharing.custom.ui.AdaptiveTextView
+                        android:id="@+id/TV_EnableHTTPSSub"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/enable_https_desc"
+                        android:textSize="@dimen/small_text"
+                        android:textAlignment="viewStart"
+                        app:layout_constraintEnd_toStartOf="@+id/SC_EnableHTTPSToggle"
+                        app:layout_constraintStart_toStartOf="@+id/TV_EnableHTTPS"
+                        app:layout_constraintTop_toBottomOf="@id/TV_EnableHTTPS"
+                        app:lightModeColor="#fff" />
+
+                    <com.suke.widget.SwitchButton
+                        android:id="@+id/SC_EnableHTTPSToggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@string/enable_https"
+                        app:sb_background="#aaa"
+                        app:sb_show_indicator="false" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
@@ -90,6 +151,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/disable_browser_upload"
                         android:textSize="@dimen/settings_big_text"
+                        android:textAlignment="viewStart"
                         android:maxLines="1"
                         android:ellipsize="end"
                         app:layout_constraintStart_toStartOf="parent"
@@ -103,6 +165,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/disable_browser_upload_desc"
                         android:textSize="@dimen/small_text"
+                        android:textAlignment="viewStart"
                         app:layout_constraintEnd_toStartOf="@+id/SC_UploadAllowToggle"
                         app:layout_constraintStart_toStartOf="@+id/TV_SettingsUploadAllow"
                         app:layout_constraintTop_toBottomOf="@id/TV_SettingsUploadAllow"
@@ -148,6 +211,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/block_users"
                         android:textSize="@dimen/settings_big_text"
+                        android:textAlignment="viewStart"
                         android:maxLines="1"
                         android:ellipsize="end"
                         app:layout_constraintEnd_toStartOf="@+id/SC_UsersBlockToggle"
@@ -164,6 +228,7 @@
                         app:layout_constraintTop_toBottomOf="@id/TV_SettingsUserBlock"
                         android:text="@string/block_users_desc"
                         android:textSize="@dimen/small_text"
+                        android:textAlignment="viewStart"
                         app:lightModeColor="#fff" />
 
                     <com.suke.widget.SwitchButton
@@ -206,6 +271,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/language"
                         android:textSize="@dimen/settings_big_text"
+                        android:textAlignment="viewStart"
                         android:maxLines="1"
                         android:ellipsize="end"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -222,6 +288,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         android:text="@string/languages_desc"
                         android:textSize="@dimen/small_text"
+                        android:textAlignment="viewStart"
                         app:lightModeColor="#fff" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
@@ -260,6 +327,7 @@
                         android:textSize="@dimen/settings_big_text"
                         android:maxLines="1"
                         android:ellipsize="end"
+                        android:textAlignment="viewStart"
                         app:layout_constraintEnd_toStartOf="@+id/SC_DebugModeToggle"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -274,6 +342,7 @@
                         app:layout_constraintTop_toBottomOf="@id/TV_SettingsDebugMode"
                         android:text="@string/debug_mode_desc"
                         android:textSize="@dimen/small_text"
+                        android:textAlignment="viewStart"
                         app:lightModeColor="#fff" />
 
                     <com.suke.widget.SwitchButton
