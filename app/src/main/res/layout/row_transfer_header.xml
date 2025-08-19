@@ -266,7 +266,7 @@
             android:layout_weight="1"
             app:cornerRadius="18dp"
             android:backgroundTint="@color/status_off"
-            android:text="@string/turn_on_server"/>
+            android:text="@string/server_off"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/B_ViewCert"

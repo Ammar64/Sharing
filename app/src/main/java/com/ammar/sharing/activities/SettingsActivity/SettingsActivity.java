@@ -129,6 +129,8 @@ public class SettingsActivity extends DefaultActivity {
             if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_HTTPS, isChecked).commit()) {
                 Log.e("MYLOG", "Failed to change IS_HTTPS value");
                 enableHTTPSS.setChecked(!isChecked);
+            } else {
+                Server.IS_HTTPS = isChecked;
             }
         });
 

@@ -5,6 +5,9 @@
     <!-- Needed to initialize Sockets -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- Needed for device discovery -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
+
     <!-- We use foreground service so the app can still transfer files when the user remove the app from task manager -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
@@ -36,6 +39,7 @@
         android:name=".application.SharingApp"
         android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
@@ -64,6 +68,10 @@
                 <data android:mimeType="*/*"/>
             </intent-filter>
         </activity-alias>
+
+        <activity android:name=".activities.AppToAppSharingActivity.AppToAppSharingActivity"
+            android:exported="false">
+        </activity>
 
         <activity android:name=".activities.AddAppsActivity.AddAppsActivity"
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden"

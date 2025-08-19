@@ -3,6 +3,7 @@ package com.ammar.sharing.common.utils;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -51,6 +52,9 @@ public class FileUtils {
     private FileUtils() {
     }
 
+    public static void init(Context context) {
+        sFilesDir = context.getFilesDir();
+    }
     public static String getFileTypeName(String filename) {
         String ext = filename.substring(filename.lastIndexOf(".") + 1);
         return ext.toUpperCase();
@@ -332,7 +336,7 @@ public class FileUtils {
         return depth;
     }
 
-    private static final Pattern VALID_FILENAME_PATTERN = Pattern.compile("^[a-zA-Z0-9_.-]+$");
+    private static final Pattern VALID_FILENAME_PATTERN = Pattern.compile("/^(?!\\\\.)(?!com[0-9]$)(?!con$)(?!lpt[0-9]$)(?!nul$)(?!prn$)[^\\\\|\\\\*\\?\\\\:<>\\/$\"]*[^\\\\.\\\\|\\\\*\\\\?\\\\\\:<>\\/$\"]+$/");
     public static boolean isValidFileName(String fileName) {
         if (fileName.isEmpty() || fileName.length() > 255) {
             return false;
@@ -340,4 +344,8 @@ public class FileUtils {
         return VALID_FILENAME_PATTERN.matcher(fileName).matches();
     }
 
+    private static File sFilesDir;
+    public static File getFilesDir() {
+        return sFilesDir;
+    }
 }

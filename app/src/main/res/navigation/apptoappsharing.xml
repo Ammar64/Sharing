@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sendtoapp">
+
+    <fragment
+        android:id="@+id/discoverDevicesFragment"
+        android:name="com.ammar.sharing.activities.AppToAppSharingActivity.fragments.DiscoverDevicesFragment"
+        android:label="@string/discover_devices"
+        tools:layout="@layout/fragment_discover_devices" >
+        <action
+            android:id="@+id/action_discoverDevicesFragment_to_communicationFragment"
+            app:destination="@id/communicationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/communicationFragment"
+        android:name="com.ammar.sharing.activities.AppToAppSharingActivity.fragments.CommunicationFragment"
+        android:label="@string/communicate_with_devices"
+        tools:layout="@layout/fragment_communication" />
+    <fragment
+        android:id="@+id/listenerFragment"
+        android:name="com.ammar.sharing.activities.AppToAppSharingActivity.fragments.ListenerFragment"
+        android:label="@string/listen_to_devices"
+        tools:layout="@layout/fragment_listener" >
+        <action
+            android:id="@+id/action_listenerFragment_to_communicationFragment"
+            app:destination="@id/communicationFragment" />
+    </fragment>
+</navigation>

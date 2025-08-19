@@ -68,6 +68,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 break;
             case TYPE_HEADER:
                 ((HeaderViewHolder) holder).updateUnseenMessagesNum();
+                ((HeaderViewHolder) holder).updateViewCertButtonStatus();
                 break;
         }
     }

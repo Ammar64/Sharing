@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -18,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.view.ViewCompat;
-import androidx.lifecycle.ViewTreeLifecycleOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,14 +39,6 @@ import com.ammar.sharing.network.SSLServerSocketManager;
 import com.ammar.sharing.network.Server;
 import com.ammar.sharing.services.ServerService;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateEncodingException;
-import java.security.cert.X509Certificate;
-import java.util.Objects;
-
 // This is just the first row in the recycler view
 public class HeaderViewHolder extends RecyclerView.ViewHolder {
     private final ImageView QRImageIV;
@@ -56,6 +46,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
     private final AdaptiveTextView QRCodeErrorText;
     private final BrowserShareFragment fragment;
     private final TextView messagesNumTV;
+    private final Button viewCertB;
 
     public static int unseenMessagesCount = 0;
 
@@ -83,31 +74,29 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
         Data.serverStatusObserver.observe(fragment.getViewLifecycleOwner(), running -> {
             if (running) {
                 ViewCompat.setBackgroundTintList(toggleServerButton, ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.status_on)));
-                toggleServerButton.setText(R.string.turn_off_server);
+                toggleServerButton.setText(R.string.server_on);
             } else {
                 ViewCompat.setBackgroundTintList(toggleServerButton, ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.status_off)));
-                toggleServerButton.setText(R.string.turn_on_server);
+                toggleServerButton.setText(R.string.server_off);
             }
             SharedInfo.sIsWebServerOn = running;
         });
 
-        Button viewCert = itemView.findViewById(R.id.B_ViewCert);
+        viewCertB = itemView.findViewById(R.id.B_ViewCert);
+        updateViewCertButtonStatus();
+
         RoundDialog certInfoDialog = new RoundDialog(itemView.getContext());
         certInfoDialog.setView(R.layout.dialog_cert_info);
         certInfoDialog.setCornerRadius((int) Utils.dpToPx(18));
         View certInfoDialogLayout = certInfoDialog.getView();
 
-        viewCert.setOnClickListener((view) -> {
+        certInfoDialogLayout.findViewById(R.id.B_CertInfoOkButton).setOnClickListener((view) -> {
+            certInfoDialog.dismiss();
+        });
+
+        viewCertB.setOnClickListener((view) -> {
             SSLServerSocketManager sslServerSocketManager = SSLServerSocketManager.getInstance();
-            if( sslServerSocketManager == null ) {
-                Toast.makeText(itemView.getContext(), R.string.cert_not_created, Toast.LENGTH_SHORT).show();
-                return;
-            }
-            boolean isCertCreated = sslServerSocketManager.isCertCreated();
-            if (!isCertCreated) {
-                Toast.makeText(itemView.getContext(), R.string.cert_not_created, Toast.LENGTH_SHORT).show();
-                return;
-            }
+
             TextView certSHA256TV = certInfoDialogLayout.findViewById(R.id.TV_CertSHA256Fingerprint);
             TextView pubKeySHA256TV = certInfoDialogLayout.findViewById(R.id.TV_PublicKeySHA256Fingerprint);
 
@@ -253,6 +242,16 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
+    // Show or hide viewCert Button based on Server.IS_HTTPS value
+    public void updateViewCertButtonStatus() {
+        if( Server.IS_HTTPS ) {
+            viewCertB.setVisibility(View.VISIBLE);
+        } else {
+            viewCertB.setVisibility(View.GONE);
+        }
+
+    }
+
     private void setupQrCode() {
         String ip = ServerService.getIpAddress();
         MainActivity activity = (MainActivity) fragment.requireActivity();
@@ -269,7 +268,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
             serverLinkTV.setVisibility(View.VISIBLE);
             QRImageIV.setVisibility(View.VISIBLE);
 
-            String link = "http://" + ip + ":" + Server.PORT_NUMBER;
+            String link = (Server.IS_HTTPS ? "https" : "http") + "://" + ip + ":" + Server.PORT_NUMBER;
             serverLinkTV.setText(link);
             byte[] qrCodeBytes = Utils.encodeTextToQR(link);
             Bitmap qrCodeBitmap = Utils.QrCodeArrayToBitmap(qrCodeBytes, darkMode);

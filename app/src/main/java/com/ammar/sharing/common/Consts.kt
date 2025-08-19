@@ -5,9 +5,10 @@ import java.io.File
 import java.util.Locale
 
 object Consts {
+    const val MAX_NON_FILE_CONTENT_LENGTH: Long = 4096
     const val PREF_APP_INFO: String = "AppInfoPref"
     const val PREF_FIELD_IS_FIRST_RUN: String = "IS_FIRST_RUN"
-    const val PREF_FIELD_HTTPS_DIALOG_SHOWN: String = "IS_USER_WANTS_WARNING"
+    const val PREF_FIELD_HTTPS_DIALOG_SHOWN: String = "HTTPS_DIALOG_SHOWN"
 
     const val PREF_SETTINGS: String = "SettingsPref"
 
@@ -24,6 +25,10 @@ object Consts {
     const val PROGRESS_NOTIFICATION_CHANNEL_ID: String = "PROGRESS_NOTIFICATION_CHANNEL_ID"
 
     const val PROGRESS_NOTIFICATION_GROUP: String = "PROGRESS_NOTIFICATION_GROUP"
+
+    const val MULTICAST_DISCOVERY_GROUP: String = "227.2.7.7"
+    const val MULTICAST_DISCOVERY_PORT: Int = 20152
+    const val BROADCAST_DISCOVERY_PORT: Int = 50722
     @JvmField
     val Sharing: File = File(Environment.getExternalStorageDirectory(), "Sharing")
     @JvmField

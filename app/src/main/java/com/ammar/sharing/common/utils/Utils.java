@@ -1,5 +1,6 @@
 package com.ammar.sharing.common.utils;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,7 +14,9 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.webkit.MimeTypeMap;
 
@@ -60,14 +63,21 @@ public class Utils {
     private static ContentResolver cr;
     private static AssetManager assetManager;
 
+
     public static void setupUtils(Context ctx) {
         Utils.res = ctx.getResources();
         Utils.assetManager = ctx.getAssets();
         Utils.settings = ctx.getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
         Utils.pm = ctx.getPackageManager();
         Utils.cr = ctx.getContentResolver();
+        Utils.applicationContext = ctx;
+
     }
 
+    private static Context applicationContext;
+    public static Context getAppCtx() {
+        return applicationContext;
+    }
     public static float dpToPx(float dp) {
         return TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
@@ -304,6 +314,7 @@ public class Utils {
         Bundle bundle = new Bundle();
         bundle.putString("title", title);
         bundle.putString("message", message);
+        Log.e("ERROR_DIALOG", title + "\n" + message);
         Data.alertNotifier.postValue(bundle);
     }
 
@@ -403,4 +414,23 @@ public class Utils {
     public static ContentResolver getCR() {
         return cr;
     }
+
+    private static WifiManager.MulticastLock mMulticastLock;
+
+    public static void aquireMulticastLock() {
+        if( mMulticastLock == null ) {
+            @SuppressLint("WifiManagerLeak") // This the application context
+            WifiManager wifiManager = (WifiManager) Utils.getAppCtx().getSystemService(Context.WIFI_SERVICE);
+            mMulticastLock = wifiManager.createMulticastLock("multicastLock");
+            mMulticastLock.setReferenceCounted(true);
+        }
+        mMulticastLock.acquire();
+    }
+
+    public static void releaseMulticastLock() {
+        if (mMulticastLock != null) {
+            mMulticastLock.release();
+        }
+    }
+
 }

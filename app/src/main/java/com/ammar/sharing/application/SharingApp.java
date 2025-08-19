@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Build;
 
 import com.ammar.sharing.common.Consts;
+import com.ammar.sharing.common.utils.FileUtils;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.R;
 import com.ammar.sharing.network.Server;
@@ -28,6 +29,7 @@ public class SharingApp extends Application {
         super.onCreate();
         _isDebuggable = (0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
         Utils.setupUtils(this);
+        FileUtils.init(this);
         WebAppUtils.init();
         Consts.systemLocale = Locale.getDefault();
         Consts.langCodes = getResources().getStringArray(R.array.lang_codes);
@@ -57,6 +59,7 @@ public class SharingApp extends Application {
 
         SharedPreferences settingsPref = getSharedPreferences(Consts.PREF_SETTINGS, MODE_PRIVATE);
         Server.PORT_NUMBER = settingsPref.getInt(Consts.PREF_FIELD_SERVER_PORT, 2999);
+        Server.IS_HTTPS = settingsPref.getBoolean(Consts.PREF_FIELD_IS_HTTPS, true);
     }
 
     public static boolean isDebuggable() {

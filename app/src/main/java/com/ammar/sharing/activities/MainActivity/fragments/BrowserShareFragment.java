@@ -6,9 +6,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +37,8 @@ import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.SharedInfo;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.io.ProgressManager;
+import com.ammar.sharing.custom.ui.RoundDialog;
+import com.ammar.sharing.network.Server;
 import com.ammar.sharing.services.ServerService;
 
 import java.util.ArrayList;
@@ -67,6 +72,7 @@ public class BrowserShareFragment extends Fragment {
         initItems();
         setItemsListener();
         initObservers();
+        new Handler().postDelayed(this::showHTTPSDialogIfNotShownBefore, 1000);
         return v;
     }
 
@@ -216,4 +222,42 @@ public class BrowserShareFragment extends Fragment {
         notificationManager.notify(manager.getProgressUUID().hashCode(), notification);
     }
 
+    private static boolean httpsDialogShown = false;
+    private void showHTTPSDialogIfNotShownBefore() {
+        // show warning if user didn't choose to not show it again
+        SharedPreferences appInfoPref = requireContext().getSharedPreferences(Consts.PREF_APP_INFO, Context.MODE_PRIVATE);
+        SharedPreferences settingsPref = requireContext().getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
+        final boolean httpsDialogShownBefore = appInfoPref.getBoolean(Consts.PREF_FIELD_HTTPS_DIALOG_SHOWN, true);
+        if (!httpsDialogShownBefore && !httpsDialogShown) {
+            RoundDialog enableHTTPSDialog = new RoundDialog(requireContext());
+            enableHTTPSDialog.setView(R.layout.dialog_enable_https);
+            enableHTTPSDialog.setCornerRadius((int) Utils.dpToPx(18));
+            enableHTTPSDialog.getInternalAlertDialog().setCanceledOnTouchOutside(false);
+            View enableHTTPSDialogLayout = enableHTTPSDialog.getView();
+
+            enableHTTPSDialog.getInternalAlertDialog().setOnDismissListener((d) -> {
+                appInfoPref.edit().putBoolean(Consts.PREF_FIELD_HTTPS_DIALOG_SHOWN, true).apply();
+            });
+
+            enableHTTPSDialogLayout.findViewById(R.id.B_EncryptionYESButton).setOnClickListener((v) -> {
+                if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_HTTPS, true).commit()) {
+                    Log.e("MYLOG", "Failed to change IS_HTTPS value");
+                }
+                enableHTTPSDialog.dismiss();
+            });
+            enableHTTPSDialogLayout.findViewById(R.id.B_EncryptionNOButton).setOnClickListener((v) -> {
+                if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_HTTPS, false).commit()) {
+                    Log.e("MYLOG", "Failed to change IS_HTTPS value");
+                }
+                enableHTTPSDialog.dismiss();
+            });
+
+            // set dialog bg color
+            enableHTTPSDialog.setBackgroundColor(getResources().getColor(MainActivity.darkMode ? R.color.dialogColorDark : R.color.dialogColorLight));
+
+            // show dialog
+            enableHTTPSDialog.show();
+            httpsDialogShown = true;
+        }
+    }
 }

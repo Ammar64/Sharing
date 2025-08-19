@@ -140,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private static boolean httpsDialogShown = false;
 
     private void initItems() {
         layout = findViewById(R.id.CL_MainLayout);
@@ -148,9 +147,6 @@ public class MainActivity extends AppCompatActivity {
             Insets paddings = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             MainActivity.systemBarsPaddings = paddings;
             v.setPadding(0, paddings.top, 0, 0);
-
-            // round dialog needs systemBarsPaddings to be set that's why we call here
-            showHTTPSDialogIfNotShownBefore();
             return insets;
         });
 
@@ -179,42 +175,6 @@ public class MainActivity extends AppCompatActivity {
         errorDialogAD = new AlertDialog.Builder(this)
                 .setPositiveButton(R.string.ok, null)
                 .create();
-    }
-
-    private void showHTTPSDialogIfNotShownBefore() {
-        // show warning if user didn't choose to not show it again
-        final boolean httpsDialogShownBefore = appInfoPref.getBoolean(Consts.PREF_FIELD_HTTPS_DIALOG_SHOWN, true);
-        if (httpsDialogShownBefore && !httpsDialogShown) {
-            RoundDialog enableHTTPSDialog = new RoundDialog(this);
-            enableHTTPSDialog.setView(R.layout.dialog_enable_https);
-            enableHTTPSDialog.setCornerRadius((int) Utils.dpToPx(18));
-
-            View enableHTTPSDialogLayout = enableHTTPSDialog.getView();
-
-            enableHTTPSDialog.getInternalAlertDialog().setOnDismissListener((d) -> {
-                appInfoPref.edit().putBoolean(Consts.PREF_FIELD_HTTPS_DIALOG_SHOWN, true).apply();
-            });
-
-            enableHTTPSDialogLayout.findViewById(R.id.B_EncryptionYESButton).setOnClickListener((v) -> {
-                if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_HTTPS, true).commit()) {
-                    Log.e("MYLOG", "Failed to change IS_HTTPS value");
-                }
-                enableHTTPSDialog.dismiss();
-            });
-            enableHTTPSDialogLayout.findViewById(R.id.B_EncryptionNOButton).setOnClickListener((v) -> {
-                if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_HTTPS, false).commit()) {
-                    Log.e("MYLOG", "Failed to change IS_HTTPS value");
-                }
-                enableHTTPSDialog.dismiss();
-            });
-
-            // set dialog bg color
-            enableHTTPSDialog.setBackgroundColor(getResources().getColor(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight));
-
-            // show dialog
-            enableHTTPSDialog.show();
-            httpsDialogShown = true;
-        }
     }
 
     private void setItemsListener() {

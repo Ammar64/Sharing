@@ -1,7 +1,6 @@
 package com.ammar.sharing.network;
 
-import android.content.Context;
-
+import com.ammar.sharing.common.utils.FileUtils;
 import com.ammar.sharing.common.utils.Utils;
 
 import org.bouncycastle.asn1.x500.X500Name;
@@ -45,28 +44,36 @@ public class SSLServerSocketManager {
     private final File mCertFile;
     private static final String mALIAS = "sharing-cert";
     private CertificateInfo mCertInfo = new CertificateInfo();
-
+    private KeyStore mKeyStore;
     private static SSLServerSocketManager sInstance;
 
     public static SSLServerSocketManager getInstance() {
+        if( sInstance == null ) {
+            sInstance = new SSLServerSocketManager();
+        }
         return sInstance;
     }
 
-    public SSLServerSocketManager(Context context) {
+    public SSLServerSocketManager() {
         sInstance = this;
 
-        File filesDir = context.getFilesDir();
+        File filesDir = FileUtils.getFilesDir();
         File certDir = new File(filesDir, "cert");
         if (!certDir.exists()) {
             certDir.mkdir();
         }
 
         mCertFile = new File(certDir, "certificate.pfx");
+        try {
+            mKeyStore = getKeyStore();
+        } catch (KeyStoreException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public SSLServerSocket generateSSLServerSocket() {
         try {
-            KeyStore keyStore = getKeyStore();
+            KeyStore keyStore = mKeyStore;
 
             KeyManagerFactory km = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
             km.init(keyStore, new char[0]);
@@ -83,6 +90,40 @@ public class SSLServerSocketManager {
 
     }
 
+
+    private KeyStore getKeyStore() throws KeyStoreException {
+        if (mCertFile.exists()) {
+            KeyStore keyStore = KeyStore.getInstance("PKCS12");
+            try (FileInputStream fis = new FileInputStream(mCertFile)) {
+                keyStore.load(fis, new char[0]);
+            } catch (CertificateException | NoSuchAlgorithmException | IOException e) {
+                Utils.showErrorDialog("SSLServerSocketManager.getKeyStore()", e.getMessage());
+            }
+            X509Certificate certificate = null;
+            boolean isValid = true;
+            try {
+                certificate = (X509Certificate) keyStore.getCertificate(mALIAS);
+                certificate.checkValidity();
+            } catch (CertificateExpiredException | CertificateNotYetValidException e) {
+                isValid = false;
+            }
+            if (!isValid) {
+                if (mCertFile.delete()) {
+                    return getKeyStore();
+                } else {
+                    throw new RuntimeException("This should not happen");
+                }
+            }
+            saveCertInfo(certificate);
+            return keyStore;
+        } else {
+            GeneratedCert cert = generateRandomSelfSignedCertificate();
+            saveCertInfo(cert.certificate);
+            KeyStore keyStore = certToKeyStore(cert);
+            saveKeyStoreToFile(keyStore);
+            return keyStore;
+        }
+    }
     private GeneratedCert generateRandomSelfSignedCertificate() {
         try {
             KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
@@ -141,40 +182,6 @@ public class SSLServerSocketManager {
         }
     }
 
-    private KeyStore getKeyStore() throws KeyStoreException {
-        if (mCertFile.exists()) {
-            KeyStore keyStore = KeyStore.getInstance("PKCS12");
-            try (FileInputStream fis = new FileInputStream(mCertFile)) {
-                keyStore.load(fis, new char[0]);
-            } catch (CertificateException | NoSuchAlgorithmException | IOException e) {
-                Utils.showErrorDialog("SSLServerSocketManager.getKeyStore()", e.getMessage());
-            }
-            X509Certificate certificate = null;
-            boolean isValid = true;
-            try {
-                certificate = (X509Certificate) keyStore.getCertificate(mALIAS);
-                certificate.checkValidity();
-            } catch (CertificateExpiredException | CertificateNotYetValidException e) {
-                isValid = false;
-            }
-            if (!isValid) {
-                if (mCertFile.delete()) {
-                    return getKeyStore();
-                } else {
-                    throw new RuntimeException("This should not happen");
-                }
-            }
-            saveCertInfo(certificate);
-            return keyStore;
-        } else {
-            GeneratedCert cert = generateRandomSelfSignedCertificate();
-            saveCertInfo(cert.certificate);
-            KeyStore keyStore = certToKeyStore(cert);
-            saveKeyStoreToFile(keyStore);
-            return keyStore;
-        }
-    }
-
     private void saveCertInfo(X509Certificate certificate) {
         try {
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
@@ -185,10 +192,6 @@ public class SSLServerSocketManager {
             byte[] encodedPublicKey = publicKey.getEncoded();
             mCertInfo.publicKeySha256fingerprint = Utils.bytesToHex(sha256.digest(encodedPublicKey));
         } catch (NoSuchAlgorithmException | CertificateEncodingException ignore) {}
-    }
-
-    public boolean isCertCreated() {
-        return mCertFile.exists();
     }
 
     public CertificateInfo getCertInfo() {

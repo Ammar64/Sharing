@@ -33,6 +33,7 @@ import javax.net.ssl.SSLSocket;
 public class Server {
 
     public static int PORT_NUMBER;
+    public static boolean IS_HTTPS;
     private ServerSocket serverSocket;
     private SSLServerSocket sslServerSocket;
     private SSLServerSocketManager sslServerSocketManager;
@@ -47,13 +48,12 @@ public class Server {
     public Server(ServerService service) {
         this.service = service;
         handleSessionsData();
-        sslServerSocketManager = new SSLServerSocketManager(service);
+        sslServerSocketManager = SSLServerSocketManager.getInstance();
     }
 
     public void Start() {
         try {
-            boolean isHTTPS = Utils.getSettings().getBoolean(Consts.PREF_FIELD_IS_HTTPS, true);
-            if( isHTTPS ) {
+            if( Server.IS_HTTPS ) {
                 sslServerSocket = sslServerSocketManager.generateSSLServerSocket();
                 serverThread = new Thread(this::AcceptSSL);
                 serverThread.start();

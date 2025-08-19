@@ -4,6 +4,7 @@ import static com.ammar.sharing.common.utils.Utils.readLineUTF8;
 
 import android.util.Log;
 
+import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.network.exceptions.BadRequestException;
 import com.ammar.sharing.network.exceptions.NotImplementedException;
@@ -153,8 +154,12 @@ public class Request {
     }
 
     public String getBody() throws BadRequestException, IOException {
-        if ("application/json".equals(getHeader("Content-Type"))) {
-            if (content_length <= 4096) {
+        if( !"POST".equals(getMethod()) ) {
+            throw new BadRequestException("You can only get the body of POST requests");
+        }
+        
+        if (getHeader("Content-Type").startsWith("application/json")) {
+            if (content_length <= Consts.MAX_NON_FILE_CONTENT_LENGTH) {
                 byte[] buff = new byte[(int) content_length];
                 clientInput.read(buff);
                 return new String(buff);

@@ -26,6 +26,11 @@
     <string name="minutes">%d دقائق</string>
     <string name="seconds">%d ثوانى</string>
     <string name="milliSeconds">%d أجزاء من الثانية</string>
+    <string name="server_off">الخادم متوقف</string>
+    <string name="server_on">الخادم يعمل</string>
+    <string name="view_https_certificate">اعرض الشهادة</string>
+    <string name="streaming">بث</string>
+
     <!-- dialogs   -->
     <string name="connected_users">المستخدمون المتصلون</string>
     <string name="block">حظر</string>
@@ -125,4 +130,12 @@
     <string name="min_value_error">يحب ألا يقل الرقم عن %d</string>
     <string name="max_value_error">يجب ألا يزيد الرقم عن %d</string>
     <string name="server_port_changed">تم تغيير المنفذ إلى %d</string>
+    <string name="cert_info_title">معلومات الشهادة</string>
+    <string name="sha256_fingerprint">بصمة SHA256:</string>
+    <string name="certificate">الشهادة</string>
+    <string name="public_key">المفتاح العام</string>
+    <string name="discover_devices">البحث عن أجهزة</string>
+    <string name="listen_to_devices">الاستماع إلى أجهزة</string>
+    <string name="communicate_with_devices">التواصل مع الأجهزة</string>
+
 </resources>
