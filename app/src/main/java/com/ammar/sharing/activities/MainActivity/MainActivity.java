@@ -21,7 +21,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -47,10 +46,10 @@ import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.Me
 import com.ammar.sharing.activities.SettingsActivity.SettingsActivity;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
+import com.ammar.sharing.common.utils.UsersNotifier;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.ui.AdaptiveDropDown;
 import com.ammar.sharing.custom.ui.AdaptiveTextView;
-import com.ammar.sharing.custom.ui.RoundDialog;
 import com.ammar.sharing.models.Message;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.websocket.sessions.MessagesWSSession;
@@ -83,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences settingsPref;
     private SharedPreferences appInfoPref;
 
-    public static boolean darkMode = true;
+    public static boolean sDarkMode = true;
     public static boolean isFirstRun = false;
     public static Insets systemBarsPaddings;
     public final int REQUEST_CODE_STORAGE_PERMISSION = 2;
@@ -103,9 +102,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void prepareActivity() {
         settingsPref = getSharedPreferences(Consts.PREF_SETTINGS, MODE_PRIVATE);
-        darkMode = settingsPref.getBoolean(Consts.PREF_FIELD_IS_DARK, true);
+        sDarkMode = settingsPref.getBoolean(Consts.PREF_FIELD_IS_DARK, true);
 
-        if (darkMode) {
+        if (sDarkMode) {
             setTheme(R.style.AppThemeDark);
             getWindow().setBackgroundDrawableResource(R.drawable.gradient_background_dark);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -251,9 +250,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initStates() {
-        syncTheme(darkMode);
+        syncTheme(sDarkMode);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (darkMode) getWindow().setNavigationBarColor(Color.BLACK);
+            if (sDarkMode) getWindow().setNavigationBarColor(Color.BLACK);
             else getWindow().setNavigationBarColor(Color.WHITE);
         }
 
@@ -272,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
                     HeaderViewHolder.unseenMessagesCount++;
                     Data.messagesNotifier.forcePostValue(MessagesAdapter.messages.size());
                     for (User i : User.users) {
-                        if (i.isWebSokcetConnected(MessagesWSSession.path)) {
+                        if (i.isWebSocketConnected(MessagesWSSession.path)) {
                             i.getWebSocket(MessagesWSSession.path).sendText(message.toJSON().toString());
                         }
                     }
@@ -343,7 +342,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void changeTheme(int[] pos) {
-        darkMode = !darkMode;
+        sDarkMode = !sDarkMode;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (themeChangeIV.getVisibility() == View.VISIBLE) {
                 return;
@@ -357,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
 
             layout.draw(canvas);
 
-            syncTheme(darkMode);
+            syncTheme(sDarkMode);
 
             themeChangeIV.setImageBitmap(bitmap);
             themeChangeIV.setVisibility(View.VISIBLE);
@@ -372,16 +371,19 @@ public class MainActivity extends AppCompatActivity {
                 public void onAnimationEnd(Animator animation) {
                     themeChangeIV.setImageDrawable(null);
                     themeChangeIV.setVisibility(View.GONE);
-                    setNavbarTheme(darkMode);
+                    setNavbarTheme(sDarkMode);
                 }
             });
             anim.start();
-        } else syncTheme(darkMode);
+        } else syncTheme(sDarkMode);
+
+        // notify browsers
+        UsersNotifier.notifyUsersOfUIChange();
     }
 
     @Override
     protected void onPause() {
-        settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_DARK, darkMode).apply();
+        settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_DARK, sDarkMode).apply();
         super.onPause();
     }
 

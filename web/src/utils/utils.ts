@@ -1,4 +1,25 @@
+import { createTheme } from "@mui/material";
 import { TFunction } from "i18next";
+
+export function createNewSharingAppTheme(uiMode: "dark" | "light", dir: "rtl" | "ltr") {
+    return createTheme({
+        palette: {
+            mode: uiMode
+        },
+        direction: dir,
+        components: {
+            MuiCssBaseline: {
+                styleOverrides: {
+                    body: {
+                        background: uiMode === "light" ?
+                            "linear-gradient(to left, #67addf, #df90df)" :
+                            "linear-gradient(to left, #010c14, #2e012e)"
+                    }
+                }
+            }
+        }
+    });
+}
 
 export function getFormattedFileSize(s: number) {
     const levels = ["B", "KB", "MB", "GB", "TB", "PB"];

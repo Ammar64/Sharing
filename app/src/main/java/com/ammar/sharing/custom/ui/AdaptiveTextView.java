@@ -1,6 +1,6 @@
 package com.ammar.sharing.custom.ui;
 
-import static com.ammar.sharing.activities.MainActivity.MainActivity.darkMode;
+import static com.ammar.sharing.activities.MainActivity.MainActivity.sDarkMode;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -23,7 +23,7 @@ public class AdaptiveTextView extends androidx.appcompat.widget.AppCompatTextVie
 
     private void addTextView() {
         AdaptiveTextView.textViews.addLast(new WeakReference<>(this));
-        setTextColor( darkMode ? darkModeColor : lightModeColor );
+        setTextColor( sDarkMode ? darkModeColor : lightModeColor );
     }
 
     public AdaptiveTextView(@NonNull Context context) {
@@ -71,12 +71,12 @@ public class AdaptiveTextView extends androidx.appcompat.widget.AppCompatTextVie
 
     public void setLightModeColor(@ColorInt int lightModeColor) {
         this.lightModeColor = lightModeColor;
-        if(!darkMode) setTextColor(this.lightModeColor);
+        if(!sDarkMode) setTextColor(this.lightModeColor);
     }
 
     public void setDarkModeColor(@ColorInt int darkModeColor) {
         this.darkModeColor = darkModeColor;
-        if(darkMode) setTextColor(this.darkModeColor);
+        if(sDarkMode) setTextColor(this.darkModeColor);
     }
 
     private void changeDrawableColor(boolean dark) {

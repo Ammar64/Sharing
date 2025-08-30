@@ -1,6 +1,6 @@
 package com.ammar.sharing.activities.ApksInstallerActivity;
 
-import static com.ammar.sharing.activities.MainActivity.MainActivity.darkMode;
+import static com.ammar.sharing.activities.MainActivity.MainActivity.sDarkMode;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -33,7 +33,7 @@ public class ApksInstallerActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (darkMode) {
+        if (sDarkMode) {
             setTheme(R.style.AppThemeDark);
             getWindow().setBackgroundDrawableResource(R.drawable.gradient_background_dark);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -99,10 +99,10 @@ public class ApksInstallerActivity extends AppCompatActivity {
 
         Window window = installerDialog.getWindow();
         if (window != null)
-            window.setBackgroundDrawableResource(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight);
+            window.setBackgroundDrawableResource(sDarkMode ? R.color.dialogColorDark : R.color.dialogColorLight);
 
-        titleTV.setDark(darkMode);
-        operationTV.setDark(darkMode);
+        titleTV.setDark(sDarkMode);
+        operationTV.setDark(sDarkMode);
 
 
         progress.setVisibility(View.VISIBLE);

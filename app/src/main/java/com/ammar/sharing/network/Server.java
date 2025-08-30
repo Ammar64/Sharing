@@ -1,10 +1,10 @@
 package com.ammar.sharing.network;
 
-import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.utils.Utils;
+import com.ammar.sharing.network.sessions.AppConfigSession;
 import com.ammar.sharing.network.sessions.CLISession;
 import com.ammar.sharing.network.sessions.DownloadSession;
-import com.ammar.sharing.network.sessions.DynamicAssetsSession;
+import com.ammar.sharing.network.sessions.SharedAssetsSession;
 import com.ammar.sharing.network.sessions.HTTPSession;
 import com.ammar.sharing.network.sessions.MessagesSession;
 import com.ammar.sharing.network.sessions.NoJSSession;
@@ -12,6 +12,7 @@ import com.ammar.sharing.network.sessions.RedirectSession;
 import com.ammar.sharing.network.sessions.UploadSession;
 import com.ammar.sharing.network.sessions.UserSession;
 import com.ammar.sharing.network.websocket.sessions.InfoWSSession;
+import com.ammar.sharing.network.websocket.sessions.MainWSSession;
 import com.ammar.sharing.network.websocket.sessions.MessagesWSSession;
 import com.ammar.sharing.network.websocket.sessions.WebSocketSession;
 import com.ammar.sharing.services.ServerService;
@@ -19,7 +20,6 @@ import com.ammar.sharing.services.ServerService;
 import org.intellij.lang.annotations.RegExp;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -27,8 +27,6 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLSocket;
 
 public class Server {
 
@@ -152,7 +150,6 @@ public class Server {
 
         // UploadSession
         this.addPath("/upload/(.*)", UploadSession.class);
-        this.addPath("/check-upload-allowed", UploadSession.class);
 
         // UserSession
         this.addPath("/get-user-info", UserSession.class);
@@ -164,12 +161,17 @@ public class Server {
         this.addPath("/da", CLISession.class);
 
         //DynamicAssetsSession
-        this.addPath("/get-icon/(.*)", DynamicAssetsSession.class);
-        this.addPath("/favicon.ico", DynamicAssetsSession.class);
+        this.addPath("/get-icon/(.*)", SharedAssetsSession.class);
+        this.addPath("/favicon.ico", SharedAssetsSession.class);
 
         this.addPath("/get-all-messages", MessagesSession.class);
-        this.addPaths(RedirectSession.redirectMap.keySet(), RedirectSession.class);
 
+        //AppConfigSession
+        this.addPath("/check-upload-allowed", AppConfigSession.class);
+        this.addPath("/get-app-config", AppConfigSession.class);
+
+        this.addPaths(RedirectSession.redirectMap.keySet(), RedirectSession.class);
+        this.addWebsocketPath(MainWSSession.path, MainWSSession.class);
         this.addWebsocketPath(MessagesWSSession.path, MessagesWSSession.class);
         this.addWebsocketPath(InfoWSSession.path, InfoWSSession.class);
     }

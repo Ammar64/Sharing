@@ -1,6 +1,6 @@
 package com.ammar.sharing.custom.ui;
 
-import static com.ammar.sharing.activities.MainActivity.MainActivity.darkMode;
+import static com.ammar.sharing.activities.MainActivity.MainActivity.sDarkMode;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
@@ -48,7 +48,7 @@ public class AdaptiveDropDown extends PopupWindow {
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         setElevation(24);
-        setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(darkMode ? R.color.popupDarkerBG : R.color.popupLightBG)));
+        setBackgroundDrawable(new ColorDrawable(context.getResources().getColor(sDarkMode ? R.color.popupDarkerBG : R.color.popupLightBG)));
 
         setContentView(layout);
         AdaptiveDropDown.menus.addLast(new WeakReference<>(this));
@@ -80,7 +80,7 @@ public class AdaptiveDropDown extends PopupWindow {
         int size = (int) Utils.dpToPx(30);
         icon.setBounds(0, 0, size, size);
         view.setCompoundDrawablesRelative(icon, null, null, null);
-        view.setDark(darkMode);
+        view.setDark(sDarkMode);
         layout.addView(view);
 
         return view;

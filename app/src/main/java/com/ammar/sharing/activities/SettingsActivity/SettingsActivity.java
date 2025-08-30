@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.MainActivity.adaptersR.LanguagesAdapter.LanguagesAdapter;
 import com.ammar.sharing.common.Consts;
+import com.ammar.sharing.common.utils.UsersNotifier;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.ui.DefaultActivity;
 import com.ammar.sharing.custom.ui.NumberDialog;
@@ -115,6 +116,7 @@ public class SettingsActivity extends DefaultActivity {
                         .apply();
                 recreate();
             }
+            UsersNotifier.notifyUsersOfUIChange();
         });
     }
 
@@ -140,6 +142,7 @@ public class SettingsActivity extends DefaultActivity {
                 Log.e("MYLOG", "Failed to change IS_UPLOAD_DISABLED value");
                 uploadDisableS.setChecked(!isChecked);
             }
+            UsersNotifier.notifyUsersOfUploadStateChange();
         }));
 
         usersBlockCV.setOnClickListener((view) -> usersBlockS.toggle());

@@ -1,6 +1,6 @@
 package com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.viewHolders;
 
-import static com.ammar.sharing.activities.MainActivity.MainActivity.darkMode;
+import static com.ammar.sharing.activities.MainActivity.MainActivity.sDarkMode;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
@@ -30,6 +29,7 @@ import com.ammar.sharing.activities.MessagesActivity.MessagesActivity;
 import com.ammar.sharing.activities.StreamingActivity.StreamingActivity;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.SharedInfo;
+import com.ammar.sharing.common.utils.UsersNotifier;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.ui.AdaptiveTextView;
 import com.ammar.sharing.custom.ui.RoundDialog;
@@ -142,7 +142,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
                 .setOnClickListener((v) -> QRDialogRD.dismiss());
 
         QRCodeB.setOnClickListener(button -> {
-            QRDialogRD.setBackgroundColor(res.getColor(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight));
+            QRDialogRD.setBackgroundColor(res.getColor(sDarkMode ? R.color.dialogColorDark : R.color.dialogColorLight));
             QRDialogRD.show();
             setupQrCode();
         });
@@ -166,7 +166,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
         });
 
         showSelected.setOnClickListener(button -> {
-            chosenFilesRD.setBackgroundColor(res.getColor(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight));
+            chosenFilesRD.setBackgroundColor(res.getColor(sDarkMode ? R.color.dialogColorDark : R.color.dialogColorLight));
             chosenFilesRD.show();
         });
 
@@ -186,7 +186,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
                 filesNumTV.setVisibility(View.VISIBLE);
                 noFilesTV.setVisibility(View.GONE);
             }
-            User.informAllUsersThat(User.INFO.AVAILABLE_DOWNLOADS_UPDATED);
+            UsersNotifier.notifyDownloadsChanged();
         });
 
         // setup users dialog
@@ -205,7 +205,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
                 .setOnClickListener((v) -> usersDialogRD.dismiss());
 
         showUsersB.setOnClickListener(button -> {
-            usersDialogRD.setBackgroundColor(res.getColor(darkMode ? R.color.dialogColorDark : R.color.dialogColorLight));
+            usersDialogRD.setBackgroundColor(res.getColor(sDarkMode ? R.color.dialogColorDark : R.color.dialogColorLight));
             usersDialogRD.show();
         });
 
@@ -271,7 +271,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
             String link = (Server.IS_HTTPS ? "https" : "http") + "://" + ip + ":" + Server.PORT_NUMBER;
             serverLinkTV.setText(link);
             byte[] qrCodeBytes = Utils.encodeTextToQR(link);
-            Bitmap qrCodeBitmap = Utils.QrCodeArrayToBitmap(qrCodeBytes, darkMode);
+            Bitmap qrCodeBitmap = Utils.QrCodeArrayToBitmap(qrCodeBytes, sDarkMode);
             // Display the bitmap in an ImageView or any other suitable view
             QRImageIV.setImageBitmap(qrCodeBitmap);
         } else {

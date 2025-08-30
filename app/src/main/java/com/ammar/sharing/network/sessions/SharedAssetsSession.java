@@ -11,8 +11,8 @@ import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
 
-public class DynamicAssetsSession extends HTTPSession {
-    public DynamicAssetsSession(User user) {
+public class SharedAssetsSession extends HTTPSession {
+    public SharedAssetsSession(User user) {
         super(user);
     }
 

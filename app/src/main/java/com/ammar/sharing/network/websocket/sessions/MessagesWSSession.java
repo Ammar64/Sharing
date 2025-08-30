@@ -26,7 +26,7 @@ public class MessagesWSSession extends WebSocketSession {
                 Data.messagesNotifier.forcePostValue(MessagesAdapter.messages.size());
             }
             for( User i : User.users ) {
-                if( i != this.user && i.isWebSokcetConnected(MessagesWSSession.path) ) {
+                if( i != this.user && i.isWebSocketConnected(MessagesWSSession.path) ) {
                     i.getWebSocket(MessagesWSSession.path).sendText(message.toJSON().toString());
                 }
             }

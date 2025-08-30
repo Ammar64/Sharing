@@ -4,19 +4,27 @@
   "version": "0.0.0",
   "source": "src/index.html",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "start": "parcel --dist-dir ./dist/web_app",
     "build": "parcel build --no-source-maps --dist-dir ./dist/web_app && python list_web_files.py"
   },
   "dependencies": {
+    "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^7.2.0",
+    "@mui/stylis-plugin-rtl": "^7.3.1",
+    "@parcel/config-default": "^2.15.4",
+    "@types/stylis": "^4.2.7",
     "i18next": "^25.3.2",
     "i18next-http-backend": "^3.0.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-i18next": "^15.6.0",
-    "react-router": "^7.7.0"
+    "react-router": "^7.7.0",
+    "react-use-websocket": "^4.13.0",
+    "stylis": "^4.3.6",
+    "swr": "^2.3.6"
   },
   "devDependencies": {
     "@types/css-modules": "^1.0.5",

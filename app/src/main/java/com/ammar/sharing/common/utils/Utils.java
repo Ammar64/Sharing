@@ -34,6 +34,8 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.concurrent.Callable;
 
+import okhttp3.Response;
+
 public class Utils {
 
     static {
@@ -431,6 +433,19 @@ public class Utils {
         if (mMulticastLock != null) {
             mMulticastLock.release();
         }
+    }
+
+    public static boolean verifyResponse(Response response) {
+        boolean success = true;
+        if (response.code() != 200) {
+            Utils.showErrorDialog("Unexpected", "Response code is not 200");
+            success = false;
+        }
+        if (response.body().contentLength() >= Consts.MAX_NON_FILE_CONTENT_LENGTH) {
+            Utils.showErrorDialog("Unexpected", "Device listener content length is too long");
+            success = false;
+        }
+        return success;
     }
 
 }

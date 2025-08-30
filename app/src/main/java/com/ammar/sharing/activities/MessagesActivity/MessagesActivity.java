@@ -51,7 +51,7 @@ public class MessagesActivity extends AdaptiveActivity {
             if( messageText.isEmpty() ) return;
             Message message = new Message(messageText);
             for( User i : User.users ){
-                if( i.isWebSokcetConnected(MessagesWSSession.path) ) {
+                if( i.isWebSocketConnected(MessagesWSSession.path) ) {
                     i.getWebSocket(MessagesWSSession.path).sendText(message.toJSON().toString());
                 }
             }

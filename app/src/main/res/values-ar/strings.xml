@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="lang">ar</string>
+    <string name="dir">rtl</string>
     <!-- Activity Main   -->
     <string name="about_us">عنا</string>
     <string name="no_app_found_to_handle">لم يتم العثور على تطبيق لفتح الرابط</string>

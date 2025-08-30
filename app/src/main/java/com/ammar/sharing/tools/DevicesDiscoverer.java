@@ -13,6 +13,7 @@ import com.ammar.sharing.custom.lambda.LambdaTakeLongNoReturn;
 import com.ammar.sharing.models.Device;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
+import com.ammar.sharing.network.Server;
 import com.ammar.sharing.network.exceptions.BadRequestException;
 
 import org.json.JSONException;
@@ -27,16 +28,14 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import kotlin.concurrent.ThreadsKt;
-
 public class DevicesDiscoverer {
-    public static final int PORT = 34839;
-    public static final byte[] MESSAGE = "0d1f8be2-300b-438d-bbe5-1cdac3adb9e2".getBytes();
+    public static final int PORT = 49003;
     private DeviceFoundLambda mDeviceFoundCallback;
     private final ScheduledExecutorService mScheduledExecutorService = Executors.newScheduledThreadPool(2);
     private ScheduledFuture<?> mScheduledFuture;
@@ -58,7 +57,8 @@ public class DevicesDiscoverer {
             try {
                 mDatagramSocket = new DatagramSocket();
                 InetAddress multicastAddress = InetAddress.getByName(Consts.MULTICAST_DISCOVERY_GROUP);
-                DatagramPacket packet = new DatagramPacket(MESSAGE, MESSAGE.length, multicastAddress, Consts.MULTICAST_DISCOVERY_PORT);
+                byte[] discoverPacket = DiscoverPacket.getDiscoverHostPacket();
+                DatagramPacket packet = new DatagramPacket(discoverPacket, discoverPacket.length, multicastAddress, Consts.MULTICAST_DISCOVERY_PORT);
                 Runnable packetSender = () -> {
                     try {
                         Log.d("FIND", "try to send packet");
@@ -130,27 +130,39 @@ public class DevicesDiscoverer {
                 request.readSocket();
 
                 Response response = new Response(clientSocket);
+                response.setHeader("Connection", "close");
                 try {
-                    String deviceInfo = request.getBody();
-                    JSONObject deviceInfoJSON = new JSONObject(deviceInfo);
+                    String requestBody = request.getBody();
+                    JSONObject reqJSON = new JSONObject(requestBody);
+                    String action = reqJSON.getString("action");
 
-                    String deviceName = deviceInfoJSON.getString("name");
-                    String deviceOS = deviceInfoJSON.getString("os");
-                    String deviceIp = clientSocket.getRemoteSocketAddress().toString();
+                    if( "device-info".equals(action) ) {
+                        String deviceName = reqJSON.getString("name");
+                        String deviceOS = reqJSON.getString("os");
+                        String deviceIp = clientSocket.getRemoteSocketAddress().toString();
 
-                    Device device = new Device(deviceName, deviceIp, OS.valueOf(deviceOS));
+                        Device device = new Device(deviceName, deviceIp, OS.valueOf(deviceOS));
 
-                    if (mDeviceFoundCallback != null) {
-                        mHandler.post(() -> mDeviceFoundCallback.accept(device));
+                        if (mDeviceFoundCallback != null) {
+                            mHandler.post(() -> mDeviceFoundCallback.accept(device));
+                        }
+
+                        JSONObject thisDeviceInfoJSON = DevicesDiscoverer.getDeviceJSONInfo();
+                        assert thisDeviceInfoJSON != null;
+                        response.sendResponse(thisDeviceInfoJSON.toString().getBytes(StandardCharsets.UTF_8));
+                    } else if("start-communication".equals(action)) {
+                        JSONObject startCommunicationResJSON = new JSONObject();
+                        startCommunicationResJSON
+                                .put("message", "start-communication")
+                                .put("port", Server.PORT_NUMBER);
+
+                        response.sendResponse(startCommunicationResJSON.toString().getBytes(StandardCharsets.UTF_8));
+                    } else {
+                        response.sendResponse("{\"message\": \"no-such-action\"}".getBytes(StandardCharsets.UTF_8));
                     }
-
-                    JSONObject thisDeviceInfoJSON = DevicesDiscoverer.getDeviceJSONInfo();
-                    assert thisDeviceInfoJSON != null;
-                    response.setHeader("Connection", "close");
-                    response.sendResponse(thisDeviceInfoJSON.toString().getBytes(StandardCharsets.UTF_8));
-                    response.close();
                 } catch (BadRequestException | JSONException e) {
                     Utils.showErrorDialog("DevicesDiscoverer.listenToDevicesResponse() BadRequestException | JSONException", e.getMessage());
+                } finally {
                     response.close();
                 }
             }
@@ -187,4 +199,19 @@ public class DevicesDiscoverer {
         void accept(Device device);
     }
 
+
+    public static class DiscoverPacket {
+        public static final byte[] DISCOVER_DEVICE_MESSAGE = "0d1f8be2-300b-438d-bbe5-1cdac3adb9e2".getBytes(StandardCharsets.UTF_8);
+        public static final byte[] START_COMMUNICATING_MESSAGE = "7e48eb56-636c-4ea2-9472-6baba2c9eabf".getBytes(StandardCharsets.UTF_8);
+        public static final byte[] IDENTIFIER = UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8);
+        public static final int SIZE = DISCOVER_DEVICE_MESSAGE.length + IDENTIFIER.length;
+
+        public static byte[] getDiscoverHostPacket() {
+            int newArrayLength = DISCOVER_DEVICE_MESSAGE.length + IDENTIFIER.length;
+            byte[] packet = new byte[newArrayLength];
+            System.arraycopy(DISCOVER_DEVICE_MESSAGE, 0, packet, 0, DISCOVER_DEVICE_MESSAGE.length);
+            System.arraycopy(IDENTIFIER, 0, packet, DISCOVER_DEVICE_MESSAGE.length, IDENTIFIER.length);
+            return packet;
+        }
+    }
 }

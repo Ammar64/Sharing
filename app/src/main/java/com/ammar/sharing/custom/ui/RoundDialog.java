@@ -1,13 +1,12 @@
 package com.ammar.sharing.custom.ui;
 
-import static com.ammar.sharing.activities.MainActivity.MainActivity.darkMode;
+import static com.ammar.sharing.activities.MainActivity.MainActivity.sDarkMode;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,7 +68,7 @@ public class RoundDialog {
 
     public void show() {
         Resources res = context.getResources();
-        int color = ResourcesCompat.getColor(res, darkMode ? R.color.dialogColorDark : R.color.dialogColorLight, null);
+        int color = ResourcesCompat.getColor(res, sDarkMode ? R.color.dialogColorDark : R.color.dialogColorLight, null);
         setBackgroundColor(color);
         alertDialog.show();
         View child = cardView.getChildAt(0);

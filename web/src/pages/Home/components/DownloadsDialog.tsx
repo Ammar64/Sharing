@@ -5,6 +5,7 @@ import DownloadItem, { DownloadItemSkeleton } from "./DownloadItem";
 import { ApiError, Downloadable, getAvailableDownloads } from "../api/downloads";
 import DownloadAllDialog from "./DownloadAllDialog";
 import { DialogRef } from "common/dialog";
+import useSharingMainWebSocket from "common/hooks/sharing_main_websocket";
 
 function DownloadsDialog(_: unknown, ref: Ref<DialogRef>) {
     const { t } = useTranslation();
@@ -25,8 +26,10 @@ function DownloadsDialog(_: unknown, ref: Ref<DialogRef>) {
     const [isError, setIsError] = useState(false);
     const [downloads, setDownloads] = useState<Downloadable[]>();
 
+    const {lastJsonMessage} = useSharingMainWebSocket();
     useEffect(() => {
-        if (open) {
+        
+        if (open || (open && lastJsonMessage?.action === "update-downloads")) {
             const timeout_id = setTimeout(() => setIsLoading(true), 500);
             (async () => {
                 const availableDownloads = await getAvailableDownloads();
@@ -39,7 +42,7 @@ function DownloadsDialog(_: unknown, ref: Ref<DialogRef>) {
                 setIsLoading(false);
             })();
         }
-    }, [open]);
+    }, [open, lastJsonMessage]);
 
     let dialogContent: JSX.Element;
 

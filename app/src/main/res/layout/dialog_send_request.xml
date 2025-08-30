@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="8dp">
+
+    <com.ammar.sharing.custom.ui.AdaptiveTextView
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send_request"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <com.ammar.sharing.custom.ui.AdaptiveTextView
+        android:id="@+id/TV_DeviceWantToSendFiles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="device_name wants to send you these files:"
+        />
+
+    <com.ammar.sharing.custom.ui.AdaptiveTextView
+        android:id="@+id/TV_FilesList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="viewStart" />
+</LinearLayout>

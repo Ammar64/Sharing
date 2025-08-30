@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.tools.DevicesListener;
@@ -32,6 +34,14 @@ public class ListenerFragment extends Fragment {
                         .setMessage("Device name: " + device.getName() + "\nDevice IP: " + device.getIpAddress() + "\nDevice OS: " + device.getOS().name())
                         .show()
         );
+        mDevicesListener.setOnStartCommunicationCallback((ipSource, port, files) -> {
+            Bundle args = new Bundle();
+            args.putString(CommunicationFragment.REMOTE_SERVER_IP, ipSource);
+            args.putInt(CommunicationFragment.REMOTE_SERVER_PORT, port);
+            args.putStringArrayList(CommunicationFragment.FILES_LIST, files);
+            Navigation.findNavController(view).navigate(R.id.action_listenerFragment_to_communicationFragment, args);
+            return null;
+        });
         mDevicesListener.listenToDevices();
     }
 

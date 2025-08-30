@@ -30,11 +30,7 @@ public class UploadSession extends HTTPSession {
 
         try {
             String path = req.getPath();
-            if ("/check-upload-allowed".equals(path)) {
-                JSONObject uploadAllowedJson = new JSONObject();
-                uploadAllowedJson.put("allowed", !uploadDisabled);
-                res.sendResponse(uploadAllowedJson.toString().getBytes());
-            } else if (path.startsWith("/upload/")) {
+            if (path.startsWith("/upload/")) {
                 if (!uploadDisabled) {
                     String fileName = URLDecoder.decode(path.substring(8), "UTF-8");
                     if (fileName.contains("/")) {
@@ -56,10 +52,6 @@ public class UploadSession extends HTTPSession {
                 }
 
             }
-        } catch (JSONException e) {
-            Utils.showErrorDialog("UploadSession.POST(). JSONException", e.getMessage());
-            res.setStatusCode(400);
-            res.sendResponse();
         } catch (UnsupportedEncodingException e) {
             Utils.showErrorDialog("UploadSession.POST(). UnsupportedEncodingException", e.getMessage());
             res.setStatusCode(400);
@@ -72,12 +64,12 @@ public class UploadSession extends HTTPSession {
     private int StoreFile(Request request, String fullFileName, long size) throws IOException {
         InputStream in = request.getClientInput();
         File upload_dir = Utils.getUploadDir(fullFileName);
-            if (!upload_dir.exists()) {
-                Utils.createAppDirs();
-            }
-            File upload_file = Utils.createNewFile(upload_dir, fullFileName);
-            ProgressManager progressManager = new ProgressManager(new Sharable(upload_file.getPath()), request.getClientSocket(), size, user, ProgressManager.OP.UPLOAD);
-            progressManager.setDisplayName(upload_file.getName());
+        if (!upload_dir.exists()) {
+            Utils.createAppDirs();
+        }
+        File upload_file = Utils.createNewFile(upload_dir, fullFileName);
+        ProgressManager progressManager = new ProgressManager(new Sharable(upload_file.getPath()), request.getClientSocket(), size, user, ProgressManager.OP.UPLOAD);
+        progressManager.setDisplayName(upload_file.getName());
         try {
             FileOutputStream out = new FileOutputStream(upload_file);
             long totalBytesRead = 0;

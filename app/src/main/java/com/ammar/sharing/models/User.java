@@ -8,12 +8,7 @@ import androidx.annotation.Nullable;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.enums.OS;
-import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.network.websocket.WebSocket;
-import com.ammar.sharing.network.websocket.sessions.MessagesWSSession;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -160,7 +155,7 @@ public class User {
         wsMap.put(path, ws);
     }
 
-    public boolean isWebSokcetConnected(String path) {
+    public boolean isWebSocketConnected(String path) {
         WebSocket ws = wsMap.get(path);
         if (ws != null) {
             return ws.isNotClosed();
@@ -172,45 +167,14 @@ public class User {
     public WebSocket getWebSocket(String path) {
         return wsMap.get(path);
     }
-
     public void sendWebSocketMessage(String wsPath, String message) {
         WebSocket ws = wsMap.get(wsPath);
         if(ws == null || !ws.isNotClosed()) return;
         ws.sendText(message);
     }
-
     public void sendWebSocketMessage(String wsPath, byte[] message) {
         WebSocket ws = wsMap.get(wsPath);
         if(ws == null || !ws.isNotClosed()) return;
         ws.sendBinary(message);
-    }
-
-    public enum INFO {
-        AVAILABLE_DOWNLOADS_UPDATED
-    }
-    public static void informAllUsersThat(INFO info) {
-        try {
-            JSONObject infoJSON = new JSONObject();
-            infoJSON.put("type", "info");
-            switch (info) {
-                case AVAILABLE_DOWNLOADS_UPDATED:
-                    infoJSON.put("info", "update-downloads");
-                    break;
-            }
-
-
-            for( final User i : User.users ) {
-                if( i.isWebSokcetConnected(MessagesWSSession.path) ) {
-                    WebSocket ws = i.getWebSocket(MessagesWSSession.path);
-                    if( ws != null ) {
-                        ws.sendText(infoJSON.toString());
-                    }
-                }
-            }
-        } catch (JSONException e) {
-            Utils.showErrorDialog("User.informAllUsersThat(). JSONException", "Error: " + e.getMessage());
-        } catch (Exception e) {
-            Utils.showErrorDialog("User.informAllUsersThat(). Exception", "Error: " + e.getMessage());
-        }
     }
 }

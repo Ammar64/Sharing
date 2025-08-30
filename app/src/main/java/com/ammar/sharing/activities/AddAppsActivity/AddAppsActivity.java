@@ -1,6 +1,6 @@
 package com.ammar.sharing.activities.AddAppsActivity;
 
-import static com.ammar.sharing.activities.MainActivity.MainActivity.darkMode;
+import static com.ammar.sharing.activities.MainActivity.MainActivity.sDarkMode;
 
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -37,7 +37,7 @@ public class AddAppsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if( darkMode ) {
+        if(sDarkMode) {
             setTheme(R.style.AppThemeDark);
             getWindow().setBackgroundDrawableResource(R.drawable.gradient_background_dark);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);

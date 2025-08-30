@@ -1,6 +1,6 @@
 package com.ammar.sharing.activities.AddFilesActivity;
 
-import static com.ammar.sharing.activities.MainActivity.MainActivity.darkMode;
+import static com.ammar.sharing.activities.MainActivity.MainActivity.sDarkMode;
 
 import android.content.Context;
 import android.content.Intent;
@@ -52,7 +52,7 @@ public class AddFilesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        if (darkMode) {
+        if (sDarkMode) {
             setTheme(R.style.AppThemeDark);
             getWindow().setBackgroundDrawableResource(R.drawable.gradient_background_dark);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
