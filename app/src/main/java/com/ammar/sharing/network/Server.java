@@ -163,7 +163,9 @@ public class Server {
         //DynamicAssetsSession
         this.addPath("/get-icon/(.*)", SharedAssetsSession.class);
         this.addPath("/favicon.ico", SharedAssetsSession.class);
+        this.addPath("/shared/almarai_regular.ttf", SharedAssetsSession.class);
 
+        //MessagesSession
         this.addPath("/get-all-messages", MessagesSession.class);
 
         //AppConfigSession

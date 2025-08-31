@@ -10,14 +10,17 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class WebAppUtils {
-    private WebAppUtils() {}
+    private WebAppUtils() {
+    }
+
     private static ArrayList<String> webAppPathsList;
+    private static ArrayList<String> webAppRoutesList;
 
     private static boolean _isInit = false;
+
     public static void init() {
-        if( !_isInit ) {
-            try {
-                InputStream input = Utils.getAssetManager().open("web_app_files_list.txt");
+        if (!_isInit) {
+            try (InputStream input = Utils.getAssetManager().open("web_app_files_list.txt")) {
                 int size = input.available();
                 byte[] buffer = new byte[size];
                 input.read(buffer);
@@ -25,6 +28,18 @@ public class WebAppUtils {
                 String[] filesPathsArray = filesPathsListStr.split("\n");
                 webAppPathsList = new ArrayList<>(Arrays.asList(filesPathsArray));
                 Collections.sort(webAppPathsList);
+            } catch (IOException e) {
+                Utils.showErrorDialog("WebAppUtils.init()", e.getMessage());
+            }
+
+            try(InputStream input = Utils.getAssetManager().open("web_routes_list.txt")) {
+                int size = input.available();
+                byte[] buffer = new byte[size];
+                input.read(buffer);
+                String routesListsStr = new String(buffer);
+                String[] routesList = routesListsStr.split("\n");
+                webAppRoutesList = new ArrayList<>(Arrays.asList(routesList));
+                Collections.sort(webAppRoutesList);
             } catch (IOException e) {
                 Utils.showErrorDialog("WebAppUtils.init()", e.getMessage());
             }
@@ -39,6 +54,11 @@ public class WebAppUtils {
     public static boolean webAppPathExists(String path) {
         return Collections.binarySearch(webAppPathsList, path.substring(1)) >= 0;
     }
+
+    public static boolean webAppRouteExists(String path) {
+        return Collections.binarySearch(webAppRoutesList, path) >= 0;
+    }
+
     public static byte[] readFileFromWebAssets(String filepath) {
         try (InputStream input = Utils.getAssetManager().open(filepath)) {
             int size = input.available();

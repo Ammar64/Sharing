@@ -38,7 +38,6 @@ public class NoJSSession extends HTTPSession {
                         "<head>\n" +
                         "    <meta charset=\"UTF-8\">\n" +
                         "    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n" +
-                        "    <link rel=\"icon\" type=\"image/x-icon\" href=\"/common/favicon\" />" +
                         "    <title>Sharing</title>\n" +
                         "</head>\n" +
                         "<body>\n" +

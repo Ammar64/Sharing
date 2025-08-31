@@ -1,7 +1,8 @@
-html {
-  font-family: system-ui;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+@font-face {
+    font-family: 'Almarai';
+    src: url('/shared/almarai_regular.ttf');
+}
+
+* {
+    font-family: 'Almarai';
 }

@@ -1,8 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router';
-import './App.css';
 import Home from './pages/Home/Home';
 import NotFound from './pages/NotFound/NotFound';
-import { StrictMode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CacheProvider } from '@emotion/react';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import createCache from '@emotion/cache';
@@ -11,6 +10,7 @@ import rtlPlugin from '@mui/stylis-plugin-rtl';
 import useSharingMainWebSocket from 'common/hooks/sharing_main_websocket';
 import { createNewSharingAppTheme } from 'utils/utils';
 import { useTranslation } from 'react-i18next';
+import Messages from 'pages/Messages/Messages';
 
 export function App(props: any) {
   const rtlCache = createCache({
@@ -39,6 +39,7 @@ export function App(props: any) {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/messages" element={<Messages />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

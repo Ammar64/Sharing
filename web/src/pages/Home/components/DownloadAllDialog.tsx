@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Link, Stack, TextField, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Link as MuiLink, Stack, TextField, Typography } from "@mui/material";
 import { forwardRef, Ref, useImperativeHandle, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -41,7 +41,7 @@ function DownloadAllDialog(_: unknown, ref: Ref<DownloadAllDialogRef>) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={() => setOpen(false)}>{t("cancel")}</Button>
-                <Button download component={Link} href={`/da?file_name=${encodeURIComponent(fileNameInput)}`}>{t("download")}</Button>
+                <Button download component={MuiLink} href={`/da?file_name=${encodeURIComponent(fileNameInput)}`}>{t("download")}</Button>
             </DialogActions>
         </Dialog>
     );

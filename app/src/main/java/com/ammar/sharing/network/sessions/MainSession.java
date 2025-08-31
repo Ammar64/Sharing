@@ -32,7 +32,9 @@ public class MainSession extends HTTPSession {
         } else {
             String indexHTMLWebAppPath = WebAppUtils.getWebResourcePath("/index.html");
             byte[] content = WebAppUtils.readFileFromWebAssets(indexHTMLWebAppPath);
-            res.setStatusCode(404);
+            if( !WebAppUtils.webAppRouteExists(path) ) {
+                res.setStatusCode(404);
+            }
             res.setContentType("text/html");
             res.sendResponse(content);
         }

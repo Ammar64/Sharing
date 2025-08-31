@@ -1,8 +1,10 @@
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { createTheme } from '@mui/material';
-import { IS_DEBUG } from './consts';
+import { globalProps, IS_DEBUG } from './consts';
 import i18n from './i18n';
+import { createNewSharingAppTheme } from 'utils/utils';
+
 
 (async function () {
     let theme;
@@ -34,25 +36,10 @@ import i18n from './i18n';
     } else {
         const configRes = await fetch("/get-app-config");
         const config = await configRes.json();
+        globalProps.BROWSER_IP = config.browserIP;
         i18n.changeLanguage(config.language);
         document.documentElement.setAttribute("dir", config.dir);
-        theme = createTheme({
-            palette: {
-                mode: config.uiMode
-            },
-            direction: config.dir,
-            components: {
-                MuiCssBaseline: {
-                    styleOverrides: {
-                        body: {
-                            background: config.uiMode === "light" ?
-                                "linear-gradient(to left, #67addf, #df90df)" :
-                                "linear-gradient(to left, #010c14, #2e012e)"
-                        }
-                    }
-                }
-            }
-        });
+        theme = createNewSharingAppTheme(config.uiMode, config.dir);
     }
 
     let container = document.getElementById("app")!;

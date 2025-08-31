@@ -33,5 +33,5 @@ public class MessagesWSSession extends WebSocketSession {
         }
     }
 
-    public static final String path = "/messages";
+    public static final String path = "/messages/ws";
 }

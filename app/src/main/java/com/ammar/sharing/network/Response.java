@@ -304,7 +304,7 @@ public class Response {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, buffer);
         Log.d("MYLOG", "Bitmap buffer size: " + buffer.size());
-        setHeader("Content-Type", "image/png");
+        setContentType("image/png");
         sendResponse(buffer.toByteArray());
     }
 

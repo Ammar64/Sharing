@@ -1,8 +1,11 @@
 import { Card, CardActionArea, CardContent, Tooltip, Typography, useTheme } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
 
 export interface SharingMainActionCardProps {
     bgcolor: string,
+    textColor?: string,
+    link_to?: string,
     action_string_key: string,
     onClick?: () => void,
     icon?: string,
@@ -34,9 +37,9 @@ function SharingMainActionCard({ cardProps }: { cardProps: SharingMainActionCard
                 backgroundColor: cardProps.bgcolor,
                 ...(cardProps.disabled ? disabledCardStyle : {})
             }}>
-                <CardActionArea onClick={cardProps.onClick} disabled={cardProps.disabled}>
+                <CardActionArea LinkComponent={Link} {...(cardProps.link_to && {to: "/messages"})}{...( cardProps.onClick && {onClick: cardProps.onClick})} disabled={cardProps.disabled}>
                     <CardContent>
-                        <Typography sx={{ textAlign: "cener", fontSize: "x-large" }}>
+                        <Typography sx={{ textAlign: "cener", fontSize: "x-large", ...( cardProps.textColor && {color: cardProps.textColor}) }}>
                             {t(cardProps.action_string_key)}
                         </Typography>
                     </CardContent>

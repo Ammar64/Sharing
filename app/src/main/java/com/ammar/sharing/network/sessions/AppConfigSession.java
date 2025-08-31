@@ -22,6 +22,7 @@ public class AppConfigSession extends HTTPSession {
         String path = req.getPath();
         try {
             boolean uploadDisabled = Utils.getSettings().getBoolean(Consts.PREF_FIELD_IS_UPLOAD_DISABLED, false);
+            res.setContentType("application/json"); // this session always sends json
             if ("/check-upload-allowed".equals(path)) {
                 JSONObject uploadAllowedJson = new JSONObject();
                 uploadAllowedJson.put("allowed", !uploadDisabled);
@@ -32,10 +33,11 @@ public class AppConfigSession extends HTTPSession {
                 appConfigJson.put("uiMode", isDark ? "dark" : "light");
                 appConfigJson.put("dir", Utils.getRes().getString(R.string.dir));
                 appConfigJson.put("language", Utils.getRes().getString(R.string.lang));
+                appConfigJson.put("browserIP", user.getIp());
                 res.sendResponse(appConfigJson.toString().getBytes(StandardCharsets.UTF_8));
             }
         } catch (JSONException e) {
-            Utils.showErrorDialog("AppConfigSession.POST(). JSONException", e.getMessage());
+            Utils.showErrorDialog("AppConfigSession.GET(). JSONException", e.getMessage());
             res.setStatusCode(400);
             res.sendResponse();
         }

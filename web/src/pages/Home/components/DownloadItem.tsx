@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Avatar, Button, Link, Skeleton } from "@mui/material";
+import { Avatar, Button, Link as MuiLink, Skeleton } from "@mui/material";
 import EllipsisTypography from "common/components/EllipsisTypography";
 import { useTranslation } from "react-i18next";
 import { getFormattedFileSize } from "utils/utils";
@@ -30,7 +30,7 @@ function DownloadItem(props: DownloadItemProps) {
             <EllipsisTypography sx={{ gridRow: '1/2' }}>{props.name}</EllipsisTypography>
             <EllipsisTypography sx={{ gridRow: '2/3' }}>{getFormattedFileSize(props.size)} {props.hasSplits && `(${t("splits")})`}</EllipsisTypography>
             {props.isStreamable && <Button variant="contained" color="error" sx={{ gridRow: '1/3', gridColumn: '3/4' }}>{t("play")}</Button>}
-            <Button component={Link} href={props.downloadLink} download variant="contained" color="primary" sx={{ gridRow: '1/3', gridColumn: '4/5', alignSelf: "center" }}>{t("download")}</Button>
+            <Button component={MuiLink} href={props.downloadLink} download variant="contained" color="primary" sx={{ gridRow: '1/3', gridColumn: '4/5', alignSelf: "center" }}>{t("download")}</Button>
         </DownloadItemGridBox>
     );
 }

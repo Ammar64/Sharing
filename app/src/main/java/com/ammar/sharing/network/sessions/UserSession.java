@@ -45,6 +45,7 @@ public class UserSession extends HTTPSession {
                 jsonRes.put("changed", true);
                 jsonRes.put("username", user.getName());
                 jsonRes.put("userID", user.getId());
+                res.setContentType("application/json");
                 res.sendResponse(jsonRes.toString().getBytes());
             }
         } catch (BadRequestException e) {

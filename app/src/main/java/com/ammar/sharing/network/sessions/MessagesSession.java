@@ -18,6 +18,7 @@ public class MessagesSession extends HTTPSession {
         String path = req.getPath();
         if("/get-all-messages".equals(path)) {
             String jsonRes = Message.toJSONArray(MessagesAdapter.messages).toString();
+            res.setContentType("application/json");
             res.sendResponse(jsonRes.getBytes(StandardCharsets.UTF_8));
         }
     }

@@ -194,7 +194,7 @@ public class ClientHandler implements Runnable {
                         res.setContentType("font/ttf");
                         res.sendResponse(Utils.readRawRes(R.raw.almarai_regular));
                     } catch (IOException e) {
-                        Utils.showErrorDialog("PagesSession.GET(). IOException.", "Note: error happened when reading raw resources\n" + e.getMessage());
+                        Utils.showErrorDialog("BlockedSession.GET(). IOException.", "Note: error happened when reading raw resources\n" + e.getMessage());
                     }
                 } else if (!"/blocked.html".equals(req.getPath())) {
                     res.setStatusCode(302);

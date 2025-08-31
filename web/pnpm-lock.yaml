@@ -53,9 +53,6 @@ importers:
       stylis:
         specifier: ^4.3.6
         version: 4.3.6
-      swr:
-        specifier: ^2.3.6
-        version: 2.3.6(react@19.1.0)
     devDependencies:
       '@types/css-modules':
         specifier: ^1.0.5
@@ -81,6 +78,9 @@ importers:
       parcel-reporter-static-files-copy:
         specifier: ^1.5.3
         version: 1.5.3(@parcel/core@2.15.4(@swc/helpers@0.5.17))
+      parcel-resolver-ignore:
+        specifier: ^2.2.0
+        version: 2.2.0(@parcel/core@2.15.4(@swc/helpers@0.5.17))
 
 packages:
 
@@ -924,10 +924,6 @@ packages:
       supports-color:
         optional: true
 
-  dequal@2.0.3:
-    resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
-    engines: {node: '>=6'}
-
   detect-libc@1.0.3:
     resolution: {integrity: sha512-pGjwhsmsp4kL2RTz08wcOlGN83otlqHeD/Z5T8GXZB+/YcpQ/dgo+lbU8ZsGxV0HIvqqxo9l7mqYwyYMD9bKDg==}
     engines: {node: '>=0.10'}
@@ -1176,6 +1172,10 @@ packages:
     resolution: {integrity: sha512-Ukq2SyJYn3GFIPCLamXuQ+2t+0j54llujjOUoRjtmVvfsuGnJDEpMznADeIoKuQDvy0jpxtWzWkQvxqI/j+U4A==}
     engines: {parcel: ^2.0.0-beta.1}
 
+  parcel-resolver-ignore@2.2.0:
+    resolution: {integrity: sha512-srQwekxRIiKVvAf9ljoFTw3WCrZVOhOcxOgHsWJ6FBK4yCD/w+7eNHvqWgtACVwVGkjyU6eVcy9eN9m2+Co6GA==}
+    engines: {parcel: '>=2.9.0'}
+
   parcel@2.15.4:
     resolution: {integrity: sha512-eZHQ/omuQ7yBYB9XezyzSqhc826oy/uhloCNiej1CTZ+twAqJVtp4MRvTGMcivKhE+WE8QkYD5XkJHLLQsJQcg==}
     engines: {node: '>= 16.0.0'}
@@ -1307,11 +1307,6 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  swr@2.3.6:
-    resolution: {integrity: sha512-wfHRmHWk/isGNMwlLGlZX5Gzz/uTgo0o2IRuTMcf4CPuPFJZlq0rDaKUx+ozB5nBOReNV1kiOyzMfj+MBMikLw==}
-    peerDependencies:
-      react: ^16.11.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-
   term-size@2.2.1:
     resolution: {integrity: sha512-wK0Ri4fOGjv/XPy8SBHZChl8CM7uMc5VML7SqiQ0zG7+J5Vr+RMQDoHa2CNT6KHUnTGIXH34UDMkPzAUyapBZg==}
     engines: {node: '>=8'}
@@ -1335,11 +1330,6 @@ packages:
     hasBin: true
     peerDependencies:
       browserslist: '>= 4.21.0'
-
-  use-sync-external-store@1.5.0:
-    resolution: {integrity: sha512-Rb46I4cGGVBmjamjphe8L/UnvJD+uPPtTkNvX5mZgqdbavhI4EbgIWJiIHXJ8bc/i9EQGPRh4DwEURJ552Do0A==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   utility-types@3.11.0:
     resolution: {integrity: sha512-6Z7Ma2aVEWisaL6TvBCy7P8rm2LQoPv6dJ7ecIaIixHcwfbJ0x7mWdbcwlIM5IGQxPZSFYeqRCqlOOeKoJYMkw==}
@@ -2460,8 +2450,6 @@ snapshots:
     dependencies:
       ms: 2.1.3
 
-  dequal@2.0.3: {}
-
   detect-libc@1.0.3: {}
 
   detect-libc@2.0.4: {}
@@ -2675,6 +2663,13 @@ snapshots:
       - '@parcel/core'
       - napi-wasm
 
+  parcel-resolver-ignore@2.2.0(@parcel/core@2.15.4(@swc/helpers@0.5.17)):
+    dependencies:
+      '@parcel/plugin': 2.15.4(@parcel/core@2.15.4(@swc/helpers@0.5.17))
+    transitivePeerDependencies:
+      - '@parcel/core'
+      - napi-wasm
+
   parcel@2.15.4(@swc/helpers@0.5.17):
     dependencies:
       '@parcel/config-default': 2.15.4(@parcel/core@2.15.4(@swc/helpers@0.5.17))(@swc/helpers@0.5.17)
@@ -2794,12 +2789,6 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  swr@2.3.6(react@19.1.0):
-    dependencies:
-      dequal: 2.0.3
-      react: 19.1.0
-      use-sync-external-store: 1.5.0(react@19.1.0)
-
   term-size@2.2.1: {}
 
   to-regex-range@5.0.1:
@@ -2817,10 +2806,6 @@ snapshots:
       browserslist: 4.25.1
       escalade: 3.2.0
       picocolors: 1.1.1
-
-  use-sync-external-store@1.5.0(react@19.1.0):
-    dependencies:
-      react: 19.1.0
 
   utility-types@3.11.0: {}
 

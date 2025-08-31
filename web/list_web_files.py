@@ -22,4 +22,10 @@ def main():
     web_app_files_list_file = open("./dist/web_app_files_list.txt", "w")
     web_app_files_list_file.writelines( line + '\n' for line in list_files_pathlib() )
 
+    APP_ROUTES = [
+        "/messages"
+    ]
+    web_app_routes_list_file = open("./dist/web_routes_list.txt", "w")
+    web_app_routes_list_file.writelines( line + '\n' for line in APP_ROUTES )
+
 main()

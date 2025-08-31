@@ -11,6 +11,8 @@ import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
 
+import java.io.IOException;
+
 public class SharedAssetsSession extends HTTPSession {
     public SharedAssetsSession(User user) {
         super(user);
@@ -25,6 +27,14 @@ public class SharedAssetsSession extends HTTPSession {
         } else if( "/favicon.ico".equals(req.getPath()) ) {
             Bitmap favBM = Utils.drawableToBitmap(ResourcesCompat.getDrawable(Utils.getRes(), R.mipmap.ic_launcher_round, null));
             res.sendBitmapResponse(favBM);
+        } else if("/shared/almarai_regular.ttf".equals(req.getPath())) {
+            try {
+                res.setContentType("font/ttf");
+                res.sendResponse(Utils.readRawRes(R.raw.almarai_regular));
+            } catch (IOException e) {
+                Utils.showErrorDialog("SharedAssetsSession.GET(). IOException.", "Note: error happened when reading raw resources\n" + e.getMessage());
+            }
         }
     }
 }
+

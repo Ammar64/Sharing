@@ -1,5 +1,5 @@
 {
-  "name": "parcel-react-client-starter",
+  "name": "sharing-web",
   "private": true,
   "version": "0.0.0",
   "source": "src/index.html",
@@ -23,8 +23,7 @@
     "react-i18next": "^15.6.0",
     "react-router": "^7.7.0",
     "react-use-websocket": "^4.13.0",
-    "stylis": "^4.3.6",
-    "swr": "^2.3.6"
+    "stylis": "^4.3.6"
   },
   "devDependencies": {
     "@types/css-modules": "^1.0.5",
@@ -34,10 +33,14 @@
     "@types/react-i18next": "^7.8.3",
     "parcel": "^2.14.0",
     "parcel-plugin-clean-dist": "^0.0.6",
-    "parcel-reporter-static-files-copy": "^1.5.3"
+    "parcel-reporter-static-files-copy": "^1.5.3",
+    "parcel-resolver-ignore": "^2.2.0"
   },
   "staticFiles": {
     "staticPath": "src/locales",
     "staticOutPath": "locales"
-  }
+  },
+  "parcelIgnore": [
+    "/shared/almarai_regular.ttf"
+  ]
 }

@@ -7,6 +7,9 @@ export function createNewSharingAppTheme(uiMode: "dark" | "light", dir: "rtl" | 
             mode: uiMode
         },
         direction: dir,
+        typography: {
+            fontFamily: "Almarai"
+        },
         components: {
             MuiCssBaseline: {
                 styleOverrides: {
@@ -19,6 +22,10 @@ export function createNewSharingAppTheme(uiMode: "dark" | "light", dir: "rtl" | 
             }
         }
     });
+}
+
+export function useSharingAppDarkTheme() {
+    return createNewSharingAppTheme("dark", document.documentElement.dir as any);
 }
 
 export function getFormattedFileSize(s: number) {
