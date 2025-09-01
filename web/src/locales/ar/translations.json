@@ -51,5 +51,9 @@
     "one_hour": "ساعة واحدة",
     "two_hours": "ساعتان",
     "no_uploads_yet": "لم ترفع ملفات حتى الآن",
-    "close": "إغلاق"
+    "close": "إغلاق",
+    "completed": "اكتمل",
+    "failed": "فشل",
+    "expected_remaining_time": "الوقت المتبقى المتوقع",
+    "time_taken_to_send": "الوقت المستهلك {{time}}"
 }

@@ -1,5 +1,4 @@
 import { createTheme } from "@mui/material";
-import { TFunction } from "i18next";
 
 export function createNewSharingAppTheme(uiMode: "dark" | "light", dir: "rtl" | "ltr") {
     return createTheme({
@@ -62,54 +61,13 @@ export function convertSeconds(seconds: number): Time {
     };
 }
 
-export function getFormattedTime(time: Time, t: TFunction): string {
-    let hourText = "";
-    let minutesText = "";
-    let secondsText = "";
-    if (time.hours >= 1) {
-        switch (time.hours) {
-            case 1:
-                hourText = t("one_hour");
-                break;
-            case 2:
-                hourText = t("two_hours");
-                break;
-            default:
-                let hourTextGrammer: string;
-                hourTextGrammer = t("hours");
-                hourText = `${time.hours} ${hourTextGrammer}`
-                break;
-        }
+export function getFormattedTime(time: Time): string {
+    let timeText = "";
+    // include hours if bigger than 0
+    // minutes will always be included
+    if (time.hours > 0) {
+        timeText = timeText.concat(time.hours.toString().padStart(2, '0')).concat(":")
     }
-    if (time.minutes >= 1) {
-        switch (time.hours) {
-            case 1:
-                minutesText = t("one_minute");
-                break;
-            case 2:
-                minutesText = t("two_minutes");
-                break;
-            default:
-                let minutesTextGrammer: string;
-                minutesTextGrammer = t("minutes");
-                minutesText = `${time.minutes} ${minutesTextGrammer}`
-                break;
-        }
-    }
-    if (time.minutes >= 1) {
-        switch (time.hours) {
-            case 1:
-                secondsText = t("one_second");
-                break;
-            case 2:
-                secondsText = t("two_seconds");
-                break;
-            default:
-                let secondsTextGrammer: string;
-                secondsTextGrammer = t("seconds");
-                secondsText += `${time.seconds} ${secondsTextGrammer}`
-                break;
-        }
-    }
-    return "TODO";
+    timeText = timeText.concat(time.minutes.toString().padStart(2, '0')).concat(":").concat(time.seconds.toString().padStart(2, '0'));
+    return timeText;
 }

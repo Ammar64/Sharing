@@ -1,11 +1,18 @@
+
+export enum CompleteStatus {
+    IN_PROGRESS = 0,
+    COMPLETED = 1,
+    FAILED = 2,
+}
 export interface Progress {
     loaded: number,
     total: number,
-    completed: boolean,
+    completeStatus: CompleteStatus,
     computable: boolean,
 }
 
 export class UploadOperation {
+
     private xhr: XMLHttpRequest = new XMLHttpRequest();
     private file: File;
     private setProgress: (progress: Progress) => void
@@ -22,25 +29,29 @@ export class UploadOperation {
         operationEndTime: -1,
         startTime: Date.now(),
         oldLoaded: 0,
+        currentSpeed: 0,
         speedSum: 0,
         numOfProgressCalls: 0
     };
 
     public get averageUploadSpeed() {
-        return this.timeData.speedSum / this.timeData.numOfProgressCalls
+        return this.timeData.speedSum / this.timeData.numOfProgressCalls * 1000;
     }
 
+    public get currentSpeed() {
+        return this.timeData.currentSpeed * 1000;
+    }
     public get getTotalOperationTime() {
-        if( this.timeData.operationEndTime == -1 || this.timeData.operationStartTime == -1) {
+        if (this.timeData.operationEndTime === -1 || this.timeData.operationStartTime === -1) {
             return -1;
         }
-        return this.timeData.operationEndTime - this.timeData.operationStartTime;
+        return (this.timeData.operationEndTime - this.timeData.operationStartTime) * 0.001;
     }
 
     public get loaded() {
         return this._loaded;
     }
-    
+
     public get total() {
         return this._total;
     }
@@ -49,42 +60,39 @@ export class UploadOperation {
         this.xhr.open("POST", "/upload/" + encodeURIComponent(this.file.name));
         this.xhr.upload.onprogress = e => {
             if (e.lengthComputable) {
+                this.timeData.numOfProgressCalls++;
                 this._loaded = e.loaded;
                 this._total = e.total;
-                this.setProgress({ loaded: e.loaded, total: e.total, completed: false, computable: true });
-                const speed = (e.loaded - this.timeData.oldLoaded) / ((Date.now() - this.timeData.startTime) * 0.001);
-
-                this.timeData.numOfProgressCalls++;
-                this.timeData.speedSum += speed;
+                
+                this.setProgress({ loaded: e.loaded, total: e.total, completeStatus: CompleteStatus.IN_PROGRESS, computable: true });
+                const speedPerMillisecond = (e.loaded - this.timeData.oldLoaded) / ((Date.now() - this.timeData.startTime));
 
                 this.timeData.startTime = Date.now();
+                this.timeData.oldLoaded = e.loaded;
+                this.timeData.currentSpeed = speedPerMillisecond;
+                this.timeData.speedSum += speedPerMillisecond;
             } else {
                 this.setProgress({
                     computable: false,
                     loaded: e.loaded,
                     total: -1,
-                    completed: false
+                    completeStatus: CompleteStatus.IN_PROGRESS
                 });
             }
         };
 
-        this.xhr.upload.onloadstart = e => {
-            this.timeData.operationStartTime = Date.now();
-        };
-
-        this.xhr.upload.onloadend = e => {
-            this.timeData.operationEndTime = Date.now();
-            this.setProgress({completed: true, computable: true, loaded: this.total, total: this.total});
-        };
-
-        this.xhr.upload.onabort = e => {
-
-        };
-
-        this.xhr.upload.onerror = e => {
-
+        this.xhr.onreadystatechange = () => {
+            if (this.xhr.readyState == XMLHttpRequest.DONE) {
+                if (this.xhr.status === 200) {
+                    this.setProgress({ completeStatus: CompleteStatus.COMPLETED, computable: true, loaded: this.total, total: this.total });
+                    this.timeData.operationEndTime = Date.now();
+                } else {
+                    this.setProgress({ completeStatus: CompleteStatus.FAILED, computable: true, loaded: this.loaded, total: this.total });
+                }
+            }
         }
-
+        this.timeData.startTime = Date.now();
+        this.timeData.operationStartTime = Date.now();
         this.xhr.send(this.file);
     }
 

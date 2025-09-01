@@ -184,7 +184,7 @@ public class ProgressViewHolder extends RecyclerView.ViewHolder {
 
         stopB.setOnClickListener((view) -> {
             if (manager.getLoaded() >= 0) {
-                manager.stop();
+                new Thread(manager::stop).start();
             } else
                 ProgressManager.removeProgress(manager.getIndex());
         });

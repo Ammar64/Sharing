@@ -51,5 +51,9 @@
     "one_hour": "1 hour",
     "two_hours": "2 hours",
     "no_uploads_yet": "No files uploaded yet",
-    "close": "Close"
+    "close": "Close",
+    "completed": "completed",
+    "failed": "failed",
+    "expected_remaining_time": "expected remaining time",
+    "time_taken_to_send": "Time taken to send {{time}}"
 }

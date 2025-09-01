@@ -25,6 +25,8 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.net.ssl.SSLServerSocket;
 
@@ -42,7 +44,9 @@ public class Server {
 
     final HashMap<String, Class<? extends HTTPSession>> pathsMap = new HashMap<>();
     final HashMap<String, Class<? extends WebSocketSession>> wsPathsMap = new HashMap<>();
+    ExecutorService threadPool = Executors.newCachedThreadPool();
 
+    
     public Server(ServerService service) {
         this.service = service;
         handleSessionsData();
@@ -107,11 +111,7 @@ public class Server {
         try {
             while (!serverSocket.isClosed()) {
                 Socket clientSocket = serverSocket.accept();
-                ClientHandler clientHandler = new ClientHandler(this, clientSocket);
-                clientSocket.setKeepAlive(true);
-                clientSocket.setSoTimeout(ClientHandler.timeout);
-                Thread clientThread = new Thread(clientHandler);
-                clientThread.start();
+                handleAcceptedClient(clientSocket);
             }
         } catch (SocketException e) {
             // TODO: Socket probably closed   
@@ -124,17 +124,20 @@ public class Server {
         try {
             while (!sslServerSocket.isClosed()) {
                 Socket clientSocket = sslServerSocket.accept();
-                ClientHandler clientHandler = new ClientHandler(this, clientSocket);
-                clientSocket.setKeepAlive(true);
-                clientSocket.setSoTimeout(ClientHandler.timeout);
-                Thread clientThread = new Thread(clientHandler);
-                clientThread.start();
+                handleAcceptedClient(clientSocket);
             }
         } catch (SocketException e) {
             // TODO: Socket probably closed
         } catch (IOException e) {
             Utils.showErrorDialog("IOException", "Server.AcceptSSL(). IOException: " + e.getMessage());
         }
+    }
+
+    private void handleAcceptedClient(Socket clientSocket) throws SocketException {
+        ClientHandler clientHandler = new ClientHandler(this, clientSocket);
+        clientSocket.setKeepAlive(true);
+        clientSocket.setSoTimeout(ClientHandler.timeout);
+        threadPool.submit(clientHandler);
     }
 
     public boolean isRunning() {

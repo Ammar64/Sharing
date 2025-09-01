@@ -133,6 +133,9 @@ public class SettingsActivity extends DefaultActivity {
                 enableHTTPSS.setChecked(!isChecked);
             } else {
                 Server.IS_HTTPS = isChecked;
+                Intent intent = new Intent(this, ServerService.class);
+                intent.setAction(ServerService.ACTION_RESTART_SERVER);
+                startService(intent);
             }
         });
 
