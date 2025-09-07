@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -26,10 +27,17 @@ import com.ammar.sharing.network.Server;
 import com.ammar.sharing.services.ServerService;
 import com.suke.widget.SwitchButton;
 
+
+
 public class SettingsActivity extends DefaultActivity {
+    public static final String EXTRA_SHOULD_MAIN_ACTIVITY_RECREATE = "EXTRA_SHOULD_MAIN_ACTIVITY_RECREATE";
+    private boolean mShouldMainActivityRecreate = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState != null) {
+            mShouldMainActivityRecreate = savedInstanceState.getBoolean(SettingsActivity.EXTRA_SHOULD_MAIN_ACTIVITY_RECREATE);
+        }
         setContentView(R.layout.activity_settings);
         initItems();
         setItemsListeners();
@@ -109,14 +117,15 @@ public class SettingsActivity extends DefaultActivity {
         langsDialogOkButton.setOnClickListener((v) -> {
             languagesRD.dismiss();
             String langCode = languagesAdapter.getSelectedLanguageCode();
-            if( langCode != null ) {
+            if (langCode != null) {
                 Utils.setLocale(this, langCode);
                 settingsPref.edit()
                         .putString(Consts.PREF_FIELD_LANG, langCode)
                         .apply();
                 recreate();
+                mShouldMainActivityRecreate = true;
+                UsersNotifier.notifyUsersOfUIChange();
             }
-            UsersNotifier.notifyUsersOfUIChange();
         });
     }
 
@@ -162,9 +171,23 @@ public class SettingsActivity extends DefaultActivity {
                 Toast.makeText(this, "Failed to change DEBUG_MODE value", Toast.LENGTH_SHORT).show();
                 debugModeS.setChecked(!isChecked);
             }
-           recreate();
+            recreate();
+            mShouldMainActivityRecreate = true;
         });
 
         languageCL.setOnClickListener(view -> languagesRD.show());
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(SettingsActivity.EXTRA_SHOULD_MAIN_ACTIVITY_RECREATE, mShouldMainActivityRecreate);
+        super.onSaveInstanceState(outState);
+    }
+    @Override
+    public void finish() {
+        Intent result = new Intent();
+        result.putExtra(SettingsActivity.EXTRA_SHOULD_MAIN_ACTIVITY_RECREATE, mShouldMainActivityRecreate);
+        setResult(RESULT_OK, result);
+        super.finish();
     }
 }

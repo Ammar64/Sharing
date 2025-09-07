@@ -24,6 +24,9 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +46,7 @@ import com.ammar.sharing.activities.ApksInstallerActivity.ApksInstallerActivity;
 import com.ammar.sharing.activities.ChangeLogActivity.ChangeLogActivity;
 import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.viewHolders.HeaderViewHolder;
 import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.MessagesAdapter;
+import com.ammar.sharing.activities.SettingsActivity.SettingActivityResultsContract;
 import com.ammar.sharing.activities.SettingsActivity.SettingsActivity;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
@@ -137,7 +141,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, ChangeLogActivity.class));
         }
     }
-
 
 
     private void initItems() {
@@ -240,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         settingsTV.setOnClickListener((view) -> {
-            startActivity(new Intent(this, SettingsActivity.class));
+            settingsActivityLauncher.launch(null);
         });
 
         apksInstallerTV.setOnClickListener((view) -> {
@@ -436,4 +439,13 @@ public class MainActivity extends AppCompatActivity {
 
         AdaptiveDropDown.setDarkAll(dark);
     }
+
+    ActivityResultLauncher<Void> settingsActivityLauncher = registerForActivityResult(
+            new SettingActivityResultsContract(),
+            (shouldRecreate) -> {
+                if (shouldRecreate) {
+                    recreate();
+                }
+            }
+    );
 }
