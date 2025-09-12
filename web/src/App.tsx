@@ -11,6 +11,9 @@ import useSharingMainWebSocket from 'common/hooks/sharing_main_websocket';
 import { createNewSharingAppTheme } from 'utils/utils';
 import { useTranslation } from 'react-i18next';
 import Messages from 'pages/Messages/Messages';
+import { FilesUploadsContext } from 'common/contexts';
+import type { FileUpload } from 'pages/Home/components/UploadProgressDialog';
+
 
 export function App(props: any) {
   const rtlCache = createCache({
@@ -32,10 +35,17 @@ export function App(props: any) {
     }
   }, [lastJsonMessage]);
 
+
+  const [filesUploadsList, setFilesUploadsList] = useState<FileUpload[]>([]);
+  const filesUploadsContextValue = {
+    filesUploadsList: filesUploadsList,
+    setFilesUploadsList: setFilesUploadsList
+  };
   return (
-      <CacheProvider value={rtlCache!}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
+    <CacheProvider value={rtlCache!}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <FilesUploadsContext value={filesUploadsContextValue}>
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -43,7 +53,8 @@ export function App(props: any) {
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
-        </ThemeProvider>
-      </CacheProvider>
+        </FilesUploadsContext>
+      </ThemeProvider>
+    </CacheProvider>
   );
 }

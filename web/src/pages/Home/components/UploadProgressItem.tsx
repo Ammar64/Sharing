@@ -2,12 +2,13 @@ import styled from "@emotion/styled";
 import { Box, LinearProgress, LinearProgressProps, Paper, Tooltip, Typography } from "@mui/material";
 import EllipsisTypography from "common/components/EllipsisTypography";
 import { useEffect, useRef, useState } from "react";
-import { CompleteStatus, Progress, UploadOperation } from "../api/upload";
+import { CompleteStatus, Progress, FileUploadManager } from "../api/upload";
 import { convertSeconds, getFormattedFileSize, getFormattedTime } from "utils/utils";
 import { useTranslation } from "react-i18next";
+import { FileUpload } from "./UploadProgressDialog";
 
 interface UploadProgressItemProps {
-    file: File;
+    fileUpload: FileUpload;
 }
 
 const UploadProgressItemGridBox = styled('div')({
@@ -20,34 +21,23 @@ const UploadProgressItemGridBox = styled('div')({
     padding: "8px 16px"
 });
 
+function percentage(progress: Progress) {
+    return progress.loaded / progress.total * 100;
+}
 
 function UploadProgressItem(props: UploadProgressItemProps) {
     const { t } = useTranslation();
-    const [progress, setProgress] = useState<Progress>({ completeStatus: CompleteStatus.IN_PROGRESS, computable: true, loaded: 0, total: 100 });
     const linearProgressRef = useRef<LinearProgressProps>(null);
-
-    const uploadOperation = useRef(new UploadOperation(props.file, (progress) => {
-        if (progress == null) {
-            linearProgressRef.current!.variant = "indeterminate";
-        } else if (progress.completeStatus) {
-            linearProgressRef.current!.variant = "determinate";
-            linearProgressRef.current!.color = "success";
-            setProgress(progress);
-        } else {
-            setProgress(progress);
-        }
-    }));
-
-    useEffect(() => {
-        uploadOperation.current.startUpload();
-    }, [])
-
-    const currentSpeed = uploadOperation.current.currentSpeed;
-    const loaded = progress.loaded;
-    const total = progress.total;
-    const percentage = progress.loaded / progress.total * 100;
-    const totalRemaningSeconds = currentSpeed !== 0 ? (total - loaded) / currentSpeed : 0;
+    const fum = props.fileUpload.uploadManager;
+    const [progress, setProgress] = useState(fum.progress);
+    
+    const currentSpeed = fum.currentSpeed;
+    const totalRemaningSeconds = currentSpeed !== 0 ? (progress.total - progress.loaded) / currentSpeed : 0;
     const remaningTime = convertSeconds(totalRemaningSeconds);
+    
+    fum.progressCallback = function(progress) {
+        setProgress(progress);
+    }
 
     let timeText = (function () {
         switch (progress.completeStatus) {
@@ -68,21 +58,21 @@ function UploadProgressItem(props: UploadProgressItemProps) {
                     display: "flex",
                     justifyContent: "space-between"
                 }}>
-                    <EllipsisTypography textAlign="start">{props.file.name}</EllipsisTypography>
+                    <EllipsisTypography textAlign="start">{props.fileUpload.file.name}</EllipsisTypography>
                     <Tooltip placement="top" title={t("expected_remaining_time")}>
                         <Typography textAlign="end">{timeText}</Typography>
                     </Tooltip>
                 </Box>
                 <Box sx={{ gridRow: "2/3", gridColumn: "1/3" }}>
                     <Typography>
-                        <span dir="ltr">{(progress.completeStatus === CompleteStatus.COMPLETED ? getFormattedFileSize(progress.total) : `${getFormattedFileSize(progress.loaded)} / ${getFormattedFileSize(progress.total)}`)}</span>&nbsp;&nbsp;&nbsp;
-                        <span dir="ltr">{progress.completeStatus === CompleteStatus.IN_PROGRESS ? `(${getFormattedFileSize(currentSpeed)}/s)` : (progress.completeStatus === CompleteStatus.COMPLETED && `(${t("time_taken_to_send", { time: getFormattedTime(convertSeconds(uploadOperation.current.getTotalOperationTime)) })})`)}</span>
+                        <span dir="ltr">{(progress.completeStatus === CompleteStatus.COMPLETED ? getFormattedFileSize(fum.total) : `${getFormattedFileSize(fum.loaded)} / ${getFormattedFileSize(fum.total)}`)}</span>&nbsp;&nbsp;&nbsp;
+                        <span dir="ltr">{progress.completeStatus === CompleteStatus.IN_PROGRESS ? `(${getFormattedFileSize(currentSpeed)}/s)` : (progress.completeStatus === CompleteStatus.COMPLETED && `(${t("time_taken_to_send", { time: getFormattedTime(convertSeconds(fum.getTotalOperationTime)) })})`)}</span>
                     </Typography>
                 </Box>
                 <Box sx={{ gridRow: "3/4", gridColumn: "1/3", display: "flex", alignItems: "center", gap: 1 }}>
                     <LinearProgress
                         ref={linearProgressRef}
-                        value={progress.completeStatus === CompleteStatus.COMPLETED || progress.completeStatus === CompleteStatus.FAILED ? 100 : percentage}
+                        value={progress.completeStatus === CompleteStatus.COMPLETED || progress.completeStatus === CompleteStatus.FAILED ? 100 : percentage(progress)}
                         variant="determinate"
                         color={(function () {
                             switch (progress.completeStatus) {
@@ -99,7 +89,7 @@ function UploadProgressItem(props: UploadProgressItemProps) {
                     <Typography width="fit-content" textAlign="end">{(function () {
                         switch (progress.completeStatus) {
                             case CompleteStatus.IN_PROGRESS:
-                                return `${percentage.toFixed(2)}%`
+                                return `${percentage(progress).toFixed(2)}%`
                             case CompleteStatus.COMPLETED:
                                 return t("completed");
                             case CompleteStatus.FAILED:
