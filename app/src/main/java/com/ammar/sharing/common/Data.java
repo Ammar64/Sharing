@@ -4,7 +4,9 @@ import android.os.Bundle;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.ammar.sharing.custom.data.ObjectsHolder2;
 import com.ammar.sharing.custom.data.QueueMutableLiveData;
+import com.ammar.sharing.models.User;
 
 import org.webrtc.IceCandidate;
 import org.webrtc.SessionDescription;
@@ -20,6 +22,7 @@ public class Data {
     public static final QueueMutableLiveData<IceCandidate> webRTCIceCandidate = new QueueMutableLiveData<>();
     public static final QueueMutableLiveData<SessionDescription> webRTCSessionDescription = new QueueMutableLiveData<>();
     public static final QueueMutableLiveData<Void> webRTCStartOffer = new QueueMutableLiveData<>();
+    public static final QueueMutableLiveData<ObjectsHolder2<User, Boolean>> startStreamToUser = new QueueMutableLiveData<>();
 
 
     private Data(){}

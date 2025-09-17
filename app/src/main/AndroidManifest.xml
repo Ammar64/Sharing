@@ -95,6 +95,7 @@
 
         <activity android:name=".activities.StreamingActivity.StreamingActivity"
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
+            android:theme="@style/FullScreenAppTheme"
             android:exported="false"/>
 
         <activity android:name=".activities.ChangeLogActivity.ChangeLogActivity"
@@ -113,6 +114,9 @@
 
         <service android:name=".services.PackageInstallerService"
             android:exported="false" />
+
+        <service android:name=".services.StreamingService"
+            android:exported="false"/>
 
         <service android:name=".services.ScreenCapturerService"
             android:foregroundServiceType="mediaProjection"

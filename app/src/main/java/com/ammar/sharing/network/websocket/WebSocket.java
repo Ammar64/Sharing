@@ -1,25 +1,17 @@
 package com.ammar.sharing.network.websocket;
 
-import android.app.KeyguardManager;
-import android.util.Log;
-
-import androidx.core.util.Function;
-
-import com.ammar.sharing.common.utils.Utils;
-import com.ammar.sharing.network.exceptions.WebSocketException;
 import com.ammar.sharing.network.websocket.sessions.WebSocketSession;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 
 public class WebSocket extends WebSocketImpl {
 
-    private final WebSocketSession session;
+    private final WebSocketSession mSession;
     public WebSocket(Socket clientSocket, WebSocketSession session) {
         super(clientSocket);
-        this.session = session;
+        this.mSession = session;
     }
 
     public void sendText(String data) {
@@ -40,13 +32,17 @@ public class WebSocket extends WebSocketImpl {
         }).start();
     }
 
+    public WebSocketSession getSession() {
+        return mSession;
+    }
+
     @Override
     protected void onStringReceived(String data) {
-        session.onMessage(this, data);
+        mSession.onMessage(this, data);
     }
 
     @Override
     protected void onBinaryReceived(byte[] data) {
-        session.onMessage(this, data);
+        mSession.onMessage(this, data);
     }
 }

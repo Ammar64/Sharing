@@ -212,4 +212,10 @@
     <string translatable="false" name="hello_blank_fragment">Hello blank fragment</string>
     <string name="device_listener_qr_code">Scan The QR Code if your device was not discovered.\nIt\'s more secure to scan the above QR Code even if your device was discovered.</string>
     <string name="send_request">Send request</string>
+    <string name="resolution">Video resolution</string>
+    <string name="framerate">framerate</string>
+    <string name="microphone">microphone</string>
+    <string name="video_source">video source</string>
+    <string name="rear_camera">Rear camera</string>
+    <string name="front_camera">Front camera</string>
 </resources>

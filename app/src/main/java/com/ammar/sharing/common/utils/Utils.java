@@ -73,7 +73,6 @@ public class Utils {
         Utils.pm = ctx.getPackageManager();
         Utils.cr = ctx.getContentResolver();
         Utils.applicationContext = ctx;
-
     }
 
     private static Context applicationContext;

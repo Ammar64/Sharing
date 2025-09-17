@@ -273,6 +273,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cornerRadius="18dp"
+            app:backgroundTint="@color/colorPrimary"
             android:text="@string/view_https_certificate"/>
     </com.google.android.material.button.MaterialButtonToggleGroup>
 </GridLayout>

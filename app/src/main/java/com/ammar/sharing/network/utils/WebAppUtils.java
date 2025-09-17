@@ -1,13 +1,15 @@
 package com.ammar.sharing.network.utils;
 
 import com.ammar.sharing.common.utils.Utils;
-import com.ammar.sharing.network.Response;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public class WebAppUtils {
     private WebAppUtils() {
@@ -18,7 +20,10 @@ public class WebAppUtils {
 
     private static boolean _isInit = false;
 
-    public static void init() {
+    private static ExecutorService sExecutor;
+
+    public static void init(ExecutorService initExecutor) {
+        sExecutor = initExecutor;
         if (!_isInit) {
             try (InputStream input = Utils.getAssetManager().open("web_app_files_list.txt")) {
                 int size = input.available();
@@ -52,11 +57,20 @@ public class WebAppUtils {
     }
 
     public static boolean webAppPathExists(String path) {
+        waitInitExecutor();
         return Collections.binarySearch(webAppPathsList, path.substring(1)) >= 0;
     }
 
     public static boolean webAppRouteExists(String path) {
+        waitInitExecutor();
         return Collections.binarySearch(webAppRoutesList, path) >= 0;
+    }
+
+    private static void waitInitExecutor() {
+        try {
+            boolean jobDone = sExecutor.awaitTermination(7000, TimeUnit.MILLISECONDS);
+            if(!jobDone) throw new RuntimeException("WebAppUtils.webAppPathExists(). problem happened with init executor");
+        } catch (InterruptedException ignore) {}
     }
 
     public static byte[] readFileFromWebAssets(String filepath) {

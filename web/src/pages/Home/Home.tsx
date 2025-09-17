@@ -47,7 +47,7 @@ function Home() {
                         <SharingMainActionCard cardProps={{ action_string_key: "messages", bgcolor: "blue", link_to:"/messages" }} />
                     </Grid>
                     <Grid size={{ xs: 12, md: 6 }}>
-                        <SharingMainActionCard cardProps={{ action_string_key: "stream", bgcolor: "red" }} />
+                        <SharingMainActionCard cardProps={{ action_string_key: "stream", bgcolor: "red", link_to: "/stream" }} />
                     </Grid>
                 </Grid>
                 <DownloadsDialog ref={downloadDialogRef} />

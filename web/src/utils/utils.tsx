@@ -1,9 +1,15 @@
 import { createTheme } from "@mui/material";
 
 export function createNewSharingAppTheme(uiMode: "dark" | "light", dir: "rtl" | "ltr") {
-    return createTheme({
+    const { palette } = createTheme();
+    const { augmentColor } = palette;
+    const createColor = (mainColor: string) => augmentColor({ color: { main: mainColor } });
+
+    const theme = createTheme({
         palette: {
-            mode: uiMode
+            mode: uiMode,
+            primary: createColor("#2196f3"),
+            secondary: createColor("#e91e63")
         },
         direction: dir,
         typography: {
@@ -21,6 +27,7 @@ export function createNewSharingAppTheme(uiMode: "dark" | "light", dir: "rtl" | 
             }
         }
     });
+    return theme;
 }
 
 export function useSharingAppDarkTheme() {

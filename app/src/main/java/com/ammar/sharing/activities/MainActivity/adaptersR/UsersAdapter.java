@@ -10,16 +10,19 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
+import com.ammar.sharing.common.Data;
+import com.ammar.sharing.common.enums.OS;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.User;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
-
     @NonNull
     @Override
     public UsersAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -37,7 +40,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
         return User.users.size();
     }
 
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageView userIconIV;
         private final TextView usernameTV;
@@ -54,21 +56,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
         public void setup(User user) {
             // Temporary for now
-            int os_icon_res;
-            switch (user.getOS()) {
-                case WINDOWS:
-                    os_icon_res = R.drawable.icon_windows_10;
-                    break;
-                case ANDROID:
-                    os_icon_res = R.drawable.ic_android;
-                    break;
-                case LINUX:
-                    os_icon_res = R.drawable.icon_linux;
-                    break;
-                default:
-                    os_icon_res = R.drawable.icon_question_mark;
-                    break;
-            }
+            int os_icon_res = OS.getOSResourceDrawable(user.getOS());
             int iconSize = (int) Utils.dpToPx(40);
             Glide.with(itemView)
                     .load(os_icon_res)

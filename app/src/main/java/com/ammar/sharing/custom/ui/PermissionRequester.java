@@ -25,28 +25,26 @@ public class PermissionRequester {
     private final ActivityResultCaller resultCaller;
     private final ComponentActivity activity;
     private final String permission;
-    private final Runnable onGranted;
+    private Runnable onGranted;
     private ActivityResultLauncher<String> permissionRequestLauncher;
     private String title = "";
     private String explanation = "";
 
-    public PermissionRequester(ComponentActivity activity, String permission, Runnable onGranted) {
+    public PermissionRequester(ComponentActivity activity, String permission) {
         this.activity = activity;
         this.resultCaller = activity;
         this.permission = permission;
         this.title = "Title hasn't been set";
         this.explanation = "Explanation hasn't been set";
-        this.onGranted = onGranted;
         this.permissionRequestLauncher = resultCaller.registerForActivityResult(new ActivityResultContracts.RequestPermission(), this::resultCallback);
     }
 
-    public PermissionRequester(Fragment fragment, String permission, Runnable onGranted) {
+    public PermissionRequester(Fragment fragment, String permission) {
         this.activity = fragment.requireActivity();
         this.resultCaller = fragment;
         this.permission = permission;
         this.title = "Title hasn't been set";
         this.explanation = "Explanation hasn't been set";
-        this.onGranted = onGranted;
         this.permissionRequestLauncher = resultCaller.registerForActivityResult(new ActivityResultContracts.RequestPermission(), this::resultCallback);
     }
 
@@ -78,7 +76,8 @@ public class PermissionRequester {
         return this;
     }
 
-    public void request() {
+    public void request(Runnable onGranted) {
+        this.onGranted = onGranted;
         if (ContextCompat.checkSelfPermission(activity, permission) == PackageManager.PERMISSION_GRANTED) {
             this.onGranted.run();
         } else {

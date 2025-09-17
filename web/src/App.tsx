@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import Messages from 'pages/Messages/Messages';
 import { FilesUploadsContext } from 'common/contexts';
 import type { FileUpload } from 'pages/Home/components/UploadProgressDialog';
+import Stream from 'pages/Stream/Stream';
 
 
 export function App(props: any) {
@@ -50,6 +51,7 @@ export function App(props: any) {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/messages" element={<Messages />} />
+              <Route path="/stream" element={<Stream />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

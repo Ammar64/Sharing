@@ -3,6 +3,7 @@ package com.ammar.sharing.network.sessions;
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.MainActivity.MainActivity;
 import com.ammar.sharing.common.Consts;
+import com.ammar.sharing.common.utils.StreamUtils;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
@@ -34,6 +35,13 @@ public class AppConfigSession extends HTTPSession {
                 appConfigJson.put("dir", Utils.getRes().getString(R.string.dir));
                 appConfigJson.put("language", Utils.getRes().getString(R.string.lang));
                 appConfigJson.put("browserIP", user.getIp());
+                String streamStatus;
+                if(!StreamUtils.isStreamingOn) {
+                    streamStatus = User.StreamStatus.SERVICE_OFF.toString();
+                } else {
+                    streamStatus = user.mStreamStatus.toString();
+                }
+                appConfigJson.put("stream-status", streamStatus);
                 res.sendResponse(appConfigJson.toString().getBytes(StandardCharsets.UTF_8));
             }
         } catch (JSONException e) {

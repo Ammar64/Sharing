@@ -46,7 +46,7 @@ public class ServerService extends Service {
     // actions
     public static final String ACTION_MULTIPLE_ACTIONS = "ACTION_MULTIPLE_ACTIONS";
     public static final String ACTION_TOGGLE_SERVER = "ACTION_TOGGLE_SERVER";
-    public static final String ACTION_STOP_SERVICE = "ACTION_STOP_SERVICE";
+    public static final String ACTION_STOP_SERVICE_IF_SERVER_OFF = "ACTION_STOP_SERVICE_IF_SERVER_OFF";
     public static final String ACTION_GET_SERVER_STATUS = "ACTION_GET_SERVER_STATUS";
     public static final String ACTION_RESTART_SERVER = "ACTION_RESTART_SERVER";
     public static final String ACTION_UPDATE_NOTIFICATION_TEXT = "ACTION_UPDATE_NOTIFICATION_TEXT";
@@ -98,8 +98,10 @@ public class ServerService extends Service {
             case ServerService.ACTION_TOGGLE_SERVER:
                 toggleServer();
                 break;
-            case ServerService.ACTION_STOP_SERVICE:
-                stopSelf();
+            case ServerService.ACTION_STOP_SERVICE_IF_SERVER_OFF:
+                if(!server.isRunning()) {
+                    stopSelf();
+                }
             case ServerService.ACTION_GET_SERVER_STATUS:
                 Data.serverStatusObserver.postValue(server.isRunning());
                 break;

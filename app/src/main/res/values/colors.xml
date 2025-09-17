@@ -36,4 +36,5 @@
     <color name="checked_card">#771B5C78</color>
 
     <color name="placeholder">#7a373737</color>
+    <color name="transparentToolbar">#55000000</color>
 </resources>

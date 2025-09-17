@@ -37,7 +37,7 @@ function SharingMainActionCard({ cardProps }: { cardProps: SharingMainActionCard
                 backgroundColor: cardProps.bgcolor,
                 ...(cardProps.disabled ? disabledCardStyle : {})
             }}>
-                <CardActionArea LinkComponent={Link} {...(cardProps.link_to && {to: "/messages"})}{...( cardProps.onClick && {onClick: cardProps.onClick})} disabled={cardProps.disabled}>
+                <CardActionArea LinkComponent={Link} {...(cardProps.link_to && {to: cardProps.link_to})}{...( cardProps.onClick && {onClick: cardProps.onClick})} disabled={cardProps.disabled}>
                     <CardContent>
                         <Typography sx={{ textAlign: "cener", fontSize: "x-large", ...( cardProps.textColor && {color: cardProps.textColor}) }}>
                             {t(cardProps.action_string_key)}

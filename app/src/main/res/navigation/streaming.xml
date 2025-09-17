@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/streaming"
+    app:startDestination="@id/streamSetupFragment">
+
+    <fragment
+        android:id="@+id/streamSetupFragment"
+        android:name="com.ammar.sharing.activities.StreamingActivity.fragments.StreamSetupFragment"
+        android:label="StreamSetupFragment"
+        tools:layout="@layout/fragment_streaming_setup">
+        <action
+            android:id="@+id/action_streamSetupFragment_to_streamingFragment"
+            app:destination="@id/streamingFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/streamingFragment"
+        android:name="com.ammar.sharing.activities.StreamingActivity.fragments.StreamingFragment"
+        android:label="StreamingFragment" />
+
+</navigation>

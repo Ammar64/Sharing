@@ -55,5 +55,6 @@
     "completed": "completed",
     "failed": "failed",
     "expected_remaining_time": "expected remaining time",
-    "time_taken_to_send": "Time taken to send {{time}}"
+    "time_taken_to_send": "Time taken to send {{time}}",
+    "tap_to_play_stream": "Tap to play stream"
 }

@@ -8,7 +8,9 @@ import androidx.annotation.Nullable;
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.enums.OS;
+import com.ammar.sharing.custom.lambda.MyConsumer;
 import com.ammar.sharing.network.websocket.WebSocket;
+import com.ammar.sharing.network.websocket.sessions.WebSocketSession;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -29,6 +31,13 @@ public class User {
     private final SocketAddress address;
     private boolean _isBlocked = false;
     private String name;
+
+    public enum StreamStatus {
+        SERVICE_OFF,
+        DISALLOWED,
+        ALLOWED
+    }
+    public StreamStatus mStreamStatus = StreamStatus.DISALLOWED;
     private static int numUsers = 0;
 
     private User(Socket socket, String userAgent) {
@@ -176,5 +185,10 @@ public class User {
         WebSocket ws = wsMap.get(wsPath);
         if(ws == null || !ws.isNotClosed()) return;
         ws.sendBinary(message);
+    }
+    public void setOnWebSocketMessage(String wsPath, MyConsumer<String> onMessage) {
+        WebSocket ws = wsMap.get(wsPath);
+        WebSocketSession session = ws.getSession();
+        session.setOnStringMessageListener(onMessage);
     }
 }

@@ -14,6 +14,7 @@ public class MessagesWSSession extends WebSocketSession {
 
     @Override
     public void onMessage(WebSocket socket, String data) {
+        super.onMessage(socket, data);
         Message message = Message.fromJSON(data, user);
         if( message != null ) {
             if( !user.getName().equals( message.getAuthorName() ) ) {

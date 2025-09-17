@@ -55,5 +55,6 @@
     "completed": "اكتمل",
     "failed": "فشل",
     "expected_remaining_time": "الوقت المتبقى المتوقع",
-    "time_taken_to_send": "الوقت المستهلك {{time}}"
+    "time_taken_to_send": "الوقت المستهلك {{time}}",
+    "tap_to_play_stream": "اضغط لبدء البث"
 }

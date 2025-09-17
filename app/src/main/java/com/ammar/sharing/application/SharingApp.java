@@ -19,18 +19,32 @@ import com.ammar.sharing.network.utils.WebAppUtils;
 import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class SharingApp extends Application {
     private static boolean _isDebuggable;
 
+    private ExecutorService mInitExecutor = Executors.newSingleThreadExecutor();
+
     @Override
     public void onCreate() {
         super.onCreate();
         _isDebuggable = (0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
-        Utils.setupUtils(this);
         FileUtils.init(this);
-        WebAppUtils.init();
+
+
+       mInitExecutor.execute(() -> {
+            Utils.setupUtils(this);
+            WebAppUtils.init(mInitExecutor);
+            SharedPreferences settingsPref = getSharedPreferences(Consts.PREF_SETTINGS, MODE_PRIVATE);
+            Server.PORT_NUMBER = settingsPref.getInt(Consts.PREF_FIELD_SERVER_PORT, 2999);
+            Server.IS_HTTPS = settingsPref.getBoolean(Consts.PREF_FIELD_IS_HTTPS, true);
+
+            mInitExecutor.shutdown();
+       });
+
         Consts.systemLocale = Locale.getDefault();
         Consts.langCodes = getResources().getStringArray(R.array.lang_codes);
 
@@ -56,10 +70,6 @@ public class SharingApp extends Application {
 
             notificationManager.createNotificationChannels(Arrays.asList(serverChannel, progressChannel));
         }
-
-        SharedPreferences settingsPref = getSharedPreferences(Consts.PREF_SETTINGS, MODE_PRIVATE);
-        Server.PORT_NUMBER = settingsPref.getInt(Consts.PREF_FIELD_SERVER_PORT, 2999);
-        Server.IS_HTTPS = settingsPref.getBoolean(Consts.PREF_FIELD_IS_HTTPS, true);
     }
 
     public static boolean isDebuggable() {

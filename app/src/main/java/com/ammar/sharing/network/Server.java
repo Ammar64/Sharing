@@ -4,16 +4,16 @@ import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.network.sessions.AppConfigSession;
 import com.ammar.sharing.network.sessions.CLISession;
 import com.ammar.sharing.network.sessions.DownloadSession;
-import com.ammar.sharing.network.sessions.SharedAssetsSession;
 import com.ammar.sharing.network.sessions.HTTPSession;
 import com.ammar.sharing.network.sessions.MessagesSession;
 import com.ammar.sharing.network.sessions.NoJSSession;
 import com.ammar.sharing.network.sessions.RedirectSession;
+import com.ammar.sharing.network.sessions.SharedAssetsSession;
 import com.ammar.sharing.network.sessions.UploadSession;
 import com.ammar.sharing.network.sessions.UserSession;
-import com.ammar.sharing.network.websocket.sessions.InfoWSSession;
 import com.ammar.sharing.network.websocket.sessions.MainWSSession;
 import com.ammar.sharing.network.websocket.sessions.MessagesWSSession;
+import com.ammar.sharing.network.websocket.sessions.WebRTCSignallingSession;
 import com.ammar.sharing.network.websocket.sessions.WebSocketSession;
 import com.ammar.sharing.services.ServerService;
 
@@ -178,6 +178,6 @@ public class Server {
         this.addPaths(RedirectSession.redirectMap.keySet(), RedirectSession.class);
         this.addWebsocketPath(MainWSSession.path, MainWSSession.class);
         this.addWebsocketPath(MessagesWSSession.path, MessagesWSSession.class);
-        this.addWebsocketPath(InfoWSSession.path, InfoWSSession.class);
+        this.addWebsocketPath(WebRTCSignallingSession.path, WebRTCSignallingSession.class);
     }
 }
