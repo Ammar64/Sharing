@@ -1,0 +1,5 @@
+1- Lisans GPLv3'ten AGPLv3'e değiştirildi
+2- URL /no-JS'ye yalnızca HTML sayfası eklendi
+3- Curl için CLI desteği eklendi
+4- Web sitesi güncellendi ve daha az kafa karıştırıcı hale getirildi
+5- Yeni Çince çeviriler eklendi
