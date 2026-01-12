@@ -1,0 +1,7 @@
+Tarayıcıyı kullanarak dosya ve uygulamaları paylaşın. Diğer cihazın aynı ağa bağlı olması gerekir.
+Tarayıcıdan uygulamaya gönderilen dosyalar, dahili depolama alanındaki Sharing/ klasöründe bulunabilir.
+Bölünmüş apk dosyaları içeren bir uygulama gönderdiyseniz, bu uygulamayı diğer cihaza göndermeniz gerekir.
+Dosya aktarım hızını artırmak için hotspot kullandığınızdan emin olun.
+
+UI tasarımı, özellikle web tarafı için Hamdy El-Menshawy'e teşekkür ederiz.
+Uygulama Ammar64 tarafından yapılmıştır.
