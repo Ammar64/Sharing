@@ -68,12 +68,6 @@ height="80">](https://apt.izzysoft.de/fdroid/index/apk/com.ammar.sharing)
 
 </div>
 
-ملحوظة
-----------------
-تعليمات استعمال التطبيق هنا https://ammar64.github.io/Sharing/Tutorial <br>
-الضغط على زر التعليمات بالتطبيق فى الإصدار 1.5 و أحدث سيفتح الرابط أعلاه<br>
-يمكنك المساهمة فى فرع ال[tutorial](https://github.com/Ammar64/Sharing/tree/tutorial)<br>
-
 الترخيص
 -------------
 
