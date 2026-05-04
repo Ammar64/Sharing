@@ -17,18 +17,16 @@ def getGitCommitCount() {
 def commitCount = getGitCommitCount()
 ext.commitCount = commitCount
 
-def getVersionName() {
-    return "v2.0.$commitCount-alpha1"
-}
+def myVersionName = "v2.0.$commitCount-alpha1"
+ext.versionName = myVersionName
+
 tasks.register('writeVersionFile') {
     def outputFile = file("$projectDir/version.txt")
     doLast {
         def versionCode = commitCount
-        def versionName = getVersionName()
-
         outputFile.text = """\
 versionCode=${versionCode}
-versionName=${versionName}
+versionName=${myVersionName}
 """.stripIndent()
 
         println "Version file written to: ${outputFile}"
@@ -54,7 +52,7 @@ android {
         targetSdk = 34
 
         versionCode = commitCount
-        versionName = getVersionName()
+        versionName = myVersionName
 
         vectorDrawables.useSupportLibrary = true
         externalNativeBuild {
