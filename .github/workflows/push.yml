@@ -11,9 +11,9 @@ jobs:
     - uses: actions/checkout@v2
     - name: Trigger build in Ammar64/SharingBuilds
       run: |
+        BNUM=$(grep '^versionCode=' app/version.txt | cut -d'=' -f2)
         git clone --depth=1 https://github.com/Ammar64/SharingBuilds
         cd SharingBuilds
-        BNUM=$(grep '^versionCode=' app/version.txt | cut -d'=' -f2)
         git tag ${BNUM}
         git config --global user.name "Github Actions"
         git push https://Ammar64:${{ secrets.API_TOKEN_GITHUB }}@github.com/Ammar64/SharingBuilds ${BNUM}
