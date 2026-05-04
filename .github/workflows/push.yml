@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Trigger build in Ammar64/SharingBuilds
       run: |
-        BNUM=$(grep '^versionCode=' app/version.txt | cut -d'=' -f2)
+        BNUM=$(git rev-list --count master)
         git clone --depth=1 https://github.com/Ammar64/SharingBuilds
         cd SharingBuilds
         git tag ${BNUM}
