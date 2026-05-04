@@ -63,18 +63,12 @@ public class CLISession extends HTTPSession {
 
     private void sendSharable(String uuid, Response res) {
         Sharable file = Sharable.getFileWithUUID(uuid);
-        if (!(file instanceof SharableApp)) {
+        if (!(file instanceof SharableApp app)) {
             res.sendFileResponse(file, user);
         } else {
-            SharableApp app = (SharableApp) file;
             if (app.hasSplits()) {
-                Sharable[] app_splits = app.getSplits();
-                Sharable[] app_files = new Sharable[app_splits.length + 1];
-
-                // app base.apk must be the first file because it will be the name of the zip.
-                app_files[0] = app;
-                System.arraycopy(app_splits, 0, app_files, 1, app_files.length - 1);
-                res.sendApksFileResponse(app_files, user);
+                Sharable[] app_files = app.toShrablesArray();
+                res.sendApksFileResponse(app.getFileName() ,app_files, user);
             } else {
                 res.sendFileResponse(app, user);
             }

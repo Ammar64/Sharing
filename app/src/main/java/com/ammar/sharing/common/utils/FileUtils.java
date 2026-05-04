@@ -336,12 +336,13 @@ public class FileUtils {
         return depth;
     }
 
+    // fixme: Validate user input
     private static final Pattern VALID_FILENAME_PATTERN = Pattern.compile("/^(?!\\\\.)(?!com[0-9]$)(?!con$)(?!lpt[0-9]$)(?!nul$)(?!prn$)[^\\\\|\\\\*\\?\\\\:<>\\/$\"]*[^\\\\.\\\\|\\\\*\\\\?\\\\\\:<>\\/$\"]+$/");
     public static boolean isValidFileName(String fileName) {
         if (fileName.isEmpty() || fileName.length() > 255) {
             return false;
         }
-        return VALID_FILENAME_PATTERN.matcher(fileName).matches();
+        return true;
     }
 
     private static File sFilesDir;

@@ -41,6 +41,7 @@ jobs:
       run: |
         sudo apt update -y
         sudo apt install -y npm node-typescript rsync apksigner apksigcopier
+        sudo npm install -g pnpm
 
     - name: Build App
       run: |

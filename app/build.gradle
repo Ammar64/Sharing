@@ -6,6 +6,36 @@ plugins {
     //id 'com.google.devtools.ksp'
 }
 
+def getGitCommitCount() {
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-list', '--count', 'master'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim().toInteger()
+}
+def commitCount = getGitCommitCount()
+ext.commitCount = commitCount
+
+def getVersionName() {
+    return "v2.0.$commitCount-alpha1"
+}
+tasks.register('writeVersionFile') {
+    def outputFile = file("$projectDir/version.txt")
+    doLast {
+        def versionCode = commitCount
+        def versionName = getVersionName()
+
+        outputFile.text = """\
+versionCode=${versionCode}
+versionName=${versionName}
+""".stripIndent()
+
+        println "Version file written to: ${outputFile}"
+    }
+}
+preBuild.dependsOn(writeVersionFile)
+
 android {
     namespace = 'com.ammar.sharing'
     //noinspection GradleDependency
@@ -22,8 +52,9 @@ android {
         minSdk = 21
         //noinspection OldTargetApi
         targetSdk = 34
-        versionCode = 24
-        versionName = "v1.5.5-alpha3"
+
+        versionCode = commitCount
+        versionName = getVersionName()
 
         vectorDrawables.useSupportLibrary = true
         externalNativeBuild {

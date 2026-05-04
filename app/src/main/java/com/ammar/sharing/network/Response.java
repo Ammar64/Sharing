@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -123,14 +123,15 @@ public class Response {
 
     public void sendZippedFilesResponse(Sharable[] files, String filename, User user) {
         long totalSize = 0;
-        for(Sharable i : files) {
-            if( i instanceof SharableApp && ((SharableApp) i).hasSplits() ) {
-                Sharable[] splits = ((SharableApp) i).getSplits();
+        for (int i = 0; i < files.length; i++) {
+            Sharable sharable = files[i];
+            if (sharable instanceof SharableApp && ((SharableApp) sharable).hasSplits()) {
+                Sharable[] splits = ((SharableApp) sharable).getSplits();
                 for (Sharable j : splits) {
                     totalSize += j.getSize();
                 }
             }
-            totalSize += i.getSize();
+            totalSize += sharable.getSize();
         }
 
         ProgressManager progressManager = new ProgressManager(files[0], clientSocket, totalSize, user, ProgressManager.OP.DOWNLOAD);
@@ -150,21 +151,31 @@ public class Response {
 
             writeHeaders(out);
             zout.setMethod(ZipOutputStream.DEFLATED);
-            for (Sharable i : files) {
 
-                if(i instanceof SharableApp && ((SharableApp) i).hasSplits()) {
+            ArrayList<String> sentFilesNames = new ArrayList<>(files.length);
+            for (int i = 0; i < files.length; i++) {
+                Sharable sharable = files[i];
+
+                String fullFileName = sharable.getFileName();
+                int ext_index = fullFileName.lastIndexOf('.');
+                String fileNameNoExt = ext_index < 0 ? fullFileName : fullFileName.substring(0, ext_index);
+                String fileExtension = ext_index < 0 ? "" : fullFileName.substring(ext_index);
+                int numOfDuplicateNames = 0;
+
+                while (sentFilesNames.contains(fullFileName)) {
+                    numOfDuplicateNames++;
+                    fullFileName = String.format(Locale.ENGLISH, "%s (%d).%s", fileNameNoExt, numOfDuplicateNames, fileExtension);
+                }
+
+                ZipEntry zipEntry = new ZipEntry(fullFileName);
+                zout.putNextEntry(zipEntry);
+
+                if (sharable instanceof SharableApp app && app.hasSplits()) {
                     // in case zipped file response has an app with splits in it
                     // we include the apks file in the zip response
-                    SharableApp app = (SharableApp) i;
-                    ZipEntry zipEntry = new ZipEntry(i.getName() + ".apks");
-                    zout.putNextEntry(zipEntry);
-
-                    Sharable[] appApkFiles = new Sharable[app.getSplits().length + 1];
-                    appApkFiles[0] = app;
-                    System.arraycopy(app.getSplits(), 0, appApkFiles, 1, app.getSplits().length);
-
+                    Sharable[] appApkFiles = app.toShrablesArray();
                     ZipOutputStream apksZout = new ZipOutputStream(zout);
-                    for( Sharable apk : appApkFiles ) {
+                    for (Sharable apk : appApkFiles) {
                         ZipEntry apkEntry = new ZipEntry(apk.getFileName());
                         apksZout.putNextEntry(apkEntry);
                         __writeFileZippedToSocket(apk, out, apksZout, bout, progressManager);
@@ -173,11 +184,10 @@ public class Response {
                     apksZout.finish();
                 } else {
                     // this is the normal case where Sharable is one file
-                    ZipEntry zipEntry = new ZipEntry(i.getFileName());
-                    zout.putNextEntry(zipEntry);
-                    __writeFileZippedToSocket(i, out, zout, bout, progressManager);
+                    __writeFileZippedToSocket(sharable, out, zout, bout, progressManager);
                 }
                 zout.closeEntry();
+                sentFilesNames.add(fullFileName);
             }
 
             // write the end of the zip file and the last chunk
@@ -194,9 +204,9 @@ public class Response {
         }
     }
 
-    public void sendApksFileResponse(Sharable[] files, User user) {
+    public void sendApksFileResponse(String apks_file_name, Sharable[] files, User user) {
         long totalSize = 0;
-        for(Sharable i : files) {
+        for (Sharable i : files) {
             totalSize += i.getSize();
         }
 
@@ -209,7 +219,7 @@ public class Response {
             ZipOutputStream zout = new ZipOutputStream(bout);
 
             setHeader("Content-Type", "application/octet-stream");
-            setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", files[0].getName() + ".apks"));
+            setHeader("Content-Disposition", String.format(Locale.ENGLISH, "attachment; filename=\"%s\"", apks_file_name));
             setHeader("Transfer-Encoding", "chunked");
             setHeader("Accept-Ranges", "none");
 

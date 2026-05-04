@@ -31,9 +31,10 @@ public class SharableApp extends Sharable {
         // get pm and app info
         this.pm = context.getPackageManager();
         this.appInfo = pm.getApplicationInfo(package_id, 0);
+        baseApkSharable = new Sharable(appInfo.publicSourceDir);
         app_name = appInfo.loadLabel(pm).toString();
         // construct base class
-        fileName = app_name + ".apk";
+        mFileName = app_name + ".apks";
         super.uuid = UUID.randomUUID();
 
         // check for splits
@@ -121,7 +122,8 @@ public class SharableApp extends Sharable {
     }
 
     private boolean _hasSplits = false;
-    Sharable[] splits = null;
+    final Sharable baseApkSharable;
+    Sharable[] splits;
 
     public boolean hasSplits() {
         return _hasSplits;
@@ -129,6 +131,17 @@ public class SharableApp extends Sharable {
 
     public Sharable[] getSplits() {
         return splits;
+    }
+
+    public Sharable getBaseApkSharable() {
+        return baseApkSharable;
+    }
+
+    public Sharable[] toShrablesArray() {
+        Sharable[] sharables_array = new Sharable[splits.length + 1];
+        sharables_array[0] = this.getBaseApkSharable();
+        System.arraycopy(splits, 0, sharables_array, 1, sharables_array.length - 1);
+        return sharables_array;
     }
 }
 

@@ -25,8 +25,6 @@
     <string name="choose_language">Elegir idioma</string>
     <string name="no_user_connected">No hay usuarios conectados</string>
     <string name="no_files_selected">Ningún archivo seleccionado</string>
-    <string name="warning">¡Atención!</string>
-    <string name="warning_details">Esta aplicación no utiliza HTTPS para transferir tus archivos lo que la hace vulnerable a ataques de \'hombre en el medio\'.\nPara estar más seguro, activa un punto de acceso seguro en este dispositivo y asegúrate que solo se conecten a él otros dispositivos deseados.</string>
     <string name="dont_show_again">No volver a mostrar este mensaje</string>
     <string name="fast_share">Compartir rápido</string>
     <string name="toggle_dark_mode">Alternar modo oscuro</string>

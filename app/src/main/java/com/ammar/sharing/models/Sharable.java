@@ -33,16 +33,16 @@ public class Sharable {
     protected Uri uri;
 
     protected ContentResolver resolver;
-    protected String fileName;
+    protected String mFileName;
     protected long fileSize;
     private final boolean isUri;
 
     public Sharable(String path) {
         this.file = new File(path);
         this.uuid = UUID.randomUUID();
-        fileName = file.getName();
+        mFileName = file.getName();
         fileSize = file.length();
-        this.mimeType = Utils.getMimeType(fileName);
+        this.mimeType = Utils.getMimeType(mFileName);
         if (mimeType.equals("*/*")) mimeType = "application/octet-stream";
         isUri = false;
     }
@@ -51,13 +51,13 @@ public class Sharable {
         this.uri = uri;
         this.resolver = resolver;
         this.uuid = UUID.randomUUID();
-        fileName = FileUtils.getFileName(resolver, uri);
+        mFileName = FileUtils.getFileName(resolver, uri);
         try (AssetFileDescriptor assetFileDescriptor = resolver.openAssetFileDescriptor(uri, "r")) {
             fileSize = assetFileDescriptor.getLength();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        this.mimeType = Utils.getMimeType(fileName);
+        this.mimeType = Utils.getMimeType(mFileName);
         if (mimeType.equals("*/*")) mimeType = "application/octet-stream";
         isUri = true;
     }
@@ -72,7 +72,7 @@ public class Sharable {
     }
 
     public String getFileName() {
-        return fileName;
+        return mFileName;
     }
 
     public String getFilePath() {
@@ -177,4 +177,9 @@ public class Sharable {
         }
         return false;
     }
+
+    public void setFileName(String fileName) {
+        mFileName = fileName;
+    }
+
 }
