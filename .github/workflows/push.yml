@@ -1,10 +1,9 @@
-name: trigger build
-
+name: push
 on: [push, workflow_dispatch]
 
 permissions: {}
 jobs:
-  runPush:
+  trigger_build:
     runs-on: ubuntu-latest
 
     steps:
