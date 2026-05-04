@@ -1,6 +1,7 @@
 package com.ammar.sharing.activities.AddAppsAndFilesActivity.adaptersR;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
@@ -57,6 +58,10 @@ public class FilesFragmentRecyclerAdapter extends RecyclerView.Adapter<FilesBrow
             Intent intent = new Intent();
             intent.putExtra(AddAppsAndFilesActivity.EXTRA_URIS_SHARED, true);
             intent.putExtra(AddAppsAndFilesActivity.EXTRA_URIS, urisArrayList);
+            Context applicationContext = fragment.requireContext().getApplicationContext();
+            for (Uri i : urisArrayList) {
+                applicationContext.grantUriPermission(applicationContext.getPackageName(), i, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
             activity.setResult(Activity.RESULT_OK, intent);
             activity.finish();
 
