@@ -35,7 +35,7 @@ tasks.register('buildWeb', Exec) {
         file("dist").deleteDir()
     }
 
-    commandLine 'npm', 'run', 'build'
+    commandLine 'pnpm', 'run', 'build'
     outputs.upToDateWhen {
         if(localProjectOptions.force_rebuild_web === null) {
             localProjectOptions.force_rebuild_web = true

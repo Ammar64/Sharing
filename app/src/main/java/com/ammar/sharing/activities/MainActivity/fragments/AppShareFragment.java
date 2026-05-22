@@ -18,9 +18,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.ammar.sharing.R;
-import com.ammar.sharing.activities.AppToAppSharingActivity.AppToAppSharingActivity;
-import com.ammar.sharing.activities.MainActivity.MainActivity;
-import com.ammar.sharing.common.utils.Utils;
 
 public class AppShareFragment extends Fragment {
 
@@ -48,15 +45,9 @@ public class AppShareFragment extends Fragment {
         appIconObjAnimator.start();
 
         mSendButton.setOnClickListener((v) -> {
-            Intent intent = new Intent(AppToAppSharingActivity.ACTION_SEND_TO_DEVICES);
-            intent.setClass(this.requireContext(), AppToAppSharingActivity.class);
-            startActivity(intent);
         });
 
         mReceiveButton.setOnClickListener((v) -> {
-            Intent intent = new Intent(AppToAppSharingActivity.ACTION_RECEIVE_FROM_DEVICES);
-            intent.setClass(this.requireContext(), AppToAppSharingActivity.class);
-            startActivity(intent);
         });
     }
 }
