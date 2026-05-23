@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "source": "src/index.html",
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
     "start": "parcel --dist-dir ./dist/web_app",
     "build": "parcel build --no-source-maps --dist-dir ./dist/web_app && python list_web_files.py"
   },

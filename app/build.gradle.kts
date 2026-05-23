@@ -44,7 +44,7 @@ tasks.named("preBuild") {
 android {
     namespace = "com.ammar.sharing"
     //noinspection GradleDependency
-    compileSdk = 34
+    compileSdk = 36
     dependenciesInfo {
         // Disables dependency metadata when building APKs.
         includeInApk = false
@@ -54,9 +54,9 @@ android {
 
     defaultConfig {
         applicationId = "com.ammar.sharing"
-        minSdk = 21
+        minSdk = 23
         //noinspection OldTargetApi
-        targetSdk = 34
+        targetSdk = 36
 
         versionCode = VERSION_NUMBER
         versionName = VERSION_NAME

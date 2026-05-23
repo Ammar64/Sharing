@@ -31,7 +31,7 @@ tasks.register<Exec>("buildWeb") {
         file("dist").deleteRecursively()
     }
 
-    commandLine("pnpm", "run", "build")
+    commandLine("bun", "run", "build")
     outputs.upToDateWhen {
         var forceRebuildWeb = localProjectOptions["force_rebuild_web"] as Boolean?
         if( forceRebuildWeb == null) {
