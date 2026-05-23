@@ -2,15 +2,9 @@ package com.ammar.sharing.activities.StreamingActivity;
 
 import android.os.Bundle;
 import android.view.MotionEvent;
-import android.view.Window;
-import android.view.WindowManager;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.custom.ui.DefaultActivity;

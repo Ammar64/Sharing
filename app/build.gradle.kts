@@ -55,8 +55,7 @@ android {
     defaultConfig {
         applicationId = "com.ammar.sharing"
         minSdk = 23
-        //noinspection OldTargetApi
-        targetSdk = 36
+        targetSdk = 35
 
         versionCode = VERSION_NUMBER
         versionName = VERSION_NAME
