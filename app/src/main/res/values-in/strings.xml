@@ -32,8 +32,6 @@
     <string name="choose_language">Pilih Bahasa</string>
     <string name="no_user_connected">Tidak ada pengguna yang terhubung</string>
     <string name="no_files_selected">Tidak ada file yang dipilih</string>
-    <string name="warning">Peringatan!</string>
-    <string name="warning_details">Aplikasi ini tidak menggunakan HTTPS untuk mentransfer file Anda sehingga rentan terhadap serangan man-in-the-middle.\nUntuk lebih aman, aktifkan hotspot aman di perangkat ini dan pastikan hanya perangkat lain yang diinginkan saja yang dapat mengaksesnya.</string>
     <string name="dont_show_again">Jangan tampilkan pesan ini lagi</string>
     <string name="fast_share">Bagikan dengan cepat</string>
     <string name="toggle_dark_mode">Alihkan mode gelap</string>
