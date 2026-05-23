@@ -16,7 +16,6 @@ import com.ammar.sharing.R;
 import com.ammar.sharing.network.Server;
 import com.ammar.sharing.network.utils.WebAppUtils;
 
-import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
@@ -26,7 +25,7 @@ import java.util.concurrent.Executors;
 public class SharingApp extends Application {
     private static boolean _isDebuggable;
 
-    private ExecutorService mInitExecutor = Executors.newSingleThreadExecutor();
+    private final ExecutorService mInitExecutor = Executors.newSingleThreadExecutor();
 
     @Override
     public void onCreate() {

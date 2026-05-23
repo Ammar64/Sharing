@@ -1,0 +1,141 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.io.BufferedReader
+import java.io.InputStreamReader
+
+plugins {
+    alias(libs.plugins.androidApplication)
+    //id "com.google.devtools.ksp"
+}
+
+fun getVersionNumber(): Int {
+    val process = ProcessBuilder("python3", "app/get_version_number.py")
+        .redirectErrorStream(true)
+        .start()
+    val inputReader = process.inputReader()
+
+    val version_number = inputReader.readText().trim().toInt()
+
+    inputReader.close()
+    val exitCode = process.waitFor()
+
+    if(exitCode != 0) {
+        error("Failed to get version number")
+    }
+    return version_number
+}
+
+val VERSION_NUMBER = getVersionNumber()
+val VERSION_NAME = "v2.0.0-$VERSION_NUMBER-alpha1"
+
+tasks.register("writeVersionFile") {
+    val outputFile = file("$projectDir/version.txt")
+    doLast {
+        outputFile.writeText("""\
+versionCode=${VERSION_NUMBER}
+versionName=${VERSION_NAME}
+""".trimIndent())
+        println("Version file written to: $outputFile")
+    }
+}
+tasks.named("preBuild") {
+    dependsOn(tasks.named("writeVersionFile"))
+}
+
+android {
+    namespace = "com.ammar.sharing"
+    //noinspection GradleDependency
+    compileSdk = 34
+    dependenciesInfo {
+        // Disables dependency metadata when building APKs.
+        includeInApk = false
+        // Disables dependency metadata when building Android App Bundles.
+        includeInBundle = false
+    }
+
+    defaultConfig {
+        applicationId = "com.ammar.sharing"
+        minSdk = 21
+        //noinspection OldTargetApi
+        targetSdk = 34
+
+        versionCode = VERSION_NUMBER
+        versionName = VERSION_NAME
+
+        vectorDrawables.useSupportLibrary = true
+        externalNativeBuild {
+            cmake {
+                abiFilters("arm64-v8a" ,"armeabi-v7a", "x86_64")
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            vcsInfo.include = false
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+    }
+
+    buildFeatures {
+        prefab = true
+        buildConfig = true
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/jni/CMakeLists.txt")
+            version = "3.22.1"
+        }
+    }
+    packaging {
+        resources.excludes.add("META-INF/versions/9/OSGI-INF/MANIFEST.MF")
+    }
+}
+
+kotlin {
+    compilerOptions {
+        languageVersion = org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0
+        jvmTarget = JvmTarget.JVM_17
+    }
+}
+
+dependencies {
+    implementation(libs.core.ktx)
+
+    implementation(libs.appcompat)
+    implementation(libs.constraintlayout) // add this because we want negative margins
+    implementation(libs.recyclerview) // when you add this recycler view width issue is fixed in dialogs
+    implementation(libs.swiperefreshlayout) // needed to get CircularProgressDrawable
+    implementation(libs.material)
+    implementation(libs.glide)
+
+    // I don't like the new library catalog declaration it makes you write more stuff :)
+    implementation("com.github.zcweng:switch-button:0.0.3@aar")
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation("androidx.lifecycle:lifecycle-service:2.9.3")
+
+    implementation("com.github.hendrawd:StorageUtil:1.1.0")
+    implementation("io.getstream:stream-webrtc-android:1.3.8")
+    implementation("org.jmdns:jmdns:3.6.3")
+
+    implementation("androidx.navigation:navigation-fragment-ktx:2.9.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.9.3")
+
+    implementation("org.bouncycastle:bcpkix-jdk18on:1.81")
+
+    //ksp "androidx.room:room-compiler:2.5.0"
+    implementation("androidx.room:room-runtime:2.7.2")
+    implementation("com.squareup.okhttp3:okhttp:5.1.0")
+
+
+    implementation(project(":web"))
+
+    testImplementation("junit:junit:4.13.2")
+}

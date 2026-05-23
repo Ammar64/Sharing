@@ -1,15 +1,11 @@
 package com.ammar.sharing.activities.MainActivity.fragments;
 
 import android.animation.ObjectAnimator;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
-import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ImageView;
 

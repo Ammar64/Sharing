@@ -10,9 +10,9 @@ jobs:
     - uses: actions/checkout@v2
     - name: Trigger build in Ammar64/SharingBuilds
       run: |
-        BNUM=$(git rev-list --count master)
+        VERSION_NUMBER=$(python3 app/get_version_number.py)
         git clone --depth=1 https://github.com/Ammar64/SharingBuilds
         cd SharingBuilds
-        git tag ${BNUM}
+        git tag ${VERSION_NUMBER}
         git config --global user.name "Github Actions"
-        git push https://Ammar64:${{ secrets.API_TOKEN_GITHUB }}@github.com/Ammar64/SharingBuilds ${BNUM}
+        git push https://Ammar64:${{ secrets.API_TOKEN_GITHUB }}@github.com/Ammar64/SharingBuilds ${VERSION_NUMBER}
