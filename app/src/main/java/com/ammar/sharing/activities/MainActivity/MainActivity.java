@@ -24,6 +24,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -150,10 +151,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void initItems() {
         layout = findViewById(R.id.CL_MainLayout);
+        EdgeToEdge.enable(this);
         ViewCompat.setOnApplyWindowInsetsListener(layout, (v, insets) -> {
             Insets paddings = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             MainActivity.systemBarsPaddings = paddings;
-            v.setPadding(0, paddings.top, 0, 0);
+            v.setPadding(paddings.left, paddings.top, paddings.right, paddings.bottom);
             return insets;
         });
 
@@ -174,6 +176,10 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.BottomNavView);
         viewPager = findViewById(R.id.MainActivityFragmentContainer);
         bottomNavigationView.setSelectedItemId(R.id.B_AppShare);
+        bottomAppBar.setOnApplyWindowInsetsListener(null);
+        bottomAppBar.setPadding(0,0,0,0);
+        bottomNavigationView.setOnApplyWindowInsetsListener(null);
+        bottomNavigationView.setPadding(0,0,0,0);
 
         MainViewPagerAdapter viewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager(), getLifecycle());
         viewPager.setAdapter(viewPagerAdapter);
