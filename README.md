@@ -21,7 +21,7 @@ You can always disable uploads in the app settings.
 alt="Get it on IzzyOnDroid"
 height="80">](https://apt.izzysoft.de/fdroid/index/apk/com.ammar.sharing)
 
-Or download the latest stable APK from the [Releases Section](https://github.com/Ammar64/Sharing/releases/latest).
+Or download the latest stable APK from the [Releases Section](https://github.com/Ammar64/Sharing/releases/latest).  
 Or you can check [this](https://github.com/Ammar64/SharingBuilds) repository for the build of the latest commit (It may contain more bugs and incomplete features).
 
 TODO
