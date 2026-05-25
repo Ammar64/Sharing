@@ -20,7 +20,8 @@
 alt="Get it on IzzyOnDroid"
 height="80">](https://apt.izzysoft.de/fdroid/index/apk/com.ammar.sharing)
 
-أو نزل ملف APK من [هنا](https://github.com/Ammar64/Sharing/releases/latest)
+أو نزل ملف APK من [هنا](https://github.com/Ammar64/Sharing/releases/latest) لتحصل على آخر إصدار مستقل.  
+أو يمكنك تفقد هذا [المستودع](https://github.com/Ammar64/SharingBuilds) لتحصل على آخر نسخة تحت التطوير (لا تتفاجئ عندما تجد الكثير من الأخطاء و الميزات الغير الكاملة).
 
 
 الخطط
