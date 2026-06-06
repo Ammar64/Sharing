@@ -1,2 +1,5 @@
 .clangd
 .vscode
+target
+jni-rs/target
+jni-rs/Cargo.toml_*/

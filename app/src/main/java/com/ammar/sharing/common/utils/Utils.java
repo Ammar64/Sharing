@@ -1,6 +1,5 @@
 package com.ammar.sharing.common.utils;
 
-import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,7 +13,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -34,14 +32,14 @@ import java.io.InputStream;
 import java.util.Locale;
 import java.util.concurrent.Callable;
 
-import okhttp3.Response;
-
 public class Utils {
 
     static {
         System.loadLibrary("nativeutils");
+        System.loadLibrary("rust_native");
     }
 
+    public static native String hello(String h);
     public static String getFormattedSize(long size) {
         double s = size;
         String[] levels = {"B", "KB", "MB", "GB", "TB", "PB"};
@@ -416,35 +414,5 @@ public class Utils {
         return cr;
     }
 
-    private static WifiManager.MulticastLock mMulticastLock;
-
-    public static void aquireMulticastLock() {
-        if( mMulticastLock == null ) {
-            @SuppressLint("WifiManagerLeak") // This the application context
-            WifiManager wifiManager = (WifiManager) Utils.getAppCtx().getSystemService(Context.WIFI_SERVICE);
-            mMulticastLock = wifiManager.createMulticastLock("multicastLock");
-            mMulticastLock.setReferenceCounted(true);
-        }
-        mMulticastLock.acquire();
-    }
-
-    public static void releaseMulticastLock() {
-        if (mMulticastLock != null) {
-            mMulticastLock.release();
-        }
-    }
-
-    public static boolean verifyResponse(Response response) {
-        boolean success = true;
-        if (response.code() != 200) {
-            Utils.showErrorDialog("Unexpected", "Response code is not 200");
-            success = false;
-        }
-        if (response.body().contentLength() >= Consts.MAX_NON_FILE_CONTENT_LENGTH) {
-            Utils.showErrorDialog("Unexpected", "Device listener content length is too long");
-            success = false;
-        }
-        return success;
-    }
 
 }

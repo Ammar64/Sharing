@@ -1,10 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import java.io.BufferedReader
-import java.io.InputStreamReader
 
 plugins {
     alias(libs.plugins.androidApplication)
-    //id "com.google.devtools.ksp"
 }
 
 fun getVersionNumber(): Int {

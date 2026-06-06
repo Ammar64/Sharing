@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 
 import com.ammar.sharing.common.Consts;
 import com.ammar.sharing.common.utils.FileUtils;
@@ -33,6 +34,8 @@ public class SharingApp extends Application {
         _isDebuggable = (0 != (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE));
         FileUtils.init(this);
 
+        String hello = Utils.hello("test hey hi");
+        Log.d("TEST", hello);
 
        mInitExecutor.execute(() -> {
             Utils.setupUtils(this);
