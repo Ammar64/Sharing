@@ -1,0 +1,5 @@
+{
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}/../../../.cxx/tools/debug/arm64-v8a/"
+    ]
+}

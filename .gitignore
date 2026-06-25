@@ -9,7 +9,6 @@
 .externalNativeBuild
 .cxx
 local.properties
-.vscode
 
 app/build
 cert/
