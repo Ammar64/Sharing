@@ -10,13 +10,16 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ammar.sharing.R
+import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.ShareAdapter
 import com.ammar.sharing.common.utils.Utils
 import com.ammar.sharing.nativebackend.TransferOperation
+import com.ammar.sharing.nativebackend.TransferOperationsManager
 import com.ammar.sharing.nativebackend.TransferStatus
 import java.util.Locale
 import kotlin.math.roundToInt
 
-class ProgressViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class ProgressViewHolder(val adapter: ShareAdapter, itemView: View) :
+    RecyclerView.ViewHolder(itemView) {
     var fileNameTV: TextView = itemView.findViewById(R.id.TV_SharedFileName)
     var stopB: AppCompatImageButton = itemView.findViewById(R.id.B_StopSharing)
     var operationTV: TextView = itemView.findViewById(R.id.TV_OperationType)
@@ -48,22 +51,26 @@ class ProgressViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                         username,
                         Utils.getFormattedTime(operation.timeToComplete!!.inWholeMilliseconds)
                     )
+
                     TransferStatus.Failed -> ctx.getString(
                         R.string.sending_to_user_stopped, username
                     )
+
                     else -> ctx.getString(R.string.sending_to_user, username)
                 }
 
             TransferOperation.UPLOAD -> operationText =
-                when(operation.status) {
+                when (operation.status) {
                     TransferStatus.Completed -> ctx.getString(
                         R.string.receiving_from_user_done,
                         username,
                         Utils.getFormattedTime(operation.timeToComplete!!.inWholeMilliseconds)
                     )
+
                     TransferStatus.Failed -> ctx.getString(
                         R.string.receiving_from_user_stopped, username
                     )
+
                     else -> ctx.getString(R.string.receiving_from_user, username)
                 }
 
@@ -123,30 +130,16 @@ class ProgressViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             return
         } else stopB.setImageResource(R.drawable.icon_x)
 
-        // todo: we will support indeterminate downloads later
-        if (true) {
-            val percentage =
-                (operation.progress.toDouble() / operation.total.toDouble() * 100.0).roundToInt()
+        val percentage =
+            (operation.progress.toDouble() / operation.total.toDouble() * 100.0).roundToInt()
 
-            fileProgressTV.visibility = View.VISIBLE
-            fileProgressTV.text = String.format(Locale.ENGLISH, "%d%%", percentage)
-            DrawableCompat.setTint(fileProgressPB.progressDrawable, Color.CYAN)
-            fileProgressPB.isIndeterminate = false
-            fileProgressPB.progress = percentage
-            fileProgressPB.setPaddingRelative(0, 0, Utils.dpToPx(8.0f).toInt(), 0)
-        } else {
-            //            fileProgressTV.setVisibility(View.INVISIBLE);
-//            fileProgressPB.setPaddingRelative(0, 0, 0, 0);
-//            DrawableCompat.setTint(fileProgressPB.getProgressDrawable(), Color.CYAN);
-//
-//            if (manager.getLoaded() == ProgressManager.COMPLETED) {
-//                fileProgressPB.setIndeterminate(false);
-//                fileProgressPB.setProgress(100);
-//            } else {
-//                fileProgressPB.setProgress(0);
-//                fileProgressPB.setIndeterminate(true);
-//            }
-        }
+        fileProgressTV.visibility = View.VISIBLE
+        fileProgressTV.text = String.format(Locale.ENGLISH, "%d%%", percentage)
+        DrawableCompat.setTint(fileProgressPB.progressDrawable, Color.CYAN)
+        fileProgressPB.isIndeterminate = false
+        fileProgressPB.progress = percentage
+        fileProgressPB.setPaddingRelative(0, 0, Utils.dpToPx(8.0f).toInt(), 0)
+
     }
 
     private fun setClickListeners(operation: TransferOperation) {
@@ -163,7 +156,7 @@ class ProgressViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         stopB.setOnClickListener { _: View? ->
-            // support stopping
+            TransferOperationsManager.removeOrCancelTransferOperationAtIndex(bindingAdapterPosition - 1)
         }
     }
 }
