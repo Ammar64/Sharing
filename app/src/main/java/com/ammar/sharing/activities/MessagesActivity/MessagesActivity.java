@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.viewHolders.HeaderViewHolder;
 import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.MessagesAdapter;
-import com.ammar.sharing.common.Data;
+import com.ammar.sharing.common.LiveDataSingletons;
 import com.ammar.sharing.custom.ui.AdaptiveActivity;
 import com.ammar.sharing.models.Message;
 import com.ammar.sharing.models.User;
@@ -50,11 +50,12 @@ public class MessagesActivity extends AdaptiveActivity {
             String messageText = messageInput.getText().toString();
             if( messageText.isEmpty() ) return;
             Message message = new Message(messageText);
-            for( User i : User.users ){
-                if( i.isWebSocketConnected(MessagesWSSession.path) ) {
-                    i.getWebSocket(MessagesWSSession.path).sendText(message.toJSON().toString());
-                }
-            }
+            // FIXME: Implement in rust
+//            for( User i : User.users ){
+//                if( i.isWebSocketConnected(MessagesWSSession.path) ) {
+//                    i.getWebSocket(MessagesWSSession.path).sendText(message.toJSON().toString());
+//                }
+//            }
             synchronized (MessagesAdapter.messages) {
                 MessagesAdapter.messages.add(message);
                 messagesAdapter.notifyItemInserted(MessagesAdapter.messages.size() - 1);
@@ -66,7 +67,7 @@ public class MessagesActivity extends AdaptiveActivity {
     }
 
     private void initObservers() {
-        Data.messagesNotifier.observe(this, (size) -> {
+        LiveDataSingletons.messagesNotifier.observe(this, (size) -> {
             messagesAdapter.notifyItemInserted(size-1);
             //FIXME: Scroll to bottom if user is already viewing the last message
             scrollToBottom();

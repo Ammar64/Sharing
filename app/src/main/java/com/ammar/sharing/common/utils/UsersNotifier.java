@@ -2,7 +2,7 @@ package com.ammar.sharing.common.utils;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.MainActivity.MainActivity;
-import com.ammar.sharing.common.Consts;
+import com.ammar.sharing.common.Global;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.websocket.sessions.MainWSSession;
 
@@ -27,16 +27,18 @@ public class UsersNotifier {
     }
 
     public static void notifyUsersOfUIChange() {
-        String themeChangedJSON = getUIChangeJSON();
-        for(User i : User.users) {
-            if(i.isWebSocketConnected(MainWSSession.path)) {
-                i.sendWebSocketMessage(MainWSSession.path, themeChangedJSON);
-            }
-        }
+        // FIXME: Implement in rust
+
+//        String themeChangedJSON = getUIChangeJSON();
+//        for(User i : User.users) {
+//            if(i.isWebSocketConnected(MainWSSession.path)) {
+//                i.sendWebSocketMessage(MainWSSession.path, themeChangedJSON);
+//            }
+//        }
     }
 
     private static String getUploadStateJSON() {
-        boolean isUploadAllowed = !Utils.getSettings().getBoolean(Consts.PREF_FIELD_IS_UPLOAD_DISABLED, false);
+        boolean isUploadAllowed = !Utils.getSettings().getBoolean(Global.PREF_FIELD_IS_UPLOAD_DISABLED, false);
         try {
             return new JSONObject()
                     .put("action", "change-upload-state")
@@ -47,19 +49,21 @@ public class UsersNotifier {
         }
     }
     public static void notifyUsersOfUploadStateChange() {
-        String uploadStateJSON = getUploadStateJSON();
-        for(User i : User.users) {
-            if(i.isWebSocketConnected(MainWSSession.path)) {
-                i.sendWebSocketMessage(MainWSSession.path, uploadStateJSON);
-            }
-        }
+        // FIXME: Implement in rust
+//        String uploadStateJSON = getUploadStateJSON();
+//        for(User i : User.users) {
+//            if(i.isWebSocketConnected(MainWSSession.path)) {
+//                i.sendWebSocketMessage(MainWSSession.path, uploadStateJSON);
+//            }
+//        }
     }
 
     public static void notifyDownloadsChanged() {
-        for(User i : User.users) {
-            if(i.isWebSocketConnected(MainWSSession.path)) {
-                i.sendWebSocketMessage(MainWSSession.path, "{\"action\":\"update-downloads\"}");
-            }
-        }
+        // FIXME: Implement in rust
+//        for(User i : User.users) {
+//            if(i.isWebSocketConnected(MainWSSession.path)) {
+//                i.sendWebSocketMessage(MainWSSession.path, "{\"action\":\"update-downloads\"}");
+//            }
+//        }
     }
 }

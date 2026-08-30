@@ -16,5 +16,10 @@ enum class OS {
                 else ->R.drawable.icon_question_mark
             }
         }
+
+        @JvmStatic
+        fun fromInt(value: Int): OS {
+            return OS.entries.getOrElse(value, { OS.UNKNOWN })
+        }
     }
 }

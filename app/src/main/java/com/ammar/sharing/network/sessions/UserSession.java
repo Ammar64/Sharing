@@ -21,7 +21,6 @@ public class UserSession extends HTTPSession {
         try {
             if ("/get-user-info".equals(req.getPath())) {
                 JSONObject userJson = new JSONObject();
-                userJson.put("id", user.getId());
                 userJson.put("username", user.getName());
                 res.setStatusCode(200);
                 res.sendResponse(userJson.toString().getBytes());
@@ -39,12 +38,11 @@ public class UserSession extends HTTPSession {
             if ("/update-user-name".equals(req.getPath())) {
                 JSONObject jsonReq = new JSONObject(req.getBody());
                 String username = jsonReq.getString("username");
-                user.setName(username);
+                //user.setName(username);
 
                 JSONObject jsonRes = new JSONObject();
                 jsonRes.put("changed", true);
                 jsonRes.put("username", user.getName());
-                jsonRes.put("userID", user.getId());
                 res.setContentType("application/json");
                 res.sendResponse(jsonRes.toString().getBytes());
             }

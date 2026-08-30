@@ -4,7 +4,6 @@ import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
-import com.ammar.sharing.network.utils.WebAppUtils;
 
 
 
@@ -14,29 +13,5 @@ public class MainSession extends HTTPSession {
         super(user);
     }
 
-    @Override
-    public void GET(Request req, Response res) {
-        String path = req.getPath();
-        if ("/".equals(path)) {
-            String indexHTMLWebAppPath = WebAppUtils.getWebResourcePath("/index.html");
-            byte[] content = WebAppUtils.readFileFromWebAssets(indexHTMLWebAppPath);
-            res.setStatusCode(200);
-            res.setContentType("text/html");
-            res.sendResponse(content);
-        } else if( WebAppUtils.webAppPathExists(path) ) {
-            String webAppPath = WebAppUtils.getWebResourcePath(path);
-            byte[] content = WebAppUtils.readFileFromWebAssets(webAppPath);
-            res.setStatusCode(200);
-            res.setContentType(Utils.getMimeType(webAppPath));
-            res.sendResponse(content);
-        } else {
-            String indexHTMLWebAppPath = WebAppUtils.getWebResourcePath("/index.html");
-            byte[] content = WebAppUtils.readFileFromWebAssets(indexHTMLWebAppPath);
-            if( !WebAppUtils.webAppRouteExists(path) ) {
-                res.setStatusCode(404);
-            }
-            res.setContentType("text/html");
-            res.sendResponse(content);
-        }
-    }
+
 }

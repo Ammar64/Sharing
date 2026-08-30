@@ -13,7 +13,7 @@ import com.ammar.sharing.R;
 import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.viewHolders.HeaderViewHolder;
 import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.viewHolders.ProgressViewHolder;
 import com.ammar.sharing.activities.MainActivity.fragments.BrowserShareFragment;
-import com.ammar.sharing.custom.io.ProgressManager;
+import com.ammar.sharing.nativebackend.TransferOperationsManager;
 
 // this adapter for the recycler view you see when you open the app
 // it takes the entire screen except for the top and bottom bars
@@ -64,7 +64,7 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case TYPE_PROGRESS:
-                ((ProgressViewHolder) holder).setup(ProgressManager.progresses.get(position - 1));
+                ((ProgressViewHolder) holder).setup(TransferOperationsManager.getTransferOperationAtIndex(position - 1));
                 break;
             case TYPE_HEADER:
                 ((HeaderViewHolder) holder).updateUnseenMessagesNum();
@@ -75,6 +75,6 @@ public class ShareAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return ProgressManager.progresses.size() + 2;
+        return TransferOperationsManager.getOperationsCount() + 2;
     }
 }

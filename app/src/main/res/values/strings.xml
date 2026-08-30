@@ -218,4 +218,5 @@
     <string name="video_source">video source</string>
     <string name="rear_camera">Rear camera</string>
     <string name="front_camera">Front camera</string>
+    <string name="cert_not_created">The certificate has not been created yet. start the server to create one.</string>
 </resources>

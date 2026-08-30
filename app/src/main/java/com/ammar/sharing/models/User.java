@@ -1,12 +1,5 @@
 package com.ammar.sharing.models;
 
-import android.content.SharedPreferences;
-import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-
-import com.ammar.sharing.common.Consts;
-import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.enums.OS;
 import com.ammar.sharing.custom.lambda.MyConsumer;
 import com.ammar.sharing.network.websocket.WebSocket;
@@ -20,175 +13,51 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+@SuppressWarnings("JavaJniMissingFunction")
 public class User {
-    public static final ArrayList<User> users = new ArrayList<>();
-
-    private final int id;
-
-    public final LinkedList<Socket> sockets = new LinkedList<>();
-    private final HashMap<String, WebSocket> wsMap = new HashMap<>();
-
-    private final SocketAddress address;
-    private boolean _isBlocked = false;
     private String name;
-
-    public enum StreamStatus {
-        SERVICE_OFF,
-        DISALLOWED,
-        ALLOWED
-    }
-    public StreamStatus mStreamStatus = StreamStatus.DISALLOWED;
-    private static int numUsers = 0;
-
-    private User(Socket socket, String userAgent) {
-        this.address = socket.getRemoteSocketAddress();
-        this.sockets.add(socket);
-
-        this.id = numUsers++;
-        this.name = "User-" + getId();
-        if (userAgent != null) {
-            if (userAgent.contains("Windows")) {
-                this.OS = com.ammar.sharing.common.enums.OS.WINDOWS;
-            } else if (userAgent.contains("Android")) {
-                this.OS = com.ammar.sharing.common.enums.OS.ANDROID;
-            } else if (userAgent.contains("Linux")) {
-                this.OS = com.ammar.sharing.common.enums.OS.LINUX;
-            } else this.OS = com.ammar.sharing.common.enums.OS.UNKNOWN;
-        } else {
-            this.OS = com.ammar.sharing.common.enums.OS.UNKNOWN;
-        }
-    }
-
-    // make new user if user exist return it.
-    public static User RegisterUser(SharedPreferences prefs, Socket socket, String agent) {
-        User registered_user = getUserBySockAddr(socket.getRemoteSocketAddress());
-        if (registered_user != null) {
-            if (!registered_user.socketExists(socket))
-                registered_user.addSocket(socket);
-            return registered_user;
-        } else {
-            User new_user = new User(socket, agent);
-            User.users.add(new_user);
-            // block or not
-            new_user.block(prefs.getBoolean(Consts.PREF_FIELD_ARE_USERS_BLOCKED, false));
-
-            // inform UI
-            Bundle bundle = new Bundle();
-            bundle.putChar("action", 'A');
-            bundle.putInt("index", new_user.getId());
-            Data.usersListObserver.forcePostValue(bundle);
-            return new_user;
-        }
-    }
-
-    private boolean socketExists(Socket s) {
-        return sockets.contains(s);
-    }
-
-    @Nullable
-    public static User getUserBySockAddr(SocketAddress targetAddr) {
-        String targetIp = targetAddr.toString();
-        targetIp = targetIp.substring(1, targetIp.lastIndexOf(":"));
-        for (User i : users) {
-            String ip = i.getAddress().toString();
-            ip = ip.substring(1, ip.lastIndexOf(":"));
-            if (ip.equals(targetIp)) {
-                return i;
-            }
-        }
-        return null;
-    }
-
-    public static void closeAllSockets() {
-        try {
-            for (User user : users) {
-                Iterator<Socket> iterator = user.sockets.iterator();
-                while (iterator.hasNext()) {
-                    Socket i = iterator.next();
-                    i.getInputStream().close();
-                    i.getOutputStream().close();
-                    i.close();
-                    iterator.remove();
-                }
-            }
-        } catch (IOException ignore) {
-        }
-
-    }
-
-    public void addSocket(Socket s) {
-        sockets.add(s);
-    }
-
-    public void setName(String name) {
+    private String ip;
+    private final int nativeIndex;
+    private boolean isBlocked;
+    private boolean isConnected;
+    public User(String name, String ip, int nativeIndex, boolean isBlocked, boolean isConnected) {
         this.name = name;
-
-        Bundle bundle = new Bundle();
-        bundle.putChar("action", 'C');
-        bundle.putInt("index", getId());
-        Data.usersListObserver.forcePostValue(bundle);
+        this.ip = ip;
+        this.nativeIndex = nativeIndex;
+        this.isBlocked = isBlocked;
+        this.isConnected = isConnected;
+    }
+    private native void nativeSetBlocked(int index, boolean blocked);
+    public void setBlocked(boolean blocked) {
+        this.isBlocked = blocked;
+        nativeSetBlocked(nativeIndex, blocked);
     }
 
-    public void block(boolean b) {
-        this._isBlocked = b;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public SocketAddress getAddress() {
-        return address;
-    }
-
-    public String getIp() {
-        String ip = address.toString();
-        return ip.substring(1, ip.lastIndexOf(":"));
-    }
-
-    private final OS OS;
-
+    private native int nativeGetOs(int index);
     public OS getOS() {
-        return OS;
+        int os_number = nativeGetOs(nativeIndex);
+        return OS.fromInt(os_number);
     }
 
-    public boolean isBlocked() {
-        return this._isBlocked;
-    }
+    public static native User getUser(int index);
+    public static native int usersCount();
+    public static native boolean noUsers();
+
 
     public String getName() {
         return name;
     }
 
-    public void addWebsocket(String path, WebSocket ws) {
-        wsMap.put(path, ws);
+    public String getIp() {
+        return ip;
     }
 
-    public boolean isWebSocketConnected(String path) {
-        WebSocket ws = wsMap.get(path);
-        if (ws != null) {
-            return ws.isNotClosed();
-        } else {
-            return false;
-        }
+    public boolean isBlocked() {
+        return isBlocked;
     }
 
-    public WebSocket getWebSocket(String path) {
-        return wsMap.get(path);
+    public boolean isConnected() {
+        return isConnected;
     }
-    public void sendWebSocketMessage(String wsPath, String message) {
-        WebSocket ws = wsMap.get(wsPath);
-        if(ws == null || !ws.isNotClosed()) return;
-        ws.sendText(message);
-    }
-    public void sendWebSocketMessage(String wsPath, byte[] message) {
-        WebSocket ws = wsMap.get(wsPath);
-        if(ws == null || !ws.isNotClosed()) return;
-        ws.sendBinary(message);
-    }
-    public void setOnWebSocketMessage(String wsPath, MyConsumer<String> onMessage) {
-        WebSocket ws = wsMap.get(wsPath);
-        WebSocketSession session = ws.getSession();
-        session.setOnStringMessageListener(onMessage);
-    }
+
 }

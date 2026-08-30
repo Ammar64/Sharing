@@ -4,7 +4,7 @@ import static com.ammar.sharing.common.utils.Utils.readLineUTF8;
 
 import android.util.Log;
 
-import com.ammar.sharing.common.Consts;
+import com.ammar.sharing.common.Global;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.network.exceptions.BadRequestException;
 import com.ammar.sharing.network.exceptions.NotImplementedException;
@@ -159,7 +159,7 @@ public class Request {
         }
         
         if (getHeader("Content-Type").startsWith("application/json")) {
-            if (content_length <= Consts.MAX_NON_FILE_CONTENT_LENGTH) {
+            if (content_length <= Global.MAX_NON_FILE_CONTENT_LENGTH) {
                 byte[] buff = new byte[(int) content_length];
                 clientInput.read(buff);
                 return new String(buff);

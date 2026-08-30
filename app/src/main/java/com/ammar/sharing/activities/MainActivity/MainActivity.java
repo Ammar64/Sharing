@@ -4,7 +4,6 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -46,17 +45,14 @@ import com.ammar.sharing.activities.ChangeLogActivity.ChangeLogActivity;
 import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.viewHolders.HeaderViewHolder;
 import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.MessagesAdapter;
 import com.ammar.sharing.activities.SettingsActivity.SettingActivityResultsContract;
-import com.ammar.sharing.common.Consts;
-import com.ammar.sharing.common.Data;
-import com.ammar.sharing.common.utils.UsersNotifier;
+import com.ammar.sharing.common.Global;
+import com.ammar.sharing.common.LiveDataSingletons;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.ui.AdaptiveDropDown;
 import com.ammar.sharing.custom.ui.AdaptiveTextView;
 import com.ammar.sharing.models.Message;
-import com.ammar.sharing.models.User;
-import com.ammar.sharing.network.websocket.sessions.MessagesWSSession;
+import com.ammar.sharing.network.WebServer;
 import com.ammar.sharing.services.ServerService;
-import com.ammar.sharing.BuildConfig;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -80,12 +76,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private AlertDialog errorDialogAD;
 
-
-    private SharedPreferences settingsPref;
-    private SharedPreferences appInfoPref;
-
     public static boolean sDarkMode = true;
-    public static boolean isFirstRun = false;
     public static Insets systemBarsPaddings;
     public final int REQUEST_CODE_STORAGE_PERMISSION = 2;
     public final int REQUEST_CODE_NOTIFICATION_PERMISSION = 3;
@@ -111,9 +102,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void prepareActivity() {
-        settingsPref = getSharedPreferences(Consts.PREF_SETTINGS, MODE_PRIVATE);
-        sDarkMode = settingsPref.getBoolean(Consts.PREF_FIELD_IS_DARK, true);
-
+        sDarkMode = Utils.getSettings().getBoolean(Global.PREF_FIELD_IS_DARK, true);
         if (sDarkMode) {
             setTheme(R.style.AppThemeDark);
             getWindow().setBackgroundDrawableResource(R.drawable.gradient_background_dark);
@@ -123,27 +112,8 @@ public class MainActivity extends AppCompatActivity {
             getWindow().setBackgroundDrawableResource(R.drawable.gradient_background_light);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_IN_OVERSCAN);
-
-        // setup language
-        String lang = settingsPref.getString(Consts.PREF_FIELD_LANG, "");
-        if (!lang.isEmpty()) {
-            Utils.setLocale(this, lang);
-        }
-        // check for first Run
-        appInfoPref = getSharedPreferences(Consts.PREF_APP_INFO, MODE_PRIVATE);
-        isFirstRun = appInfoPref.getBoolean(Consts.PREF_FIELD_IS_FIRST_RUN, true);
-        if (isFirstRun) {
-            settingsPref.edit()
-                    .putBoolean(Consts.PREF_FIELD_IS_DARK, true)
-                    .apply();
-            appInfoPref.edit().putBoolean(Consts.PREF_FIELD_IS_FIRST_RUN, false).apply();
-        }
-
-        int lastVerCode = appInfoPref.getInt(Consts.PREF_FIELD_LAST_VERCODE, 0);
-        if (BuildConfig.VERSION_CODE > lastVerCode) {
-            appInfoPref.edit().putInt(Consts.PREF_FIELD_LAST_VERCODE, BuildConfig.VERSION_CODE).apply();
+        if(Global.IS_FIRST_RUN_AFTER_UPDATE) {
             startActivity(new Intent(this, ChangeLogActivity.class));
         }
     }
@@ -272,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         Intent serviceIntent = new Intent(this, ServerService.class);
-        serviceIntent.setAction(ServerService.ACTION_GET_SERVER_STATUS);
+        serviceIntent.setAction(ServerService.ACTION_POST_SERVER_STATUS);
         startService(serviceIntent);
 
         if (Intent.ACTION_SEND.equals(getIntent().getAction())) {
@@ -283,12 +253,13 @@ public class MainActivity extends AppCompatActivity {
                     MessagesAdapter.messages.add(message);
                     // notify UI that a message was received
                     HeaderViewHolder.unseenMessagesCount++;
-                    Data.messagesNotifier.forcePostValue(MessagesAdapter.messages.size());
-                    for (User i : User.users) {
-                        if (i.isWebSocketConnected(MessagesWSSession.path)) {
-                            i.getWebSocket(MessagesWSSession.path).sendText(message.toJSON().toString());
-                        }
-                    }
+                    LiveDataSingletons.messagesNotifier.forcePostValue(MessagesAdapter.messages.size());
+                    // FIXME: Implement in rust
+//                    for (User i : User.users) {
+//                        if (i.isWebSocketConnected(MessagesWSSession.path)) {
+//                            i.getWebSocket(MessagesWSSession.path).sendText(message.toJSON().toString());
+//                        }
+//                    }
                 }
             } else {
                 Intent uriIntent = new Intent(this, ServerService.class);
@@ -317,8 +288,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void observeStates() {
-        if (settingsPref.getBoolean(Consts.PREF_FIELD_DEBUG_MODE, false))
-            Data.alertNotifier.observe(this, info -> {
+        if (Utils.getSettings().getBoolean(Global.PREF_FIELD_DEBUG_MODE, false))
+            LiveDataSingletons.alertNotifier.observe(this, info -> {
                 errorDialogAD.setTitle(info.getString("title"));
                 errorDialogAD.setMessage(info.getString("message"));
                 errorDialogAD.show();
@@ -392,12 +363,12 @@ public class MainActivity extends AppCompatActivity {
         } else syncTheme(sDarkMode);
 
         // notify browsers
-        UsersNotifier.notifyUsersOfUIChange();
+        WebServer.doSomethingIfServerAvailable(WebServer::updateUiConfig);
     }
 
     @Override
     protected void onPause() {
-        settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_DARK, sDarkMode).apply();
+        Utils.getSettings().edit().putBoolean(Global.PREF_FIELD_IS_DARK, sDarkMode).apply();
         super.onPause();
     }
 

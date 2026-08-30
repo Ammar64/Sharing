@@ -22,8 +22,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RawRes;
 
 import com.ammar.sharing.R;
-import com.ammar.sharing.common.Consts;
-import com.ammar.sharing.common.Data;
+import com.ammar.sharing.common.Global;
+import com.ammar.sharing.common.LiveDataSingletons;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -33,14 +33,8 @@ import java.util.Locale;
 import java.util.concurrent.Callable;
 
 public class Utils {
-
-    static {
-        System.loadLibrary("nativeutils");
-        System.loadLibrary("rust_native");
-    }
-
-    public static native String hello(String h);
     public static String getFormattedSize(long size) {
+        
         double s = size;
         String[] levels = {"B", "KB", "MB", "GB", "TB", "PB"};
         int level = 0;
@@ -67,10 +61,11 @@ public class Utils {
     public static void setupUtils(Context ctx) {
         Utils.res = ctx.getResources();
         Utils.assetManager = ctx.getAssets();
-        Utils.settings = ctx.getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
+        Utils.settings = ctx.getSharedPreferences(Global.PREF_SETTINGS, Context.MODE_PRIVATE);
         Utils.pm = ctx.getPackageManager();
         Utils.cr = ctx.getContentResolver();
         Utils.applicationContext = ctx;
+
     }
 
     private static Context applicationContext;
@@ -246,13 +241,13 @@ public class Utils {
 
     public static void createAppDirs() throws IOException {
         boolean dirsMade = true;
-        dirsMade &= Consts.Sharing.mkdirs();
-        dirsMade &= Consts.appsDir.mkdir();
-        dirsMade &= Consts.imagesDir.mkdir();
-        dirsMade &= Consts.audioDir.mkdir();
-        dirsMade &= Consts.otherDir.mkdir();
-        dirsMade &= Consts.videosDir.mkdir();
-        dirsMade &= Consts.documentsDir.mkdir();
+        dirsMade &= Global.Sharing.mkdirs();
+        dirsMade &= Global.appsDir.mkdir();
+        dirsMade &= Global.imagesDir.mkdir();
+        dirsMade &= Global.audioDir.mkdir();
+        dirsMade &= Global.otherDir.mkdir();
+        dirsMade &= Global.videosDir.mkdir();
+        dirsMade &= Global.documentsDir.mkdir();
 
         if (!dirsMade) throw new IOException("Failed to make app directories");
     }
@@ -260,7 +255,7 @@ public class Utils {
     public static void setLocale(Context context, String languageTag) {
         Locale locale;
         if (languageTag == null || languageTag.isEmpty()) {
-            locale = Consts.systemLocale;
+            locale = Global.systemLocale;
         } else {
             locale = Locale.forLanguageTag(languageTag);
         }
@@ -314,25 +309,25 @@ public class Utils {
         bundle.putString("title", title);
         bundle.putString("message", message);
         Log.e("ERROR_DIALOG", title + "\n" + message);
-        Data.alertNotifier.postValue(bundle);
+        LiveDataSingletons.alertNotifier.postValue(bundle);
     }
 
     public static File getUploadDir(String fileName) {
         String mimeType = Utils.getMimeType(fileName);
         if (mimeType.startsWith("image/")) {
-            return Consts.imagesDir;
+            return Global.imagesDir;
         } else if (mimeType.equals("application/vnd.android.package-archive")) { // apk files in apps folder
-            return Consts.appsDir;
+            return Global.appsDir;
         } else if (mimeType.startsWith("video/")) {
-            return Consts.videosDir;
+            return Global.videosDir;
         } else if (mimeType.startsWith("audio/")) {
-            return Consts.audioDir;
+            return Global.audioDir;
         } else if (Utils.isDocumentType(mimeType)) {
-            return Consts.documentsDir;
+            return Global.documentsDir;
         } else if (fileName.substring(fileName.lastIndexOf(".")).equals(".apks")) { // apks files should go to apps folder
-            return Consts.appsDir;
+            return Global.appsDir;
         } else {
-            return Consts.otherDir;
+            return Global.otherDir;
         }
     }
 
@@ -397,8 +392,8 @@ public class Utils {
     }
 
     public static boolean isLangSupported(String lang) {
-        assert Consts.langCodes != null;
-        for(final String i : Consts.langCodes) {
+        assert Global.langCodes != null;
+        for(final String i : Global.langCodes) {
             if(i.equals(lang)) return true;
         }
         return false;

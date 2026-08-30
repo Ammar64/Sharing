@@ -2,7 +2,7 @@ package com.ammar.sharing.custom.io;
 
 import android.os.Bundle;
 
-import com.ammar.sharing.common.Data;
+import com.ammar.sharing.common.LiveDataSingletons;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.User;
@@ -52,7 +52,7 @@ public class ProgressManager {
         Bundle b = new Bundle();
         b.putChar("action", 'R');
         b.putInt("index", index);
-        Data.filesSendNotifier.forcePostValue(b);
+        LiveDataSingletons.filesSendNotifier.forcePostValue(b);
     }
     public ProgressManager(Sharable sharable, Socket socket, long total, User user, OP opType) {
         this.uuid = UUID.randomUUID();
@@ -68,7 +68,7 @@ public class ProgressManager {
         Bundle info_add = new Bundle();
         info_add.putChar("action", 'A');
         info_add.putInt("index", index);
-        Data.filesSendNotifier.forcePostValue(info_add);
+        LiveDataSingletons.filesSendNotifier.forcePostValue(info_add);
         // set action to P for later use
         progress_info.putChar("action", 'P');
         progress_info.putInt("index", index);
@@ -163,7 +163,7 @@ public class ProgressManager {
 
     public void reportProgress() {
         if (System.currentTimeMillis() - lastTime >= 300) {
-            Data.filesSendNotifier.postValue(progress_info); // notify the UI of changes
+            LiveDataSingletons.filesSendNotifier.postValue(progress_info); // notify the UI of changes
             transferSpeed = getLoaded() - previouslyLoaded;
             previouslyLoaded = getLoaded();
             lastTime = System.currentTimeMillis();
@@ -179,12 +179,12 @@ public class ProgressManager {
     public void reportCompleted() {
         totalFinishTime = System.currentTimeMillis() - startTime;
         setLoaded(COMPLETED);
-        Data.filesSendNotifier.forcePostValue(progress_info);
+        LiveDataSingletons.filesSendNotifier.forcePostValue(progress_info);
     }
 
     public void reportStopped() {
         setLoaded(STOPPED_BY_REMOTE);
-        Data.filesSendNotifier.forcePostValue(progress_info);
+        LiveDataSingletons.filesSendNotifier.forcePostValue(progress_info);
     }
 
     public void stop() {
@@ -194,7 +194,7 @@ public class ProgressManager {
             socket.close();
         } catch (IOException ignore) {}
         setLoaded(STOPPED_BY_REMOTE); // Passing STOPPED_BY_USER doesn't work properly
-        Data.filesSendNotifier.forcePostValue(progress_info);
+        LiveDataSingletons.filesSendNotifier.forcePostValue(progress_info);
     }
 
 }

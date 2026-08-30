@@ -1,3 +1,3 @@
-[submodule "app/src/main/jni/corrosion"]
-	path = app/src/main/jni/corrosion
-	url = https://github.com/corrosion-rs/corrosion.git
+[submodule "share-any-backend"]
+	path = nativebackend/src/main/rust/share-any-backend
+	url = https://github.com/Ammar64/ShareAnyBackend.git

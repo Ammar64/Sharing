@@ -10,12 +10,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
-import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.enums.OS;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.User;
@@ -32,12 +29,12 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull UsersAdapter.ViewHolder holder, int position) {
-        holder.setup(User.users.get(position));
+        holder.setup(User.getUser(position));
     }
 
     @Override
     public int getItemCount() {
-        return User.users.size();
+        return User.usersCount();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -68,7 +65,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
             setBlockButton(user.isBlocked());
             userBlockToggleB.setOnClickListener(button -> {
-                user.block(!user.isBlocked());
+                user.setBlocked(!user.isBlocked());
                 setBlockButton(user.isBlocked());
             });
         }

@@ -36,7 +36,7 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <application
-        android:name=".application.SharingApp"
+        android:name=".application.AppShareAny"
         android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:usesCleartextTraffic="true"
@@ -69,9 +69,6 @@
             </intent-filter>
         </activity-alias>
 
-        <activity android:name=".activities.AppToAppSharingActivity.AppToAppSharingActivity"
-            android:exported="false">
-        </activity>
 
         <activity android:name=".activities.AddAppsActivity.AddAppsActivity"
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
@@ -93,10 +90,6 @@
         <activity android:name=".activities.AddAppsAndFilesActivity.AddAppsAndFilesActivity"
             android:exported="false"/>
 
-        <activity android:name=".activities.StreamingActivity.StreamingActivity"
-            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
-            android:theme="@style/FullScreenAppTheme"
-            android:exported="false"/>
 
         <activity android:name=".activities.ChangeLogActivity.ChangeLogActivity"
             android:exported="true" />
@@ -114,9 +107,6 @@
 
         <service android:name=".services.PackageInstallerService"
             android:exported="false" />
-
-        <service android:name=".services.StreamingService"
-            android:exported="false"/>
 
         <service android:name=".services.ScreenCapturerService"
             android:foregroundServiceType="mediaProjection"

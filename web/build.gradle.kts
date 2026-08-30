@@ -13,38 +13,21 @@ android {
     }
 }
 
-val jsonFileLocalProjectOptions = file("${rootDir}/local_project_options.json")
-val localProjectOptions = if( jsonFileLocalProjectOptions.exists() ) {
-    JsonSlurper().parseText(jsonFileLocalProjectOptions.readText())
-} else {
-    JsonSlurper().parseText("{}")
-} as Map<*, *>
 
-tasks.register<Exec>("buildWeb") {
-    doFirst {
-        println("Running buildWeb task...")
+androidComponents {
+    onVariants { variant ->
+        val variantCap = variant.name.replaceFirstChar { it.uppercase() }
 
-        println("Removing .parcel-cache/ if exists")
-        file(".parcel-cache").deleteRecursively()
-
-        println("Removing dist/ if exists")
-        file("dist").deleteRecursively()
-    }
-
-    commandLine("bun", "run", "build")
-    outputs.upToDateWhen {
-        var forceRebuildWeb = localProjectOptions["force_rebuild_web"] as Boolean?
-        if( forceRebuildWeb == null) {
-            forceRebuildWeb = true
+        val buildWebTask = tasks.register<BuildWebTask>("buildWeb$variantCap") {
+            frontendDir.set(fileTree("frontend") {
+                exclude("node_modules/**")
+            })
+            outputDirectory.set(layout.projectDirectory.dir("dist"))
         }
-        return@upToDateWhen !(forceRebuildWeb)
-    }
-}
 
-tasks.named("preBuild") {
-    doFirst {
-        println("Running preBuild task...")
+        variant.sources.assets?.addGeneratedSourceDirectory(
+            buildWebTask,
+            BuildWebTask::outputDirectory
+        )
     }
-
-    dependsOn(tasks.named("buildWeb"))
 }

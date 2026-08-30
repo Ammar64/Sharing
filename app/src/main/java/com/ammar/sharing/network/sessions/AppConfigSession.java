@@ -2,8 +2,7 @@ package com.ammar.sharing.network.sessions;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.MainActivity.MainActivity;
-import com.ammar.sharing.common.Consts;
-import com.ammar.sharing.common.utils.StreamUtils;
+import com.ammar.sharing.common.Global;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
@@ -22,7 +21,7 @@ public class AppConfigSession extends HTTPSession {
     public void GET(Request req, Response res) {
         String path = req.getPath();
         try {
-            boolean uploadDisabled = Utils.getSettings().getBoolean(Consts.PREF_FIELD_IS_UPLOAD_DISABLED, false);
+            boolean uploadDisabled = Utils.getSettings().getBoolean(Global.PREF_FIELD_IS_UPLOAD_DISABLED, false);
             res.setContentType("application/json"); // this session always sends json
             if ("/check-upload-allowed".equals(path)) {
                 JSONObject uploadAllowedJson = new JSONObject();
@@ -35,13 +34,7 @@ public class AppConfigSession extends HTTPSession {
                 appConfigJson.put("dir", Utils.getRes().getString(R.string.dir));
                 appConfigJson.put("language", Utils.getRes().getString(R.string.lang));
                 appConfigJson.put("browserIP", user.getIp());
-                String streamStatus;
-                if(!StreamUtils.isStreamingOn) {
-                    streamStatus = User.StreamStatus.SERVICE_OFF.toString();
-                } else {
-                    streamStatus = user.mStreamStatus.toString();
-                }
-                appConfigJson.put("stream-status", streamStatus);
+
                 res.sendResponse(appConfigJson.toString().getBytes(StandardCharsets.UTF_8));
             }
         } catch (JSONException e) {

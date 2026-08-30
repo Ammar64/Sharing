@@ -2,10 +2,8 @@ package com.ammar.sharing.activities.MainActivity.adaptersR;
 
 
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.os.ParcelFileDescriptor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.common.utils.Utils;
-import com.ammar.sharing.models.Sharable;
-import com.ammar.sharing.models.SharableApp;
+import com.ammar.sharing.nativebackend.DownloadItemsManager;
+import com.ammar.sharing.nativebackend.DownloadItem;
 import com.ammar.sharing.services.ServerService;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
@@ -44,9 +42,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
     }
 
     @Override
-    public int getItemCount() {
-        return Sharable.sharablesList.size();
-    }
+    public int getItemCount() { return DownloadItemsManager.getDownloadItemsCount(); }
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -55,6 +51,7 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         final TextView fileSizeTV;
 
         final View removeB;
+        Map<Integer, Drawable> appsIconCache = new TreeMap<>();
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,19 +62,22 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
         }
 
         public void setup(int pos) {
-            Sharable file = Sharable.sharablesList.get(pos);
+            DownloadItem file = DownloadItemsManager.getDownloadItem(pos);
             setFileName(file.getName());
             setFileIconIV(file, pos);
             setFileSizeTV(file);
-            setFileListener(file);
+            setFileListener();
         }
 
-        public void setFileListener(Sharable file) {
+        public void setFileListener() {
             removeB.setOnClickListener(v -> {
-                Intent serviceIntent = new Intent(itemView.getContext(), ServerService.class);
-                serviceIntent.setAction(ServerService.ACTION_REMOVE_DOWNLOAD);
-                serviceIntent.putExtra(ServerService.EXTRA_DOWNLOAD_UUID, file.getUUID().toString());
-                itemView.getContext().startService(serviceIntent);
+                int pos = getBindingAdapterPosition();
+                if( pos != RecyclerView.NO_POSITION ) {
+                    Intent serviceIntent = new Intent(itemView.getContext(), ServerService.class);
+                    serviceIntent.setAction(ServerService.ACTION_REMOVE_DOWNLOAD);
+                    serviceIntent.putExtra(ServerService.EXTRA_DOWNLOAD_INDEX, pos);
+                    itemView.getContext().startService(serviceIntent);
+                }
             });
         }
 
@@ -85,61 +85,26 @@ public class ChosenFilesAdapter extends RecyclerView.Adapter<ChosenFilesAdapter.
             fileNameTV.setText(fileName);
         }
 
-        public void setFileSizeTV(Sharable file) {
-            fileSizeTV.setText(
-                    (file instanceof SharableApp a && a.hasSplits()) ?
-                    Utils.getRes().getString(R.string.splits):
-                    Utils.getFormattedSize(file.getSize())
-            );
+        public void setFileSizeTV(DownloadItem item) {
+            fileSizeTV.setText(Utils.getFormattedSize(item.getSize()));
         }
 
-        Map<Integer, Drawable> appsIconCache = new TreeMap<>();
-
-        public void setFileIconIV(@NonNull Sharable file, int pos) {
+        public void setFileIconIV(@NonNull DownloadItem file, int pos) {
             String mimeType = file.getMimeType();
             int imageSize = (int) Utils.dpToPx(40);
             RequestManager request = Glide.with(itemView.getContext());
             RequestBuilder<Drawable> builder;
-            if (file instanceof SharableApp) {
-                SharableApp app = (SharableApp) file;
-                builder = request.load(app.getIcon());
-            } else if (mimeType.startsWith("image/")) {
-                builder = request.load(file.isUri() ? file.getUri() : file.getFile());
-            } else if(mimeType.startsWith("audio/")) {
+            ParcelFileDescriptor pfd = DownloadItemsManager.openDownloadItem(pos);
+            if (mimeType.startsWith("image/")) {
+                builder = request.load(pfd);
+            } else if (mimeType.startsWith("audio/")) {
                 builder = request.load(R.drawable.ic_audio);
-            } else if(mimeType.startsWith("video/")) {
+            } else if (mimeType.startsWith("video/")) {
                 builder = request.load(R.drawable.ic_video);
-            } else if ("application/vnd.android.package-archive".equals(mimeType)) {
-                Drawable appIcon = appsIconCache.get(pos);
-                if (appIcon == null) {
-                    PackageManager pm = itemView.getContext().getApplicationContext().getPackageManager();
-                    if( !file.isUri() ) {
-                        PackageInfo packageInfo = pm.getPackageArchiveInfo(file.getFilePath(), 0);
-                        if (packageInfo != null) {
-                            ApplicationInfo appInfo = packageInfo.applicationInfo;
-                            appInfo.sourceDir = file.getFilePath();
-                            appInfo.publicSourceDir = file.getFilePath();
-                            appIcon = appInfo.loadIcon(pm);
-                            appsIconCache.put(pos, appIcon);
-
-                            builder = request.load(appIcon);
-                            builder = builder.skipMemoryCache(true);
-
-                        } else builder = request.load(R.drawable.icon_archive);
-                    } else {
-                        builder = request.load(R.drawable.icon_archive);
-                    }
-                } else {
-                    builder = request.load(appIcon);
-                }
             } else {
                 builder = request.load(R.drawable.ic_file);
             }
-
-
-            builder.diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .override(imageSize, imageSize)
-                    .into(fileIconIV);
+            builder.diskCacheStrategy(DiskCacheStrategy.NONE).override(imageSize, imageSize).into(fileIconIV);
         }
     }
 }

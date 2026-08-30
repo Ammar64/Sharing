@@ -8,16 +8,21 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddFilesActivity.adaptersR.StorageAdapter;
+import com.ammar.sharing.activities.MainActivity.MainActivity;
 import com.ammar.sharing.common.utils.FileUtils;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.ui.AdaptiveDropDown;
@@ -63,14 +68,21 @@ public class AddFilesActivity extends AppCompatActivity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_files);
+
         initItems();
         setListeners();
 
     }
 
     private void initItems() {
-        recentsFile = new File(getFilesDir(), "recent_files.json");
+        EdgeToEdge.enable(this);
+        ViewCompat.setOnApplyWindowInsetsListener(getWindow().getDecorView(), (v, insets) -> {
+            Insets paddings = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(paddings.left, paddings.top, paddings.right, paddings.bottom);
+            return insets;
+        });
 
+        recentsFile = new File(getFilesDir(), "recent_files.json");
         appBar = findViewById(R.id.TB_Toolbar);
         appBar.inflateMenu(R.menu.menu_select);
         appBar.setNavigationIcon(R.drawable.ic_back);

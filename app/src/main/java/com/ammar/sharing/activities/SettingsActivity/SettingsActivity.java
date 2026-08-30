@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -17,13 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.MainActivity.adaptersR.LanguagesAdapter.LanguagesAdapter;
-import com.ammar.sharing.common.Consts;
+import com.ammar.sharing.common.Global;
 import com.ammar.sharing.common.utils.UsersNotifier;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.ui.DefaultActivity;
 import com.ammar.sharing.custom.ui.NumberDialog;
 import com.ammar.sharing.custom.ui.RoundDialog;
-import com.ammar.sharing.network.Server;
+import com.ammar.sharing.network.WebServer;
 import com.ammar.sharing.services.ServerService;
 import com.suke.widget.SwitchButton;
 
@@ -65,17 +64,17 @@ public class SettingsActivity extends DefaultActivity {
         appBarTB.setNavigationIcon(R.drawable.ic_back);
         setTitle(R.string.settings);
 
-        settingsPref = getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
+        settingsPref = getSharedPreferences(Global.PREF_SETTINGS, Context.MODE_PRIVATE);
         serverPortCL = findViewById(R.id.CL_ServerPort);
         serverPortND = new NumberDialog(this)
                 .setTitle(R.string.server_port)
                 .setHint(R.string.port)
                 .setMinValue(1024)
                 .setMaxValue(65535)
-                .setDefaultValue(Server.PORT_NUMBER)
+                .setDefaultValue(WebServer.PORT_NUMBER)
                 .setOnResult((port) -> {
-                    Server.PORT_NUMBER = port;
-                    settingsPref.edit().putInt(Consts.PREF_FIELD_SERVER_PORT, port).apply();
+                    WebServer.PORT_NUMBER = port;
+                    settingsPref.edit().putInt(Global.PREF_FIELD_SERVER_PORT, port).apply();
                     Intent intent = new Intent(this, ServerService.class);
                     intent.setAction(ServerService.ACTION_RESTART_SERVER);
                     startService(intent);
@@ -88,16 +87,16 @@ public class SettingsActivity extends DefaultActivity {
         debugModeCV = findViewById(R.id.CV_DebugMode);
 
         enableHTTPSS = findViewById(R.id.SC_EnableHTTPSToggle);
-        enableHTTPSS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_IS_HTTPS, true));
+        enableHTTPSS.setChecked(settingsPref.getBoolean(Global.PREF_FIELD_IS_HTTPS, true));
 
         uploadDisableS = findViewById(R.id.SC_UploadAllowToggle);
-        uploadDisableS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_IS_UPLOAD_DISABLED, false));
+        uploadDisableS.setChecked(settingsPref.getBoolean(Global.PREF_FIELD_IS_UPLOAD_DISABLED, false));
 
         usersBlockS = findViewById(R.id.SC_UsersBlockToggle);
-        usersBlockS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_ARE_USERS_BLOCKED, false));
+        usersBlockS.setChecked(settingsPref.getBoolean(Global.PREF_FIELD_ARE_USERS_BLOCKED, false));
 
         debugModeS = findViewById(R.id.SC_DebugModeToggle);
-        debugModeS.setChecked(settingsPref.getBoolean(Consts.PREF_FIELD_DEBUG_MODE, false));
+        debugModeS.setChecked(settingsPref.getBoolean(Global.PREF_FIELD_DEBUG_MODE, false));
 
         languageCL = findViewById(R.id.CL_SettingsLanguage);
 
@@ -120,28 +119,28 @@ public class SettingsActivity extends DefaultActivity {
             if (langCode != null) {
                 Utils.setLocale(this, langCode);
                 settingsPref.edit()
-                        .putString(Consts.PREF_FIELD_LANG, langCode)
+                        .putString(Global.PREF_FIELD_LANG, langCode)
                         .apply();
                 recreate();
                 mShouldMainActivityRecreate = true;
-                UsersNotifier.notifyUsersOfUIChange();
+                WebServer.doSomethingIfServerAvailable(WebServer::updateUiConfig);
             }
         });
     }
 
     private void setItemsListeners() {
         serverPortCL.setOnClickListener((view) -> {
-            serverPortND.setDefaultValue(Server.PORT_NUMBER);
+            serverPortND.setDefaultValue(WebServer.PORT_NUMBER);
             serverPortND.show();
         });
 
         enableHTTPSCV.setOnClickListener((view) -> enableHTTPSS.toggle());
         enableHTTPSS.setOnCheckedChangeListener((view, isChecked) -> {
-            if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_HTTPS, isChecked).commit()) {
+            if (!settingsPref.edit().putBoolean(Global.PREF_FIELD_IS_HTTPS, isChecked).commit()) {
                 Log.e("MYLOG", "Failed to change IS_HTTPS value");
                 enableHTTPSS.setChecked(!isChecked);
             } else {
-                Server.IS_HTTPS = isChecked;
+                WebServer.IS_HTTPS = isChecked;
                 Intent intent = new Intent(this, ServerService.class);
                 intent.setAction(ServerService.ACTION_RESTART_SERVER);
                 startService(intent);
@@ -150,7 +149,7 @@ public class SettingsActivity extends DefaultActivity {
 
         uploadDisableCV.setOnClickListener((view) -> uploadDisableS.toggle());
         uploadDisableS.setOnCheckedChangeListener(((view, isChecked) -> {
-            if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_UPLOAD_DISABLED, isChecked).commit()) {
+            if (!settingsPref.edit().putBoolean(Global.PREF_FIELD_IS_UPLOAD_DISABLED, isChecked).commit()) {
                 Log.e("MYLOG", "Failed to change IS_UPLOAD_DISABLED value");
                 uploadDisableS.setChecked(!isChecked);
             }
@@ -159,7 +158,7 @@ public class SettingsActivity extends DefaultActivity {
 
         usersBlockCV.setOnClickListener((view) -> usersBlockS.toggle());
         usersBlockS.setOnCheckedChangeListener(((view, isChecked) -> {
-            if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_ARE_USERS_BLOCKED, isChecked).commit()) {
+            if (!settingsPref.edit().putBoolean(Global.PREF_FIELD_ARE_USERS_BLOCKED, isChecked).commit()) {
                 Log.e("MYLOG", "Failed to change ARE_USERS_BLOCKED value");
                 usersBlockS.setChecked(!isChecked);
             }
@@ -167,7 +166,7 @@ public class SettingsActivity extends DefaultActivity {
 
         debugModeCV.setOnClickListener((view) -> debugModeS.toggle());
         debugModeS.setOnCheckedChangeListener((view, isChecked) -> {
-            if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_DEBUG_MODE, isChecked).commit()) {
+            if (!settingsPref.edit().putBoolean(Global.PREF_FIELD_DEBUG_MODE, isChecked).commit()) {
                 Toast.makeText(this, "Failed to change DEBUG_MODE value", Toast.LENGTH_SHORT).show();
                 debugModeS.setChecked(!isChecked);
             }

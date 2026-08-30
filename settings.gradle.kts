@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 rootProject.name = "Sharing"
 include(":app")
 include(":web")
+include(":nativebackend")

@@ -1,15 +1,12 @@
 package com.ammar.sharing.network.sessions;
 
-import com.ammar.sharing.common.Consts;
+import com.ammar.sharing.common.Global;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.io.ProgressManager;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.Request;
 import com.ammar.sharing.network.Response;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,7 +23,7 @@ public class UploadSession extends HTTPSession {
 
     @Override
     public void POST(Request req, Response res) {
-        boolean uploadDisabled = Utils.getSettings().getBoolean(Consts.PREF_FIELD_IS_UPLOAD_DISABLED, false);
+        boolean uploadDisabled = Utils.getSettings().getBoolean(Global.PREF_FIELD_IS_UPLOAD_DISABLED, false);
 
         try {
             String path = req.getPath();

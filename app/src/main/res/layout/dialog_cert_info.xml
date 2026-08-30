@@ -1,10 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="8dp">
+    tools:background="@color/black">
+
+    <com.ammar.sharing.custom.ui.AdaptiveTextView
+        android:id="@+id/TV_CertFingerprintNotCreatedYet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:padding="4dp"
+        android:text="@string/cert_not_created" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/CL_CertInfoContent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="8dp"
+    android:layout_gravity="center"
+    >
 
     <com.ammar.sharing.custom.ui.AdaptiveTextView
         android:id="@+id/TV_DialogCertInfoTitle"
@@ -82,3 +101,4 @@
         app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

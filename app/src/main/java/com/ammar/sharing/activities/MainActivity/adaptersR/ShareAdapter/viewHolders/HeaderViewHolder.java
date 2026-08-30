@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,17 +27,18 @@ import com.ammar.sharing.activities.MainActivity.adaptersR.ChosenFilesAdapter;
 import com.ammar.sharing.activities.MainActivity.adaptersR.UsersAdapter;
 import com.ammar.sharing.activities.MainActivity.fragments.BrowserShareFragment;
 import com.ammar.sharing.activities.MessagesActivity.MessagesActivity;
-import com.ammar.sharing.activities.StreamingActivity.StreamingActivity;
-import com.ammar.sharing.common.Data;
+import com.ammar.sharing.common.LiveDataSingletons;
 import com.ammar.sharing.common.SharedInfo;
 import com.ammar.sharing.common.utils.UsersNotifier;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.ui.AdaptiveTextView;
 import com.ammar.sharing.custom.ui.RoundDialog;
+import com.ammar.sharing.nativebackend.DownloadItemsManager;
+import com.ammar.sharing.nativebackend.CertFingerprints;
 import com.ammar.sharing.models.Sharable;
 import com.ammar.sharing.models.User;
-import com.ammar.sharing.network.SSLServerSocketManager;
-import com.ammar.sharing.network.Server;
+import com.ammar.sharing.nativebackend.CertificateManagerWrapper;
+import com.ammar.sharing.network.WebServer;
 import com.ammar.sharing.services.ServerService;
 
 // This is just the first row in the recycler view
@@ -71,7 +73,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
             serviceIntent.setAction(ServerService.ACTION_TOGGLE_SERVER);
             itemView.getContext().startService(serviceIntent);
         });
-        Data.serverStatusObserver.observe(fragment.getViewLifecycleOwner(), running -> {
+        LiveDataSingletons.serverStatusObserver.observe(fragment.getViewLifecycleOwner(), running -> {
             if (running) {
                 ViewCompat.setBackgroundTintList(toggleServerButton, ColorStateList.valueOf(itemView.getContext().getResources().getColor(R.color.status_on)));
                 toggleServerButton.setText(R.string.server_on);
@@ -95,14 +97,21 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
         });
 
         viewCertB.setOnClickListener((view) -> {
-            SSLServerSocketManager sslServerSocketManager = SSLServerSocketManager.getInstance();
+            CertFingerprints certFingerprints = CertificateManagerWrapper.getCertSha256Fingerprints();
+            TextView certFingerprintsNotCreatedTV = certInfoDialogLayout.findViewById(R.id.TV_CertFingerprintNotCreatedYet);
+            ConstraintLayout certFingerprintContent = certInfoDialogLayout.findViewById(R.id.CL_CertInfoContent);
 
-            TextView certSHA256TV = certInfoDialogLayout.findViewById(R.id.TV_CertSHA256Fingerprint);
-            TextView pubKeySHA256TV = certInfoDialogLayout.findViewById(R.id.TV_PublicKeySHA256Fingerprint);
-
-            SSLServerSocketManager.CertificateInfo certInfo = sslServerSocketManager.getCertInfo();
-            certSHA256TV.setText(certInfo.certSha256fingerprint);
-            pubKeySHA256TV.setText(certInfo.publicKeySha256fingerprint);
+            if( certFingerprints.certSha256Fingerprint.isEmpty() || certFingerprints.publicKeySha256Fingerprint.isEmpty()) {
+                certFingerprintContent.setVisibility(View.GONE);
+                certFingerprintsNotCreatedTV.setVisibility(View.VISIBLE);
+            } else {
+                certFingerprintContent.setVisibility(View.VISIBLE);
+                certFingerprintsNotCreatedTV.setVisibility(View.GONE);
+                TextView certSHA256TV = certInfoDialogLayout.findViewById(R.id.TV_CertSHA256Fingerprint);
+                TextView pubKeySHA256TV = certInfoDialogLayout.findViewById(R.id.TV_PublicKeySHA256Fingerprint);
+                certSHA256TV.setText(certFingerprints.certSha256Fingerprint);
+                pubKeySHA256TV.setText(certFingerprints.publicKeySha256Fingerprint);
+            }
             certInfoDialog.show();
         });
 
@@ -110,20 +119,19 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
             filesNumTV.setText(String.valueOf(Sharable.sharablesList.size()));
             filesNumTV.setVisibility(View.VISIBLE);
         }
-        if (!User.users.isEmpty()) {
-            usersNumTV.setText(String.valueOf(User.users.size()));
+        if (!User.noUsers()) {
+            usersNumTV.setText(String.valueOf(User.usersCount()));
             usersNumTV.setVisibility(View.VISIBLE);
         }
 
         addItemsB.setOnClickListener((button) -> this.fragment.launcher.launch(new Intent(itemView.getContext(), AddAppsAndFilesActivity.class)));
-        streamingB.setOnClickListener((button) -> itemView.getContext().startActivity(new Intent(itemView.getContext(), StreamingActivity.class)));
         messagesB.setOnClickListener((button) -> {
             Intent intent = new Intent(itemView.getContext(), MessagesActivity.class);
             itemView.getContext().startActivity(intent);
         });
 
         updateUnseenMessagesNum();
-        Data.messagesNotifier.observe(this.fragment.getViewLifecycleOwner(), (messageCount) -> {
+        LiveDataSingletons.messagesNotifier.observe(this.fragment.getViewLifecycleOwner(), (messageCount) -> {
             updateUnseenMessagesNum();
         });
 
@@ -170,9 +178,9 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
             chosenFilesRD.show();
         });
 
-        Data.downloadsListNotifier.observe(this.fragment.getViewLifecycleOwner(), info -> {
+        LiveDataSingletons.downloadsListNotifier.observe(this.fragment.getViewLifecycleOwner(), info -> {
             char action = info.getChar("action");
-            int size = Sharable.sharablesList.size();
+            int size = DownloadItemsManager.getDownloadItemsCount();
             if ('R' == action) {
                 int index = info.getInt("index");
                 chosenFilesAdapter.notifyItemRemoved(index);
@@ -210,9 +218,9 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
         });
 
 
-        Data.usersListObserver.observe(this.fragment.getViewLifecycleOwner(), info -> {
+        LiveDataSingletons.usersListObserver.observe(this.fragment.getViewLifecycleOwner(), info -> {
             char action = info.getChar("action");
-            int size = User.users.size();
+            int size = User.usersCount();
             int index = info.getInt("index");
             if ('A' == action) {
                 usersAdapter.notifyItemInserted(index);
@@ -244,7 +252,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
 
     // Show or hide viewCert Button based on Server.IS_HTTPS value
     public void updateViewCertButtonStatus() {
-        if( Server.IS_HTTPS ) {
+        if( WebServer.IS_HTTPS ) {
             viewCertB.setVisibility(View.VISIBLE);
         } else {
             viewCertB.setVisibility(View.GONE);
@@ -268,7 +276,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
             serverLinkTV.setVisibility(View.VISIBLE);
             QRImageIV.setVisibility(View.VISIBLE);
 
-            String link = (Server.IS_HTTPS ? "https" : "http") + "://" + ip + ":" + Server.PORT_NUMBER;
+            String link = (WebServer.IS_HTTPS ? "https" : "http") + "://" + ip + ":" + WebServer.PORT_NUMBER;
             serverLinkTV.setText(link);
             byte[] qrCodeBytes = Utils.encodeTextToQR(link);
             Bitmap qrCodeBitmap = Utils.QrCodeArrayToBitmap(qrCodeBytes, sDarkMode);

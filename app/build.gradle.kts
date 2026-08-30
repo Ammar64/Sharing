@@ -4,33 +4,21 @@ plugins {
     alias(libs.plugins.androidApplication)
 }
 
-fun getVersionNumber(): Int {
-    val process = ProcessBuilder("python3", "app/get_version_number.py")
-        .redirectErrorStream(true)
-        .start()
-    val inputReader = process.inputReader()
-
-    val version_number = inputReader.readText().trim().toInt()
-
-    inputReader.close()
-    val exitCode = process.waitFor()
-
-    if(exitCode != 0) {
-        error("Failed to get version number")
-    }
-    return version_number
-}
-
-val VERSION_NUMBER = getVersionNumber()
-val VERSION_NAME = "v2.0.0-$VERSION_NUMBER-alpha1"
+val verCode: Int by rootProject.extra
+val verName: String by rootProject.extra
+val androidMinSdkVersion: Int by rootProject.extra
+val androidTargetABIs: List<String> by rootProject.extra
 
 tasks.register("writeVersionFile") {
+    description = "writes version name and version code to a file for F-Droid"
     val outputFile = file("$projectDir/version.txt")
     doLast {
-        outputFile.writeText("""\
-versionCode=${VERSION_NUMBER}
-versionName=${VERSION_NAME}
-""".trimIndent())
+        outputFile.writeText(
+            """\
+versionCode=${verCode}
+versionName=${verName}
+""".trimIndent()
+        )
         println("Version file written to: $outputFile")
     }
 }
@@ -41,7 +29,7 @@ tasks.named("preBuild") {
 android {
     namespace = "com.ammar.sharing"
     //noinspection GradleDependency
-    compileSdk = 36
+    compileSdk = 37
     dependenciesInfo {
         // Disables dependency metadata when building APKs.
         includeInApk = false
@@ -51,17 +39,23 @@ android {
 
     defaultConfig {
         applicationId = "com.ammar.sharing"
-        minSdk = 23
+        minSdk = androidMinSdkVersion
         targetSdk = 35
 
-        versionCode = VERSION_NUMBER
-        versionName = VERSION_NAME
+        versionCode = verCode
+        versionName = verName
 
         vectorDrawables.useSupportLibrary = true
         externalNativeBuild {
             cmake {
-                abiFilters("arm64-v8a" ,"armeabi-v7a", "x86_64")
+                abiFilters += androidTargetABIs
             }
+        }
+
+        // tells AGP to only include those ABIs in the final APK
+        ndk {
+            //noinspection ChromeOsAbiSupport
+            abiFilters += androidTargetABIs
         }
     }
 
@@ -70,7 +64,10 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             vcsInfo.include = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -110,6 +107,7 @@ dependencies {
     implementation(libs.swiperefreshlayout) // needed to get CircularProgressDrawable
     implementation(libs.material)
     implementation(libs.glide)
+    annotationProcessor(libs.glide.compiler)
 
     // I don't like the new library catalog declaration it makes you write more stuff :)
     implementation("com.github.zcweng:switch-button:0.0.3@aar")
@@ -132,6 +130,7 @@ dependencies {
 
 
     implementation(project(":web"))
+    implementation(project(":nativebackend"))
 
     testImplementation("junit:junit:4.13.2")
 }

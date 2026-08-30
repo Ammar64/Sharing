@@ -12,7 +12,6 @@ import java.util.List;
 public class Message {
     private final String text;
     private String authorName;
-    private final int authorId;
     private final boolean isRemote;
     private final String ipAddress;
 
@@ -20,7 +19,6 @@ public class Message {
         this.text = text;
         this.isRemote = true;
         this.authorName = user.getName();
-        this.authorId = user.getId();
         this.ipAddress = user.getIp();
     }
 
@@ -28,7 +26,6 @@ public class Message {
         this.text = text;
         this.isRemote = false;
         this.authorName = "admin";
-        this.authorId = -1; // owner
         this.ipAddress = ServerService.getIpAddress();
     }
 
@@ -50,10 +47,6 @@ public class Message {
     public void setAuthorName(String name) {
         this.authorName = name;
     }
-    public int getAuthorID() {
-        return authorId;
-    }
-
     public static Message fromJSON(String json, User user) {
         try {
             JSONObject messageJSON = new JSONObject(json);
@@ -80,7 +73,6 @@ public class Message {
             JSONObject messageJSON = new JSONObject();
             messageJSON.put("type", "message");
             messageJSON.put("author", getAuthorName());
-            messageJSON.put("authorID", getAuthorID());
             messageJSON.put("remoteIP", getIp());
             messageJSON.put("content", getContent());
             return messageJSON;

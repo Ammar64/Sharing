@@ -13,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.ammar.sharing.R;
-import com.ammar.sharing.common.Consts;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -2,7 +2,7 @@ package com.ammar.sharing.network.websocket.sessions;
 
 import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.viewHolders.HeaderViewHolder;
 import com.ammar.sharing.activities.MessagesActivity.adaptersR.MessageAdapter.MessagesAdapter;
-import com.ammar.sharing.common.Data;
+import com.ammar.sharing.common.LiveDataSingletons;
 import com.ammar.sharing.models.Message;
 import com.ammar.sharing.models.User;
 import com.ammar.sharing.network.websocket.WebSocket;
@@ -24,13 +24,15 @@ public class MessagesWSSession extends WebSocketSession {
                 MessagesAdapter.messages.add(message);
                 // notify UI that a message was received
                 HeaderViewHolder.unseenMessagesCount++;
-                Data.messagesNotifier.forcePostValue(MessagesAdapter.messages.size());
+                LiveDataSingletons.messagesNotifier.forcePostValue(MessagesAdapter.messages.size());
             }
-            for( User i : User.users ) {
-                if( i != this.user && i.isWebSocketConnected(MessagesWSSession.path) ) {
-                    i.getWebSocket(MessagesWSSession.path).sendText(message.toJSON().toString());
-                }
-            }
+            // FIXME: Implement in rust
+
+//            for( User i : User.users ) {
+//                if( i != this.user && i.isWebSocketConnected(MessagesWSSession.path) ) {
+//                    i.getWebSocket(MessagesWSSession.path).sendText(message.toJSON().toString());
+//                }
+//            }
         }
     }
 

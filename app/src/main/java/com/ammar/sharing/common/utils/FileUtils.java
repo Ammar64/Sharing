@@ -17,6 +17,7 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
@@ -36,6 +37,7 @@ import com.bumptech.glide.request.target.Target;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -346,7 +348,18 @@ public class FileUtils {
     }
 
     private static File sFilesDir;
+
+    @Keep
     public static File getFilesDir() {
         return sFilesDir;
+    }
+
+    public static void deleteDirRecursively(File f) throws IOException {
+        if (f.isDirectory()) {
+            for (File c : f.listFiles())
+                deleteDirRecursively(c);
+        }
+        if (!f.delete())
+            throw new FileNotFoundException("Failed to delete file: " + f);
     }
 }

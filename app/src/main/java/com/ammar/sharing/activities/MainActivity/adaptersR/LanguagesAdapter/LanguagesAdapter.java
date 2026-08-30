@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ammar.sharing.R;
 import com.ammar.sharing.activities.MainActivity.adaptersR.LanguagesAdapter.viewHolders.LanguageViewHolder;
-import com.ammar.sharing.common.Consts;
+import com.ammar.sharing.common.Global;
 
 import java.util.Locale;
 
@@ -57,7 +57,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
         position--;
         int positionCopy = position;
         holder.itemView.setOnClickListener((v) -> {
-            assert Consts.langCodes != null;
+            assert Global.langCodes != null;
             notifyItemChanged(selectedIndex+1);
             selectedIndex = positionCopy;
             if( selectedIndex == -1 ) {
@@ -65,7 +65,7 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
                 languageCode = "";
 
             } else {
-                languageCode = Consts.langCodes[selectedIndex];
+                languageCode = Global.langCodes[selectedIndex];
             }
             notifyItemChanged(positionCopy+1);
         });
@@ -78,11 +78,11 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
 
     @Override
     public int getItemCount() {
-        assert Consts.langCodes != null;
-        assert Consts.langCodes.length == originalLanguagesNames.length;
-        assert Consts.langCodes.length == translatedLanguagesNames.length;
+        assert Global.langCodes != null;
+        assert Global.langCodes.length == originalLanguagesNames.length;
+        assert Global.langCodes.length == translatedLanguagesNames.length;
 
-        return Consts.langCodes.length + 1;
+        return Global.langCodes.length + 1;
     }
 
     public String getSelectedLanguageCode() {
@@ -91,9 +91,9 @@ public class LanguagesAdapter extends RecyclerView.Adapter<LanguageViewHolder> {
 
     public void resetSelectedIndex() {
         String langCode = Locale.getDefault().getLanguage();
-        assert Consts.langCodes != null;
-        for(int i = 0; i < Consts.langCodes.length ; i++) {
-            if( Consts.langCodes[i].equals(langCode) ) {
+        assert Global.langCodes != null;
+        for(int i = 0; i < Global.langCodes.length ; i++) {
+            if( Global.langCodes[i].equals(langCode) ) {
                 selectedIndex = i;
                 return;
             }

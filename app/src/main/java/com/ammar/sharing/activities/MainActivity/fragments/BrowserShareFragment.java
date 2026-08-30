@@ -26,8 +26,8 @@ import com.ammar.sharing.R;
 import com.ammar.sharing.activities.AddAppsAndFilesActivity.AddAppsAndFilesActivity;
 import com.ammar.sharing.activities.MainActivity.MainActivity;
 import com.ammar.sharing.activities.MainActivity.adaptersR.ShareAdapter.ShareAdapter;
-import com.ammar.sharing.common.Consts;
-import com.ammar.sharing.common.Data;
+import com.ammar.sharing.common.Global;
+import com.ammar.sharing.common.LiveDataSingletons;
 import com.ammar.sharing.common.utils.Utils;
 import com.ammar.sharing.custom.io.ProgressManager;
 import com.ammar.sharing.custom.ui.RoundDialog;
@@ -81,7 +81,7 @@ public class BrowserShareFragment extends Fragment {
     }
 
     private void initObservers() {
-        Data.filesSendNotifier.observe( requireActivity(), info -> {
+        LiveDataSingletons.filesSendNotifier.observe( requireActivity(), info -> {
             char action = info.getChar("action");
             int index = info.getInt("index");
             index += 1; // I don't remember why I increment 1 but it works like that :)
@@ -142,7 +142,7 @@ public class BrowserShareFragment extends Fragment {
 
         Intent intent = new Intent(requireContext(), MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(requireContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
-        Notification notification = new NotificationCompat.Builder(requireContext(), Consts.PROGRESS_NOTIFICATION_CHANNEL_ID)
+        Notification notification = new NotificationCompat.Builder(requireContext(), Global.PROGRESS_NOTIFICATION_CHANNEL_ID)
                 // isDownload means that the remote is downloading and we are the one who upload
                 .setSmallIcon( isDownload ? R.drawable.icon_upload : R.drawable.icon_download)
                 .setContentTitle(isDownload ? "Sending " + manager.getDisplayName() : "Receiving " + manager.getDisplayName())
@@ -152,7 +152,7 @@ public class BrowserShareFragment extends Fragment {
                 .setOnlyAlertOnce(true)
                 .setProgress(100, 0, manager.getTotal() != -1)
                 .setContentIntent(pendingIntent)
-                .setGroup(Consts.PROGRESS_NOTIFICATION_GROUP)
+                .setGroup(Global.PROGRESS_NOTIFICATION_GROUP)
                 .build();
 
         notificationsMap.put(manager.getProgressUUID(), notification);
@@ -217,9 +217,9 @@ public class BrowserShareFragment extends Fragment {
     private static boolean httpsDialogShown = false;
     private void showHTTPSDialogIfNotShownBefore() {
         // show warning if user didn't choose to not show it again
-        SharedPreferences appInfoPref = requireContext().getSharedPreferences(Consts.PREF_APP_INFO, Context.MODE_PRIVATE);
-        SharedPreferences settingsPref = requireContext().getSharedPreferences(Consts.PREF_SETTINGS, Context.MODE_PRIVATE);
-        final boolean httpsDialogShownBefore = appInfoPref.getBoolean(Consts.PREF_FIELD_HTTPS_DIALOG_SHOWN, true);
+        SharedPreferences appInfoPref = requireContext().getSharedPreferences(Global.PREF_APP_INFO, Context.MODE_PRIVATE);
+        SharedPreferences settingsPref = requireContext().getSharedPreferences(Global.PREF_SETTINGS, Context.MODE_PRIVATE);
+        final boolean httpsDialogShownBefore = appInfoPref.getBoolean(Global.PREF_FIELD_HTTPS_DIALOG_SHOWN, true);
         if (!httpsDialogShownBefore && !httpsDialogShown) {
             RoundDialog enableHTTPSDialog = new RoundDialog(requireContext());
             enableHTTPSDialog.setView(R.layout.dialog_enable_https);
@@ -228,17 +228,17 @@ public class BrowserShareFragment extends Fragment {
             View enableHTTPSDialogLayout = enableHTTPSDialog.getView();
 
             enableHTTPSDialog.getInternalAlertDialog().setOnDismissListener((d) -> {
-                appInfoPref.edit().putBoolean(Consts.PREF_FIELD_HTTPS_DIALOG_SHOWN, true).apply();
+                appInfoPref.edit().putBoolean(Global.PREF_FIELD_HTTPS_DIALOG_SHOWN, true).apply();
             });
 
             enableHTTPSDialogLayout.findViewById(R.id.B_EncryptionYESButton).setOnClickListener((v) -> {
-                if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_HTTPS, true).commit()) {
+                if (!settingsPref.edit().putBoolean(Global.PREF_FIELD_IS_HTTPS, true).commit()) {
                     Log.e("MYLOG", "Failed to change IS_HTTPS value");
                 }
                 enableHTTPSDialog.dismiss();
             });
             enableHTTPSDialogLayout.findViewById(R.id.B_EncryptionNOButton).setOnClickListener((v) -> {
-                if (!settingsPref.edit().putBoolean(Consts.PREF_FIELD_IS_HTTPS, false).commit()) {
+                if (!settingsPref.edit().putBoolean(Global.PREF_FIELD_IS_HTTPS, false).commit()) {
                     Log.e("MYLOG", "Failed to change IS_HTTPS value");
                 }
                 enableHTTPSDialog.dismiss();
