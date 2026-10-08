@@ -4,7 +4,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.RadioButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
@@ -14,14 +13,9 @@ import com.ammar.sharing.common.utils.Utils
 import com.ammar.sharing.custom.ui.AdaptiveTextView
 
 class LanguageViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val langOptionRB: RadioButton
-    private val originalLangNameTV: AdaptiveTextView
-    private val translatedLanguageNameTV: AdaptiveTextView
-    init {
-        langOptionRB = itemView.findViewById(R.id.RB_LanguageOption)
-        originalLangNameTV = itemView.findViewById(R.id.TV_LanguageOptionOriginal)
-        translatedLanguageNameTV = itemView.findViewById(R.id.TV_LanguageOptionNotTranslated)
-    }
+    private val langOptionRB: RadioButton = itemView.findViewById(R.id.RB_LanguageOption)
+    private val originalLangNameTV: AdaptiveTextView = itemView.findViewById(R.id.TV_LanguageOptionOriginal)
+    private val translatedLanguageNameTV: AdaptiveTextView = itemView.findViewById(R.id.TV_LanguageOptionNotTranslated)
 
     fun setOriginalLangText(text: String) {
         originalLangNameTV.text = text
@@ -55,8 +49,8 @@ class LanguageViewHolder private constructor(itemView: View) : RecyclerView.View
             languageOptionOriginal.updateLayoutParams<ConstraintLayout.LayoutParams> {
                 bottomToBottom = R.id.RB_LanguageOption
             }
-            languageOptionOriginal.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f);
-            languageOptionOriginal.setText( R.string.system_default_lang )
+            languageOptionOriginal.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f)
+            languageOptionOriginal.setText(R.string.system_default_lang)
             return LanguageViewHolder(languageOptionView)
         }
     }

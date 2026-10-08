@@ -1,3 +1,2 @@
-\
-versionCode=183187
-versionName=v2.0.0-183187-alpha1
+versionCode=11958942
+versionName=v2.0.0-11958942-alpha1

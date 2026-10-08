@@ -8,12 +8,15 @@ android {
         namespace = "com.ammar.sharing.web"
         compileSdk = 34
     }
-    sourceSets {
-        getByName("main").assets.directories.add("dist")
+}
+
+androidComponents {
+    onVariants { variant ->
+        variant.sources.assets?.addStaticSourceDirectory("dist")
     }
 }
 
-val jsonFileLocalProjectOptions = file("${rootDir}/local_project_options.json")
+val jsonFileLocalProjectOptions = file("$rootDir/local_project_options.json")
 val localProjectOptions = if( jsonFileLocalProjectOptions.exists() ) {
     JsonSlurper().parseText(jsonFileLocalProjectOptions.readText())
 } else {
@@ -21,6 +24,7 @@ val localProjectOptions = if( jsonFileLocalProjectOptions.exists() ) {
 } as Map<*, *>
 
 tasks.register<Exec>("buildWeb") {
+    description = "Builds the web project using pnpm"
     doFirst {
         println("Running buildWeb task...")
 
@@ -31,7 +35,7 @@ tasks.register<Exec>("buildWeb") {
         file("dist").deleteRecursively()
     }
 
-    commandLine("bun", "run", "build")
+    commandLine("pnpm", "run", "build")
     outputs.upToDateWhen {
         var forceRebuildWeb = localProjectOptions["force_rebuild_web"] as Boolean?
         if( forceRebuildWeb == null) {

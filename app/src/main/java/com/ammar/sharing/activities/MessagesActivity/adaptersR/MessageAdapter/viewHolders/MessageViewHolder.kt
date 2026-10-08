@@ -32,15 +32,10 @@ class MessageViewHolder private constructor(itemView: LinearLayout) : RecyclerVi
             }
 
             // setup corners
-            val config = context.resources.configuration;
-            val layoutDirection = config.layoutDirection;
+            val config = context.resources.configuration
+            val layoutDirection = config.layoutDirection
 
-            val isRTL: Boolean
-            if( layoutDirection == View.LAYOUT_DIRECTION_RTL ){
-                isRTL = true
-            } else {
-                isRTL = false;
-            }
+            val isRTL = layoutDirection == View.LAYOUT_DIRECTION_RTL
 
             val bottomStartCorner: Float
             val bottomEndCorner: Float
@@ -67,7 +62,7 @@ class MessageViewHolder private constructor(itemView: LinearLayout) : RecyclerVi
                 cornerRadius, cornerRadius,
                 cornerRadius, cornerRadius,
                 bottomRightCorner, bottomRightCorner,
-                bottomLeftCorner, bottomLeftCorner
+                bottomLeftCorner, bottomLeftCorner,
             )
             val shape = RoundRectShape(radiuses, null, null)
             val shapeDrawable = ShapeDrawable(shape)
@@ -92,7 +87,7 @@ class MessageViewHolder private constructor(itemView: LinearLayout) : RecyclerVi
                 setTextIsSelectable(true)
             }
 
-            messageContainer.addView(messageContentTV);
+            messageContainer.addView(messageContentTV)
 
 
             val linearLayout = LinearLayout(context).apply {
@@ -115,7 +110,7 @@ class MessageViewHolder private constructor(itemView: LinearLayout) : RecyclerVi
                     messageContainer.addView(messageAuthorTV)
                     authorTV = messageAuthorTV
                 }
-            };
+            }
         }
     }
 }

@@ -26,8 +26,6 @@ object Consts {
 
     const val PROGRESS_NOTIFICATION_GROUP: String = "PROGRESS_NOTIFICATION_GROUP"
 
-    const val MULTICAST_DISCOVERY_GROUP: String = "225.3.4.7"
-    const val MULTICAST_DISCOVERY_PORT: Int = 49002
     @JvmField
     val Sharing: File = File(Environment.getExternalStorageDirectory(), "Sharing")
     @JvmField
