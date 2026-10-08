@@ -26,7 +26,6 @@ import com.ammar.sharing.activities.MainActivity.adaptersR.ChosenFilesAdapter;
 import com.ammar.sharing.activities.MainActivity.adaptersR.UsersAdapter;
 import com.ammar.sharing.activities.MainActivity.fragments.BrowserShareFragment;
 import com.ammar.sharing.activities.MessagesActivity.MessagesActivity;
-import com.ammar.sharing.activities.StreamingActivity.StreamingActivity;
 import com.ammar.sharing.common.Data;
 import com.ammar.sharing.common.SharedInfo;
 import com.ammar.sharing.common.utils.UsersNotifier;
@@ -116,7 +115,7 @@ public class HeaderViewHolder extends RecyclerView.ViewHolder {
         }
 
         addItemsB.setOnClickListener((button) -> this.fragment.launcher.launch(new Intent(itemView.getContext(), AddAppsAndFilesActivity.class)));
-        streamingB.setOnClickListener((button) -> itemView.getContext().startActivity(new Intent(itemView.getContext(), StreamingActivity.class)));
+        streamingB.setOnClickListener((button) -> {});
         messagesB.setOnClickListener((button) -> {
             Intent intent = new Intent(itemView.getContext(), MessagesActivity.class);
             itemView.getContext().startActivity(intent);

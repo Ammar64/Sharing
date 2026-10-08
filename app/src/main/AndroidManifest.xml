@@ -69,14 +69,6 @@
             </intent-filter>
         </activity-alias>
 
-        <activity android:name=".activities.AppToAppSharingActivity.AppToAppSharingActivity"
-            android:exported="false">
-        </activity>
-
-        <activity android:name=".activities.AddAppsActivity.AddAppsActivity"
-            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
-            android:exported="false" />
-
         <activity android:name=".activities.AddFilesActivity.AddFilesActivity"
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
             android:exported="false"/>
@@ -93,16 +85,9 @@
         <activity android:name=".activities.AddAppsAndFilesActivity.AddAppsAndFilesActivity"
             android:exported="false"/>
 
-        <activity android:name=".activities.StreamingActivity.StreamingActivity"
-            android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
-            android:theme="@style/FullScreenAppTheme"
-            android:exported="false"/>
-
         <activity android:name=".activities.ChangeLogActivity.ChangeLogActivity"
             android:exported="true" />
 
-        <activity android:name=".activities.GetFilesActivity.GetFilesActivity"
-            android:exported="true" />
 
         <activity android:name=".activities.SettingsActivity.SettingsActivity"
             android:configChanges="orientation|screenSize|keyboard|keyboardHidden"
@@ -115,12 +100,6 @@
         <service android:name=".services.PackageInstallerService"
             android:exported="false" />
 
-        <service android:name=".services.StreamingService"
-            android:exported="false"/>
-
-        <service android:name=".services.ScreenCapturerService"
-            android:foregroundServiceType="mediaProjection"
-            android:exported="false"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
