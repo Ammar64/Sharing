@@ -45,7 +45,7 @@ jobs:
 
     - name: Build App
       run: |
-        npm install --prefix web/
+        pnpm install --prefix web/
         ./gradlew assembleRelease
 
     - name: Verify Reproducible builds

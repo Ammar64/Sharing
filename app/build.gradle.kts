@@ -5,31 +5,16 @@ plugins {
     //id "com.google.devtools.ksp"
 }
 
-fun getVersionNumber(): Int {
-    val process = ProcessBuilder("python3", "app/get_version_number.py")
-        .redirectErrorStream(true)
-        .start()
-    val inputReader = process.inputReader()
-
-    val versionNumber = inputReader.readText().trim().toInt()
-
-    inputReader.close()
-    val exitCode = process.waitFor()
-
-    if(exitCode != 0) {
-        error("Failed to get version number")
-    }
-    return versionNumber
-}
-
-val versionNum = getVersionNumber()
-val versionName = "v2.0.0-$versionNum-alpha1"
+val VERSION_NUMBER = Utils.getVersionNumber()
+val VERSION_NAME = "v2.0.0-$VERSION_NUMBER-alpha1"
 
 tasks.register("writeVersionFile") {
-    description = "Writes version file for build"
     val outputFile = file("$projectDir/version.txt")
     doLast {
-        outputFile.writeText("versionCode=$versionNum\nversionName=$versionName\n")
+        outputFile.writeText("""\
+versionCode=${VERSION_NUMBER}
+versionName=${VERSION_NAME}
+""".trimIndent())
         println("Version file written to: $outputFile")
     }
 }
@@ -51,10 +36,10 @@ android {
     defaultConfig {
         applicationId = "com.ammar.sharing"
         minSdk = 23
-        targetSdk = 36
+        targetSdk = 35
 
-        versionCode = versionNum
-        versionName = versionName
+        versionCode = VERSION_NUMBER
+        versionName = VERSION_NAME
 
         vectorDrawables.useSupportLibrary = true
         externalNativeBuild {
@@ -114,20 +99,20 @@ dependencies {
     implementation("com.github.zcweng:switch-button:0.0.3@aar")
     implementation("com.facebook.shimmer:shimmer:0.5.0")
     implementation("de.hdodenhof:circleimageview:3.1.0")
-    implementation("androidx.lifecycle:lifecycle-service:2.11.0")
+    implementation("androidx.lifecycle:lifecycle-service:2.9.3")
 
     implementation("com.github.hendrawd:StorageUtil:1.1.0")
-    implementation("io.getstream:stream-webrtc-android:1.3.10")
+    implementation("io.getstream:stream-webrtc-android:1.3.8")
     implementation("org.jmdns:jmdns:3.6.3")
 
-    implementation("androidx.navigation:navigation-fragment-ktx:2.10.2")
-    implementation("androidx.navigation:navigation-ui-ktx:2.10.2")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.9.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.9.3")
 
-    implementation("org.bouncycastle:bcpkix-jdk18on:1.86")
+    implementation("org.bouncycastle:bcpkix-jdk18on:1.81")
 
     //ksp "androidx.room:room-compiler:2.5.0"
-    implementation("androidx.room:room-runtime:2.8.5")
-    implementation("com.squareup.okhttp3:okhttp:5.5.0")
+    implementation("androidx.room:room-runtime:2.7.2")
+    implementation("com.squareup.okhttp3:okhttp:5.1.0")
 
 
     implementation(project(":web"))

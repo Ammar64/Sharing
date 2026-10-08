@@ -1,5 +1,3 @@
-import groovy.json.JsonSlurper
-
 plugins {
     id("com.android.library")
 }
@@ -8,47 +6,26 @@ android {
         namespace = "com.ammar.sharing.web"
         compileSdk = 34
     }
+    sourceSets {
+        getByName("main").assets.directories.add("dist")
+    }
 }
+
 
 androidComponents {
     onVariants { variant ->
-        variant.sources.assets?.addStaticSourceDirectory("dist")
-    }
-}
+        val variantCap = variant.name.replaceFirstChar { it.uppercase() }
 
-val jsonFileLocalProjectOptions = file("$rootDir/local_project_options.json")
-val localProjectOptions = if( jsonFileLocalProjectOptions.exists() ) {
-    JsonSlurper().parseText(jsonFileLocalProjectOptions.readText())
-} else {
-    JsonSlurper().parseText("{}")
-} as Map<*, *>
-
-tasks.register<Exec>("buildWeb") {
-    description = "Builds the web project using pnpm"
-    doFirst {
-        println("Running buildWeb task...")
-
-        println("Removing .parcel-cache/ if exists")
-        file(".parcel-cache").deleteRecursively()
-
-        println("Removing dist/ if exists")
-        file("dist").deleteRecursively()
-    }
-
-    commandLine("pnpm", "run", "build")
-    outputs.upToDateWhen {
-        var forceRebuildWeb = localProjectOptions["force_rebuild_web"] as Boolean?
-        if( forceRebuildWeb == null) {
-            forceRebuildWeb = true
+        val srcDir = layout.projectDirectory.dir("src")
+        val buildWebTask = tasks.register<BuildWebTask>("buildWeb$variantCap") {
+            description = "Build web side of the app"
+            webProjectPath.set(srcDir)
+            outputDirectory.set(srcDir.dir("dist"))
         }
-        return@upToDateWhen !(forceRebuildWeb)
-    }
-}
 
-tasks.named("preBuild") {
-    doFirst {
-        println("Running preBuild task...")
+        variant.sources.assets?.addGeneratedSourceDirectory(
+            buildWebTask,
+            BuildWebTask::outputDirectory
+        )
     }
-
-    dependsOn(tasks.named("buildWeb"))
 }
