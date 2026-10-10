@@ -150,7 +150,7 @@ public class Response {
             setHeader("Accept-Ranges", "none");
 
             writeHeaders(out);
-            zout.setMethod(ZipOutputStream.DEFLATED);
+            zout.setMethod(ZipOutputStream.STORED);
 
             ArrayList<String> sentFilesNames = new ArrayList<>(files.length);
             for (int i = 0; i < files.length; i++) {
@@ -225,7 +225,7 @@ public class Response {
 
             writeHeaders(out);
 
-            zout.setMethod(ZipOutputStream.DEFLATED);
+            zout.setMethod(ZipOutputStream.STORED);
             for (Sharable i : files) {
                 ZipEntry zipEntry = new ZipEntry(i.getFileName());
                 zout.putNextEntry(zipEntry);
