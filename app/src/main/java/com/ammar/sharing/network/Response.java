@@ -3,6 +3,8 @@ package com.ammar.sharing.network;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.ammar.sharing.custom.io.ProgressManager;
 import com.ammar.sharing.custom.io.ProgressOutputStream;
 import com.ammar.sharing.models.Sharable;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -60,7 +63,7 @@ public class Response {
             writeHeaders(out);
             try (InputStream input = file.openInputStream()) {
                 int bytesRead;
-                byte[] buffer = new byte[2048];
+                byte[] buffer = new byte[64 * 1024];
                 while ((bytesRead = input.read(buffer)) != -1) {
                     out.write(buffer, 0, bytesRead);
                 }
@@ -106,7 +109,7 @@ public class Response {
             progressManager.setLoaded(start);
 
             int bytesRead;
-            byte[] buffer = new byte[2048];
+            byte[] buffer = new byte[64 * 1024];
             while ((bytesRead = input.read(buffer)) != -1) {
                 out.write(buffer, 0, bytesRead);
             }
@@ -167,7 +170,7 @@ public class Response {
                     fullFileName = String.format(Locale.ENGLISH, "%s (%d).%s", fileNameNoExt, numOfDuplicateNames, fileExtension);
                 }
 
-                ZipEntry zipEntry = new ZipEntry(fullFileName);
+                ZipEntry zipEntry = createZipEntry(sharable);
                 zout.putNextEntry(zipEntry);
 
                 if (sharable instanceof SharableApp app && app.hasSplits()) {
@@ -215,7 +218,7 @@ public class Response {
         progressManager.setDisplayName(files[0].getName());
         try {
             OutputStream out = clientSocket.getOutputStream();
-            ByteArrayOutputStream bout = new ByteArrayOutputStream(2048);
+            ByteArrayOutputStream bout = new ByteArrayOutputStream(64 * 1024);
             ZipOutputStream zout = new ZipOutputStream(bout);
 
             setHeader("Content-Type", "application/octet-stream");
@@ -227,11 +230,12 @@ public class Response {
 
             zout.setMethod(ZipOutputStream.STORED);
             for (Sharable i : files) {
-                ZipEntry zipEntry = new ZipEntry(i.getFileName());
+                // first pass: compute size and CRC
+                ZipEntry zipEntry = createZipEntry(i);
                 zout.putNextEntry(zipEntry);
 
                 FileInputStream fin = new FileInputStream(i.getFilePath());
-                byte[] buffer = new byte[8192];
+                byte[] buffer = new byte[64 * 1024];
                 int bytesRead;
                 while ((bytesRead = fin.read(buffer)) != -1) {
                     zout.write(buffer, 0, bytesRead);
@@ -264,11 +268,32 @@ public class Response {
         }
     }
 
+    @NonNull
+    private static ZipEntry createZipEntry(Sharable i) throws IOException {
+        CRC32 crc = new CRC32();
+        long size = 0;
+        try (FileInputStream f = new FileInputStream(i.getFilePath())) {
+            byte[] b = new byte[64 * 1024];
+            int n;
+            while ((n = f.read(b)) != -1) {
+                crc.update(b, 0, n);
+                size += n;
+            }
+        }
+
+        ZipEntry zipEntry = new ZipEntry(i.getFileName());
+        zipEntry.setMethod(ZipEntry.STORED);
+        zipEntry.setSize(size);
+        zipEntry.setCompressedSize(size);
+        zipEntry.setCrc(crc.getValue());
+        return zipEntry;
+    }
+
     // this function is used for sendZippedFilesResponse
     // don't ask me about how it works.
     private static void __writeFileZippedToSocket(Sharable file, OutputStream clientOut, ZipOutputStream zout, ByteArrayOutputStream bout, ProgressManager progressManager) throws IOException {
         InputStream fin = file.openInputStream();
-        byte[] buffer = new byte[2048];
+        byte[] buffer = new byte[64 * 1024];
         int bytesRead;
 
         while ((bytesRead = fin.read(buffer)) != -1) {
